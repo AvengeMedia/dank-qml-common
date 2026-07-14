@@ -41,7 +41,7 @@ Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHo
 
 Metrics: `spacingXXS`..`spacingL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
 
-Typography: `fontFamily`, `monoFontFamily`, `defaultFontFamily`, `defaultMonoFontFamily`, `iconFontFamily`, `nerdFontFamily`, `fontWeight`. The app owns font files and their FontLoaders; these properties must name families that are already registered (`iconFontFamily` is a Material Symbols variant, `nerdFontFamily` a Nerd Font for file-type glyphs).
+Typography: `fontFamily`, `monoFontFamily`, `defaultFontFamily`, `defaultMonoFontFamily`, `fontWeight`. The library bundles and registers its own fonts (Inter, FiraCode Nerd Font, Material Symbols — `DankCommon/assets/fonts/`) through the `Fonts` singleton in `qs.DankCommon.Common`; apps typically bind `defaultFontFamily: Fonts.sans` and `defaultMonoFontFamily: Fonts.mono` rather than shipping font files of their own.
 
 Animation: `shorterDuration`, `shortDuration`, `standardEasing`, `emphasizedEasing`, `currentAnimationSpeed`, `expressiveCurves`, `expressiveDurations`.
 

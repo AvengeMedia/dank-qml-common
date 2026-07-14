@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -150,7 +151,7 @@ Item {
 
         anchors.centerIn: parent
 
-        font.family: Theme.nerdFontFamily
+        font.family: Fonts.nerd
         font.pixelSize: root.size
         color: Theme.surfaceText
         text: root.text

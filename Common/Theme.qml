@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import qs.DankCommon.Common
 
 Singleton {
     id: root
@@ -67,12 +68,10 @@ Singleton {
 
     property real cornerRadius: 12
 
-    readonly property string defaultFontFamily: "Inter Variable"
-    readonly property string defaultMonoFontFamily: "Fira Code"
+    readonly property string defaultFontFamily: Fonts.sans
+    readonly property string defaultMonoFontFamily: Fonts.mono
     property string fontFamily: defaultFontFamily
     property string monoFontFamily: defaultMonoFontFamily
-    property string iconFontFamily: "Material Symbols Rounded"
-    property string nerdFontFamily: "FiraCode Nerd Font"
     property int fontWeight: Font.Normal
 
     property int shorterDuration: 100

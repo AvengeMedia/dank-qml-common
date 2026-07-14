@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -23,7 +24,7 @@ Item {
 
         anchors.fill: parent
 
-        font.family: Theme.iconFontFamily
+        font.family: Fonts.icons
         font.pixelSize: Math.round(Theme.fontSizeMedium)
         font.weight: root.weight
         font.hintingPreference: Font.PreferNoHinting

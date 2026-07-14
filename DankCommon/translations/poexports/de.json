@@ -1,0 +1,95 @@
+{
+  "A file with this name already exists. Do you want to overwrite it?": {
+    "A file with this name already exists. Do you want to overwrite it?": "Eine Datei mit diesem Namen existiert bereits. Möchten Sie diese überschreiben?"
+  },
+  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Rücktaste: Zurück • F1/I: Datei-Info • F10: Hilfe • Esc: Schließen"
+  },
+  "Ascending": {
+    "Ascending": "Aufsteigend"
+  },
+  "Cancel": {
+    "Cancel": "Abbrechen"
+  },
+  "Copy path": {
+    "Copy path": "Pfad kopieren"
+  },
+  "Descending": {
+    "Descending": "Absteigend"
+  },
+  "Desktop": {
+    "Desktop": "Desktop"
+  },
+  "Documents": {
+    "Documents": "Dokumente"
+  },
+  "Downloads": {
+    "Downloads": "Downloads"
+  },
+  "Enter filename...": {
+    "Enter filename...": "Dateinamen eingeben..."
+  },
+  "F1/I: Toggle • F10: Help": {
+    "F1/I: Toggle • F10: Help": "F1/I: Umschalten • F10: Hilfe"
+  },
+  "File Already Exists": {
+    "File Already Exists": "Datei existiert bereits"
+  },
+  "File Information": {
+    "File Information": "Dateiinformationen"
+  },
+  "Files - %1": {
+    "Files - %1": "Dateien - %1"
+  },
+  "Home": {
+    "Home": "Persönlicher Ordner"
+  },
+  "Modified": {
+    "Modified": "Geändert"
+  },
+  "Move to Trash": {
+    "Move to Trash": "In den Papierkorb verschieben"
+  },
+  "Music": {
+    "Music": "Musik"
+  },
+  "Name": {
+    "Name": "Name"
+  },
+  "Order": {
+    "Order": "Reihenfolge"
+  },
+  "Overwrite": {
+    "Overwrite": "Überschreiben"
+  },
+  "Pictures": {
+    "Pictures": "Bilder"
+  },
+  "Quick Access": {
+    "Quick Access": "Schnellzugriff"
+  },
+  "Save": {
+    "Save": "Speichern"
+  },
+  "Select File": {
+    "Select File": "Datei auswählen"
+  },
+  "Size": {
+    "Size": "Größe"
+  },
+  "Sort By": {
+    "Sort By": "Sortieren nach"
+  },
+  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Umschalt+Tab: Nav • ←→↑↓: Gitter-Nav • Eingabe/Leertaste: Auswählen"
+  },
+  "Type": {
+    "Type": "Typ"
+  },
+  "Use this folder": {
+    "Use this folder": "Diesen Ordner verwenden"
+  },
+  "Videos": {
+    "Videos": "Videos"
+  }
+}

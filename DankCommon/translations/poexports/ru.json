@@ -1,0 +1,95 @@
+{
+  "A file with this name already exists. Do you want to overwrite it?": {
+    "A file with this name already exists. Do you want to overwrite it?": "Файл с таким именем уже существует. Перезаписать?"
+  },
+  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Назад • F1/I: Сведения • F10: Справка • Esc: Закрыть"
+  },
+  "Ascending": {
+    "Ascending": "По возрастанию"
+  },
+  "Cancel": {
+    "Cancel": "Отмена"
+  },
+  "Copy path": {
+    "Copy path": "Копировать путь"
+  },
+  "Descending": {
+    "Descending": "По убыванию"
+  },
+  "Desktop": {
+    "Desktop": "Рабочий стол"
+  },
+  "Documents": {
+    "Documents": "Документы"
+  },
+  "Downloads": {
+    "Downloads": "Загрузки"
+  },
+  "Enter filename...": {
+    "Enter filename...": "Введите имя файла..."
+  },
+  "F1/I: Toggle • F10: Help": {
+    "F1/I: Toggle • F10: Help": "F1/I: Переключить • F10: Справка"
+  },
+  "File Already Exists": {
+    "File Already Exists": "Файл уже существует"
+  },
+  "File Information": {
+    "File Information": "Сведения о файле"
+  },
+  "Files - %1": {
+    "Files - %1": "Файлы — %1"
+  },
+  "Home": {
+    "Home": "Домашняя папка"
+  },
+  "Modified": {
+    "Modified": "Изменён"
+  },
+  "Move to Trash": {
+    "Move to Trash": "Переместить в корзину"
+  },
+  "Music": {
+    "Music": "Музыка"
+  },
+  "Name": {
+    "Name": "Имя"
+  },
+  "Order": {
+    "Order": "Порядок"
+  },
+  "Overwrite": {
+    "Overwrite": "Перезаписать"
+  },
+  "Pictures": {
+    "Pictures": "Изображения"
+  },
+  "Quick Access": {
+    "Quick Access": "Быстрый доступ"
+  },
+  "Save": {
+    "Save": "Сохранить"
+  },
+  "Select File": {
+    "Select File": "Выбрать файл"
+  },
+  "Size": {
+    "Size": "Размер"
+  },
+  "Sort By": {
+    "Sort By": "Сортировка"
+  },
+  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Навигация • ←→↑↓: По сетке • Enter/Space: Выбор"
+  },
+  "Type": {
+    "Type": "Тип"
+  },
+  "Use this folder": {
+    "Use this folder": "Выбрать эту папку"
+  },
+  "Videos": {
+    "Videos": "Видео"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "A file with this name already exists. Do you want to overwrite it?": {
+    "A file with this name already exists. Do you want to overwrite it?": "Esiste già un file con questo nome. Vuoi sovrascriverlo?"
+  },
+  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Indietro • F1/I: Info file • F10: Aiuto • Esc: Chiudi"
+  },
+  "Ascending": {
+    "Ascending": "Crescente"
+  },
+  "Cancel": {
+    "Cancel": "Annulla"
+  },
+  "Copy path": {
+    "Copy path": "Copia percorso"
+  },
+  "Descending": {
+    "Descending": "Decrescente"
+  },
+  "Desktop": {
+    "Desktop": "Desktop"
+  },
+  "Documents": {
+    "Documents": "Documenti"
+  },
+  "Downloads": {
+    "Downloads": "Download"
+  },
+  "Enter filename...": {
+    "Enter filename...": "Inserisci il nome del file..."
+  },
+  "F1/I: Toggle • F10: Help": {
+    "F1/I: Toggle • F10: Help": "F1/I: Attiva/disattiva • F10: Aiuto"
+  },
+  "File Already Exists": {
+    "File Already Exists": "Il File Esiste Già"
+  },
+  "File Information": {
+    "File Information": "Informazioni File"
+  },
+  "Files - %1": {
+    "Files - %1": "File - %1"
+  },
+  "Home": {
+    "Home": "Home"
+  },
+  "Modified": {
+    "Modified": "Modificato"
+  },
+  "Move to Trash": {
+    "Move to Trash": "Sposta nel Cestino"
+  },
+  "Music": {
+    "Music": "Musica"
+  },
+  "Name": {
+    "Name": "Nome"
+  },
+  "Order": {
+    "Order": "Ordine"
+  },
+  "Overwrite": {
+    "Overwrite": "Sovrascrivi"
+  },
+  "Pictures": {
+    "Pictures": "Immagini"
+  },
+  "Quick Access": {
+    "Quick Access": "Accesso rapido"
+  },
+  "Save": {
+    "Save": "Salva"
+  },
+  "Select File": {
+    "Select File": "Seleziona File"
+  },
+  "Size": {
+    "Size": "Dimensione"
+  },
+  "Sort By": {
+    "Sort By": "Ordina Per"
+  },
+  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Maiusc+Tab: Naviga • ←→↑↓: Naviga griglia • Invio/Spazio: Seleziona"
+  },
+  "Type": {
+    "Type": "Tipo"
+  },
+  "Use this folder": {
+    "Use this folder": "Usa questa cartella"
+  },
+  "Videos": {
+    "Videos": "Video"
+  }
+}

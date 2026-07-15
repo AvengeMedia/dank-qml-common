@@ -1,4 +1,5 @@
 import QtQuick
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -7,11 +8,18 @@ Item {
     required property var targetWindow
     readonly property bool supported: typeof targetWindow.startSystemMove === "function"
     readonly property bool canMaximize: targetWindow.minimumSize.width !== targetWindow.maximumSize.width || targetWindow.minimumSize.height !== targetWindow.maximumSize.height
+    readonly property bool canMinimize: targetWindow.minimized !== undefined && Compositor.supportsMinimize
 
     anchors.fill: parent
 
     function tryStartMove() {
         targetWindow.startSystemMove();
+    }
+
+    function tryMinimize() {
+        if (!canMinimize)
+            return;
+        targetWindow.minimized = true;
     }
 
     function tryStartResize(edges) {

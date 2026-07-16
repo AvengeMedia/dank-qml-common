@@ -6,6 +6,12 @@
     "comment": "file browser overwrite dialog message"
   },
   {
+    "term": "Actions",
+    "context": "Actions",
+    "reference": "Widgets/DankIconPicker.qml:52",
+    "comment": ""
+  },
+  {
     "term": "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close",
     "context": "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close",
     "reference": "Modals/FileBrowser/KeyboardHints.qml:35",
@@ -24,6 +30,18 @@
     "comment": "file browser overwrite dialog cancel button"
   },
   {
+    "term": "Choose icon",
+    "context": "Choose icon",
+    "reference": "Widgets/DankIconPicker.qml:101",
+    "comment": ""
+  },
+  {
+    "term": "Communication",
+    "context": "Communication",
+    "reference": "Widgets/DankIconPicker.qml:36",
+    "comment": ""
+  },
+  {
     "term": "Copy path",
     "context": "Copy path",
     "reference": "Modals/FileBrowser/FileBrowserItemContextMenu.qml:28",
@@ -40,6 +58,12 @@
     "context": "Desktop",
     "reference": "Modals/FileBrowser/FileBrowserContent.qml:297",
     "comment": "file browser quick access location"
+  },
+  {
+    "term": "Development",
+    "context": "Development",
+    "reference": "Widgets/DankIconPicker.qml:32",
+    "comment": ""
   },
   {
     "term": "Documents",
@@ -84,10 +108,22 @@
     "comment": "file browser window title, %1 is the picker purpose"
   },
   {
+    "term": "Fun",
+    "context": "Fun",
+    "reference": "Widgets/DankIconPicker.qml:60",
+    "comment": ""
+  },
+  {
     "term": "Home",
     "context": "Home",
     "reference": "Modals/FileBrowser/FileBrowserContent.qml:267",
     "comment": "file browser quick access location"
+  },
+  {
+    "term": "Media",
+    "context": "Media",
+    "reference": "Widgets/DankIconPicker.qml:40",
+    "comment": ""
   },
   {
     "term": "Modified",
@@ -112,6 +148,18 @@
     "context": "Name",
     "reference": "Modals/FileBrowser/FileBrowserSortMenu.qml:42",
     "comment": "file browser sort criterion option"
+  },
+  {
+    "term": "Navigation",
+    "context": "Navigation",
+    "reference": "Widgets/DankIconPicker.qml:48",
+    "comment": ""
+  },
+  {
+    "term": "Numbers",
+    "context": "Numbers",
+    "reference": "Widgets/DankIconPicker.qml:24",
+    "comment": ""
   },
   {
     "term": "Order",
@@ -144,6 +192,12 @@
     "comment": "file browser save button"
   },
   {
+    "term": "Search for a location...",
+    "context": "Search for a location...",
+    "reference": "Widgets/DankLocationSearch.qml:21",
+    "comment": ""
+  },
+  {
     "term": "Search...",
     "context": "Search...",
     "reference": "Widgets/DankDropdown.qml:403",
@@ -168,6 +222,18 @@
     "comment": "file browser sort menu section header"
   },
   {
+    "term": "Status",
+    "context": "Status",
+    "reference": "Widgets/DankIconPicker.qml:56",
+    "comment": ""
+  },
+  {
+    "term": "System",
+    "context": "System",
+    "reference": "Widgets/DankIconPicker.qml:44",
+    "comment": ""
+  },
+  {
     "term": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select",
     "context": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select",
     "reference": "Modals/FileBrowser/KeyboardHints.qml:26",
@@ -190,5 +256,11 @@
     "context": "Videos",
     "reference": "Modals/FileBrowser/FileBrowserContent.qml:292",
     "comment": "file browser quick access location"
+  },
+  {
+    "term": "Workspace",
+    "context": "Workspace",
+    "reference": "Widgets/DankIconPicker.qml:28",
+    "comment": ""
   }
 ]

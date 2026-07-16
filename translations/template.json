@@ -7,6 +7,13 @@
     "comment": ""
   },
   {
+    "term": "Actions",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close",
     "translation": "",
     "context": "file browser keyboard shortcuts hint line",
@@ -28,6 +35,20 @@
     "comment": ""
   },
   {
+    "term": "Choose icon",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Communication",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Copy path",
     "translation": "",
     "context": "file browser item context menu action",
@@ -45,6 +66,13 @@
     "term": "Desktop",
     "translation": "",
     "context": "file browser quick access location",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Development",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -98,9 +126,23 @@
     "comment": ""
   },
   {
+    "term": "Fun",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Home",
     "translation": "",
     "context": "file browser quick access location",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Media",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -129,6 +171,20 @@
     "term": "Name",
     "translation": "",
     "context": "file browser sort criterion option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Navigation",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Numbers",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -168,6 +224,13 @@
     "comment": ""
   },
   {
+    "term": "Search for a location...",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Search...",
     "translation": "",
     "context": "",
@@ -196,6 +259,20 @@
     "comment": ""
   },
   {
+    "term": "Status",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "System",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select",
     "translation": "",
     "context": "file browser keyboard shortcuts hint line",
@@ -220,6 +297,13 @@
     "term": "Videos",
     "translation": "",
     "context": "file browser quick access location",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Workspace",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   }

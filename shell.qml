@@ -323,6 +323,156 @@ ShellRoot {
                     }
                 }
 
+                Section {
+                    text: "Sliders and progress"
+                }
+
+                DankSlider {
+                    width: 340
+                    value: 40
+                    leftIcon: "volume_down"
+                    rightIcon: "volume_up"
+                    onSliderValueChanged: newValue => log.info("slider:", newValue)
+                }
+
+                M3WaveProgress {
+                    width: 340
+                    height: 24
+                    value: 0.6
+                    isPlaying: true
+                }
+
+                Section {
+                    text: "Tabs"
+                }
+
+                DankTabBar {
+                    width: 340
+                    model: [
+                        {
+                            "icon": "home",
+                            "text": "Home"
+                        },
+                        {
+                            "icon": "palette",
+                            "text": "Theme"
+                        },
+                        {
+                            "icon": "info",
+                            "text": "About"
+                        }
+                    ]
+                    onTabClicked: index => log.info("tab:", index)
+                }
+
+                Section {
+                    text: "Filter chips"
+                }
+
+                DankFilterChips {
+                    width: 340
+                    model: ["All", "Active", "Muted"]
+                    onSelectionChanged: index => log.info("chip:", index)
+                }
+
+                Section {
+                    text: "Collapsible section"
+                }
+
+                DankCollapsibleSection {
+                    width: 340
+                    title: "Details"
+                    description: "Expands and collapses"
+                    showBackground: true
+                    onToggleRequested: expanded = !expanded
+
+                    StyledText {
+                        text: "Collapsible content"
+                    }
+                }
+
+                Section {
+                    text: "Number stepper"
+                }
+
+                DankNumberStepper {
+                    property int count: 5
+
+                    text: count
+                    onIncrement: () => count++
+                    onDecrement: () => count--
+                }
+
+                Section {
+                    text: "Avatars and logos"
+                }
+
+                Row {
+                    spacing: Theme.spacingL
+
+                    DankCircularImage {
+                        width: 48
+                        height: 48
+                        fallbackIcon: "person"
+                        fallbackText: "DK"
+                    }
+
+                    SystemLogo {
+                        width: 48
+                        height: 48
+                    }
+                }
+
+                Section {
+                    text: "Numeric text"
+                }
+
+                NumericText {
+                    text: "1234.56"
+                    reserveText: "8888.88"
+                    font.pixelSize: Theme.fontSizeXLarge
+                }
+
+                Section {
+                    text: "Icon picker"
+                }
+
+                DankIconPicker {
+                    onIconSelected: (iconName, iconType) => log.info("icon:", iconName, iconType)
+                }
+
+                Section {
+                    text: "Location search"
+                }
+
+                DankLocationSearch {
+                    width: 340
+                    onLocationSelected: (displayName, coordinates) => log.info("location:", displayName, coordinates)
+                }
+
+                Section {
+                    text: "Cursor and blink"
+                }
+
+                Row {
+                    spacing: Theme.spacingL
+
+                    StyledText {
+                        id: blinkTarget
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "DankBlink target"
+                    }
+
+                    DankBlink {
+                        target: blinkTarget
+                    }
+
+                    DankTextCursor {
+                        height: 20
+                    }
+                }
+
                 Item {
                     width: 1
                     height: Theme.spacingL

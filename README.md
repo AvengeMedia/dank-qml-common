@@ -37,15 +37,15 @@ Shared code never imports app singletons by path — it imports `qs.Common` and 
 
 ### `qs.Common` → Theme
 
-Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `widgetBaseHoverColor`.
+Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `primaryPressed`, `primarySelected`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceTextSecondary`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceTint`, `surfaceLight`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `widgetBaseHoverColor`, `onPrimary`, `onSurface`, `onSurface_38`.
 
-Metrics: `spacingXXS`..`spacingL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
+Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
 
 Typography: `fontFamily`, `monoFontFamily`, `defaultFontFamily`, `defaultMonoFontFamily`, `fontWeight`. The library bundles and registers its own fonts (Inter, FiraCode Nerd Font, Material Symbols — `DankCommon/assets/fonts/`) through the `Fonts` singleton in `qs.DankCommon.Common`; apps typically bind `defaultFontFamily: Fonts.sans` and `defaultMonoFontFamily: Fonts.mono` rather than shipping font files of their own.
 
-Animation: `shorterDuration`, `shortDuration`, `standardEasing`, `emphasizedEasing`, `currentAnimationSpeed`, `expressiveCurves`, `expressiveDurations`.
+Animation: `shorterDuration`, `shortDuration`, `mediumDuration`, `standardEasing`, `emphasizedEasing`, `currentAnimationSpeed`, `expressiveCurves`, `expressiveDurations`.
 
-Misc: `isLightMode`, `popupTransparency`, `elevationEnabled`, `elevationLevel2` (`{blurPx, offsetX, offsetY, spreadPx, alpha}`), `currentAnimationBaseDuration`, `withAlpha(color, alpha)` — which must tolerate an undefined color and return transparent.
+Misc: `isLightMode`, `popupTransparency`, `elevationEnabled`, `elevationLevel2` (`{blurPx, offsetX, offsetY, spreadPx, alpha}`), `currentAnimationBaseDuration`, `withAlpha(color, alpha)` — which must tolerate an undefined color and return transparent — and `blendAlpha(color, alpha)` with the same tolerance.
 
 Optional (used by `ElevationShadow` when present, static fallbacks otherwise): `elevationLightDirection`, `elevationOffsetXFor()`, `elevationOffsetYFor()`, `elevationShadowColor()`, `elevationAmbient()`.
 
@@ -56,7 +56,7 @@ Enums `AnimationSpeed`, `TextRenderType`, `TextRenderQuality`; properties `anima
 ### `qs.Common` → Anims, Paths, CacheData, I18n
 
 - Anims: `durShort`, `standard`, `emphasized` (bezier arrays)
-- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`; the app must create `imagecache`
+- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`, `resolveIconPath(iconName)` (return `""` when the app has no icon-theme resolution); the app must create `imagecache`
 - CacheData: `fileBrowserSettings` (var), `wallpaperLastPath`, `profileLastPath`, `saveCache()`
 - I18n: `tr(term, context)`, `isRtl`
 

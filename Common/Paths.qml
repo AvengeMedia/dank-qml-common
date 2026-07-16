@@ -25,5 +25,9 @@ Singleton {
         Quickshell.execDetached(["mkdir", "-p", strip(path)]);
     }
 
+    function resolveIconPath(iconName: string): string {
+        return "";
+    }
+
     Component.onCompleted: mkdir(imagecache)
 }

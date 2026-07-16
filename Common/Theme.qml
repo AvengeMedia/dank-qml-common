@@ -24,13 +24,22 @@ Singleton {
     property color surfaceContainerHigh: "#2B2930"
     property color error: "#F2B8B5"
 
+    property color onPrimary: primaryText
+    property color onSurface: surfaceText
+    property color onSurface_38: withAlpha(onSurface, 0.38)
+    property color surfaceTint: primary
+    property color surfaceLight: withAlpha(surfaceVariant, 0.1)
+
     property color primaryHover: withAlpha(primary, 0.12)
     property color primaryHoverLight: withAlpha(primary, 0.08)
+    property color primaryPressed: withAlpha(primary, 0.16)
+    property color primarySelected: withAlpha(primary, 0.3)
     property color errorHover: withAlpha(error, 0.12)
     property color surfacePressed: withAlpha(surfaceVariant, 0.12)
     property color surfaceVariantAlpha: withAlpha(surfaceVariant, 0.2)
     property color surfaceTextHover: withAlpha(surfaceText, 0.08)
     property color surfaceTextMedium: withAlpha(surfaceText, 0.7)
+    property color surfaceTextSecondary: withAlpha(surfaceText, 0.6)
     property color outlineButton: withAlpha(outline, 0.5)
     property color outlineMedium: withAlpha(outline, 0.12)
     property color outlineStrong: withAlpha(outline, 0.18)
@@ -56,6 +65,7 @@ Singleton {
     property real spacingS: 8
     property real spacingM: 12
     property real spacingL: 16
+    property real spacingXL: 24
 
     property real fontSizeSmall: 12
     property real fontSizeMedium: 14
@@ -76,6 +86,7 @@ Singleton {
 
     property int shorterDuration: 100
     property int shortDuration: 200
+    property int mediumDuration: 350
     property int standardEasing: Easing.OutCubic
     property int emphasizedEasing: Easing.OutQuart
 
@@ -117,6 +128,12 @@ Singleton {
         if (!c || c.r === undefined)
             return Qt.rgba(0, 0, 0, 0);
         return Qt.rgba(c.r, c.g, c.b, a);
+    }
+
+    function blendAlpha(c, a) {
+        if (!c || c.r === undefined)
+            return Qt.rgba(0, 0, 0, 0);
+        return Qt.rgba(c.r, c.g, c.b, c.a * a);
     }
 
     function blend(c1, c2, r) {

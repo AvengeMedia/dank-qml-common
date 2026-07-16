@@ -1,7 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import Quickshell
-import Quickshell.Io
 import qs.Common
 import qs.DankCommon.Widgets
 
@@ -47,28 +45,18 @@ Popup {
     function trashItem() {
         if (!filePath)
             return;
-        trashProcess.targetPath = filePath;
-        trashProcess.running = true;
+        Paths.trashPath(filePath, ok => {
+            if (ok)
+                root.trashed();
+        });
         close();
     }
 
     function copyPath() {
         if (!filePath)
             return;
-        Quickshell.clipboardText = filePath;
+        Paths.copyPathToClipboard(filePath);
         close();
-    }
-
-    Process {
-        id: trashProcess
-
-        property string targetPath: ""
-
-        command: ["gio", "trash", targetPath]
-        onExited: exitCode => {
-            if (exitCode === 0)
-                root.trashed();
-        }
     }
 
     width: 220

@@ -56,7 +56,7 @@ Enums `AnimationSpeed`, `TextRenderType`, `TextRenderQuality`; properties `anima
 ### `qs.Common` → Anims, Paths, CacheData, I18n
 
 - Anims: `durShort`, `standard`, `emphasized` (bezier arrays)
-- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`, `resolveIconPath(iconName)` (return `""` when the app has no icon-theme resolution); the app must create `imagecache`
+- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`, `resolveIconPath(iconName)` (return `""` when the app has no icon-theme resolution), `trashPath(path, callback)` (callback receives a success bool), `copyPathToClipboard(path)`; the app must create `imagecache`. The stub defaults use `gio trash` and `Quickshell.clipboardText` — apps route these through their own trash and clipboard machinery so the library itself imposes no runtime dependency
 - CacheData: `fileBrowserSettings` (var), `wallpaperLastPath`, `profileLastPath`, `saveCache()`
 - I18n: `tr(term, context)`, `isRtl`
 

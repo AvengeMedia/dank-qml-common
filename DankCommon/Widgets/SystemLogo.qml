@@ -51,7 +51,7 @@ Item {
             const distroId = output.trim();
             if (!distroId)
                 return;
-            const supportedDistroNFs = ["debian", "arch", "archcraft", "fedora", "nixos", "ubuntu", "guix", "gentoo", "endeavouros", "manjaro", "opensuse"];
+            const supportedDistroNFs = ["debian", "arch", "archcraft", "fedora", "freebsd", "nixos", "ubuntu", "guix", "gentoo", "endeavouros", "manjaro", "opensuse"];
             if (supportedDistroNFs.includes(distroId)) {
                 if (!root)
                     return;

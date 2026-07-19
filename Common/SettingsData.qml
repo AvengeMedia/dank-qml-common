@@ -29,6 +29,11 @@ Singleton {
 
     property int animationSpeed: SettingsData.AnimationSpeed.Short
     property bool enableRippleEffects: true
+    property bool powerActionConfirm: true
+    property real powerActionHoldDuration: 0.5
+    property var powerMenuActions: ["reboot", "logout", "poweroff", "lock", "suspend", "restart"]
+    property string powerMenuDefaultAction: "logout"
+    property bool powerMenuGridLayout: false
     property bool popoutElevationEnabled: true
     property int textRenderType: SettingsData.TextRenderType.Qt
     property int textRenderQuality: SettingsData.TextRenderQuality.Default

@@ -133,9 +133,44 @@
     "comment": ""
   },
   {
+    "term": "Hibernate",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Hold longer to confirm",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Hold to confirm (%1 ms)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Hold to confirm (%1s)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Home",
     "translation": "",
     "context": "file browser quick access location",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Log Out",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -210,9 +245,30 @@
     "comment": ""
   },
   {
+    "term": "Power Off",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Power Options",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Quick Access",
     "translation": "",
     "context": "file browser sidebar section header",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Reboot",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -260,6 +316,20 @@
   },
   {
     "term": "Status",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Suspend",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Switch User",
     "translation": "",
     "context": "",
     "reference": "",

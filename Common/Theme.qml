@@ -24,8 +24,11 @@ Singleton {
     property color surfaceContainerHigh: "#2B2930"
     property color error: "#F2B8B5"
 
+    property color warning: "#FF9800"
+
     property color onPrimary: primaryText
     property color onSurface: surfaceText
+    property color onSurface_12: withAlpha(onSurface, 0.12)
     property color onSurface_38: withAlpha(onSurface, 0.38)
     property color surfaceTint: primary
     property color surfaceLight: withAlpha(surfaceVariant, 0.1)
@@ -35,6 +38,8 @@ Singleton {
     property color primaryPressed: withAlpha(primary, 0.16)
     property color primarySelected: withAlpha(primary, 0.3)
     property color errorHover: withAlpha(error, 0.12)
+    property color errorSelected: withAlpha(error, 0.3)
+    property color surfaceHover: withAlpha(surfaceVariant, 0.08)
     property color surfacePressed: withAlpha(surfaceVariant, 0.12)
     property color surfaceVariantAlpha: withAlpha(surfaceVariant, 0.2)
     property color surfaceTextHover: withAlpha(surfaceText, 0.08)

@@ -21,6 +21,7 @@ Item {
             "archcraft": "\u{f345}",
             "guix": "\u{f325}",
             "fedora": "\u{f08db}",
+            "freebsd": "\u{f08e0}",
             "nixos": "\u{f1105}",
             "ubuntu": "\u{f0548}",
             "gentoo": "\u{f08e8}",

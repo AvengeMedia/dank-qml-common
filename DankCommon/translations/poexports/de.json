@@ -1,24 +1,36 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "Eine Datei mit diesem Namen existiert bereits. Möchten Sie diese überschreiben?"
+    "A file with this name already exists. Do you want to overwrite it?": "Eine Datei mit diesem Namen existiert bereits. Überschreiben?"
+  },
+  "Actions": {
+    "Actions": "Aktionen"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Rücktaste: Zurück • F1/I: Datei-Info • F10: Hilfe • Esc: Schließen"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Zurück: Zurück • F1/I: Datei Info • F10: Hilfe • Esc: Schließen"
   },
   "Ascending": {
-    "Ascending": "Aufsteigend"
+    "Ascending": ""
   },
   "Cancel": {
     "Cancel": "Abbrechen"
+  },
+  "Choose icon": {
+    "Choose icon": "Symbol auswählen"
+  },
+  "Communication": {
+    "Communication": "Kommunikation"
   },
   "Copy path": {
     "Copy path": "Pfad kopieren"
   },
   "Descending": {
-    "Descending": "Absteigend"
+    "Descending": ""
   },
   "Desktop": {
     "Desktop": "Desktop"
+  },
+  "Development": {
+    "Development": "Entwicklung"
   },
   "Documents": {
     "Documents": "Dokumente"
@@ -27,7 +39,7 @@
     "Downloads": "Downloads"
   },
   "Enter filename...": {
-    "Enter filename...": "Dateinamen eingeben..."
+    "Enter filename...": "Dateiname eingeben..."
   },
   "F1/I: Toggle • F10: Help": {
     "F1/I: Toggle • F10: Help": "F1/I: Umschalten • F10: Hilfe"
@@ -36,13 +48,34 @@
     "File Already Exists": "Datei existiert bereits"
   },
   "File Information": {
-    "File Information": "Dateiinformationen"
+    "File Information": "Dateiinformation"
   },
   "Files - %1": {
-    "Files - %1": "Dateien - %1"
+    "Files - %1": ""
+  },
+  "Fun": {
+    "Fun": "Spaß"
+  },
+  "Hibernate": {
+    "Hibernate": "Ruhezustand"
+  },
+  "Hold longer to confirm": {
+    "Hold longer to confirm": "Halte länger zum bestätigen"
+  },
+  "Hold to confirm (%1 ms)": {
+    "Hold to confirm (%1 ms)": "Gedrückt halten zum Bestätigen (%1 ms)"
+  },
+  "Hold to confirm (%1s)": {
+    "Hold to confirm (%1s)": "Halten zum bestätigen (%1s)"
   },
   "Home": {
-    "Home": "Persönlicher Ordner"
+    "Home": "Zuhause"
+  },
+  "Log Out": {
+    "Log Out": "Ausloggen"
+  },
+  "Media": {
+    "Media": "Medien"
   },
   "Modified": {
     "Modified": "Geändert"
@@ -56,8 +89,14 @@
   "Name": {
     "Name": "Name"
   },
+  "Navigation": {
+    "Navigation": "Navigation"
+  },
+  "Numbers": {
+    "Numbers": "Zahlen"
+  },
   "Order": {
-    "Order": "Reihenfolge"
+    "Order": ""
   },
   "Overwrite": {
     "Overwrite": "Überschreiben"
@@ -65,14 +104,29 @@
   "Pictures": {
     "Pictures": "Bilder"
   },
+  "Power Off": {
+    "Power Off": "Ausschalten"
+  },
+  "Power Options": {
+    "Power Options": "Energieoptionen"
+  },
   "Quick Access": {
     "Quick Access": "Schnellzugriff"
+  },
+  "Reboot": {
+    "Reboot": "Neustart"
   },
   "Save": {
     "Save": "Speichern"
   },
+  "Search for a location...": {
+    "Search for a location...": "Suche nach Ort..."
+  },
+  "Search...": {
+    "Search...": "Suche..."
+  },
   "Select File": {
-    "Select File": "Datei auswählen"
+    "Select File": ""
   },
   "Size": {
     "Size": "Größe"
@@ -80,16 +134,31 @@
   "Sort By": {
     "Sort By": "Sortieren nach"
   },
+  "Status": {
+    "Status": "Status"
+  },
+  "Suspend": {
+    "Suspend": "Ruhemodus"
+  },
+  "Switch User": {
+    "Switch User": "Benutzer wechseln"
+  },
+  "System": {
+    "System": "System"
+  },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Umschalt+Tab: Nav • ←→↑↓: Gitter-Nav • Eingabe/Leertaste: Auswählen"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Navigation • ←→↑↓: Grid Nav • Enter/Leertaste: Auswählen"
   },
   "Type": {
     "Type": "Typ"
   },
   "Use this folder": {
-    "Use this folder": "Diesen Ordner verwenden"
+    "Use this folder": ""
   },
   "Videos": {
     "Videos": "Videos"
+  },
+  "Workspace": {
+    "Workspace": "Arbeitsbereich"
   }
 }

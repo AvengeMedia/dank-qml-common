@@ -2,23 +2,35 @@
   "A file with this name already exists. Do you want to overwrite it?": {
     "A file with this name already exists. Do you want to overwrite it?": "Er bestaat al een bestand met deze naam. Wilt u het overschrijven?"
   },
+  "Actions": {
+    "Actions": "Acties"
+  },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Terug • F1/I: Bestandsinfo • F10: Help • Esc: Sluiten"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Terug • F1/I: Bestandsinfo • F10: Hulp • Esc: Sluiten"
   },
   "Ascending": {
-    "Ascending": "Oplopend"
+    "Ascending": ""
   },
   "Cancel": {
     "Cancel": "Annuleren"
+  },
+  "Choose icon": {
+    "Choose icon": "Kies pictogram"
+  },
+  "Communication": {
+    "Communication": "Communicatie"
   },
   "Copy path": {
     "Copy path": "Pad kopiëren"
   },
   "Descending": {
-    "Descending": "Aflopend"
+    "Descending": ""
   },
   "Desktop": {
     "Desktop": "Bureaublad"
+  },
+  "Development": {
+    "Development": "Ontwikkeling"
   },
   "Documents": {
     "Documents": "Documenten"
@@ -27,10 +39,10 @@
     "Downloads": "Downloads"
   },
   "Enter filename...": {
-    "Enter filename...": "Bestandsnaam invoeren..."
+    "Enter filename...": "Voer bestandsnaam in..."
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Omschakelen • F10: Help"
+    "F1/I: Toggle • F10: Help": "F1/I: Schakelen • F10: Hulp"
   },
   "File Already Exists": {
     "File Already Exists": "Bestand bestaat al"
@@ -39,16 +51,37 @@
     "File Information": "Bestandsinformatie"
   },
   "Files - %1": {
-    "Files - %1": "Bestanden - %1"
+    "Files - %1": ""
+  },
+  "Fun": {
+    "Fun": "Plezier"
+  },
+  "Hibernate": {
+    "Hibernate": "Sluimerstand"
+  },
+  "Hold longer to confirm": {
+    "Hold longer to confirm": "Langer ingedrukt houden om te bevestigen"
+  },
+  "Hold to confirm (%1 ms)": {
+    "Hold to confirm (%1 ms)": "Ingedrukt houden om te bevestigen (%1 ms)"
+  },
+  "Hold to confirm (%1s)": {
+    "Hold to confirm (%1s)": "Ingedrukt houden om te bevestigen (%1s)"
   },
   "Home": {
     "Home": "Persoonlijke map"
+  },
+  "Log Out": {
+    "Log Out": "Afmelden"
+  },
+  "Media": {
+    "Media": "Media"
   },
   "Modified": {
     "Modified": "Gewijzigd"
   },
   "Move to Trash": {
-    "Move to Trash": "Verplaatsen naar prullenbak"
+    "Move to Trash": "Naar prullenbak verplaatsen"
   },
   "Music": {
     "Music": "Muziek"
@@ -56,8 +89,14 @@
   "Name": {
     "Name": "Naam"
   },
+  "Navigation": {
+    "Navigation": "Navigatie"
+  },
+  "Numbers": {
+    "Numbers": "Nummers"
+  },
   "Order": {
-    "Order": "Volgorde"
+    "Order": ""
   },
   "Overwrite": {
     "Overwrite": "Overschrijven"
@@ -65,14 +104,29 @@
   "Pictures": {
     "Pictures": "Afbeeldingen"
   },
+  "Power Off": {
+    "Power Off": "Uitschakelen"
+  },
+  "Power Options": {
+    "Power Options": "Energieopties"
+  },
   "Quick Access": {
     "Quick Access": "Snelle toegang"
+  },
+  "Reboot": {
+    "Reboot": "Opnieuw opstarten"
   },
   "Save": {
     "Save": "Opslaan"
   },
+  "Search for a location...": {
+    "Search for a location...": "Zoeken naar een locatie..."
+  },
+  "Search...": {
+    "Search...": "Zoeken..."
+  },
   "Select File": {
-    "Select File": "Bestand selecteren"
+    "Select File": ""
   },
   "Size": {
     "Size": "Grootte"
@@ -80,16 +134,31 @@
   "Sort By": {
     "Sort By": "Sorteren op"
   },
+  "Status": {
+    "Status": "Status"
+  },
+  "Suspend": {
+    "Suspend": "Slaapstand"
+  },
+  "Switch User": {
+    "Switch User": "Ander account"
+  },
+  "System": {
+    "System": "Systeem"
+  },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Raster-nav • Enter/Spatie: Selecteren"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Raster Nav • Enter/Spatie: Selecteren"
   },
   "Type": {
     "Type": "Type"
   },
   "Use this folder": {
-    "Use this folder": "Deze map gebruiken"
+    "Use this folder": ""
   },
   "Videos": {
     "Videos": "Video's"
+  },
+  "Workspace": {
+    "Workspace": "Werkblad"
   }
 }

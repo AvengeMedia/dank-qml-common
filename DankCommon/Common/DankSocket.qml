@@ -1,11 +1,13 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell.Io
 
 Item {
     id: root
 
-    property alias path: socket.path
-    property alias parser: socket.parser
+    property string path: ""
+    property var parser: null
     property bool connected: false
     property bool linkUp: false
 
@@ -17,36 +19,35 @@ Item {
     signal connectionStateChanged
 
     onConnectedChanged: {
-        socket.connected = connected;
-    }
-
-    Socket {
-        id: socket
-
-        onConnectionStateChanged: {
-            root.linkUp = connected;
-            root.connectionStateChanged();
-            if (connected) {
-                root._reconnectAttempt = 0;
-                return;
-            }
-            if (root.connected) {
-                root._scheduleReconnect();
-            }
+        if (connected) {
+            _restartSocket();
+        } else {
+            reconnectTimer.stop();
+            _teardown();
         }
     }
 
-    Timer {
-        id: reconnectTimer
-        interval: 0
-        repeat: false
-        onTriggered: {
-            socket.connected = false;
-            Qt.callLater(() => socket.connected = true);
+    // Quickshell's Socket cannot redial after a failed attempt: its dead
+    // QLocalSocket is only cleared when a *successful* connection closes, and
+    // setting connected back to true is a no-op while the object exists. Every
+    // attempt therefore gets a fresh Socket instance.
+    function _restartSocket() {
+        _teardown();
+        socketLoader.active = true;
+    }
+
+    function _teardown() {
+        socketLoader.active = false;
+        if (linkUp) {
+            linkUp = false;
+            connectionStateChanged();
         }
     }
 
     function send(data) {
+        const socket = socketLoader.item;
+        if (!socket)
+            return;
         const json = typeof data === "string" ? data : JSON.stringify(data);
         const message = json.endsWith("\n") ? json : json + "\n";
         socket.write(message);
@@ -60,5 +61,47 @@ Item {
         reconnectTimer.interval = base + jitter;
         reconnectTimer.restart();
         _reconnectAttempt++;
+    }
+
+    Loader {
+        id: socketLoader
+        active: false
+
+        // Dial only once `item` is assigned: a unix connect can complete
+        // synchronously, and handlers fired mid-creation would see a null
+        // `socketLoader.item`, silently dropping the first sends.
+        onLoaded: item.connected = true
+
+        sourceComponent: Socket {
+            path: root.path
+            parser: root.parser
+
+            onConnectionStateChanged: {
+                root.linkUp = connected;
+                root.connectionStateChanged();
+                if (connected) {
+                    root._reconnectAttempt = 0;
+                    return;
+                }
+                if (root.connected)
+                    root._scheduleReconnect();
+            }
+
+            // A failed dial emits only the error signal, never a connection
+            // state transition, so the retry loop must also start from here.
+            onError: err => {
+                if (root.connected && !root.linkUp)
+                    root._scheduleReconnect();
+            }
+        }
+    }
+
+    Timer {
+        id: reconnectTimer
+        repeat: false
+        onTriggered: {
+            if (root.connected && !root.linkUp)
+                root._restartSocket();
+        }
     }
 }

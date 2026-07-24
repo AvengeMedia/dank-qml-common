@@ -1,5 +1,4 @@
 import QtQuick
-import QtCore
 import qs.Common
 
 Item {
@@ -122,12 +121,9 @@ Item {
             staticImg.source = encoded;
             return;
         }
-        const fileName = `${hash}@${maxCacheSize}x${maxCacheSize}.png`;
-        const cached = StandardPaths.locate(StandardPaths.GenericCacheLocation, `dank-qml-common/imagecache/${fileName}`, StandardPaths.LocateFile);
-        // Only assign a cache URL that exists. Probing a missing Image source emits
-        // a QML warning before the original-file fallback can run.
-        _fromCache = cached !== "";
-        staticImg.source = _fromCache ? cached : encoded;
+        // Cache-first; a miss errors and falls back to encodedImagePath
+        _fromCache = true;
+        staticImg.source = `${Paths.stringify(Paths.imagecache)}/${hash}@${maxCacheSize}x${maxCacheSize}.png`;
     }
 
     onImagePathChanged: resolveSource()

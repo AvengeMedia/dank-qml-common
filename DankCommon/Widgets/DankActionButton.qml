@@ -1,13 +1,13 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
     id: root
 
     property string iconName: ""
-    property int iconSize: Theme.iconSize - 4
-    property color iconColor: Theme.surfaceText
+    property int iconSize: Style.iconSize - 4
+    property color iconColor: Style.surfaceText
     property color backgroundColor: "transparent"
     property bool circular: true
     property int buttonSize: 32
@@ -21,7 +21,7 @@ StyledRect {
 
     width: buttonSize
     height: buttonSize
-    radius: Theme.cornerRadius
+    radius: Style.cornerRadius
     color: backgroundColor
 
     DankIcon {
@@ -34,7 +34,7 @@ StyledRect {
     StateLayer {
         id: stateLayer
         disabled: !root.enabled
-        stateColor: Theme.primary
+        stateColor: Style.primary
         cornerRadius: root.radius
         onClicked: root.clicked()
         onEntered: root.entered()

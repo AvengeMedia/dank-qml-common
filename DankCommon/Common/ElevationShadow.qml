@@ -1,17 +1,16 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import qs.Common
 
 Item {
     id: root
 
-    property var level: Theme.elevationLevel2
-    property string direction: Theme.elevationLightDirection ?? "bottom"
+    property var level: Style.elevationLevel2
+    property string direction: Style.elevationLightDirection ?? "bottom"
     property real fallbackOffset: 4
 
     property color targetColor: "white"
-    property real targetRadius: Theme.cornerRadius
+    property real targetRadius: Style.cornerRadius
     property real topLeftRadius: targetRadius
     property real topRightRadius: targetRadius
     property real bottomLeftRadius: targetRadius
@@ -24,19 +23,19 @@ Item {
     property real sourceWidth: width
     property real sourceHeight: height
 
-    property bool shadowEnabled: Theme.elevationEnabled
+    property bool shadowEnabled: Style.elevationEnabled
     property real shadowBlurPx: level && level.blurPx !== undefined ? level.blurPx : 0
     property real shadowSpreadPx: level && level.spreadPx !== undefined ? level.spreadPx : 0
-    property real shadowOffsetX: Theme.elevationOffsetXFor ? Theme.elevationOffsetXFor(level, direction, fallbackOffset) : (level && level.offsetX !== undefined ? level.offsetX : 0)
-    property real shadowOffsetY: Theme.elevationOffsetYFor ? Theme.elevationOffsetYFor(level, direction, fallbackOffset) : (level && level.offsetY !== undefined ? level.offsetY : fallbackOffset)
-    property color shadowColor: Theme.elevationShadowColor ? Theme.elevationShadowColor(level) : Qt.rgba(0, 0, 0, level && level.alpha !== undefined ? level.alpha : 0.25)
+    property real shadowOffsetX: Style.elevationOffsetXFor ? Style.elevationOffsetXFor(level, direction, fallbackOffset) : (level && level.offsetX !== undefined ? level.offsetX : 0)
+    property real shadowOffsetY: Style.elevationOffsetYFor ? Style.elevationOffsetYFor(level, direction, fallbackOffset) : (level && level.offsetY !== undefined ? level.offsetY : fallbackOffset)
+    property color shadowColor: Style.elevationShadowColor ? Style.elevationShadowColor(level) : Qt.rgba(0, 0, 0, level && level.alpha !== undefined ? level.alpha : 0.25)
     property real shadowOpacity: 1
 
-    readonly property var _ambient: Theme.elevationAmbient ? Theme.elevationAmbient(level) : ({
-                blurPx: 0,
-                spreadPx: 0,
-                alpha: 0
-            })
+    readonly property var _ambient: Style.elevationAmbient ? Style.elevationAmbient(level) : ({
+            blurPx: 0,
+            spreadPx: 0,
+            alpha: 0
+        })
     readonly property real _pad: shadowEnabled ? Math.ceil(Math.max(shadowBlurPx + shadowSpreadPx + Math.max(Math.abs(shadowOffsetX), Math.abs(shadowOffsetY)), _ambient.blurPx + _ambient.spreadPx) + 2) : 0
 
     ShaderEffect {

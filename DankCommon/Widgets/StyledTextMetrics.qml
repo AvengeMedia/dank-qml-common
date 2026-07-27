@@ -1,13 +1,12 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 TextMetrics {
     property bool isMonospace: false
 
-    readonly property string resolvedFontFamily: isMonospace ? Theme.monoFontFamily : Theme.fontFamily
+    readonly property string resolvedFontFamily: isMonospace ? Style.monoFontFamily : Style.fontFamily
 
     font.pixelSize: Appearance.fontSize.normal
     font.family: resolvedFontFamily
-    font.weight: Theme.fontWeight
+    font.weight: Style.fontWeight
 }

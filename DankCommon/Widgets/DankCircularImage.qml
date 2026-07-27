@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import Quickshell.Widgets
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Rectangle {
@@ -61,7 +61,7 @@ Rectangle {
     }
 
     radius: width / 2
-    color: Theme.primaryHover
+    color: Style.primaryHover
     border.color: "transparent"
     border.width: 0
 
@@ -113,11 +113,11 @@ Rectangle {
         visible: (root.activeImage.status !== Image.Ready || root.imageSource === "") && root.fallbackIcon !== ""
         iconValue: root.fallbackIcon
         iconSize: width
-        iconColor: Theme.surfaceVariantText
+        iconColor: Style.surfaceVariantText
         materialIconSizeAdjustment: 0
         fallbackText: root.fallbackText
         fallbackBackgroundColor: "transparent"
-        fallbackTextColor: Theme.surfaceVariantText
+        fallbackTextColor: Style.surfaceVariantText
     }
 
     StyledText {
@@ -126,6 +126,6 @@ Rectangle {
         text: root.fallbackText
         font.pixelSize: Math.max(12, parent.width * 0.5)
         font.weight: Font.Bold
-        color: Theme.surfaceVariantText
+        color: Style.surfaceVariantText
     }
 }

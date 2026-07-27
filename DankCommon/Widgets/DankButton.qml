@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Rectangle {
@@ -7,31 +7,31 @@ Rectangle {
 
     property string text: ""
     property string iconName: ""
-    property int iconSize: Theme.iconSizeSmall
+    property int iconSize: Style.iconSizeSmall
     property bool hovered: mouseArea.containsMouse
     property bool pressed: mouseArea.pressed
-    property color backgroundColor: Theme.buttonBg
-    property color textColor: Theme.buttonText
+    property color backgroundColor: Style.buttonBg
+    property color textColor: Style.buttonText
     property int buttonHeight: 40
-    property int horizontalPadding: Theme.spacingL
+    property int horizontalPadding: Style.spacingL
     property bool enableScaleAnimation: false
-    property bool enableRipple: typeof SettingsData !== "undefined" ? (SettingsData.enableRippleEffects ?? true) : true
+    property bool enableRipple: Style.enableRippleEffects
 
     signal clicked
 
     width: Math.max(contentRow.implicitWidth + horizontalPadding * 2, 64)
     height: buttonHeight
-    radius: Theme.cornerRadius
+    radius: Style.cornerRadius
     color: backgroundColor
     opacity: enabled ? 1 : 0.4
     scale: (enableScaleAnimation && pressed) ? 0.98 : 1.0
 
     Behavior on scale {
-        enabled: enableScaleAnimation && Theme.currentAnimationSpeed !== SettingsData.AnimationSpeed.None
+        enabled: enableScaleAnimation && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         NumberAnimation {
             easing.type: Easing.BezierSpline
             duration: 100
-            easing.bezierCurve: Theme.expressiveCurves.standard
+            easing.bezierCurve: Style.expressiveCurves.standard
         }
     }
 
@@ -41,16 +41,16 @@ Rectangle {
         radius: parent.radius
         color: {
             if (pressed)
-                return Theme.withAlpha(root.textColor, 0.20);
+                return Style.withAlpha(root.textColor, 0.20);
             if (hovered)
-                return Theme.withAlpha(root.textColor, 0.12);
-            return Theme.withAlpha(root.textColor, 0);
+                return Style.withAlpha(root.textColor, 0.12);
+            return Style.withAlpha(root.textColor, 0);
         }
 
         Behavior on color {
             ColorAnimation {
-                duration: Theme.shorterDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shorterDuration
+                easing.type: Style.standardEasing
             }
         }
     }
@@ -65,7 +65,7 @@ Rectangle {
     Row {
         id: contentRow
         anchors.centerIn: parent
-        spacing: Theme.spacingS
+        spacing: Style.spacingS
 
         DankIcon {
             name: root.iconName
@@ -77,7 +77,7 @@ Rectangle {
 
         StyledText {
             text: root.text
-            font.pixelSize: Theme.fontSizeMedium
+            font.pixelSize: Style.fontSizeMedium
             font.weight: Font.Medium
             color: root.textColor
             anchors.verticalCenter: parent.verticalCenter

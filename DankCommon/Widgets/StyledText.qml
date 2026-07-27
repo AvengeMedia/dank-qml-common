@@ -1,17 +1,16 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 Text {
     property bool isMonospace: false
 
-    readonly property string resolvedFontFamily: isMonospace ? Theme.monoFontFamily : Theme.fontFamily
+    readonly property string resolvedFontFamily: isMonospace ? Style.monoFontFamily : Style.fontFamily
 
     readonly property int resolvedRenderType: {
-        switch (SettingsData.textRenderType) {
-        case SettingsData.TextRenderType.Qt:
+        switch (Style.textRenderType) {
+        case Style.TextRenderType.Qt:
             return Text.QtRendering;
-        case SettingsData.TextRenderType.Curve:
+        case Style.TextRenderType.Curve:
             return Text.CurveRendering;
         default:
             return Text.NativeRendering;
@@ -19,14 +18,14 @@ Text {
     }
 
     readonly property int resolvedRenderQuality: {
-        switch (SettingsData.textRenderQuality) {
-        case SettingsData.TextRenderQuality.Low:
+        switch (Style.textRenderQuality) {
+        case Style.TextRenderQuality.Low:
             return Text.LowRenderTypeQuality;
-        case SettingsData.TextRenderQuality.Normal:
+        case Style.TextRenderQuality.Normal:
             return Text.NormalRenderTypeQuality;
-        case SettingsData.TextRenderQuality.High:
+        case Style.TextRenderQuality.High:
             return Text.HighRenderTypeQuality;
-        case SettingsData.TextRenderQuality.VeryHigh:
+        case Style.TextRenderQuality.VeryHigh:
             return Text.VeryHighRenderTypeQuality;
         default:
             return Text.DefaultRenderTypeQuality;
@@ -39,10 +38,10 @@ Text {
         "easing.bezierCurve": Appearance.anim.curves.standard
     }
 
-    color: Theme.surfaceText
+    color: Style.surfaceText
     font.pixelSize: Appearance.fontSize.normal
     font.family: resolvedFontFamily
-    font.weight: Theme.fontWeight
+    font.weight: Style.fontWeight
     textFormat: Text.PlainText
     wrapMode: Text.WordWrap
     elide: Text.ElideRight

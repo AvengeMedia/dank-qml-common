@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Flow {
@@ -10,14 +10,14 @@ Flow {
     property bool multiSelect: false
     property var selectedValues: []
     property int chipHeight: 32
-    property int chipPadding: Theme.spacingM
+    property int chipPadding: Style.spacingM
     property bool showCheck: true
     property bool showCounts: true
 
     signal selectionChanged(int index)
     signal selectionToggled(int index, bool selected)
 
-    spacing: Theme.spacingS
+    spacing: Style.spacingS
     width: parent ? parent.width : 400
 
     Repeater {
@@ -40,12 +40,12 @@ Flow {
             height: root.chipHeight
             radius: height / 2
 
-            color: selected ? Theme.primary : Theme.surfaceVariant
+            color: selected ? Style.primary : Style.surfaceVariant
 
             Behavior on color {
                 ColorAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
@@ -54,16 +54,16 @@ Flow {
                 radius: parent.radius
                 color: {
                     if (pressed)
-                        return chip.selected ? Theme.primaryPressed : Theme.surfaceTextHover;
+                        return chip.selected ? Style.primaryPressed : Style.surfaceTextHover;
                     if (hovered)
-                        return chip.selected ? Theme.primaryHover : Theme.surfaceTextHover;
+                        return chip.selected ? Style.primaryHover : Style.surfaceTextHover;
                     return "transparent";
                 }
 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Theme.shorterDuration
-                        easing.type: Theme.standardEasing
+                        duration: Style.shorterDuration
+                        easing.type: Style.standardEasing
                     }
                 }
             }
@@ -71,27 +71,27 @@ Flow {
             DankRipple {
                 id: chipRipple
                 cornerRadius: chip.radius
-                rippleColor: chip.selected ? Theme.primaryText : Theme.surfaceVariantText
+                rippleColor: chip.selected ? Style.primaryText : Style.surfaceVariantText
             }
 
             Row {
                 id: contentRow
                 anchors.centerIn: parent
-                spacing: Theme.spacingXS
+                spacing: Style.spacingXS
 
                 DankIcon {
                     name: "check"
                     size: 16
                     anchors.verticalCenter: parent.verticalCenter
-                    color: Theme.primaryText
+                    color: Style.primaryText
                     visible: root.showCheck && chip.selected
                 }
 
                 StyledText {
                     text: chip.label + (chip.showCount ? " (" + chip.count + ")" : "")
-                    font.pixelSize: Theme.fontSizeSmall
+                    font.pixelSize: Style.fontSizeSmall
                     font.weight: chip.selected ? Font.Medium : Font.Normal
-                    color: chip.selected ? Theme.primaryText : Theme.surfaceVariantText
+                    color: chip.selected ? Style.primaryText : Style.surfaceVariantText
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }

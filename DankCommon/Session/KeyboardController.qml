@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import qs.Services
+import qs.DankCommon.Common
 
 Item {
     id: keyboard_controller

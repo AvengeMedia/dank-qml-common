@@ -2,8 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell.Widgets
-import qs.Common
-import qs.Services
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Rectangle {
@@ -31,16 +30,16 @@ Rectangle {
     property var powerMenuGridLayoutOverride: undefined
     property var requiredActions: []
 
-    readonly property bool needsConfirmation: powerActionConfirmOverride !== undefined ? powerActionConfirmOverride : SettingsData.powerActionConfirm
-    readonly property int holdDurationMs: (powerActionHoldDurationOverride !== undefined ? powerActionHoldDurationOverride : SettingsData.powerActionHoldDuration) * 1000
+    readonly property bool needsConfirmation: powerActionConfirmOverride !== undefined ? powerActionConfirmOverride : Style.powerActionConfirm
+    readonly property int holdDurationMs: (powerActionHoldDurationOverride !== undefined ? powerActionHoldDurationOverride : Style.powerActionHoldDuration) * 1000
 
     signal closed
 
     signal switchUserRequested
 
     function updateVisibleActions() {
-        const allActions = powerMenuActionsOverride !== undefined ? powerMenuActionsOverride : ((typeof SettingsData !== "undefined" && SettingsData.powerMenuActions) ? SettingsData.powerMenuActions : ["logout", "suspend", "hibernate", "reboot", "poweroff"]);
-        const hibernateSupported = (typeof SessionService !== "undefined" && SessionService.hibernateSupported) || false;
+        const allActions = powerMenuActionsOverride !== undefined ? powerMenuActionsOverride : Style.powerMenuActions;
+        const hibernateSupported = Host.session?.hibernateSupported ?? false;
         let filtered = allActions.filter(action => {
             if (action === "hibernate" && !hibernateSupported)
                 return false;
@@ -60,7 +59,7 @@ Rectangle {
 
         visibleActions = filtered;
 
-        useGridLayout = powerMenuGridLayoutOverride !== undefined ? powerMenuGridLayoutOverride : ((typeof SettingsData !== "undefined" && SettingsData.powerMenuGridLayout !== undefined) ? SettingsData.powerMenuGridLayout : false);
+        useGridLayout = powerMenuGridLayoutOverride !== undefined ? powerMenuGridLayoutOverride : Style.powerMenuGridLayout;
         if (!useGridLayout)
             return;
         const count = visibleActions.length;
@@ -87,7 +86,7 @@ Rectangle {
     }
 
     function getDefaultActionIndex() {
-        const defaultAction = powerMenuDefaultActionOverride !== undefined ? powerMenuDefaultActionOverride : ((typeof SettingsData !== "undefined" && SettingsData.powerMenuDefaultAction) ? SettingsData.powerMenuDefaultAction : "suspend");
+        const defaultAction = powerMenuDefaultActionOverride !== undefined ? powerMenuDefaultActionOverride : (Style.powerMenuDefaultAction || "suspend");
         const index = visibleActions.indexOf(defaultAction);
         return index >= 0 ? index : 0;
     }
@@ -196,24 +195,24 @@ Rectangle {
             switchUserRequested();
             return;
         }
-        if (typeof SessionService === "undefined")
+        if (!Host.session)
             return;
         hide();
         switch (action) {
         case "logout":
-            SessionService.logout();
+            Host.session.logout();
             break;
         case "suspend":
-            SessionService.suspend();
+            Host.session.suspend();
             break;
         case "hibernate":
-            SessionService.hibernate();
+            Host.session.hibernate();
             break;
         case "reboot":
-            SessionService.reboot();
+            Host.session.reboot();
             break;
         case "poweroff":
-            SessionService.poweroff();
+            Host.session.poweroff();
             break;
         }
     }
@@ -491,18 +490,18 @@ Rectangle {
 
         Rectangle {
             anchors.centerIn: parent
-            width: useGridLayout ? Math.min(550, gridColumns * 180 + Theme.spacingS * (gridColumns - 1) + Theme.spacingL * 2) : 320
-            height: contentItem.implicitHeight + Theme.spacingL * 2
-            radius: Theme.cornerRadius
-            color: Theme.surfaceContainer
-            border.color: Theme.outlineMedium
+            width: useGridLayout ? Math.min(550, gridColumns * 180 + Style.spacingS * (gridColumns - 1) + Style.spacingL * 2) : 320
+            height: contentItem.implicitHeight + Style.spacingL * 2
+            radius: Style.cornerRadius
+            color: Style.surfaceContainer
+            border.color: Style.outlineMedium
             border.width: 1
 
             Item {
                 id: contentItem
                 anchors.fill: parent
-                anchors.margins: Theme.spacingL
-                implicitHeight: headerRow.height + Theme.spacingM + (useGridLayout ? buttonGrid.implicitHeight : buttonColumn.implicitHeight) + (root.needsConfirmation ? hintRow.height + Theme.spacingM : 0)
+                anchors.margins: Style.spacingL
+                implicitHeight: headerRow.height + Style.spacingM + (useGridLayout ? buttonGrid.implicitHeight : buttonColumn.implicitHeight) + (root.needsConfirmation ? hintRow.height + Style.spacingM : 0)
 
                 Row {
                     id: headerRow
@@ -511,8 +510,8 @@ Rectangle {
 
                     StyledText {
                         text: I18n.tr("Power Options")
-                        font.pixelSize: Theme.fontSizeLarge
-                        color: Theme.surfaceText
+                        font.pixelSize: Style.fontSizeLarge
+                        color: Style.surfaceText
                         font.weight: Font.Medium
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -524,8 +523,8 @@ Rectangle {
 
                     DankActionButton {
                         iconName: "close"
-                        iconSize: Theme.iconSize - 4
-                        iconColor: Theme.surfaceText
+                        iconSize: Style.iconSize - 4
+                        iconColor: Style.surfaceText
                         onClicked: root.hide()
                     }
                 }
@@ -534,11 +533,11 @@ Rectangle {
                     id: buttonGrid
                     visible: useGridLayout
                     anchors.top: headerRow.bottom
-                    anchors.topMargin: Theme.spacingM
+                    anchors.topMargin: Style.spacingM
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: root.gridColumns
-                    columnSpacing: Theme.spacingS
-                    rowSpacing: Theme.spacingS
+                    columnSpacing: Style.spacingS
+                    rowSpacing: Style.spacingS
                     width: parent.width
 
                     Repeater {
@@ -554,17 +553,17 @@ Rectangle {
                             readonly property bool showWarning: modelData === "reboot" || modelData === "poweroff"
                             readonly property bool isHolding: root.holdActionIndex === index && root.holdProgress > 0
 
-                            width: (contentItem.width - Theme.spacingS * (root.gridColumns - 1)) / root.gridColumns
+                            width: (contentItem.width - Style.spacingS * (root.gridColumns - 1)) / root.gridColumns
                             height: 100
-                            radius: Theme.cornerRadius
+                            radius: Style.cornerRadius
                             color: {
                                 if (isSelected)
-                                    return Theme.primaryHover;
+                                    return Style.primaryHover;
                                 if (mouseArea.containsMouse)
-                                    return Theme.primaryHoverLight;
-                                return Theme.surfaceHover;
+                                    return Style.primaryHoverLight;
+                                return Style.surfaceHover;
                             }
-                            border.color: isSelected ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+                            border.color: isSelected ? Style.primary : Style.withAlpha(Style.primary, 0)
                             border.width: isSelected ? 2 : 0
 
                             ClippingRectangle {
@@ -580,38 +579,38 @@ Rectangle {
                                     width: parent.width * root.holdProgress
                                     color: {
                                         if (gridButtonRect.modelData === "poweroff")
-                                            return Theme.errorSelected;
+                                            return Style.errorSelected;
                                         if (gridButtonRect.modelData === "reboot")
-                                            return Theme.withAlpha(Theme.warning, 0.3);
-                                        return Theme.primarySelected;
+                                            return Style.withAlpha(Style.warning, 0.3);
+                                        return Style.primarySelected;
                                     }
                                 }
                             }
 
                             Column {
                                 anchors.centerIn: parent
-                                spacing: Theme.spacingS
+                                spacing: Style.spacingS
 
                                 DankIcon {
                                     name: gridButtonRect.actionData.icon
-                                    size: Theme.iconSize + 8
+                                    size: Style.iconSize + 8
                                     color: {
                                         if (gridButtonRect.showWarning && (mouseArea.containsMouse || gridButtonRect.isHolding)) {
-                                            return gridButtonRect.modelData === "poweroff" ? Theme.error : Theme.warning;
+                                            return gridButtonRect.modelData === "poweroff" ? Style.error : Style.warning;
                                         }
-                                        return Theme.surfaceText;
+                                        return Style.surfaceText;
                                     }
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
 
                                 StyledText {
                                     text: gridButtonRect.actionData.label
-                                    font.pixelSize: Theme.fontSizeMedium
+                                    font.pixelSize: Style.fontSizeMedium
                                     color: {
                                         if (gridButtonRect.showWarning && (mouseArea.containsMouse || gridButtonRect.isHolding)) {
-                                            return gridButtonRect.modelData === "poweroff" ? Theme.error : Theme.warning;
+                                            return gridButtonRect.modelData === "poweroff" ? Style.error : Style.warning;
                                         }
-                                        return Theme.surfaceText;
+                                        return Style.surfaceText;
                                     }
                                     font.weight: Font.Medium
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -621,13 +620,13 @@ Rectangle {
                                     width: 20
                                     height: 16
                                     radius: 4
-                                    color: Theme.onSurface_12
+                                    color: Style.onSurface_12
                                     anchors.horizontalCenter: parent.horizontalCenter
 
                                     StyledText {
                                         text: gridButtonRect.actionData.key
-                                        font.pixelSize: Theme.fontSizeSmall - 1
-                                        color: Theme.surfaceTextSecondary
+                                        font.pixelSize: Style.fontSizeSmall - 1
+                                        color: Style.surfaceTextSecondary
                                         font.weight: Font.Medium
                                         anchors.centerIn: parent
                                     }
@@ -656,10 +655,10 @@ Rectangle {
                     id: buttonColumn
                     visible: !useGridLayout
                     anchors.top: headerRow.bottom
-                    anchors.topMargin: Theme.spacingM
+                    anchors.topMargin: Style.spacingM
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    spacing: Theme.spacingS
+                    spacing: Style.spacingS
 
                     Repeater {
                         model: root.visibleActions
@@ -676,15 +675,15 @@ Rectangle {
 
                             width: parent.width
                             height: 50
-                            radius: Theme.cornerRadius
+                            radius: Style.cornerRadius
                             color: {
                                 if (isSelected)
-                                    return Theme.primaryHover;
+                                    return Style.primaryHover;
                                 if (listMouseArea.containsMouse)
-                                    return Theme.primaryHoverLight;
-                                return Theme.surfaceHover;
+                                    return Style.primaryHoverLight;
+                                return Style.surfaceHover;
                             }
-                            border.color: isSelected ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+                            border.color: isSelected ? Style.primary : Style.withAlpha(Style.primary, 0)
                             border.width: isSelected ? 2 : 0
 
                             ClippingRectangle {
@@ -700,10 +699,10 @@ Rectangle {
                                     width: parent.width * root.holdProgress
                                     color: {
                                         if (listButtonRect.modelData === "poweroff")
-                                            return Theme.errorSelected;
+                                            return Style.errorSelected;
                                         if (listButtonRect.modelData === "reboot")
-                                            return Theme.withAlpha(Theme.warning, 0.3);
-                                        return Theme.primarySelected;
+                                            return Style.withAlpha(Style.warning, 0.3);
+                                        return Style.primarySelected;
                                     }
                                 }
                             }
@@ -711,31 +710,31 @@ Rectangle {
                             Row {
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                anchors.leftMargin: Theme.spacingM
-                                anchors.rightMargin: Theme.spacingM
+                                anchors.leftMargin: Style.spacingM
+                                anchors.rightMargin: Style.spacingM
                                 anchors.verticalCenter: parent.verticalCenter
-                                spacing: Theme.spacingM
+                                spacing: Style.spacingM
 
                                 DankIcon {
                                     name: listButtonRect.actionData.icon
-                                    size: Theme.iconSize + 4
+                                    size: Style.iconSize + 4
                                     color: {
                                         if (listButtonRect.showWarning && (listMouseArea.containsMouse || listButtonRect.isHolding)) {
-                                            return listButtonRect.modelData === "poweroff" ? Theme.error : Theme.warning;
+                                            return listButtonRect.modelData === "poweroff" ? Style.error : Style.warning;
                                         }
-                                        return Theme.surfaceText;
+                                        return Style.surfaceText;
                                     }
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
 
                                 StyledText {
                                     text: listButtonRect.actionData.label
-                                    font.pixelSize: Theme.fontSizeMedium
+                                    font.pixelSize: Style.fontSizeMedium
                                     color: {
                                         if (listButtonRect.showWarning && (listMouseArea.containsMouse || listButtonRect.isHolding)) {
-                                            return listButtonRect.modelData === "poweroff" ? Theme.error : Theme.warning;
+                                            return listButtonRect.modelData === "poweroff" ? Style.error : Style.warning;
                                         }
-                                        return Theme.surfaceText;
+                                        return Style.surfaceText;
                                     }
                                     font.weight: Font.Medium
                                     anchors.verticalCenter: parent.verticalCenter
@@ -746,15 +745,15 @@ Rectangle {
                                 width: 28
                                 height: 20
                                 radius: 4
-                                color: Theme.onSurface_12
+                                color: Style.onSurface_12
                                 anchors.right: parent.right
-                                anchors.rightMargin: Theme.spacingM
+                                anchors.rightMargin: Style.spacingM
                                 anchors.verticalCenter: parent.verticalCenter
 
                                 StyledText {
                                     text: listButtonRect.actionData.key
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    color: Theme.surfaceTextSecondary
+                                    font.pixelSize: Style.fontSizeSmall
+                                    color: Style.surfaceTextSecondary
                                     font.weight: Font.Medium
                                     anchors.centerIn: parent
                                 }
@@ -780,8 +779,8 @@ Rectangle {
                     id: hintRow
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Theme.spacingS
-                    spacing: Theme.spacingXS
+                    anchors.bottomMargin: Style.spacingS
+                    spacing: Style.spacingXS
                     visible: root.needsConfirmation
                     opacity: root.showHoldHint ? 1 : 0.5
 
@@ -793,8 +792,8 @@ Rectangle {
 
                     DankIcon {
                         name: root.showHoldHint ? "warning" : "touch_app"
-                        size: Theme.fontSizeSmall
-                        color: root.showHoldHint ? Theme.warning : Theme.surfaceTextSecondary
+                        size: Style.fontSizeSmall
+                        color: root.showHoldHint ? Style.warning : Style.surfaceTextSecondary
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -814,8 +813,8 @@ Rectangle {
                                 return I18n.tr("Hold to confirm (%1 ms)").arg(totalMs);
                             return I18n.tr("Hold to confirm (%1s)").arg(durationSec);
                         }
-                        font.pixelSize: Theme.fontSizeSmall
-                        color: root.showHoldHint ? Theme.warning : Theme.surfaceTextSecondary
+                        font.pixelSize: Style.fontSizeSmall
+                        color: root.showHoldHint ? Style.warning : Style.surfaceTextSecondary
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }

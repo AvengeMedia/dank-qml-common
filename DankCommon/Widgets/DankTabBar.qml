@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 FocusScope {
@@ -7,7 +7,7 @@ FocusScope {
 
     property alias model: tabRepeater.model
     property int currentIndex: 0
-    property int spacing: Theme.spacingL
+    property int spacing: Style.spacingL
     property int tabHeight: 56
     property bool showIcons: true
     property bool equalWidthTabs: true
@@ -120,27 +120,27 @@ FocusScope {
                 property bool hasIcon: tabBar.showIcons && modelData && modelData.icon && modelData.icon.length > 0
                 property bool hasText: modelData && modelData.text && modelData.text.length > 0
 
-                width: tabBar.equalWidthTabs ? (tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Theme.spacingXL, 64)
+                width: tabBar.equalWidthTabs ? (tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, 64)
                 height: tabBar.tabHeight
 
                 Column {
                     id: contentCol
                     anchors.centerIn: parent
-                    spacing: Theme.spacingXS
+                    spacing: Style.spacingXS
 
                     DankIcon {
                         name: modelData.icon || ""
                         anchors.horizontalCenter: parent.horizontalCenter
-                        size: Theme.iconSize
-                        color: tabItem.isActive ? Theme.primary : Theme.surfaceText
+                        size: Style.iconSize
+                        color: tabItem.isActive ? Style.primary : Style.surfaceText
                         visible: hasIcon
                     }
 
                     StyledText {
                         text: modelData.text || ""
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: tabItem.isActive ? Theme.primary : Theme.surfaceText
+                        font.pixelSize: Style.fontSizeMedium
+                        color: tabItem.isActive ? Style.primary : Style.surfaceText
                         font.weight: Font.Medium
                         visible: hasText
                     }
@@ -149,21 +149,21 @@ FocusScope {
                 Rectangle {
                     id: stateLayer
                     anchors.fill: parent
-                    color: Theme.surfaceTint
+                    color: Style.surfaceTint
                     opacity: tabArea.pressed ? 0.12 : (tabArea.containsMouse ? 0.08 : 0)
                     visible: opacity > 0
-                    radius: Theme.cornerRadius
+                    radius: Style.cornerRadius
                     Behavior on opacity {
                         NumberAnimation {
-                            duration: Theme.shortDuration
-                            easing.type: Theme.standardEasing
+                            duration: Style.shortDuration
+                            easing.type: Style.standardEasing
                         }
                     }
                 }
 
                 DankRipple {
                     id: tabRipple
-                    cornerRadius: Theme.cornerRadius
+                    cornerRadius: Style.cornerRadius
                 }
 
                 MouseArea {
@@ -189,11 +189,11 @@ FocusScope {
         y: parent.height + 7
         height: 3
         width: 60
-        topLeftRadius: Theme.cornerRadius
-        topRightRadius: Theme.cornerRadius
+        topLeftRadius: Style.cornerRadius
+        topRightRadius: Style.cornerRadius
         bottomLeftRadius: 0
         bottomRightRadius: 0
-        color: Theme.primary
+        color: Style.primary
         visible: false
 
         property bool animationEnabled: false
@@ -202,16 +202,16 @@ FocusScope {
         Behavior on x {
             enabled: indicator.animationEnabled
             NumberAnimation {
-                duration: Theme.mediumDuration
-                easing.type: Theme.standardEasing
+                duration: Style.mediumDuration
+                easing.type: Style.standardEasing
             }
         }
 
         Behavior on width {
             enabled: indicator.animationEnabled
             NumberAnimation {
-                duration: Theme.mediumDuration
-                easing.type: Theme.standardEasing
+                duration: Style.mediumDuration
+                easing.type: Style.standardEasing
             }
         }
     }
@@ -220,7 +220,7 @@ FocusScope {
         width: parent.width
         height: 1
         y: parent.height + 10
-        color: Theme.outlineStrong
+        color: Style.outlineStrong
     }
 
     function updateIndicator() {

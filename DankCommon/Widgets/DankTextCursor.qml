@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 Rectangle {
     id: root
@@ -16,7 +16,7 @@ Rectangle {
 
     width: 2
     radius: 1
-    color: Theme.primary
+    color: Style.primary
     visible: shown && blinkOn
 
     onShownChanged: resetBlink()

@@ -2,7 +2,7 @@ import Qt.labs.folderlistmodel
 import QtCore
 import QtQuick
 import QtQuick.Controls
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 FocusScope {
@@ -77,7 +77,7 @@ FocusScope {
 
     function loadSettings() {
         const type = browserType || "default";
-        const settings = CacheData.fileBrowserSettings[type];
+        const settings = Host.cache?.fileBrowserSettings?.[type];
         const isImageBrowser = ["wallpaper", "profile"].includes(browserType);
 
         if (settings) {
@@ -92,10 +92,10 @@ FocusScope {
     }
 
     function saveSettings() {
-        if (!_initialized)
+        if (!_initialized || !Host.cache)
             return;
         const type = browserType || "default";
-        let settings = CacheData.fileBrowserSettings;
+        let settings = Host.cache.fileBrowserSettings;
         if (!settings[type]) {
             settings[type] = {};
         }
@@ -105,15 +105,15 @@ FocusScope {
         settings[type].iconSizeIndex = iconSizeIndex;
         settings[type].showSidebar = showSidebar;
         settings[type].lastPath = currentPath;
-        CacheData.fileBrowserSettings = settings;
+        Host.cache.fileBrowserSettings = settings;
 
         if (browserType === "wallpaper") {
-            CacheData.wallpaperLastPath = currentPath;
+            Host.cache.wallpaperLastPath = currentPath;
         } else if (browserType === "profile") {
-            CacheData.profileLastPath = currentPath;
+            Host.cache.profileLastPath = currentPath;
         }
 
-        CacheData.saveCache();
+        Host.cache.saveCache();
     }
 
     onViewModeChanged: saveSettings()
@@ -131,25 +131,27 @@ FocusScope {
 
     function getLastPath() {
         const type = browserType || "default";
-        const settings = CacheData.fileBrowserSettings[type];
+        const settings = Host.cache?.fileBrowserSettings?.[type];
         const lastPath = settings?.lastPath || "";
         return (lastPath && lastPath !== "") ? lastPath : homeDir;
     }
 
     function saveLastPath(path) {
+        if (!Host.cache)
+            return;
         const type = browserType || "default";
-        let settings = CacheData.fileBrowserSettings;
+        let settings = Host.cache.fileBrowserSettings;
         if (!settings[type]) {
             settings[type] = {};
         }
         settings[type].lastPath = path;
-        CacheData.fileBrowserSettings = settings;
-        CacheData.saveCache();
+        Host.cache.fileBrowserSettings = settings;
+        Host.cache.saveCache();
 
         if (browserType === "wallpaper") {
-            CacheData.wallpaperLastPath = path;
+            Host.cache.wallpaperLastPath = path;
         } else if (browserType === "profile") {
-            CacheData.profileLastPath = path;
+            Host.cache.profileLastPath = path;
         }
     }
 
@@ -579,22 +581,22 @@ FocusScope {
             }
 
             Row {
-                spacing: Theme.spacingM
+                spacing: Style.spacingM
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.spacingL
+                anchors.leftMargin: Style.spacingL
 
                 DankIcon {
                     name: browserIcon
-                    size: Theme.iconSizeLarge
-                    color: Theme.primary
+                    size: Style.iconSizeLarge
+                    color: Style.primary
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
                 StyledText {
                     text: browserTitle
-                    font.pixelSize: Theme.fontSizeXLarge
-                    color: Theme.surfaceText
+                    font.pixelSize: Style.fontSizeXLarge
+                    color: Style.surfaceText
                     font.weight: Font.Medium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -602,31 +604,31 @@ FocusScope {
 
             Row {
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.spacingM
+                anchors.rightMargin: Style.spacingM
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: Theme.spacingS
+                spacing: Style.spacingS
 
                 DankActionButton {
                     circular: false
                     iconName: showHiddenFiles ? "visibility_off" : "visibility"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: showHiddenFiles ? Theme.primary : Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: showHiddenFiles ? Style.primary : Style.surfaceText
                     onClicked: showHiddenFiles = !showHiddenFiles
                 }
 
                 DankActionButton {
                     circular: false
                     iconName: viewMode === "grid" ? "view_list" : "grid_view"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: Style.surfaceText
                     onClicked: viewMode = viewMode === "grid" ? "list" : "grid"
                 }
 
                 DankActionButton {
                     circular: false
                     iconName: iconSizeIndex === 0 ? "photo_size_select_small" : iconSizeIndex === 1 ? "photo_size_select_large" : iconSizeIndex === 2 ? "photo_size_select_actual" : "zoom_in"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: Style.surfaceText
                     visible: viewMode === "grid"
                     onClicked: iconSizeIndex = (iconSizeIndex + 1) % iconSizes.length
                 }
@@ -634,8 +636,8 @@ FocusScope {
                 DankActionButton {
                     circular: false
                     iconName: "info"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: Style.surfaceText
                     onClicked: root.showKeyboardHints = !root.showKeyboardHints
                 }
 
@@ -643,8 +645,8 @@ FocusScope {
                     visible: windowControls?.supported ?? false
                     circular: false
                     iconName: windowControls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: Style.surfaceText
                     onClicked: if (windowControls)
                         windowControls.tryToggleMaximize()
                 }
@@ -652,8 +654,8 @@ FocusScope {
                 DankActionButton {
                     circular: false
                     iconName: "close"
-                    iconSize: Theme.iconSize - 4
-                    iconColor: Theme.surfaceText
+                    iconSize: Style.iconSize - 4
+                    iconColor: Style.surfaceText
                     onClicked: root.closeRequested()
                 }
             }
@@ -662,7 +664,7 @@ FocusScope {
         StyledRect {
             width: parent.width
             height: 1
-            color: Theme.outline
+            color: Style.outline
         }
 
         Item {
@@ -671,7 +673,7 @@ FocusScope {
 
             Row {
                 anchors.fill: parent
-                anchors.bottomMargin: root.saveMode || root.folderMode ? 40 + Theme.spacingL * 2 : 0
+                anchors.bottomMargin: root.saveMode || root.folderMode ? 40 + Style.spacingL * 2 : 0
                 spacing: 0
 
                 Row {
@@ -690,7 +692,7 @@ FocusScope {
                     StyledRect {
                         width: 1
                         height: parent.height
-                        color: Theme.outline
+                        color: Style.outline
                     }
                 }
 
@@ -720,7 +722,7 @@ FocusScope {
                     StyledRect {
                         width: parent.width
                         height: 1
-                        color: Theme.outline
+                        color: Style.outline
                     }
 
                     Item {
@@ -731,9 +733,9 @@ FocusScope {
 
                         property real gridCellWidth: iconSizes[iconSizeIndex] + 24
                         property real gridCellHeight: iconSizes[iconSizeIndex] + 56
-                        property real availableGridWidth: width - Theme.spacingM * 2
+                        property real availableGridWidth: width - Style.spacingM * 2
                         property int gridColumns: Math.max(1, Math.floor(availableGridWidth / gridCellWidth))
-                        property real gridLeftMargin: Theme.spacingM + Math.max(0, (availableGridWidth - (gridColumns * gridCellWidth)) / 2)
+                        property real gridLeftMargin: Style.spacingM + Math.max(0, (availableGridWidth - (gridColumns * gridCellWidth)) / 2)
 
                         onGridColumnsChanged: {
                             root.actualGridColumns = gridColumns;
@@ -746,9 +748,9 @@ FocusScope {
                             id: fileGrid
                             anchors.fill: parent
                             anchors.leftMargin: gridContainer.gridLeftMargin
-                            anchors.rightMargin: Theme.spacingM
-                            anchors.topMargin: Theme.spacingS
-                            anchors.bottomMargin: Theme.spacingS
+                            anchors.rightMargin: Style.spacingM
+                            anchors.topMargin: Style.spacingS
+                            anchors.bottomMargin: Style.spacingS
                             visible: viewMode === "grid"
                             cellWidth: gridContainer.gridCellWidth
                             cellHeight: gridContainer.gridCellHeight
@@ -803,12 +805,12 @@ FocusScope {
                         DankListView {
                             id: fileList
                             anchors.fill: parent
-                            anchors.leftMargin: Theme.spacingM
-                            anchors.rightMargin: Theme.spacingM
-                            anchors.topMargin: Theme.spacingS
-                            anchors.bottomMargin: Theme.spacingS
+                            anchors.leftMargin: Style.spacingM
+                            anchors.rightMargin: Style.spacingM
+                            anchors.topMargin: Style.spacingS
+                            anchors.bottomMargin: Style.spacingS
                             visible: viewMode === "list"
-                            spacing: Theme.spacingXXS
+                            spacing: Style.spacingXXS
                             model: folderModel
                             currentIndex: selectedIndex
                             onCurrentIndexChanged: {
@@ -859,7 +861,7 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: Theme.spacingL
+                anchors.margins: Style.spacingL
                 saveMode: root.saveMode
                 folderMode: root.folderMode
                 defaultFileName: root.defaultFileName
@@ -877,7 +879,7 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: Theme.spacingL
+                anchors.margins: Style.spacingL
                 showHints: root.showKeyboardHints
             }
 
@@ -886,7 +888,7 @@ FocusScope {
 
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: Theme.spacingL
+                anchors.margins: Style.spacingL
                 width: 300
                 showFileInfo: root.showFileInfo
                 selectedIndex: root.selectedIndex
@@ -908,7 +910,7 @@ FocusScope {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.topMargin: 120
-                anchors.rightMargin: Theme.spacingL
+                anchors.rightMargin: Style.spacingL
                 sortBy: root.sortBy
                 sortAscending: root.sortAscending
                 onSortBySelected: value => {

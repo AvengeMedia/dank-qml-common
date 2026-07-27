@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 FloatingWindow {
@@ -39,7 +39,7 @@ FloatingWindow {
     minimumSize: Qt.size(500, 400)
     implicitWidth: 800
     implicitHeight: 600
-    color: Theme.surfaceContainer
+    color: Style.surfaceContainer
     visible: false
 
     onClosed: close()

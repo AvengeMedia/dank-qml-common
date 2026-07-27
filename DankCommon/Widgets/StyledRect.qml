@@ -1,5 +1,4 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 Rectangle {

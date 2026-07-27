@@ -1,5 +1,4 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 Item {
@@ -10,7 +9,7 @@ Item {
     property alias color: icon.color
     property bool filled: false
     property real fill: filled ? 1.0 : 0.0
-    property int grade: Theme.isLightMode ? 0 : -25
+    property int grade: Style.isLightMode ? 0 : -25
     property int weight: filled ? 500 : 400
     property bool smoothTransform: false
 
@@ -25,10 +24,10 @@ Item {
         anchors.fill: parent
 
         font.family: Fonts.icons
-        font.pixelSize: Math.round(Theme.fontSizeMedium)
+        font.pixelSize: Math.round(Style.fontSizeMedium)
         font.weight: root.weight
         font.hintingPreference: Font.PreferNoHinting
-        color: Theme.surfaceText
+        color: Style.surfaceText
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         renderType: root.smoothTransform ? Text.QtRendering : Text.NativeRendering
@@ -42,16 +41,16 @@ Item {
 
         Behavior on font.weight {
             NumberAnimation {
-                duration: Theme.shortDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shortDuration
+                easing.type: Style.standardEasing
             }
         }
     }
 
     Behavior on fill {
         NumberAnimation {
-            duration: Theme.shortDuration
-            easing.type: Theme.standardEasing
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
@@ -31,32 +31,32 @@ StyledRect {
     property alias validator: textInput.validator
     property alias maximumLength: textInput.maximumLength
     property string leftIconName: ""
-    property int leftIconSize: Theme.iconSize
-    property color leftIconColor: Theme.surfaceVariantText
-    property color leftIconFocusedColor: Theme.primary
+    property int leftIconSize: Style.iconSize
+    property color leftIconColor: Style.surfaceVariantText
+    property color leftIconFocusedColor: Style.primary
     property bool showClearButton: false
     property bool showPasswordToggle: false
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
     property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency) : Theme.surfaceContainerHigh
-    property color focusedBorderColor: Theme.primary
-    property color normalBorderColor: Theme.outlineMedium
-    property color placeholderColor: Theme.outlineButton
+    property color backgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.surfaceContainerHigh
+    property color focusedBorderColor: Style.primary
+    property color normalBorderColor: Style.outlineMedium
+    property color placeholderColor: Style.outlineButton
     property real borderWidth: 1
     property real focusedBorderWidth: 2
-    property real cornerRadius: Theme.cornerRadius
-    readonly property real leftPadding: Theme.spacingM + (leftIconName ? leftIconSize + Theme.spacingM : 0)
+    property real cornerRadius: Style.cornerRadius
+    readonly property real leftPadding: Style.spacingM + (leftIconName ? leftIconSize + Style.spacingM : 0)
     readonly property real rightPadding: {
-        let p = Theme.spacingS + rightAccessoryWidth;
+        let p = Style.spacingS + rightAccessoryWidth;
         if (showPasswordToggle)
-            p += 20 + Theme.spacingXS;
+            p += 20 + Style.spacingXS;
         if (showClearButton && text.length > 0)
-            p += 20 + Theme.spacingXS;
+            p += 20 + Style.spacingXS;
         return p;
     }
-    property real topPadding: Theme.spacingS
-    property real bottomPadding: Theme.spacingS
+    property real topPadding: Style.spacingS
+    property real bottomPadding: Style.spacingS
     property bool ignoreLeftRightKeys: false
     property bool ignoreUpDownKeys: false
     property bool ignoreTabKeys: false
@@ -88,10 +88,10 @@ StyledRect {
         textInput.insert(textInput.cursorPosition, str);
     }
 
-    readonly property real labelBandHeight: Math.round(Theme.fontSizeSmall * 1.4) + Theme.spacingXS * 2
+    readonly property real labelBandHeight: Math.round(Style.fontSizeSmall * 1.4) + Style.spacingXS * 2
 
     width: 200
-    height: labelText !== "" ? Math.round(Theme.fontSizeMedium * 3) + labelBandHeight : Math.round(Theme.fontSizeMedium * 3)
+    height: labelText !== "" ? Math.round(Style.fontSizeMedium * 3) + labelBandHeight : Math.round(Style.fontSizeMedium * 3)
     radius: cornerRadius
     color: backgroundColor
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
@@ -101,7 +101,7 @@ StyledRect {
         id: leftIcon
 
         anchors.left: parent.left
-        anchors.leftMargin: Theme.spacingM
+        anchors.leftMargin: Style.spacingM
         anchors.verticalCenter: textInput.verticalCenter
         name: leftIconName
         size: leftIconSize
@@ -115,11 +115,11 @@ StyledRect {
         anchors.left: textInput.left
         anchors.right: textInput.right
         anchors.top: parent.top
-        anchors.topMargin: Theme.spacingXS
+        anchors.topMargin: Style.spacingXS
         text: root.labelText
         visible: root.labelText !== ""
-        font.pixelSize: Theme.fontSizeSmall
-        color: textInput.activeFocus ? Theme.primary : Theme.surfaceVariantText
+        font.pixelSize: Style.fontSizeSmall
+        color: textInput.activeFocus ? Style.primary : Style.surfaceVariantText
         elide: Text.ElideRight
     }
 
@@ -127,18 +127,18 @@ StyledRect {
         id: textInput
 
         anchors.left: leftIcon.visible ? leftIcon.right : parent.left
-        anchors.leftMargin: Theme.spacingM
+        anchors.leftMargin: Style.spacingM
         anchors.right: rightButtonsRow.left
-        anchors.rightMargin: rightButtonsRow.visible ? Theme.spacingS : Theme.spacingM
+        anchors.rightMargin: rightButtonsRow.visible ? Style.spacingS : Style.spacingM
         anchors.top: parent.top
         anchors.topMargin: root.labelText !== "" ? root.labelBandHeight : root.topPadding
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.bottomPadding
-        font.pixelSize: Theme.fontSizeMedium
-        font.family: Theme.fontFamily
-        color: Theme.surfaceText
-        selectionColor: Theme.primaryContainer
-        selectedTextColor: Theme.primary
+        font.pixelSize: Style.fontSizeMedium
+        font.family: Style.fontFamily
+        color: Style.surfaceText
+        selectionColor: Style.primaryContainer
+        selectedTextColor: Style.primary
         horizontalAlignment: TextInput.AlignLeft
         verticalAlignment: TextInput.AlignVCenter
         selectByMouse: !root.ignoreLeftRightKeys
@@ -203,9 +203,9 @@ StyledRect {
         id: rightButtonsRow
 
         anchors.right: parent.right
-        anchors.rightMargin: Theme.spacingS + root.rightAccessoryWidth
+        anchors.rightMargin: Style.spacingS + root.rightAccessoryWidth
         anchors.verticalCenter: parent.verticalCenter
-        spacing: Theme.spacingXS
+        spacing: Style.spacingXS
         visible: showPasswordToggle || (showClearButton && text.length > 0)
 
         StyledRect {
@@ -214,14 +214,14 @@ StyledRect {
             width: 20
             height: 20
             radius: 10
-            color: passwordToggleArea.containsMouse ? Theme.outlineStrong : Theme.withAlpha(Theme.outlineStrong, 0)
+            color: passwordToggleArea.containsMouse ? Style.outlineStrong : Style.withAlpha(Style.outlineStrong, 0)
             visible: showPasswordToggle
 
             DankIcon {
                 anchors.centerIn: parent
                 name: passwordVisible ? "visibility_off" : "visibility"
                 size: 14
-                color: passwordToggleArea.containsMouse ? Theme.outline : Theme.surfaceVariantText
+                color: passwordToggleArea.containsMouse ? Style.outline : Style.surfaceVariantText
             }
 
             MouseArea {
@@ -240,14 +240,14 @@ StyledRect {
             width: 20
             height: 20
             radius: 10
-            color: clearArea.containsMouse ? Theme.outlineStrong : Theme.withAlpha(Theme.outlineStrong, 0)
+            color: clearArea.containsMouse ? Style.outlineStrong : Style.withAlpha(Style.outlineStrong, 0)
             visible: showClearButton && text.length > 0
 
             DankIcon {
                 anchors.centerIn: parent
                 name: "close"
                 size: 14
-                color: clearArea.containsMouse ? Theme.outline : Theme.surfaceVariantText
+                color: clearArea.containsMouse ? Style.outline : Style.surfaceVariantText
             }
 
             MouseArea {
@@ -276,15 +276,15 @@ StyledRect {
 
     Behavior on border.color {
         ColorAnimation {
-            duration: Theme.shortDuration
-            easing.type: Theme.standardEasing
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 
     Behavior on border.width {
         NumberAnimation {
-            duration: Theme.shortDuration
-            easing.type: Theme.standardEasing
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 }

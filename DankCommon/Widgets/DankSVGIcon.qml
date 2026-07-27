@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell.Widgets
-import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -10,8 +10,8 @@ Item {
     property int size: 24
     property string cornerIcon: ""
     property int cornerIconSize: Math.max(10, size * 0.4)
-    property color cornerIconColor: Theme.surfaceText
-    property color cornerIconBackground: Theme.surface
+    property color cornerIconColor: Style.surfaceText
+    property color cornerIconBackground: Style.surface
     property color colorOverride: "transparent"
     property real brightnessOverride: 0.0
     property real contrastOverride: 0.0
@@ -69,7 +69,7 @@ Item {
         radius: width / 2
         color: root.cornerIconBackground
         border.width: 1
-        border.color: Theme.surfaceLight
+        border.color: Style.surfaceLight
 
         DankIcon {
             anchors.centerIn: parent

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Rectangle {
@@ -8,9 +8,9 @@ Rectangle {
     property bool showHints: false
 
     height: 80
-    radius: Theme.cornerRadius
-    color: Theme.withAlpha(Theme.surfaceContainer, 0.95)
-    border.color: Theme.primary
+    radius: Style.cornerRadius
+    color: Style.withAlpha(Style.surfaceContainer, 0.95)
+    border.color: Style.primary
     border.width: 2
     opacity: showHints ? 1 : 0
     z: 100
@@ -19,13 +19,13 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacingS
-        spacing: Theme.spacingXXS
+        anchors.margins: Style.spacingS
+        spacing: Style.spacingXXS
 
         StyledText {
             text: I18n.tr("Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select", "file browser keyboard shortcuts hint line")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceText
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceText
             width: parent.width
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
@@ -33,8 +33,8 @@ Rectangle {
 
         StyledText {
             text: I18n.tr("Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close", "file browser keyboard shortcuts hint line")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceText
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceText
             width: parent.width
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
@@ -43,8 +43,8 @@ Rectangle {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: Theme.shortDuration
-            easing.type: Theme.standardEasing
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 }

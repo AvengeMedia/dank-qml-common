@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Widgets
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
@@ -137,13 +137,13 @@ StyledRect {
     }
 
     height: 44
-    radius: Theme.cornerRadius
+    radius: Style.cornerRadius
     color: {
         if (keyboardNavigationActive && listDelegateRoot.index === selectedIndex)
-            return Theme.surfacePressed;
-        return listMouseArea.containsMouse ? Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency) : Theme.withAlpha(Theme.surfaceContainerHigh, 0);
+            return Style.surfacePressed;
+        return listMouseArea.containsMouse ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.withAlpha(Style.surfaceContainerHigh, 0);
     }
-    border.color: keyboardNavigationActive && listDelegateRoot.index === selectedIndex ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+    border.color: keyboardNavigationActive && listDelegateRoot.index === selectedIndex ? Style.primary : Style.withAlpha(Style.primary, 0)
     border.width: (keyboardNavigationActive && listDelegateRoot.index === selectedIndex) ? 2 : 0
 
     Component.onCompleted: {
@@ -158,9 +158,9 @@ StyledRect {
 
     Row {
         anchors.fill: parent
-        anchors.leftMargin: Theme.spacingS
-        anchors.rightMargin: Theme.spacingS
-        spacing: Theme.spacingS
+        anchors.leftMargin: Style.spacingS
+        anchors.rightMargin: Style.spacingS
+        spacing: Style.spacingS
 
         Item {
             width: 28
@@ -169,7 +169,7 @@ StyledRect {
 
             ClippingRectangle {
                 anchors.fill: parent
-                radius: Theme.cornerRadius
+                radius: Style.cornerRadius
                 color: "transparent"
 
                 Image {
@@ -200,16 +200,16 @@ StyledRect {
             DankNFIcon {
                 anchors.centerIn: parent
                 name: listDelegateRoot.fileIsDir ? "folder" : getIconForFile(listDelegateRoot.fileName)
-                size: Theme.iconSize - 2
-                color: listDelegateRoot.fileIsDir ? Theme.primary : Theme.surfaceText
+                size: Style.iconSize - 2
+                color: listDelegateRoot.fileIsDir ? Style.primary : Style.surfaceText
                 visible: listDelegateRoot.fileIsDir || (!isImage && !(isVideo && listPreviewImage.status === Image.Ready))
             }
         }
 
         StyledText {
             text: listDelegateRoot.fileName || ""
-            font.pixelSize: Theme.fontSizeMedium
-            color: Theme.surfaceText
+            font.pixelSize: Style.fontSizeMedium
+            color: Style.surfaceText
             width: parent.width - 280
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter
@@ -219,8 +219,8 @@ StyledRect {
 
         StyledText {
             text: listDelegateRoot.fileIsDir ? "" : formatFileSize(listDelegateRoot.fileSize)
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceTextMedium
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
             width: 70
             horizontalAlignment: Text.AlignRight
             anchors.verticalCenter: parent.verticalCenter
@@ -228,8 +228,8 @@ StyledRect {
 
         StyledText {
             text: Qt.formatDateTime(listDelegateRoot.fileModified, "MMM d, yyyy h:mm AP")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceTextMedium
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
             width: 140
             horizontalAlignment: Text.AlignRight
             anchors.verticalCenter: parent.verticalCenter

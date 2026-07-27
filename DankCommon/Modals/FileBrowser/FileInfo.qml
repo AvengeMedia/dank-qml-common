@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Io
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Rectangle {
@@ -12,9 +12,9 @@ Rectangle {
     property string currentPath: ""
 
     height: 200
-    radius: Theme.cornerRadius
-    color: Theme.withAlpha(Theme.surfaceContainer, 0.95)
-    border.color: Theme.secondary
+    radius: Style.cornerRadius
+    color: Style.withAlpha(Style.surfaceContainer, 0.95)
+    border.color: Style.secondary
     border.width: 2
     opacity: showFileInfo ? 1 : 0
     z: 100
@@ -119,23 +119,23 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacingM
-        spacing: Theme.spacingXS
+        anchors.margins: Style.spacingM
+        spacing: Style.spacingXS
 
         Row {
             width: parent.width
-            spacing: Theme.spacingS
+            spacing: Style.spacingS
 
             DankIcon {
                 name: "info"
-                size: Theme.iconSize
-                color: Theme.secondary
+                size: Style.iconSize
+                color: Style.secondary
             }
 
             StyledText {
                 text: I18n.tr("File Information", "file browser info panel header")
-                font.pixelSize: Theme.fontSizeMedium
-                color: Theme.surfaceText
+                font.pixelSize: Style.fontSizeMedium
+                color: Style.surfaceText
                 font.weight: Font.Medium
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -143,12 +143,12 @@ Rectangle {
 
         Column {
             width: parent.width
-            spacing: Theme.spacingXS
+            spacing: Style.spacingXS
 
             StyledText {
                 text: currentFileDisplayData.name
-                font.pixelSize: Theme.fontSizeMedium
-                color: Theme.surfaceText
+                font.pixelSize: Style.fontSizeMedium
+                color: Style.surfaceText
                 width: parent.width
                 elide: Text.ElideMiddle
                 wrapMode: Text.NoWrap
@@ -157,23 +157,23 @@ Rectangle {
 
             StyledText {
                 text: currentFileDisplayData.type + (currentFileDisplayData.extension ? " (." + currentFileDisplayData.extension + ")" : "")
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
                 width: parent.width
             }
 
             StyledText {
                 text: currentFileDisplayData.size
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
                 width: parent.width
                 visible: currentFileDisplayData.exists && !currentFileIsDir
             }
 
             StyledText {
                 text: currentFileDisplayData.modified
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
                 width: parent.width
                 elide: Text.ElideRight
                 visible: currentFileDisplayData.exists
@@ -181,15 +181,15 @@ Rectangle {
 
             StyledText {
                 text: currentFileDisplayData.permissions
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
                 visible: currentFileDisplayData.exists
             }
 
             StyledText {
                 text: currentFileDisplayData.position
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
                 width: parent.width
             }
         }
@@ -197,12 +197,12 @@ Rectangle {
 
     StyledText {
         text: I18n.tr("F1/I: Toggle • F10: Help", "file browser info panel keyboard shortcut hint")
-        font.pixelSize: Theme.fontSizeSmall
-        color: Theme.surfaceTextMedium
+        font.pixelSize: Style.fontSizeSmall
+        color: Style.surfaceTextMedium
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacingM
+        anchors.margins: Style.spacingM
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -229,8 +229,8 @@ Rectangle {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: Theme.shortDuration
-            easing.type: Theme.standardEasing
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 }

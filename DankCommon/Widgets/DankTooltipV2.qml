@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -102,19 +102,19 @@ Item {
 
         property string text: ""
 
-        leftPadding: Theme.spacingM
-        rightPadding: Theme.spacingM
-        topPadding: Theme.spacingS
-        bottomPadding: Theme.spacingS
+        leftPadding: Style.spacingM
+        rightPadding: Style.spacingM
+        topPadding: Style.spacingS
+        bottomPadding: Style.spacingS
         closePolicy: Popup.NoAutoClose
         modal: false
         dim: false
 
         background: Rectangle {
-            color: Theme.surfaceContainerHigh
-            radius: Theme.cornerRadius
+            color: Style.surfaceContainerHigh
+            radius: Style.cornerRadius
             border.width: 1
-            border.color: Theme.outlineMedium
+            border.color: Style.outlineMedium
         }
 
         contentItem: Text {
@@ -122,8 +122,8 @@ Item {
 
             width: Math.min(implicitWidth, 500)
             text: tooltip.text
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceText
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceText
             wrapMode: Text.NoWrap
             maximumLineCount: 1
             elide: Text.ElideRight
@@ -136,8 +136,8 @@ Item {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: Theme.shortDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shortDuration
+                easing.type: Style.standardEasing
             }
         }
 
@@ -146,8 +146,8 @@ Item {
                 property: "opacity"
                 from: 1
                 to: 0
-                duration: Theme.shorterDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shorterDuration
+                easing.type: Style.standardEasing
             }
         }
     }

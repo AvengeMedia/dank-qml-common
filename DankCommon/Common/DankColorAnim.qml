@@ -1,9 +1,8 @@
 import QtQuick
-import qs.Common
 
 // Reusable ColorAnimation wrapper
 ColorAnimation {
-    duration: Theme.expressiveDurations.normal
+    duration: Style.expressiveDurations.normal
     easing.type: Easing.BezierSpline
-    easing.bezierCurve: Theme.expressiveCurves.standard
+    easing.bezierCurve: Style.expressiveCurves.standard
 }

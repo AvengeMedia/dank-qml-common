@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
@@ -10,21 +10,21 @@ StyledRect {
     signal locationSelected(string path)
 
     width: 200
-    color: Theme.nestedSurface
+    color: Style.nestedSurface
     clip: true
 
     Column {
         anchors.fill: parent
-        anchors.margins: Theme.spacingS
-        spacing: Theme.spacingXS
+        anchors.margins: Style.spacingS
+        spacing: Style.spacingXS
 
         StyledText {
             text: I18n.tr("Quick Access", "file browser sidebar section header")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceTextMedium
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
             font.weight: Font.Medium
-            leftPadding: Theme.spacingS
-            bottomPadding: Theme.spacingXS
+            leftPadding: Style.spacingS
+            bottomPadding: Style.spacingXS
         }
 
         Repeater {
@@ -33,25 +33,25 @@ StyledRect {
             StyledRect {
                 width: parent?.width ?? 0
                 height: 38
-                radius: Theme.cornerRadius
-                color: quickAccessMouseArea.containsMouse ? Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency) : (currentPath === modelData?.path ? Theme.surfacePressed : Theme.withAlpha(Theme.surfacePressed, 0))
+                radius: Style.cornerRadius
+                color: quickAccessMouseArea.containsMouse ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : (currentPath === modelData?.path ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
 
                 Row {
                     anchors.fill: parent
-                    anchors.leftMargin: Theme.spacingM
-                    spacing: Theme.spacingS
+                    anchors.leftMargin: Style.spacingM
+                    spacing: Style.spacingS
 
                     DankIcon {
                         name: modelData?.icon ?? ""
-                        size: Theme.iconSize - 2
-                        color: currentPath === modelData?.path ? Theme.primary : Theme.surfaceText
+                        size: Style.iconSize - 2
+                        color: currentPath === modelData?.path ? Style.primary : Style.surfaceText
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
                     StyledText {
                         text: modelData?.name ?? ""
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: currentPath === modelData?.path ? Theme.primary : Theme.surfaceText
+                        font.pixelSize: Style.fontSizeMedium
+                        color: currentPath === modelData?.path ? Style.primary : Style.surfaceText
                         font.weight: currentPath === modelData?.path ? Font.Medium : Font.Normal
                         anchors.verticalCenter: parent.verticalCenter
                     }

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Row {
@@ -16,20 +16,20 @@ Row {
 
     height: (saveMode || folderMode) ? 40 : 0
     visible: saveMode || folderMode
-    spacing: Theme.spacingM
+    spacing: Style.spacingM
 
     DankTextField {
         id: fileNameInput
 
         visible: saveRow.saveMode
-        width: parent.width - saveButton.width - Theme.spacingM
+        width: parent.width - saveButton.width - Style.spacingM
         height: 40
         text: defaultFileName
         placeholderText: I18n.tr("Enter filename...", "file browser save filename input placeholder")
         ignoreLeftRightKeys: false
         focus: saveMode
-        topPadding: Theme.spacingS
-        bottomPadding: Theme.spacingS
+        topPadding: Style.spacingS
+        bottomPadding: Style.spacingS
         Component.onCompleted: {
             if (saveMode)
                 Qt.callLater(() => {
@@ -52,19 +52,19 @@ Row {
         visible: saveRow.saveMode
         width: 80
         height: 40
-        color: fileNameInput.text.trim() !== "" ? Theme.primary : Theme.surfaceVariant
-        radius: Theme.cornerRadius
+        color: fileNameInput.text.trim() !== "" ? Style.primary : Style.surfaceVariant
+        radius: Style.cornerRadius
 
         StyledText {
             anchors.centerIn: parent
             text: I18n.tr("Save", "file browser save button")
-            color: fileNameInput.text.trim() !== "" ? Theme.primaryText : Theme.surfaceVariantText
-            font.pixelSize: Theme.fontSizeMedium
+            color: fileNameInput.text.trim() !== "" ? Style.primaryText : Style.surfaceVariantText
+            font.pixelSize: Style.fontSizeMedium
         }
 
         StateLayer {
-            stateColor: Theme.primary
-            cornerRadius: Theme.cornerRadius
+            stateColor: Style.primary
+            cornerRadius: Style.cornerRadius
             enabled: fileNameInput.text.trim() !== ""
             onClicked: {
                 if (fileNameInput.text.trim() !== "") {
@@ -83,32 +83,32 @@ Row {
         visible: saveRow.folderMode
         width: parent.width
         height: 40
-        color: Theme.primary
-        radius: Theme.cornerRadius
+        color: Style.primary
+        radius: Style.cornerRadius
 
         Row {
             anchors.centerIn: parent
-            spacing: Theme.spacingS
+            spacing: Style.spacingS
 
             DankIcon {
                 name: "check"
-                size: Theme.iconSize - 4
-                color: Theme.primaryText
+                size: Style.iconSize - 4
+                color: Style.primaryText
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             StyledText {
                 text: I18n.tr("Use this folder", "file browser folder selection confirm button")
-                color: Theme.primaryText
-                font.pixelSize: Theme.fontSizeMedium
+                color: Style.primaryText
+                font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         StateLayer {
-            stateColor: Theme.primaryText
-            cornerRadius: Theme.cornerRadius
+            stateColor: Style.primaryText
+            cornerRadius: Style.cornerRadius
             onClicked: {
                 var basePath = currentPath.replace(/^file:\/\//, '');
                 saveRow.folderSelected(basePath);

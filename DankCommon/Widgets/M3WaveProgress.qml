@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 // Wave progress indicator: track, animated fill, seek preview and playhead are
 // all drawn in a single fragment shader (Shaders/frag/wave_progress.frag).
@@ -15,10 +15,10 @@ Item {
     property real phase: 0.0
     property bool isPlaying: false
     property real currentAmp: 1.6
-    property color trackColor: Theme.withAlpha(Theme.surfaceVariant, 0.40)
-    property color fillColor: Theme.primary
-    property color playheadColor: Theme.primary
-    property color actualProgressColor: Theme.onSurface_38
+    property color trackColor: Style.withAlpha(Style.surfaceVariant, 0.40)
+    property color fillColor: Style.primary
+    property color playheadColor: Style.primary
+    property color actualProgressColor: Style.onSurface_38
 
     Behavior on currentAmp {
         NumberAnimation {

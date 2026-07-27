@@ -1,8 +1,7 @@
 import QtQuick
-import qs.Common
 
 NumberAnimation {
-    duration: Theme.expressiveDurations.normal
+    duration: Style.expressiveDurations.normal
     easing.type: Easing.BezierSpline
-    easing.bezierCurve: Theme.expressiveCurves.standard
+    easing.bezierCurve: Style.expressiveCurves.standard
 }

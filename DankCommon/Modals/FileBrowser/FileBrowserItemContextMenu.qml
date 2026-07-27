@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Popup {
@@ -60,7 +60,7 @@ Popup {
     }
 
     width: 220
-    height: menuColumn.implicitHeight + Theme.spacingS * 2
+    height: menuColumn.implicitHeight + Style.spacingS * 2
     padding: 0
     modal: false
     closePolicy: Popup.CloseOnEscape
@@ -85,15 +85,15 @@ Popup {
     }
 
     contentItem: Rectangle {
-        color: Theme.floatingSurface
-        radius: Theme.cornerRadius
-        border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.08)
+        color: Style.floatingSurface
+        radius: Style.cornerRadius
+        border.color: Qt.rgba(Style.outline.r, Style.outline.g, Style.outline.b, 0.08)
         border.width: 1
 
         Column {
             id: menuColumn
             anchors.fill: parent
-            anchors.margins: Theme.spacingS
+            anchors.margins: Style.spacingS
             spacing: 1
 
             Repeater {
@@ -102,36 +102,36 @@ Popup {
                 Rectangle {
                     width: parent.width
                     height: 32
-                    radius: Theme.cornerRadius
+                    radius: Style.cornerRadius
                     opacity: modelData.enabled ? 1 : 0.5
                     color: {
                         if (!modelData.enabled || !area.containsMouse)
                             return "transparent";
                         if (modelData.dangerous)
-                            return Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.12);
-                        return Theme.widgetBaseHoverColor;
+                            return Qt.rgba(Style.error.r, Style.error.g, Style.error.b, 0.12);
+                        return Style.widgetBaseHoverColor;
                     }
 
                     Row {
                         anchors.left: parent.left
-                        anchors.leftMargin: Theme.spacingS
+                        anchors.leftMargin: Style.spacingS
                         anchors.right: parent.right
-                        anchors.rightMargin: Theme.spacingS
+                        anchors.rightMargin: Style.spacingS
                         anchors.verticalCenter: parent.verticalCenter
-                        spacing: Theme.spacingS
+                        spacing: Style.spacingS
 
                         DankIcon {
                             anchors.verticalCenter: parent.verticalCenter
                             name: modelData.icon
                             size: 16
-                            color: modelData.dangerous && area.containsMouse && modelData.enabled ? Theme.error : Theme.surfaceText
+                            color: modelData.dangerous && area.containsMouse && modelData.enabled ? Style.error : Style.surfaceText
                         }
 
                         StyledText {
                             anchors.verticalCenter: parent.verticalCenter
                             text: modelData.text
-                            font.pixelSize: Theme.fontSizeSmall
-                            color: modelData.dangerous && area.containsMouse && modelData.enabled ? Theme.error : Theme.surfaceText
+                            font.pixelSize: Style.fontSizeSmall
+                            color: modelData.dangerous && area.containsMouse && modelData.enabled ? Style.error : Style.surfaceText
                             elide: Text.ElideRight
                         }
                     }

@@ -1,13 +1,13 @@
 import QtQuick
 import QtQuick.Shapes
-import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
 
     property real size: 48
     property real strokeWidth: Math.max(2, size / 12)
-    property color color: Theme.primary
+    property color color: Style.primary
     property bool running: visible
 
     implicitWidth: size

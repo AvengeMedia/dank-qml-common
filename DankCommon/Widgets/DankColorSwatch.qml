@@ -1,14 +1,14 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
 
     property color swatchColor: "transparent"
-    property color ringColor: Theme.outline
+    property color ringColor: Style.outline
     property real minPreviewAlpha: 0.4
     readonly property bool translucent: swatchColor.a > 0 && swatchColor.a < 1
-    readonly property color displayColor: translucent ? Theme.withAlpha(swatchColor, Math.max(swatchColor.a, minPreviewAlpha)) : swatchColor
+    readonly property color displayColor: translucent ? Style.withAlpha(swatchColor, Math.max(swatchColor.a, minPreviewAlpha)) : swatchColor
 
     Loader {
         anchors.fill: parent

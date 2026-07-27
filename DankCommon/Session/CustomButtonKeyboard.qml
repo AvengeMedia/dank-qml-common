@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 DankActionButton {
@@ -11,7 +11,7 @@ DankActionButton {
     width: 40
     height: 40
     property bool isShift: false
-    color: Theme.surface
+    color: Style.surface
 
     property bool isIcon: text === "keyboard_hide" || text === "Backspace" || text === "Enter"
 
@@ -27,7 +27,7 @@ DankActionButton {
             return "";
         }
         size: 20
-        color: Theme.surfaceText
+        color: Style.surfaceText
         visible: parent.isIcon
     }
 
@@ -35,8 +35,8 @@ DankActionButton {
         id: contentItem
         anchors.centerIn: parent
         text: parent.text
-        color: Theme.surfaceText
-        font.pixelSize: Theme.fontSizeXLarge
+        color: Style.surfaceText
+        font.pixelSize: Style.fontSizeXLarge
         font.weight: Font.Normal
         visible: !parent.isIcon
     }

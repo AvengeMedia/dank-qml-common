@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 // Premultiplied-alpha color tween: bind `to`, read `value`. Plain
 // ColorAnimation lerps raw RGBA and flashes when the endpoints differ
@@ -9,8 +9,8 @@ QtObject {
 
     property color to
     property bool animated: true
-    property int duration: Theme.mediumDuration
-    property int easingType: Theme.emphasizedEasing
+    property int duration: Style.mediumDuration
+    property int easingType: Style.emphasizedEasing
 
     property color _from: to
     property color _target: to

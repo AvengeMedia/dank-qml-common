@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Widgets
-import qs.Common
+import qs.DankCommon.Common
 
 Item {
     id: root
@@ -8,14 +8,14 @@ Item {
     required property string iconValue
     required property int iconSize
     property string fallbackText: "A"
-    property color iconColor: Theme.surfaceText
+    property color iconColor: Style.surfaceText
     property color colorOverride: "transparent"
     property real brightnessOverride: 0.0
     property real contrastOverride: 0.0
     property real saturationOverride: 0.0
-    property color fallbackBackgroundColor: Theme.surfaceLight
-    property color fallbackTextColor: Theme.primary
-    property real materialIconSizeAdjustment: Theme.spacingM
+    property color fallbackBackgroundColor: Style.surfaceLight
+    property color fallbackTextColor: Style.primary
+    property real materialIconSizeAdjustment: Style.spacingM
     property real unicodeIconScale: 0.7
     property real fallbackTextScale: 0.4
     property real iconMargins: 0
@@ -114,9 +114,9 @@ Item {
         anchors.bottomMargin: root.fallbackBottomMargin
         visible: !root.hasSpecialPrefix && (root.iconPath === "" || !iconImgLoader.item || iconImgLoader.item.status !== Image.Ready)
         color: root.fallbackBackgroundColor
-        radius: Theme.cornerRadius
+        radius: Style.cornerRadius
         border.width: 0
-        border.color: Theme.primarySelected
+        border.color: Style.primarySelected
 
         StyledText {
             anchors.centerIn: parent

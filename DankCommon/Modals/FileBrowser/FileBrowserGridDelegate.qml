@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Widgets
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
@@ -131,14 +131,14 @@ StyledRect {
 
     width: weMode ? 245 : iconSizes[iconSizeIndex] + 16
     height: weMode ? 205 : iconSizes[iconSizeIndex] + 48
-    radius: Theme.cornerRadius
+    radius: Style.cornerRadius
     color: {
         if (keyboardNavigationActive && delegateRoot.index === selectedIndex)
-            return Theme.surfacePressed;
+            return Style.surfacePressed;
 
-        return mouseArea.containsMouse ? Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency) : Theme.withAlpha(Theme.surfaceContainerHigh, 0);
+        return mouseArea.containsMouse ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.withAlpha(Style.surfaceContainerHigh, 0);
     }
-    border.color: keyboardNavigationActive && delegateRoot.index === selectedIndex ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+    border.color: keyboardNavigationActive && delegateRoot.index === selectedIndex ? Style.primary : Style.withAlpha(Style.primary, 0)
     border.width: (keyboardNavigationActive && delegateRoot.index === selectedIndex) ? 2 : 0
 
     Component.onCompleted: {
@@ -153,7 +153,7 @@ StyledRect {
 
     Column {
         anchors.centerIn: parent
-        spacing: Theme.spacingS
+        spacing: Style.spacingS
 
         Item {
             width: weMode ? 225 : (iconSizes[iconSizeIndex] - 8)
@@ -163,7 +163,7 @@ StyledRect {
             ClippingRectangle {
                 anchors.fill: parent
                 anchors.margins: 2
-                radius: Theme.cornerRadius
+                radius: Style.cornerRadius
                 color: "transparent"
 
                 Image {
@@ -213,16 +213,16 @@ StyledRect {
                 anchors.centerIn: parent
                 name: delegateRoot.fileIsDir ? "folder" : getIconForFile(delegateRoot.fileName)
                 size: iconSizes[iconSizeIndex] * 0.45
-                color: delegateRoot.fileIsDir ? Theme.primary : Theme.surfaceText
+                color: delegateRoot.fileIsDir ? Style.primary : Style.surfaceText
                 visible: (!delegateRoot.fileIsDir && !isImage && !(isVideo && gridPreviewImage.status === Image.Ready)) || (delegateRoot.fileIsDir && !weMode)
             }
         }
 
         StyledText {
             text: delegateRoot.fileName || ""
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceText
-            width: delegateRoot.width - Theme.spacingM
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceText
+            width: delegateRoot.width - Style.spacingM
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 Rectangle {
     id: root
@@ -8,7 +8,7 @@ Rectangle {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
-    color: Theme.surfaceContainerHigh
+    color: Style.surfaceContainerHigh
 
     signal dismissed
 

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Item {
@@ -30,10 +30,10 @@ Item {
     property bool alwaysShowValue: false
     readonly property bool containsMouse: sliderMouseArea.containsMouse
 
-    property color thumbOutlineColor: Theme.surfaceContainer
-    property color trackColor: enabled ? Theme.outline : Theme.outline
+    property color thumbOutlineColor: Style.surfaceContainer
+    property color trackColor: enabled ? Style.outline : Style.outline
     property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property real trackOpacity: usePopupTransparency ? Theme.popupTransparency : 1.0
+    property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
 
     signal sliderValueChanged(int newValue)
     signal sliderDragFinished(int finalValue)
@@ -56,12 +56,12 @@ Item {
     Row {
         anchors.centerIn: parent
         width: parent.width
-        spacing: Theme.spacingM
+        spacing: Style.spacingM
 
         DankIcon {
             name: slider.leftIcon
-            size: Theme.iconSize
-            color: slider.enabled ? Theme.surfaceText : Theme.onSurface_38
+            size: Style.iconSize
+            color: slider.enabled ? Style.surfaceText : Style.onSurface_38
             anchors.verticalCenter: parent.verticalCenter
             visible: slider.leftIcon.length > 0
         }
@@ -69,20 +69,20 @@ Item {
         StyledRect {
             id: sliderTrack
 
-            property int leftIconWidth: slider.leftIcon.length > 0 ? Theme.iconSize : 0
-            property int rightIconWidth: slider.rightIcon.length > 0 ? Theme.iconSize : 0
+            property int leftIconWidth: slider.leftIcon.length > 0 ? Style.iconSize : 0
+            property int rightIconWidth: slider.rightIcon.length > 0 ? Style.iconSize : 0
 
-            width: parent.width - (leftIconWidth + rightIconWidth + (slider.leftIcon.length > 0 ? Theme.spacingM : 0) + (slider.rightIcon.length > 0 ? Theme.spacingM : 0))
+            width: parent.width - (leftIconWidth + rightIconWidth + (slider.leftIcon.length > 0 ? Style.spacingM : 0) + (slider.rightIcon.length > 0 ? Style.spacingM : 0))
             height: 12
-            radius: Theme.cornerRadius
-            color: Theme.withAlpha(slider.trackColor, slider.trackOpacity)
+            radius: Style.cornerRadius
+            color: Style.withAlpha(slider.trackColor, slider.trackOpacity)
             anchors.verticalCenter: parent.verticalCenter
             clip: false
 
             StyledRect {
                 id: sliderFill
                 height: parent.height
-                radius: Theme.cornerRadius
+                radius: Style.cornerRadius
                 topRightRadius: 0
                 bottomRightRadius: 0
                 width: {
@@ -94,7 +94,7 @@ Item {
                     const endPoint = handleLeft - 3;
                     return Math.max(0, Math.min(sliderTrack.width, endPoint));
                 }
-                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.onSurface, 0.12)
+                color: slider.enabled ? Style.primary : Style.withAlpha(Style.onSurface, 0.12)
             }
 
             StyledRect {
@@ -104,7 +104,7 @@ Item {
 
                 width: 4
                 height: 20
-                radius: Theme.cornerRadius
+                radius: Style.cornerRadius
                 x: {
                     const range = slider.maximum - slider.minimum;
                     const rawRatio = range === 0 ? 0 : (slider.value - slider.minimum) / range;
@@ -113,14 +113,14 @@ Item {
                     return Math.max(0, Math.min(travel, travel * ratio));
                 }
                 anchors.verticalCenter: parent.verticalCenter
-                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.onSurface, 0.12)
+                color: slider.enabled ? Style.primary : Style.withAlpha(Style.onSurface, 0.12)
                 border.width: 0
                 border.color: slider.thumbOutlineColor
 
                 StyledRect {
                     anchors.fill: parent
-                    radius: Theme.cornerRadius
-                    color: Theme.onPrimary
+                    radius: Style.cornerRadius
+                    color: Style.onPrimary
                     opacity: slider.enabled ? (sliderMouseArea.pressed ? 0.16 : (sliderMouseArea.containsMouse ? 0.08 : 0)) : 0
                     visible: opacity > 0
                 }
@@ -132,7 +132,7 @@ Item {
                     radius: width / 2
                     color: "transparent"
                     border.width: 2
-                    border.color: Theme.primary
+                    border.color: Style.primary
                     opacity: slider.enabled && slider.focus ? 0.3 : 0
                     visible: opacity > 0
                 }
@@ -143,7 +143,7 @@ Item {
                     width: 0
                     height: 0
                     radius: width / 2
-                    color: Theme.onPrimary
+                    color: Style.onPrimary
                     opacity: 0
 
                     function start() {
@@ -183,8 +183,8 @@ Item {
 
                 Behavior on scale {
                     NumberAnimation {
-                        duration: Theme.shortDuration
-                        easing.type: Theme.standardEasing
+                        duration: Style.shortDuration
+                        easing.type: Style.standardEasing
                     }
                 }
             }
@@ -253,14 +253,14 @@ Item {
             StyledRect {
                 id: valueTooltip
 
-                width: tooltipText.reservedWidth + Theme.spacingS * 2
-                height: tooltipText.contentHeight + Theme.spacingXS * 2
-                radius: Theme.cornerRadius
-                color: Theme.surfaceContainer
-                border.color: Theme.outline
+                width: tooltipText.reservedWidth + Style.spacingS * 2
+                height: tooltipText.contentHeight + Style.spacingXS * 2
+                radius: Style.cornerRadius
+                color: Style.surfaceContainer
+                border.color: Style.outline
                 border.width: 1
                 anchors.bottom: parent.top
-                anchors.bottomMargin: Theme.spacingM
+                anchors.bottomMargin: Style.spacingM
                 x: Math.max(0, Math.min(parent.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
                 visible: slider.alwaysShowValue ? slider.showValue : ((sliderMouseArea.containsMouse && slider.showValue) || (slider.isDragging && slider.showValue))
                 opacity: visible ? 1 : 0
@@ -281,8 +281,8 @@ Item {
                         }
                         return widest;
                     }
-                    font.pixelSize: Theme.fontSizeSmall
-                    color: Theme.surfaceText
+                    font.pixelSize: Style.fontSizeSmall
+                    color: Style.surfaceText
                     font.weight: Font.Medium
                     anchors.centerIn: parent
                     font.hintingPreference: Font.PreferFullHinting
@@ -290,8 +290,8 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Theme.shortDuration
-                        easing.type: Theme.standardEasing
+                        duration: Style.shortDuration
+                        easing.type: Style.standardEasing
                     }
                 }
             }
@@ -299,8 +299,8 @@ Item {
 
         DankIcon {
             name: slider.rightIcon
-            size: Theme.iconSize
-            color: slider.enabled ? Theme.surfaceText : Theme.onSurface_38
+            size: Style.iconSize
+            color: slider.enabled ? Style.surfaceText : Style.onSurface_38
             anchors.verticalCenter: parent.verticalCenter
             visible: slider.rightIcon.length > 0
         }

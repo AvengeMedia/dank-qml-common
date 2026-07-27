@@ -1,5 +1,4 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -127,9 +126,9 @@ Item {
             leftIconName: "search"
             placeholderText: root.placeholderText
             text: ""
-            backgroundColor: Theme.surfaceVariant
-            normalBorderColor: Theme.primarySelected
-            focusedBorderColor: Theme.primary
+            backgroundColor: Style.surfaceVariant
+            normalBorderColor: Style.primarySelected
+            focusedBorderColor: Style.primary
             keyNavigationTab: root.keyNavigationTab
             keyNavigationBacktab: root.keyNavigationBacktab
             onTextEdited: {
@@ -155,17 +154,17 @@ Item {
 
         DankIcon {
             name: root.isLoading ? "hourglass_empty" : (searchResultsModel.count > 0 ? "check_circle" : "error")
-            size: Theme.iconSize - 4
-            color: root.isLoading ? Theme.surfaceVariantText : (searchResultsModel.count > 0 ? Theme.primary : Theme.error)
+            size: Style.iconSize - 4
+            color: root.isLoading ? Style.surfaceVariantText : (searchResultsModel.count > 0 ? Style.primary : Style.error)
             anchors.right: parent.right
-            anchors.rightMargin: Theme.spacingM
+            anchors.rightMargin: Style.spacingM
             anchors.verticalCenter: parent.verticalCenter
             opacity: (locationInput.getActiveFocus() && root.canSearch(locationInput.text)) ? 1 : 0
 
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
         }
@@ -177,11 +176,11 @@ Item {
         property bool hovered: false
 
         width: parent.width
-        height: Math.min(Math.max(searchResultsModel.count * 38 + Theme.spacingS * 2, 50), 200)
+        height: Math.min(Math.max(searchResultsModel.count * 38 + Style.spacingS * 2, 50), 200)
         y: searchInputField.height
-        radius: Theme.cornerRadius
-        color: Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency)
-        border.color: Theme.primarySelected
+        radius: Style.cornerRadius
+        color: Style.withAlpha(Style.surfaceContainer, Style.popupTransparency)
+        border.color: Style.primarySelected
         border.width: 1
         visible: locationInput.getActiveFocus() && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
 
@@ -202,7 +201,7 @@ Item {
 
         Item {
             anchors.fill: parent
-            anchors.margins: Theme.spacingS
+            anchors.margins: Style.spacingS
 
             DankListView {
                 id: searchResultsList
@@ -210,30 +209,30 @@ Item {
                 anchors.fill: parent
                 clip: true
                 model: searchResultsModel
-                spacing: Theme.spacingXXS
+                spacing: Style.spacingXXS
 
                 delegate: StyledRect {
                     width: searchResultsList.width
                     height: 36
-                    radius: Theme.cornerRadius
-                    color: resultMouseArea.containsMouse ? Theme.surfaceLight : Theme.withAlpha(Theme.surfaceLight, 0)
+                    radius: Style.cornerRadius
+                    color: resultMouseArea.containsMouse ? Style.surfaceLight : Style.withAlpha(Style.surfaceLight, 0)
 
                     Row {
                         anchors.fill: parent
-                        anchors.margins: Theme.spacingM
-                        spacing: Theme.spacingS
+                        anchors.margins: Style.spacingM
+                        spacing: Style.spacingS
 
                         DankIcon {
                             name: "place"
-                            size: Theme.iconSize - 6
-                            color: Theme.surfaceVariantText
+                            size: Style.iconSize - 6
+                            color: Style.surfaceVariantText
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         StyledText {
                             text: model.name || "Unknown"
-                            font.pixelSize: Theme.fontSizeMedium
-                            color: Theme.surfaceText
+                            font.pixelSize: Style.fontSizeMedium
+                            color: Style.surfaceText
                             anchors.verticalCenter: parent.verticalCenter
                             elide: Text.ElideRight
                             width: parent.width - 30
@@ -263,8 +262,8 @@ Item {
             StyledText {
                 anchors.centerIn: parent
                 text: root.isLoading ? "Searching..." : "No locations found"
-                font.pixelSize: Theme.fontSizeMedium
-                color: Theme.surfaceVariantText
+                font.pixelSize: Style.fontSizeMedium
+                color: Style.surfaceVariantText
                 visible: searchResultsList.count === 0 && root.canSearch(locationInput.text)
             }
         }

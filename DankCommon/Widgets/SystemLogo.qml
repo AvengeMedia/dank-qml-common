@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Widgets
-import qs.Common
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -41,7 +40,7 @@ Item {
         visible: root.useNerdFont
         name: root.nerdFontIcon
         size: Math.min(root.width, root.height)
-        color: hasColorOverride ? colorOverride : Theme.surfaceText
+        color: hasColorOverride ? colorOverride : Style.surfaceText
     }
 
     Component.onCompleted: {

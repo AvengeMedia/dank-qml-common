@@ -1,12 +1,11 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 Item {
     id: root
 
     property string name: ""
-    property int size: Theme.fontSizeMedium
+    property int size: Style.fontSizeMedium
     property alias color: icon.color
 
     width: size
@@ -154,7 +153,7 @@ Item {
 
         font.family: Fonts.nerd
         font.pixelSize: root.size
-        color: Theme.surfaceText
+        color: Style.surfaceText
         text: root.text
         antialiasing: true
     }

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 
 Column {
     id: root
@@ -14,25 +14,25 @@ Column {
     property bool incrementEnabled: true
     property bool decrementEnabled: true
 
-    property color textColor: Theme.surfaceText
-    property color iconColor: Theme.withAlpha(Theme.surfaceText, 0.5)
-    property color backgroundColor: Theme.primary
+    property color textColor: Style.surfaceText
+    property color iconColor: Style.withAlpha(Style.surfaceText, 0.5)
+    property color backgroundColor: Style.primary
 
-    property int textSize: Theme.fontSizeSmall
+    property int textSize: Style.fontSizeSmall
     property var iconSize: 12
     property int buttonSize: 20
-    property int horizontalPadding: Theme.spacingL
+    property int horizontalPadding: Style.spacingL
 
     readonly property bool effectiveIncrementEnabled: root.onIncrement ? root.incrementEnabled : false
     readonly property bool effectiveDecrementEnabled: root.onDecrement ? root.decrementEnabled : false
 
     width: Math.max(buttonSize * 2, root.implicitWidth + horizontalPadding * 2)
-    spacing: Theme.spacingXS
+    spacing: Style.spacingXS
 
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
         enabled: root.effectiveIncrementEnabled
-        iconColor: root.effectiveIncrementEnabled ? root.iconColor : Theme.blendAlpha(root.iconColor, 0.5)
+        iconColor: root.effectiveIncrementEnabled ? root.iconColor : Style.blendAlpha(root.iconColor, 0.5)
         iconSize: root.iconSize
         buttonSize: root.buttonSize
         iconName: root.incrementIconName
@@ -62,7 +62,7 @@ Column {
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
         enabled: root.effectiveDecrementEnabled
-        iconColor: root.effectiveDecrementEnabled ? root.iconColor : Theme.blendAlpha(root.iconColor, 0.5)
+        iconColor: root.effectiveDecrementEnabled ? root.iconColor : Style.blendAlpha(root.iconColor, 0.5)
         iconSize: root.iconSize
         buttonSize: root.buttonSize
         iconName: root.decrementIconName

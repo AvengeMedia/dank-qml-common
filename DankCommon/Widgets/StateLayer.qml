@@ -1,16 +1,15 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 MouseArea {
     id: root
 
     property bool disabled: false
-    property color stateColor: Theme.surfaceText
-    property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Theme.cornerRadius
+    property color stateColor: Style.surfaceText
+    property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
     property var tooltipText: null
     property string tooltipSide: "bottom"
-    property bool enableRipple: typeof SettingsData !== "undefined" ? (SettingsData.enableRippleEffects ?? true) : true
+    property bool enableRipple: Style.enableRippleEffects
 
     readonly property real stateOpacity: disabled ? 0 : pressed ? 0.12 : containsMouse ? 0.08 : 0
 
@@ -28,13 +27,13 @@ MouseArea {
         id: stateRect
         anchors.fill: parent
         radius: root.cornerRadius
-        color: Theme.withAlpha(stateColor, stateOpacity)
+        color: Style.withAlpha(stateColor, stateOpacity)
 
         Behavior on color {
-            enabled: Theme.currentAnimationSpeed !== SettingsData.AnimationSpeed.None
+            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankColorAnim {
-                duration: Theme.shorterDuration
-                easing.bezierCurve: Theme.expressiveCurves.standardDecel
+                duration: Style.shorterDuration
+                easing.bezierCurve: Style.expressiveCurves.standardDecel
             }
         }
     }

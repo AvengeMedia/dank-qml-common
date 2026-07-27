@@ -1,14 +1,13 @@
 import QtQuick
-import qs.Common
 import qs.DankCommon.Common
 
 Item {
     id: root
 
-    property color rippleColor: Theme.primary
+    property color rippleColor: Style.primary
     property real cornerRadius: 0
-    property bool enableRipple: typeof SettingsData !== "undefined" ? (SettingsData.enableRippleEffects ?? true) : true
-    property int animationDuration: Theme.expressiveDurations.expressiveDefaultSpatial
+    property bool enableRipple: Style.enableRippleEffects
+    property int animationDuration: Style.expressiveDurations.expressiveDefaultSpatial
 
     property real _rippleX: 0
     property real _rippleY: 0
@@ -18,7 +17,7 @@ Item {
     anchors.fill: parent
 
     function trigger(x, y) {
-        if (!enableRipple || Theme.currentAnimationSpeed === SettingsData.AnimationSpeed.None)
+        if (!enableRipple || Style.currentAnimationSpeed === Style.AnimationSpeed.None)
             return;
 
         _rippleX = x;
@@ -61,7 +60,7 @@ Item {
                 from: 0
                 to: root._rippleMaxRadius
                 duration: root.animationDuration
-                easing.bezierCurve: Theme.expressiveCurves.standardDecel
+                easing.bezierCurve: Style.expressiveCurves.standardDecel
             }
             SequentialAnimation {
                 PauseAnimation {
@@ -72,7 +71,7 @@ Item {
                     property: "rippleOpacity"
                     to: 0
                     duration: root.animationDuration
-                    easing.bezierCurve: Theme.expressiveCurves.standard
+                    easing.bezierCurve: Style.expressiveCurves.standard
                 }
             }
         }

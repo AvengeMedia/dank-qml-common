@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import qs.Common
+import qs.DankCommon.Common
 
 ScrollBar {
     id: scrollbar
@@ -32,7 +32,7 @@ ScrollBar {
     contentItem: Rectangle {
         implicitWidth: 6
         radius: width / 2
-        color: scrollbar.pressed ? Theme.primary : scrollbar._shouldShow ? Theme.outline : Theme.outlineMedium
+        color: scrollbar.pressed ? Style.primary : scrollbar._shouldShow ? Style.outline : Style.outlineMedium
         opacity: scrollbar.pressed ? 1.0 : scrollbar._shouldShow ? 1.0 : 0.6
     }
 

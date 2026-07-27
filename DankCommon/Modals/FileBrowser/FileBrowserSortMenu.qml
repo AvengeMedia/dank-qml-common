@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 StyledRect {
@@ -7,16 +7,16 @@ StyledRect {
 
     property string sortBy: "name"
     property bool sortAscending: true
-    property color surfaceColor: Theme.surfaceContainer
+    property color surfaceColor: Style.surfaceContainer
 
     signal sortBySelected(string value)
     signal sortOrderSelected(bool ascending)
 
     width: 200
-    height: sortColumn.height + Theme.spacingM * 2
+    height: sortColumn.height + Style.spacingM * 2
     color: surfaceColor
-    radius: Theme.cornerRadius
-    border.color: Theme.outlineMedium
+    radius: Style.cornerRadius
+    border.color: Style.outlineMedium
     border.width: 1
     visible: false
     z: 100
@@ -26,13 +26,13 @@ StyledRect {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.margins: Theme.spacingM
-        spacing: Theme.spacingXS
+        anchors.margins: Style.spacingM
+        spacing: Style.spacingXS
 
         StyledText {
             text: I18n.tr("Sort By", "file browser sort menu section header")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceTextMedium
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
             font.weight: Font.Medium
         }
 
@@ -59,26 +59,26 @@ StyledRect {
             StyledRect {
                 width: sortColumn?.width ?? 0
                 height: 32
-                radius: Theme.cornerRadius
-                color: sortMouseArea.containsMouse ? Theme.surfaceVariant : (sortBy === modelData?.value ? Theme.surfacePressed : Theme.withAlpha(Theme.surfacePressed, 0))
+                radius: Style.cornerRadius
+                color: sortMouseArea.containsMouse ? Style.surfaceVariant : (sortBy === modelData?.value ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
 
                 Row {
                     anchors.fill: parent
-                    anchors.leftMargin: Theme.spacingS
-                    spacing: Theme.spacingS
+                    anchors.leftMargin: Style.spacingS
+                    spacing: Style.spacingS
 
                     DankIcon {
                         name: sortBy === modelData?.value ? "check" : ""
-                        size: Theme.iconSizeSmall
-                        color: Theme.primary
+                        size: Style.iconSizeSmall
+                        color: Style.primary
                         anchors.verticalCenter: parent.verticalCenter
                         visible: sortBy === modelData?.value
                     }
 
                     StyledText {
                         text: modelData?.name ?? ""
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: sortBy === modelData?.value ? Theme.primary : Theme.surfaceText
+                        font.pixelSize: Style.fontSizeMedium
+                        color: sortBy === modelData?.value ? Style.primary : Style.surfaceText
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
@@ -99,39 +99,39 @@ StyledRect {
         StyledRect {
             width: sortColumn.width
             height: 1
-            color: Theme.outline
+            color: Style.outline
         }
 
         StyledText {
             text: I18n.tr("Order", "file browser sort menu section header")
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceTextMedium
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
             font.weight: Font.Medium
-            topPadding: Theme.spacingXS
+            topPadding: Style.spacingXS
         }
 
         StyledRect {
             width: sortColumn?.width ?? 0
             height: 32
-            radius: Theme.cornerRadius
-            color: ascMouseArea.containsMouse ? Theme.surfaceVariant : (sortAscending ? Theme.surfacePressed : Theme.withAlpha(Theme.surfacePressed, 0))
+            radius: Style.cornerRadius
+            color: ascMouseArea.containsMouse ? Style.surfaceVariant : (sortAscending ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
 
             Row {
                 anchors.fill: parent
-                anchors.leftMargin: Theme.spacingS
-                spacing: Theme.spacingS
+                anchors.leftMargin: Style.spacingS
+                spacing: Style.spacingS
 
                 DankIcon {
                     name: "arrow_upward"
-                    size: Theme.iconSizeSmall
-                    color: sortAscending ? Theme.primary : Theme.surfaceText
+                    size: Style.iconSizeSmall
+                    color: sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
                 StyledText {
                     text: I18n.tr("Ascending", "file browser sort order option")
-                    font.pixelSize: Theme.fontSizeMedium
-                    color: sortAscending ? Theme.primary : Theme.surfaceText
+                    font.pixelSize: Style.fontSizeMedium
+                    color: sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -151,25 +151,25 @@ StyledRect {
         StyledRect {
             width: sortColumn?.width ?? 0
             height: 32
-            radius: Theme.cornerRadius
-            color: descMouseArea.containsMouse ? Theme.surfaceVariant : (!sortAscending ? Theme.surfacePressed : Theme.withAlpha(Theme.surfacePressed, 0))
+            radius: Style.cornerRadius
+            color: descMouseArea.containsMouse ? Style.surfaceVariant : (!sortAscending ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
 
             Row {
                 anchors.fill: parent
-                anchors.leftMargin: Theme.spacingS
-                spacing: Theme.spacingS
+                anchors.leftMargin: Style.spacingS
+                spacing: Style.spacingS
 
                 DankIcon {
                     name: "arrow_downward"
-                    size: Theme.iconSizeSmall
-                    color: !sortAscending ? Theme.primary : Theme.surfaceText
+                    size: Style.iconSizeSmall
+                    color: !sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
                 StyledText {
                     text: I18n.tr("Descending", "file browser sort order option")
-                    font.pixelSize: Theme.fontSizeMedium
-                    color: !sortAscending ? Theme.primary : Theme.surfaceText
+                    font.pixelSize: Style.fontSizeMedium
+                    color: !sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Item {
@@ -24,7 +24,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.shadowStrong
+        color: Style.shadowStrong
         opacity: 0.8
 
         MouseArea {
@@ -39,28 +39,28 @@ Item {
         anchors.centerIn: parent
         width: 400
         height: 160
-        color: Theme.surfaceContainer
-        radius: Theme.cornerRadius
-        border.color: Theme.outlineMedium
+        color: Style.surfaceContainer
+        radius: Style.cornerRadius
+        border.color: Style.outlineMedium
         border.width: 1
 
         Column {
             anchors.centerIn: parent
-            width: parent.width - Theme.spacingL * 2
-            spacing: Theme.spacingM
+            width: parent.width - Style.spacingL * 2
+            spacing: Style.spacingM
 
             StyledText {
                 text: I18n.tr("File Already Exists", "file browser overwrite dialog title")
-                font.pixelSize: Theme.fontSizeLarge
+                font.pixelSize: Style.fontSizeLarge
                 font.weight: Font.Medium
-                color: Theme.surfaceText
+                color: Style.surfaceText
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
             StyledText {
                 text: I18n.tr("A file with this name already exists. Do you want to overwrite it?", "file browser overwrite dialog message")
-                font.pixelSize: Theme.fontSizeMedium
-                color: Theme.surfaceTextMedium
+                font.pixelSize: Style.fontSizeMedium
+                color: Style.surfaceTextMedium
                 width: parent.width
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -68,21 +68,21 @@ Item {
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: Theme.spacingM
+                spacing: Style.spacingM
 
                 StyledRect {
                     width: 80
                     height: 36
-                    radius: Theme.cornerRadius
-                    color: cancelArea.containsMouse ? Qt.lighter(Theme.surfaceVariant, 1.2) : Theme.surfaceVariant
-                    border.color: Theme.outline
+                    radius: Style.cornerRadius
+                    color: cancelArea.containsMouse ? Qt.lighter(Style.surfaceVariant, 1.2) : Style.surfaceVariant
+                    border.color: Style.outline
                     border.width: 1
 
                     StyledText {
                         anchors.centerIn: parent
                         text: I18n.tr("Cancel", "file browser overwrite dialog cancel button")
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: Theme.surfaceText
+                        font.pixelSize: Style.fontSizeMedium
+                        color: Style.surfaceText
                         font.weight: Font.Medium
                     }
 
@@ -100,14 +100,14 @@ Item {
                 StyledRect {
                     width: 90
                     height: 36
-                    radius: Theme.cornerRadius
-                    color: overwriteArea.containsMouse ? Qt.darker(Theme.primary, 1.1) : Theme.primary
+                    radius: Style.cornerRadius
+                    color: overwriteArea.containsMouse ? Qt.darker(Style.primary, 1.1) : Style.primary
 
                     StyledText {
                         anchors.centerIn: parent
                         text: I18n.tr("Overwrite", "file browser overwrite dialog confirm button")
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: Theme.background
+                        font.pixelSize: Style.fontSizeMedium
+                        color: Style.background
                         font.weight: Font.Medium
                     }
 

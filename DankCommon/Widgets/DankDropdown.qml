@@ -2,7 +2,6 @@ import "../Common/fzf.js" as Fzf
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import qs.Common
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -114,7 +113,7 @@ Item {
     }
 
     width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
-    implicitHeight: !showTrigger ? 0 : (compactMode ? 40 : Math.max(60, labelColumn.implicitHeight + Theme.spacingM))
+    implicitHeight: !showTrigger ? 0 : (compactMode ? 40 : Math.max(60, labelColumn.implicitHeight + Style.spacingM))
 
     Component.onDestruction: {
         transientSurfaceTracker?.unregister(root);
@@ -137,15 +136,15 @@ Item {
         anchors.left: parent.left
         anchors.right: dropdown.left
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: root.addHorizontalPadding ? Theme.spacingM : 0
-        anchors.rightMargin: Theme.spacingL
-        spacing: Theme.spacingXS
+        anchors.leftMargin: root.addHorizontalPadding ? Style.spacingM : 0
+        anchors.rightMargin: Style.spacingL
+        spacing: Style.spacingXS
         visible: !root.compactMode && root.showTrigger
 
         StyledText {
             text: root.text
-            font.pixelSize: Theme.fontSizeMedium
-            color: Theme.surfaceText
+            font.pixelSize: Style.fontSizeMedium
+            color: Style.surfaceText
             font.weight: Font.Medium
             width: parent.width
             horizontalAlignment: Text.AlignLeft
@@ -153,8 +152,8 @@ Item {
 
         StyledText {
             text: root.description
-            font.pixelSize: Theme.fontSizeSmall
-            color: Theme.surfaceVariantText
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceVariantText
             visible: description.length > 0
             wrapMode: Text.WordWrap
             width: parent.width
@@ -169,11 +168,11 @@ Item {
         width: root.compactMode ? parent.width : (root.popupWidth === -1 ? undefined : (root.popupWidth > 0 ? root.popupWidth : root.dropdownWidth))
         height: 40
         anchors.right: parent.right
-        anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Theme.spacingM : 0
+        anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: Theme.cornerRadius
-        color: dropdownArea.containsMouse || dropdownMenu.visible ? Theme.surfaceContainerHigh : (root.usePopupTransparency ? Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency) : Theme.surfaceContainer)
-        border.color: dropdownMenu.visible ? Theme.primary : Theme.outlineHeavy
+        radius: Style.cornerRadius
+        color: dropdownArea.containsMouse || dropdownMenu.visible ? Style.surfaceContainerHigh : (root.usePopupTransparency ? Style.withAlpha(Style.surfaceContainer, Style.popupTransparency) : Style.surfaceContainer)
+        border.color: dropdownMenu.visible ? Style.primary : Style.outlineHeavy
         border.width: dropdownMenu.visible ? 2 : 1
 
         MouseArea {
@@ -191,9 +190,9 @@ Item {
             anchors.left: parent.left
             anchors.right: expandIcon.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: Theme.spacingM
-            anchors.rightMargin: Theme.spacingS
-            spacing: Theme.spacingS
+            anchors.leftMargin: Style.spacingM
+            anchors.rightMargin: Style.spacingS
+            spacing: Style.spacingS
 
             DankColorSwatch {
                 id: triggerSwatch
@@ -210,7 +209,7 @@ Item {
 
                 name: root.optionIconMap[root.currentValue] ?? ""
                 size: 18
-                color: Theme.surfaceText
+                color: Style.surfaceText
                 anchors.verticalCenter: parent.verticalCenter
                 visible: name !== ""
             }
@@ -218,8 +217,8 @@ Item {
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.currentValue !== "" ? root.currentValue : root.emptyText
-                font.pixelSize: Theme.fontSizeMedium
-                color: root.currentValue !== "" ? Theme.surfaceText : Theme.outline
+                font.pixelSize: Style.fontSizeMedium
+                color: root.currentValue !== "" ? Style.surfaceText : Style.outline
                 width: contentRow.width - (triggerSwatch.visible ? triggerSwatch.width + contentRow.spacing : 0) - (triggerIcon.visible ? triggerIcon.width + contentRow.spacing : 0)
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
@@ -232,15 +231,15 @@ Item {
 
             name: dropdownMenu.visible ? "expand_less" : "expand_more"
             size: 20
-            color: Theme.surfaceText
+            color: Style.surfaceText
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: Theme.spacingS
+            anchors.rightMargin: Style.spacingS
 
             Behavior on rotation {
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
         }
@@ -326,15 +325,15 @@ Item {
                 property: "scale"
                 from: 0.9
                 to: 1
-                duration: Theme.shortDuration
-                easing.type: Theme.emphasizedEasing
+                duration: Style.shortDuration
+                easing.type: Style.emphasizedEasing
             }
             NumberAnimation {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: Theme.shortDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shortDuration
+                easing.type: Style.standardEasing
             }
         }
 
@@ -343,15 +342,15 @@ Item {
                 property: "scale"
                 from: 1
                 to: 0.9
-                duration: Theme.shortDuration
-                easing.type: Theme.emphasizedEasing
+                duration: Style.shortDuration
+                easing.type: Style.emphasizedEasing
             }
             NumberAnimation {
                 property: "opacity"
                 from: 1
                 to: 0
-                duration: Theme.shortDuration
-                easing.type: Theme.standardEasing
+                duration: Style.shortDuration
+                easing.type: Style.standardEasing
             }
         }
 
@@ -364,27 +363,27 @@ Item {
 
             LayoutMirroring.enabled: I18n.isRtl
             LayoutMirroring.childrenInherit: true
-            color: Theme.withAlpha(Theme.surfaceContainer, 1)
-            border.color: Theme.primary
+            color: Style.withAlpha(Style.surfaceContainer, 1)
+            border.color: Style.primary
             border.width: 2
-            radius: Theme.cornerRadius
+            radius: Style.cornerRadius
 
             ElevationShadow {
                 id: shadowLayer
                 anchors.fill: parent
                 z: -1
-                level: Theme.elevationLevel2
+                level: Style.elevationLevel2
                 fallbackOffset: 4
                 targetRadius: contentSurface.radius
                 targetColor: contentSurface.color
                 borderColor: contentSurface.border.color
                 borderWidth: contentSurface.border.width
-                shadowEnabled: Theme.elevationEnabled && SettingsData.popoutElevationEnabled
+                shadowEnabled: Style.elevationEnabled && Style.popoutElevationEnabled
             }
 
             Column {
                 anchors.fill: parent
-                anchors.margins: Theme.spacingS
+                anchors.margins: Style.spacingS
 
                 Rectangle {
                     id: searchContainer
@@ -392,8 +391,8 @@ Item {
                     width: parent.width
                     height: 42
                     visible: root.enableFuzzySearch
-                    radius: Theme.cornerRadius
-                    color: root.usePopupTransparency ? Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency) : Theme.surfaceContainerHigh
+                    radius: Style.cornerRadius
+                    color: root.usePopupTransparency ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.surfaceContainerHigh
 
                     DankTextField {
                         id: searchField
@@ -401,8 +400,8 @@ Item {
                         anchors.fill: parent
                         anchors.margins: 1
                         placeholderText: I18n.tr("Search...")
-                        topPadding: Theme.spacingS
-                        bottomPadding: Theme.spacingS
+                        topPadding: Style.spacingS
+                        bottomPadding: Style.spacingS
                         onTextChanged: searchDebounce.restart()
                         Keys.onDownPressed: dropdownMenu.selectNext()
                         Keys.onUpPressed: dropdownMenu.selectPrevious()
@@ -440,7 +439,7 @@ Item {
 
                 Item {
                     width: 1
-                    height: Theme.spacingXS
+                    height: Style.spacingXS
                     visible: root.enableFuzzySearch
                 }
 
@@ -452,12 +451,12 @@ Item {
                     StyledText {
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.leftMargin: Theme.spacingS
-                        anchors.rightMargin: Theme.spacingS
+                        anchors.leftMargin: Style.spacingS
+                        anchors.rightMargin: Style.spacingS
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.emptyText
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: Theme.surfaceVariantText
+                        font.pixelSize: Style.fontSizeMedium
+                        color: Style.surfaceVariantText
                         horizontalAlignment: Text.AlignLeft
                     }
                 }
@@ -466,13 +465,13 @@ Item {
                     id: listView
 
                     width: parent.width
-                    height: parent.height - (root.enableFuzzySearch ? searchContainer.height + Theme.spacingXS : 0) - (root.options.length === 0 && root.emptyText !== "" ? 32 : 0)
+                    height: parent.height - (root.enableFuzzySearch ? searchContainer.height + Style.spacingXS : 0) - (root.options.length === 0 && root.emptyText !== "" ? 32 : 0)
                     clip: true
                     visible: root.options.length > 0
                     model: ScriptModel {
                         values: dropdownMenu.filteredOptions
                     }
-                    spacing: Theme.spacingXXS
+                    spacing: Style.spacingXXS
 
                     interactive: true
                     flickDeceleration: 1500
@@ -494,16 +493,16 @@ Item {
 
                         width: ListView.view.width
                         height: 32
-                        radius: Theme.cornerRadius
-                        color: isSelected ? Theme.primaryHover : optionArea.containsMouse ? Theme.primaryHoverLight : Theme.withAlpha(Theme.primaryHoverLight, 0)
+                        radius: Style.cornerRadius
+                        color: isSelected ? Style.primaryHover : optionArea.containsMouse ? Style.primaryHoverLight : Style.withAlpha(Style.primaryHoverLight, 0)
 
                         Row {
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            anchors.leftMargin: Theme.spacingS
-                            anchors.rightMargin: Theme.spacingS
+                            anchors.leftMargin: Style.spacingS
+                            anchors.rightMargin: Style.spacingS
                             anchors.verticalCenter: parent.verticalCenter
-                            spacing: Theme.spacingS
+                            spacing: Style.spacingS
 
                             DankColorSwatch {
                                 id: optionSwatch
@@ -512,24 +511,24 @@ Item {
                                 height: 16
                                 anchors.verticalCenter: parent.verticalCenter
                                 visible: delegateRoot.swatchColor !== undefined
-                                swatchColor: visible ? delegateRoot.swatchColor : Theme.withAlpha(delegateRoot.swatchColor, 0)
-                                ringColor: delegateRoot.isCurrentValue ? Theme.primary : Theme.outline
+                                swatchColor: visible ? delegateRoot.swatchColor : Style.withAlpha(delegateRoot.swatchColor, 0)
+                                ringColor: delegateRoot.isCurrentValue ? Style.primary : Style.outline
                             }
 
                             DankIcon {
                                 name: delegateRoot.iconName
                                 size: 18
-                                color: delegateRoot.isCurrentValue ? Theme.primary : Theme.surfaceText
+                                color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
                                 visible: name !== ""
                             }
 
                             StyledText {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: delegateRoot.modelData
-                                font.pixelSize: Theme.fontSizeMedium
-                                color: delegateRoot.isCurrentValue ? Theme.primary : Theme.surfaceText
+                                font.pixelSize: Style.fontSizeMedium
+                                color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
                                 font.weight: delegateRoot.isCurrentValue ? Font.Medium : Font.Normal
-                                width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Theme.spacingS * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
+                                width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingS * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
                                 elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
                                 wrapMode: Text.NoWrap
                                 horizontalAlignment: Text.AlignLeft

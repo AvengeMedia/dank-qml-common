@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Row {
@@ -18,23 +18,23 @@ Row {
     signal pathInputFocusChanged(bool hasFocus)
 
     height: 40
-    leftPadding: Theme.spacingM
-    rightPadding: Theme.spacingM
-    spacing: Theme.spacingS
+    leftPadding: Style.spacingM
+    rightPadding: Style.spacingM
+    spacing: Style.spacingS
 
     StyledRect {
         width: 32
         height: 32
-        radius: Theme.cornerRadius
-        color: (backButtonMouseArea.containsMouse || (backButtonFocused && keyboardNavigationActive)) && currentPath !== homeDir ? Theme.surfaceVariant : Theme.withAlpha(Theme.surfaceVariant, 0)
+        radius: Style.cornerRadius
+        color: (backButtonMouseArea.containsMouse || (backButtonFocused && keyboardNavigationActive)) && currentPath !== homeDir ? Style.surfaceVariant : Style.withAlpha(Style.surfaceVariant, 0)
         opacity: currentPath !== homeDir ? 1 : 0
         anchors.verticalCenter: parent.verticalCenter
 
         DankIcon {
             anchors.centerIn: parent
             name: "arrow_back"
-            size: Theme.iconSizeSmall
-            color: Theme.surfaceText
+            size: Style.iconSizeSmall
+            color: Style.surfaceText
         }
 
         MouseArea {
@@ -49,27 +49,27 @@ Row {
     }
 
     Item {
-        width: Math.max(0, (parent?.width ?? 0) - 40 - Theme.spacingS - (showSidebar ? 0 : 80))
+        width: Math.max(0, (parent?.width ?? 0) - 40 - Style.spacingS - (showSidebar ? 0 : 80))
         height: 32
         anchors.verticalCenter: parent.verticalCenter
 
         StyledRect {
             anchors.fill: parent
-            radius: Theme.cornerRadius
-            color: pathEditMode ? Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency) : Theme.withAlpha(Theme.surfaceContainer, 0)
-            border.color: pathEditMode ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+            radius: Style.cornerRadius
+            color: pathEditMode ? Style.withAlpha(Style.surfaceContainer, Style.popupTransparency) : Style.withAlpha(Style.surfaceContainer, 0)
+            border.color: pathEditMode ? Style.primary : Style.withAlpha(Style.primary, 0)
             border.width: pathEditMode ? 1 : 0
             visible: !pathEditMode
 
             StyledText {
                 id: pathDisplay
                 text: currentPath.replace("file://", "")
-                font.pixelSize: Theme.fontSizeMedium
-                color: Theme.surfaceText
+                font.pixelSize: Style.fontSizeMedium
+                color: Style.surfaceText
                 font.weight: Font.Medium
                 anchors.fill: parent
-                anchors.leftMargin: Theme.spacingS
-                anchors.rightMargin: Theme.spacingS
+                anchors.leftMargin: Style.spacingS
+                anchors.rightMargin: Style.spacingS
                 elide: Text.ElideMiddle
                 verticalAlignment: Text.AlignVCenter
                 maximumLineCount: 1
@@ -91,8 +91,8 @@ Row {
             id: pathInput
             anchors.fill: parent
             visible: pathEditMode
-            topPadding: Theme.spacingXS
-            bottomPadding: Theme.spacingXS
+            topPadding: Style.spacingXS
+            bottomPadding: Style.spacingXS
             onAccepted: {
                 const newPath = text.trim();
                 if (newPath !== "") {
@@ -116,15 +116,15 @@ Row {
     }
 
     Row {
-        spacing: Theme.spacingXS
+        spacing: Style.spacingXS
         visible: !showSidebar
         anchors.verticalCenter: parent.verticalCenter
 
         DankActionButton {
             circular: false
             iconName: "sort"
-            iconSize: Theme.iconSize - 6
-            iconColor: Theme.surfaceText
+            iconSize: Style.iconSize - 6
+            iconColor: Style.surfaceText
         }
     }
 }

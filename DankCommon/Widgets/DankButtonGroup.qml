@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import qs.Common
+import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
 Row {
@@ -26,9 +26,9 @@ Row {
     property string size: "medium"
     property int buttonHeight: size === "small" ? 32 : 40
     property int minButtonWidth: size === "small" ? 56 : 64
-    property int buttonPadding: size === "small" ? Theme.spacingM : Theme.spacingL
-    property int checkIconSize: size === "small" ? Theme.iconSizeSmall - 2 : Theme.iconSizeSmall
-    property int textSize: size === "small" ? Theme.fontSizeSmall : Theme.fontSizeMedium
+    property int buttonPadding: size === "small" ? Style.spacingM : Style.spacingL
+    property int checkIconSize: size === "small" ? Style.iconSizeSmall - 2 : Style.iconSizeSmall
+    property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium
     property bool userInteracted: false
     property bool usePopupTransparency: !checkParentDisablesTransparency()
     property real maximumWidth: -1
@@ -42,11 +42,11 @@ Row {
     signal selectionChanged(int index, bool selected)
     signal animationCompleted
 
-    spacing: Theme.spacingXS
+    spacing: Style.spacingXS
 
     Timer {
         id: animationTimer
-        interval: Theme.shortDuration
+        interval: Style.shortDuration
         onTriggered: {
             root.userInteracted = false;
             root.animationCompleted();
@@ -114,60 +114,60 @@ Row {
             }
             height: root.buttonHeight
 
-            color: selected ? Theme.buttonBg : (root.usePopupTransparency ? Theme.withAlpha(Theme.surfaceVariant, Theme.popupTransparency) : Theme.surfaceVariant)
+            color: selected ? Style.buttonBg : (root.usePopupTransparency ? Style.withAlpha(Style.surfaceVariant, Style.popupTransparency) : Style.surfaceVariant)
             border.color: "transparent"
             border.width: 0
 
-            topLeftRadius: (visualFirst || selected) ? Theme.cornerRadius : Math.min(4, Theme.cornerRadius)
-            bottomLeftRadius: (visualFirst || selected) ? Theme.cornerRadius : Math.min(4, Theme.cornerRadius)
-            topRightRadius: (visualLast || selected) ? Theme.cornerRadius : Math.min(4, Theme.cornerRadius)
-            bottomRightRadius: (visualLast || selected) ? Theme.cornerRadius : Math.min(4, Theme.cornerRadius)
+            topLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
+            bottomLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
+            topRightRadius: (visualLast || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
+            bottomRightRadius: (visualLast || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
 
             Behavior on width {
                 enabled: root.userInteracted
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
             Behavior on topLeftRadius {
                 enabled: root.userInteracted
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
             Behavior on topRightRadius {
                 enabled: root.userInteracted
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
             Behavior on bottomLeftRadius {
                 enabled: root.userInteracted
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
             Behavior on bottomRightRadius {
                 enabled: root.userInteracted
                 NumberAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
             Behavior on color {
                 enabled: root.userInteracted
                 ColorAnimation {
-                    duration: Theme.shortDuration
-                    easing.type: Theme.standardEasing
+                    duration: Style.shortDuration
+                    easing.type: Style.standardEasing
                 }
             }
 
@@ -180,24 +180,24 @@ Row {
                 bottomRightRadius: parent.bottomRightRadius
                 color: {
                     if (pressed)
-                        return selected ? Theme.buttonPressed : Theme.surfaceTextHover;
+                        return selected ? Style.buttonPressed : Style.surfaceTextHover;
                     if (hovered)
-                        return selected ? Theme.buttonHover : Theme.surfaceTextHover;
+                        return selected ? Style.buttonHover : Style.surfaceTextHover;
                     return "transparent";
                 }
 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Theme.shorterDuration
-                        easing.type: Theme.standardEasing
+                        duration: Style.shorterDuration
+                        easing.type: Style.standardEasing
                     }
                 }
             }
 
             DankRipple {
                 id: segmentRipple
-                cornerRadius: Theme.cornerRadius
-                rippleColor: segment.selected ? Theme.buttonText : Theme.surfaceVariantText
+                cornerRadius: Style.cornerRadius
+                rippleColor: segment.selected ? Style.buttonText : Style.surfaceVariantText
             }
 
             Item {
@@ -208,13 +208,13 @@ Row {
 
                 Row {
                     id: contentRow
-                    spacing: Theme.spacingS
+                    spacing: Style.spacingS
 
                     DankIcon {
                         id: checkIcon
                         name: "check"
                         size: root.checkIconSize
-                        color: segment.selected ? Theme.buttonText : Theme.surfaceVariantText
+                        color: segment.selected ? Style.buttonText : Style.surfaceVariantText
                         visible: root.checkEnabled && segment.selected
                         opacity: segment.selected ? 1 : 0
                         scale: segment.selected ? 1 : 0.6
@@ -223,16 +223,16 @@ Row {
                         Behavior on opacity {
                             enabled: root.userInteracted
                             NumberAnimation {
-                                duration: Theme.shortDuration
-                                easing.type: Theme.standardEasing
+                                duration: Style.shortDuration
+                                easing.type: Style.standardEasing
                             }
                         }
 
                         Behavior on scale {
                             enabled: root.userInteracted
                             NumberAnimation {
-                                duration: Theme.shortDuration
-                                easing.type: Theme.emphasizedEasing
+                                duration: Style.shortDuration
+                                easing.type: Style.emphasizedEasing
                             }
                         }
                     }
@@ -250,7 +250,7 @@ Row {
                         text: typeof modelData === "string" ? modelData : modelData.text || ""
                         font.pixelSize: root.textSize
                         font.weight: segment.selected ? Font.Medium : Font.Normal
-                        color: segment.selected ? Theme.buttonText : Theme.surfaceVariantText
+                        color: segment.selected ? Style.buttonText : Style.surfaceVariantText
                         anchors.verticalCenter: parent.verticalCenter
                         width: capAvailable < 0 ? implicitWidth : Math.min(implicitWidth, capAvailable)
                         maximumLineCount: 1

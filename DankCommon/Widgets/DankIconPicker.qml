@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import qs.Common
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -14,9 +13,9 @@ Rectangle {
 
     width: 240
     height: 32
-    radius: Theme.cornerRadius
-    color: Theme.surfaceContainer
-    border.color: iconPopup.visible ? Theme.primary : Theme.outline
+    radius: Style.cornerRadius
+    color: Style.surfaceContainer
+    border.color: iconPopup.visible ? Style.primary : Style.outline
     border.width: 1
 
     property var iconCategories: [
@@ -87,20 +86,20 @@ Rectangle {
     Row {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: Theme.spacingS
-        spacing: Theme.spacingS
+        anchors.leftMargin: Style.spacingS
+        spacing: Style.spacingS
 
         DankIcon {
             name: (root.iconType === "icon" && root.currentIcon) ? root.currentIcon : (root.iconType === "text" ? "text_fields" : "add")
             size: 16
-            color: root.currentIcon ? Theme.surfaceText : Theme.outline
+            color: root.currentIcon ? Style.surfaceText : Style.outline
             anchors.verticalCenter: parent.verticalCenter
         }
 
         StyledText {
             text: root.currentIcon ? root.currentIcon : I18n.tr("Choose icon")
-            font.pixelSize: Theme.fontSizeSmall
-            color: root.currentIcon ? Theme.surfaceText : Theme.outline
+            font.pixelSize: Style.fontSizeSmall
+            color: root.currentIcon ? Style.surfaceText : Style.outline
             anchors.verticalCenter: parent.verticalCenter
             width: 160
             elide: Text.ElideRight
@@ -110,9 +109,9 @@ Rectangle {
     DankIcon {
         name: iconPopup.visible ? "expand_less" : "expand_more"
         size: 16
-        color: Theme.outline
+        color: Style.outline
         anchors.right: parent.right
-        anchors.rightMargin: Theme.spacingS
+        anchors.rightMargin: Style.spacingS
         anchors.verticalCenter: parent.verticalCenter
     }
 
@@ -133,36 +132,36 @@ Rectangle {
 
         contentItem: Rectangle {
             id: contentSurface
-            color: Theme.surface
-            radius: Theme.cornerRadius
+            color: Style.surface
+            radius: Style.cornerRadius
 
             ElevationShadow {
                 id: shadowLayer
                 anchors.fill: parent
                 z: -1
-                level: Theme.elevationLevel2
+                level: Style.elevationLevel2
                 fallbackOffset: 4
                 targetRadius: contentSurface.radius
                 targetColor: contentSurface.color
-                shadowOpacity: Theme.elevationLevel2 && Theme.elevationLevel2.alpha !== undefined ? Theme.elevationLevel2.alpha : 0.25
-                shadowEnabled: Theme.elevationEnabled
+                shadowOpacity: Style.elevationLevel2 && Style.elevationLevel2.alpha !== undefined ? Style.elevationLevel2.alpha : 0.25
+                shadowEnabled: Style.elevationEnabled
             }
 
             Rectangle {
                 width: 24
                 height: 24
                 radius: 12
-                color: closeMouseArea.containsMouse ? Theme.errorHover : Theme.withAlpha(Theme.errorHover, 0)
+                color: closeMouseArea.containsMouse ? Style.errorHover : Style.withAlpha(Style.errorHover, 0)
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.topMargin: Theme.spacingS
-                anchors.rightMargin: Theme.spacingS
+                anchors.topMargin: Style.spacingS
+                anchors.rightMargin: Style.spacingS
                 z: 1
 
                 DankIcon {
                     name: "close"
                     size: 16
-                    color: closeMouseArea.containsMouse ? Theme.error : Theme.outline
+                    color: closeMouseArea.containsMouse ? Style.error : Style.outline
                     anchors.centerIn: parent
                 }
 
@@ -177,7 +176,7 @@ Rectangle {
 
             DankFlickable {
                 anchors.fill: parent
-                anchors.margins: Theme.spacingS
+                anchors.margins: Style.spacingS
                 contentHeight: dropdownContent.height
                 clip: true
                 pressDelay: 0
@@ -185,7 +184,7 @@ Rectangle {
                 Column {
                     id: dropdownContent
                     width: parent.width
-                    spacing: Theme.spacingM
+                    spacing: Style.spacingM
 
                     Repeater {
                         model: root.iconCategories
@@ -193,18 +192,18 @@ Rectangle {
                         Column {
                             required property var modelData
                             width: parent.width
-                            spacing: Theme.spacingS
+                            spacing: Style.spacingS
 
                             StyledText {
                                 text: modelData.name
-                                font.pixelSize: Theme.fontSizeSmall
+                                font.pixelSize: Style.fontSizeSmall
                                 font.weight: Font.Medium
-                                color: Theme.surfaceText
+                                color: Style.surfaceText
                             }
 
                             Flow {
                                 width: parent.width
-                                spacing: Theme.spacingXS
+                                spacing: Style.spacingXS
 
                                 Repeater {
                                     model: modelData.icons
@@ -213,15 +212,15 @@ Rectangle {
                                         required property string modelData
                                         width: 36
                                         height: 36
-                                        radius: Theme.cornerRadius
-                                        color: iconMouseArea.containsMouse ? Theme.primaryHover : Theme.withAlpha(Theme.primaryHover, 0)
-                                        border.color: root.currentIcon === modelData ? Theme.primary : Theme.withAlpha(Theme.primary, 0)
+                                        radius: Style.cornerRadius
+                                        color: iconMouseArea.containsMouse ? Style.primaryHover : Style.withAlpha(Style.primaryHover, 0)
+                                        border.color: root.currentIcon === modelData ? Style.primary : Style.withAlpha(Style.primary, 0)
                                         border.width: 2
 
                                         DankIcon {
                                             name: parent.modelData
                                             size: 20
-                                            color: root.currentIcon === parent.modelData ? Theme.primary : Theme.surfaceText
+                                            color: root.currentIcon === parent.modelData ? Style.primary : Style.surfaceText
                                             anchors.centerIn: parent
                                         }
 
@@ -238,8 +237,8 @@ Rectangle {
 
                                         Behavior on color {
                                             ColorAnimation {
-                                                duration: Theme.shortDuration
-                                                easing.type: Theme.standardEasing
+                                                duration: Style.shortDuration
+                                                easing.type: Style.standardEasing
                                             }
                                         }
                                     }

@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Vissza • F1/I: Fájlinformáció • F10: Súgó • Esc: Bezárás"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Növekvő"
   },
   "Cancel": {
     "Cancel": "Mégse"
@@ -24,7 +24,7 @@
     "Copy path": "Útvonal másolása"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Csökkenő"
   },
   "Desktop": {
     "Desktop": "Asztal"
@@ -51,7 +51,7 @@
     "File Information": "Fájlinformáció"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Fájlok - %1"
   },
   "Fun": {
     "Fun": "Szórakozás"
@@ -96,7 +96,7 @@
     "Numbers": "Számok"
   },
   "Order": {
-    "Order": ""
+    "Order": "Sorrend"
   },
   "Overwrite": {
     "Overwrite": "Felülírás"
@@ -126,7 +126,7 @@
     "Search...": "Keresés…"
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Fájl kiválasztása"
   },
   "Size": {
     "Size": "Méret"
@@ -153,7 +153,7 @@
     "Type": "Típus"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Ezen mappa használata"
   },
   "Videos": {
     "Videos": "Videók"

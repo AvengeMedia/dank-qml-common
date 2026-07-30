@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace：返回 • F1/I：文件信息 • F10：帮助 • Esc：关闭"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "升序"
   },
   "Cancel": {
     "Cancel": "取消"
@@ -24,7 +24,7 @@
     "Copy path": "复制路径"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "降序"
   },
   "Desktop": {
     "Desktop": "桌面"
@@ -51,7 +51,7 @@
     "File Information": "文件信息"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "文件 - %1"
   },
   "Fun": {
     "Fun": "娱乐"
@@ -96,7 +96,7 @@
     "Numbers": "数字"
   },
   "Order": {
-    "Order": ""
+    "Order": "排序"
   },
   "Overwrite": {
     "Overwrite": "覆盖"
@@ -126,7 +126,7 @@
     "Search...": "搜索..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "选择文件"
   },
   "Size": {
     "Size": "尺寸"
@@ -153,7 +153,7 @@
     "Type": "类型"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "使用此文件夹"
   },
   "Videos": {
     "Videos": "视频"

@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: חזרה • F1/I: מידע על הקובץ • F10: עזרה • Esc: סגירה"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "סדר עולה"
   },
   "Cancel": {
     "Cancel": "ביטול"
@@ -24,7 +24,7 @@
     "Copy path": "העתק/י נתיב"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "סדר יורד"
   },
   "Desktop": {
     "Desktop": "שולחן העבודה"
@@ -51,7 +51,7 @@
     "File Information": "פרטי קובץ"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "קבצים - %1"
   },
   "Fun": {
     "Fun": "כיף"
@@ -96,7 +96,7 @@
     "Numbers": "מספרים"
   },
   "Order": {
-    "Order": ""
+    "Order": "סדר"
   },
   "Overwrite": {
     "Overwrite": "דריסה"
@@ -126,7 +126,7 @@
     "Search...": "חיפוש..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "בחר/י קובץ"
   },
   "Size": {
     "Size": "גודל"
@@ -153,7 +153,7 @@
     "Type": "סוג"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "השתמש/י בתיקייה זו"
   },
   "Videos": {
     "Videos": "סרטונים"

@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Indietro • F1/I: Info File • F10: Aiuto • Esc: Chiudi"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Crescente"
   },
   "Cancel": {
     "Cancel": "Annulla"
@@ -24,7 +24,7 @@
     "Copy path": "Copia percorso"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Decrescente"
   },
   "Desktop": {
     "Desktop": "Scrivania"
@@ -51,7 +51,7 @@
     "File Information": "Informazioni File"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "File - %1"
   },
   "Fun": {
     "Fun": "Svago"
@@ -96,7 +96,7 @@
     "Numbers": "Numeri"
   },
   "Order": {
-    "Order": ""
+    "Order": "Ordine"
   },
   "Overwrite": {
     "Overwrite": "Sovrascrivi"
@@ -126,7 +126,7 @@
     "Search...": "Cerca..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Seleziona File"
   },
   "Size": {
     "Size": "Dimensione"
@@ -153,7 +153,7 @@
     "Type": "Tipo"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Usa questa cartella"
   },
   "Videos": {
     "Videos": "Video"

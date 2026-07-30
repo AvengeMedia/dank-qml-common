@@ -6,10 +6,10 @@
     "Actions": "Acciones"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Atrás • F1/I: Información del archivo • F10: Ayuda • Esc: Cerrar+"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Atrás • F1/I: Información del archivo • F10: Ayuda • Esc: Cerrar"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Ascendente"
   },
   "Cancel": {
     "Cancel": "Cancelar"
@@ -24,25 +24,25 @@
     "Copy path": "Copiar ubicación"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Descendente"
   },
   "Desktop": {
-    "Desktop": ""
+    "Desktop": "Escritorio"
   },
   "Development": {
     "Development": "Desarrollo"
   },
   "Documents": {
-    "Documents": ""
+    "Documents": "Documentos"
   },
   "Downloads": {
-    "Downloads": ""
+    "Downloads": "Descargas"
   },
   "Enter filename...": {
     "Enter filename...": "Ingrese nombre de archivo..."
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Accionar • F10: Ayudar"
+    "F1/I: Toggle • F10: Help": "F1/I: Alternar • F10: Ayudar"
   },
   "File Already Exists": {
     "File Already Exists": "El archivo ya existe"
@@ -51,7 +51,7 @@
     "File Information": "Información del archivo"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Archivos - %1"
   },
   "Fun": {
     "Fun": "Diversión"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "Mantener pulsado para confirmar (%1s)"
   },
   "Home": {
-    "Home": ""
+    "Home": "Inicio"
   },
   "Log Out": {
     "Log Out": "Cerrar sesión"
@@ -81,10 +81,10 @@
     "Modified": "Modificado"
   },
   "Move to Trash": {
-    "Move to Trash": ""
+    "Move to Trash": "Mover a la papelera"
   },
   "Music": {
-    "Music": ""
+    "Music": "Música"
   },
   "Name": {
     "Name": "Nombre"
@@ -96,13 +96,13 @@
     "Numbers": "Números"
   },
   "Order": {
-    "Order": ""
+    "Order": "Orden"
   },
   "Overwrite": {
     "Overwrite": "Sobrescribir"
   },
   "Pictures": {
-    "Pictures": ""
+    "Pictures": "Imágenes"
   },
   "Power Off": {
     "Power Off": "Apagar"
@@ -111,7 +111,7 @@
     "Power Options": "Opciones de Energía"
   },
   "Quick Access": {
-    "Quick Access": ""
+    "Quick Access": "Acceso rápido"
   },
   "Reboot": {
     "Reboot": "Reiniciar"
@@ -126,7 +126,7 @@
     "Search...": "Buscar..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Seleccionar archivo"
   },
   "Size": {
     "Size": "Tamaño"
@@ -153,10 +153,10 @@
     "Type": "Tipo"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Usar esta carpeta"
   },
   "Videos": {
-    "Videos": ""
+    "Videos": "Videos"
   },
   "Workspace": {
     "Workspace": "Espacio de trabajo"

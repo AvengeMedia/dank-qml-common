@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Назад • F1/I: Информация о Файле • F10: Справка • Esc: Закрыть"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "По возрастанию"
   },
   "Cancel": {
     "Cancel": "Отмена"
@@ -24,7 +24,7 @@
     "Copy path": "Копировать путь"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "По убыванию"
   },
   "Desktop": {
     "Desktop": "Рабочий стол"
@@ -51,7 +51,7 @@
     "File Information": "Информация о Файле"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Файлы — %1"
   },
   "Fun": {
     "Fun": "Развлечение"
@@ -96,7 +96,7 @@
     "Numbers": "Числа"
   },
   "Order": {
-    "Order": ""
+    "Order": "Порядок"
   },
   "Overwrite": {
     "Overwrite": "Перезаписать"
@@ -126,7 +126,7 @@
     "Search...": "Поиск..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Выберите файл"
   },
   "Size": {
     "Size": "Размер"
@@ -153,7 +153,7 @@
     "Type": "Тип"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Использовать эту папку"
   },
   "Videos": {
     "Videos": "Видео"

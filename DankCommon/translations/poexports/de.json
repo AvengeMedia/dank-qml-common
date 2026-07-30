@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Zurück: Zurück • F1/I: Datei Info • F10: Hilfe • Esc: Schließen"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Aufsteigend"
   },
   "Cancel": {
     "Cancel": "Abbrechen"
@@ -24,7 +24,7 @@
     "Copy path": "Pfad kopieren"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Absteigend"
   },
   "Desktop": {
     "Desktop": "Desktop"
@@ -51,7 +51,7 @@
     "File Information": "Dateiinformation"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Dateien - %1"
   },
   "Fun": {
     "Fun": "Spaß"
@@ -96,7 +96,7 @@
     "Numbers": "Zahlen"
   },
   "Order": {
-    "Order": ""
+    "Order": "Reihenfolge"
   },
   "Overwrite": {
     "Overwrite": "Überschreiben"
@@ -126,7 +126,7 @@
     "Search...": "Suche..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Datei auswählen"
   },
   "Size": {
     "Size": "Größe"
@@ -153,7 +153,7 @@
     "Type": "Typ"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Diesen Ordner verwenden"
   },
   "Videos": {
     "Videos": "Videos"

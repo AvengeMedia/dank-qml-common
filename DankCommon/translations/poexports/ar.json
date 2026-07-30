@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: رجوع • F1/I: معلومات الملف • F10: المساعدة • Esc: اغلاق"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "تصاعدي"
   },
   "Cancel": {
     "Cancel": "إلغاء"
@@ -24,7 +24,7 @@
     "Copy path": "نسخ المسار"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "تنازلي"
   },
   "Desktop": {
     "Desktop": "سطح المكتب"
@@ -51,7 +51,7 @@
     "File Information": "معلومات الملف"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "الملفات - %1"
   },
   "Fun": {
     "Fun": "ترفيه"
@@ -96,7 +96,7 @@
     "Numbers": "ارقام"
   },
   "Order": {
-    "Order": ""
+    "Order": "الترتيب"
   },
   "Overwrite": {
     "Overwrite": "استبدال"
@@ -126,7 +126,7 @@
     "Search...": "ابحث هنا..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "اختيار ملف"
   },
   "Size": {
     "Size": "الحجم"
@@ -153,7 +153,7 @@
     "Type": "نوع"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "استخدم هذا المجلد"
   },
   "Videos": {
     "Videos": "الفيديوهات"

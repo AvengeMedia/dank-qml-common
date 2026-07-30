@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Назад • F1/I: Інформація про файл • F10: Довідка • Esc: Закрити"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "За зростанням"
   },
   "Cancel": {
     "Cancel": "Скасувати"
@@ -24,7 +24,7 @@
     "Copy path": "Копіювати шлях"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "За спаданням"
   },
   "Desktop": {
     "Desktop": "Робочий стіл"
@@ -51,7 +51,7 @@
     "File Information": "Інформація про файл"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Файли — %1"
   },
   "Fun": {
     "Fun": "Розваги"
@@ -66,7 +66,7 @@
     "Hold to confirm (%1 ms)": "Утримуйте для підтвердження (%1 мс)"
   },
   "Hold to confirm (%1s)": {
-    "Hold to confirm (%1s)": "Утримуйте для підтвердження (%1с)"
+    "Hold to confirm (%1s)": "Утримуйте для підтвердження (%1 с)"
   },
   "Home": {
     "Home": "Головна"
@@ -96,7 +96,7 @@
     "Numbers": "Числа"
   },
   "Order": {
-    "Order": ""
+    "Order": "Порядок"
   },
   "Overwrite": {
     "Overwrite": "Перезаписати"
@@ -126,7 +126,7 @@
     "Search...": "Пошук..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Вибрати файл"
   },
   "Size": {
     "Size": "Розмір"
@@ -153,7 +153,7 @@
     "Type": "Тип"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Використовувати цю папку"
   },
   "Videos": {
     "Videos": "Відео"

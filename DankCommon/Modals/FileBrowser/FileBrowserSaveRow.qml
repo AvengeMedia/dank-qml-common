@@ -9,6 +9,8 @@ Row {
     property bool folderMode: false
     property string defaultFileName: ""
     property string currentPath: ""
+    property string selectedFilePath: ""
+    property bool selectedFileIsDir: false
     property alias fileName: fileNameInput.text
 
     signal saveRequested(string filePath)
@@ -110,7 +112,8 @@ Row {
             stateColor: Style.primaryText
             cornerRadius: Style.cornerRadius
             onClicked: {
-                var basePath = currentPath.replace(/^file:\/\//, '');
+                var path = (selectedFilePath !== "" && selectedFileIsDir) ? selectedFilePath : currentPath;
+                var basePath = path.replace(/^file:\/\//, '');
                 saveRow.folderSelected(basePath);
             }
         }

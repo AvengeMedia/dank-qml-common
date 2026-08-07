@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Quay lại • F1/I: Thông tin tệp • F10: Trợ giúp • Esc: Đóng"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Tăng dần"
   },
   "Cancel": {
     "Cancel": "Hủy"
@@ -24,7 +24,7 @@
     "Copy path": "Sao chép đường dẫn"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Giảm dần"
   },
   "Desktop": {
     "Desktop": "Máy tính để bàn"
@@ -51,7 +51,7 @@
     "File Information": "Thông tin tệp"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Tệp - %1"
   },
   "Fun": {
     "Fun": "Giải trí"
@@ -96,7 +96,7 @@
     "Numbers": "Số"
   },
   "Order": {
-    "Order": ""
+    "Order": "Thứ tự"
   },
   "Overwrite": {
     "Overwrite": "Ghi đè"
@@ -126,7 +126,7 @@
     "Search...": "Tìm kiếm..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Chọn Tệp"
   },
   "Size": {
     "Size": "Kích thước"
@@ -153,7 +153,7 @@
     "Type": "Loại"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Sử dụng thư mục này"
   },
   "Videos": {
     "Videos": "Video"

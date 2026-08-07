@@ -39,7 +39,7 @@ FloatingWindow {
     minimumSize: Qt.size(500, 400)
     implicitWidth: 800
     implicitHeight: 600
-    color: Style.surfaceContainer
+    color: "transparent"
     visible: false
 
     onClosed: close()
@@ -63,6 +63,11 @@ FloatingWindow {
             }
             dialogClosed();
         }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        color: Style.floatingWindowSurface
     }
 
     Loader {

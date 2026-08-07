@@ -1,7 +1,7 @@
 import "../Common/fzf.js" as Fzf
 import QtQuick
-import QtQuick.Controls
 import Quickshell
+import Quickshell.Wayland
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -54,33 +54,75 @@ Item {
     property bool addHorizontalPadding: false
     property string emptyText: ""
     property bool usePopupTransparency: !checkParentDisablesTransparency()
+    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property color hoverBackgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceVariant, Style.popupTransparency) : Style.withAlpha(Style.surfaceVariant, Style.floatingWindowTransparency)
+    property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.floatingWindowFieldColor
+    property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
+    property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
     property var transientSurfaceTracker: null
+    property bool menuBlurEnabled: true
 
     signal valueChanged(string value)
 
     property bool menuOpen: false
 
-    onMenuOpenChanged: transientSurfaceTracker?.setActive(root, menuOpen, null)
+    onMenuOpenChanged: transientSurfaceTracker?.setActive(root, menuOpen, menuOpen ? dropdownMenu : null)
 
-    function closeDropdownMenu() {
-        if (!root.menuOpen && !dropdownMenu.opened && !dropdownMenu.visible)
-            return;
-        root.menuOpen = false;
-        dropdownMenu.close();
+    readonly property int menuWidth: {
+        if (root.popupWidth > 0)
+            return root.popupWidth;
+        return Math.max(1, dropdown.width + root.popupWidthOffset);
     }
 
-    function positionDropdownMenu() {
-        let currentIndex = root.options.indexOf(root.currentValue);
-        listView.positionViewAtIndex(currentIndex >= 0 ? currentIndex : 0, ListView.Beginning);
+    readonly property int menuHeight: {
+        let h = root.enableFuzzySearch ? 54 : 0;
+        if (root.options.length === 0 && root.emptyText !== "")
+            h += 32;
+        else
+            h += Math.min(dropdownMenu.filteredOptions.length, 10) * 36;
+        return Math.min(root.maxPopupHeight, h + 16);
+    }
 
+    // Host-sized PopupWindow: compositor blur on the menu, in-surface dismiss/Escape.
+    function positionMenuInHost() {
+        const qsWin = root.QsWindow.window;
         const anchorItem = root.popupAnchorItem || dropdown;
-        const pos = anchorItem.mapToItem(Overlay.overlay, 0, 0);
-        const popupW = dropdownMenu.width;
-        const popupH = dropdownMenu.height;
-        const overlayH = Overlay.overlay.height;
-        const goUp = root.openUpwards || pos.y + anchorItem.height + popupH + 4 > overlayH;
-        dropdownMenu.x = root.alignPopupRight ? pos.x + anchorItem.width - popupW : pos.x - (root.popupWidthOffset / 2);
-        dropdownMenu.y = goUp ? pos.y - popupH - 4 : pos.y + anchorItem.height + 4;
+        if (!qsWin || !anchorItem)
+            return false;
+
+        dropdownMenu.anchor.window = qsWin;
+        dropdownMenu.anchor.rect.x = 0;
+        dropdownMenu.anchor.rect.y = 0;
+        dropdownMenu.anchor.edges = Edges.Top | Edges.Left;
+        dropdownMenu.anchor.gravity = Edges.Bottom | Edges.Right;
+        dropdownMenu.anchor.margins.top = 0;
+        dropdownMenu.anchor.margins.bottom = 0;
+        dropdownMenu.anchor.adjustment = PopupAdjustment.None;
+        dropdownMenu.width = qsWin.width;
+        dropdownMenu.height = qsWin.height;
+
+        const pos = root.QsWindow.itemPosition(anchorItem);
+        const menuW = root.menuWidth;
+        const menuH = root.menuHeight;
+        let x = root.alignPopupRight ? pos.x + anchorItem.width - menuW : pos.x;
+        let goUp = root.openUpwards;
+        if (!goUp && pos.y + anchorItem.height + menuH + 4 > qsWin.height)
+            goUp = true;
+        if (goUp && pos.y - menuH - 4 < 0)
+            goUp = false;
+        let y = goUp ? pos.y - menuH - 4 : pos.y + anchorItem.height + 4;
+        dropdownMenu.menuX = Math.max(0, Math.min(qsWin.width - menuW, x));
+        dropdownMenu.menuY = Math.max(0, Math.min(qsWin.height - menuH, y));
+        dropdownMenu.anchor.updateAnchor();
+        return true;
+    }
+
+    function closeDropdownMenu() {
+        if (!root.menuOpen && !dropdownMenu.visible)
+            return;
+        root.menuOpen = false;
+        dropdownMenu.closing = true;
+        closeTimer.restart();
     }
 
     function showDropdownMenu() {
@@ -88,13 +130,30 @@ Item {
             return;
         if (root.menuOpen)
             return;
+        if (!positionMenuInHost())
+            return;
 
         root.menuOpen = true;
-        dropdownMenu.open();
-        positionDropdownMenu();
+        closeTimer.stop();
+        dropdownMenu.closing = false;
+        dropdownMenu.visible = true;
+        dropdownMenu.selectedIndex = -1;
+        const currentIndex = root.options.indexOf(root.currentValue);
+        listView.positionViewAtIndex(currentIndex >= 0 ? currentIndex : 0, ListView.Beginning);
+        if (searchField.text.length > 0) {
+            dropdownMenu.initFinder();
+            dropdownMenu.searchQuery = searchField.text;
+        } else {
+            dropdownMenu.fzfFinder = null;
+            dropdownMenu.searchQuery = "";
+        }
 
-        if (root.enableFuzzySearch)
-            searchField.forceActiveFocus();
+        Qt.callLater(() => {
+            if (root.enableFuzzySearch)
+                searchField.forceActiveFocus();
+            else
+                menuKeyHandler.forceActiveFocus();
+        });
     }
 
     function openDropdownMenu() {
@@ -117,8 +176,8 @@ Item {
 
     Component.onDestruction: {
         transientSurfaceTracker?.unregister(root);
-        if (root.menuOpen || dropdownMenu.opened || dropdownMenu.visible)
-            dropdownMenu.close();
+        if (root.menuOpen || dropdownMenu.visible)
+            dropdownMenu.visible = false;
     }
 
     Connections {
@@ -171,8 +230,8 @@ Item {
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
         radius: Style.cornerRadius
-        color: dropdownArea.containsMouse || dropdownMenu.visible ? Style.surfaceContainerHigh : (root.usePopupTransparency ? Style.withAlpha(Style.surfaceContainer, Style.popupTransparency) : Style.surfaceContainer)
-        border.color: dropdownMenu.visible ? Style.primary : Style.outlineHeavy
+        color: dropdownArea.containsMouse || dropdownMenu.visible ? root.hoverBackgroundColor : root.backgroundColor
+        border.color: dropdownMenu.visible ? root.focusedBorderColor : root.normalBorderColor
         border.width: dropdownMenu.visible ? 2 : 1
 
         MouseArea {
@@ -245,7 +304,7 @@ Item {
         }
     }
 
-    Popup {
+    PopupWindow {
         id: dropdownMenu
 
         property string searchQuery: ""
@@ -258,6 +317,9 @@ Item {
         }
         property int selectedIndex: -1
         property var fzfFinder: null
+        property real menuX: 0
+        property real menuY: 0
+        property bool closing: false
 
         function initFinder() {
             fzfFinder = new Fzf.Finder(root.options, {
@@ -288,263 +350,306 @@ Item {
                 return;
             root.currentValue = filteredOptions[selectedIndex];
             root.valueChanged(filteredOptions[selectedIndex]);
-            close();
+            root.closeDropdownMenu();
         }
 
-        onOpened: {
-            root.menuOpen = true;
-            selectedIndex = -1;
-            if (searchField.text.length > 0) {
-                initFinder();
-                searchQuery = searchField.text;
-            } else {
-                fzfFinder = null;
-                searchQuery = "";
+        color: "transparent"
+        visible: false
+
+        onVisibleChanged: {
+            if (!visible && root.menuOpen)
+                root.menuOpen = false;
+            if (visible)
+                Qt.callLater(() => menuKeyHandler.forceActiveFocus());
+        }
+
+        Timer {
+            id: closeTimer
+
+            interval: Style.shortDuration
+            onTriggered: {
+                dropdownMenu.closing = false;
+                dropdownMenu.visible = false;
             }
         }
 
-        onClosed: root.menuOpen = false
+        BackgroundEffect.blurRegion: (visible && root.menuBlurEnabled && !!(Style.theme?.blurLayersActive ?? true)) ? menuBlurRegion : null
 
-        parent: root.Overlay.overlay
-        width: root.popupWidth === -1 ? undefined : (root.popupWidth > 0 ? root.popupWidth : (dropdown.width + root.popupWidthOffset))
-        height: {
-            let h = root.enableFuzzySearch ? 54 : 0;
-            if (root.options.length === 0 && root.emptyText !== "")
-                h += 32;
-            else
-                h += Math.min(filteredOptions.length, 10) * 36;
-            return Math.min(root.maxPopupHeight, h + 16);
-        }
-        padding: 0
-        modal: true
-        dim: false
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
-        enter: Transition {
-            NumberAnimation {
-                property: "scale"
-                from: 0.9
-                to: 1
-                duration: Style.shortDuration
-                easing.type: Style.emphasizedEasing
-            }
-            NumberAnimation {
-                property: "opacity"
-                from: 0
-                to: 1
-                duration: Style.shortDuration
-                easing.type: Style.standardEasing
-            }
-        }
-
-        exit: Transition {
-            NumberAnimation {
-                property: "scale"
-                from: 1
-                to: 0.9
-                duration: Style.shortDuration
-                easing.type: Style.emphasizedEasing
-            }
-            NumberAnimation {
-                property: "opacity"
-                from: 1
-                to: 0
-                duration: Style.shortDuration
-                easing.type: Style.standardEasing
-            }
-        }
-
-        background: Rectangle {
-            color: "transparent"
-        }
-
-        contentItem: Rectangle {
-            id: contentSurface
-
-            LayoutMirroring.enabled: I18n.isRtl
-            LayoutMirroring.childrenInherit: true
-            color: Style.withAlpha(Style.surfaceContainer, 1)
-            border.color: Style.primary
-            border.width: 2
+        Region {
+            id: menuBlurRegion
+            x: menuContainer.x
+            y: menuContainer.y
+            width: menuContainer.width
+            height: menuContainer.height
             radius: Style.cornerRadius
+        }
 
-            ElevationShadow {
-                id: shadowLayer
-                anchors.fill: parent
-                z: -1
-                level: Style.elevationLevel2
-                fallbackOffset: 4
-                targetRadius: contentSurface.radius
-                targetColor: contentSurface.color
-                borderColor: contentSurface.border.color
-                borderWidth: contentSurface.border.width
-                shadowEnabled: Style.elevationEnabled && Style.popoutElevationEnabled
+        // Full-host dismiss surface (same pattern as launcher/clipboard context menus).
+        MouseArea {
+            anchors.fill: parent
+            z: -1
+            enabled: dropdownMenu.visible
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+            onClicked: root.closeDropdownMenu()
+        }
+
+        FocusScope {
+            id: menuKeyHandler
+            anchors.fill: parent
+            focus: dropdownMenu.visible
+            z: 0
+
+            Keys.onPressed: event => {
+                switch (event.key) {
+                case Qt.Key_Escape:
+                    root.closeDropdownMenu();
+                    event.accepted = true;
+                    return;
+                case Qt.Key_Down:
+                    dropdownMenu.selectNext();
+                    event.accepted = true;
+                    return;
+                case Qt.Key_Up:
+                    dropdownMenu.selectPrevious();
+                    event.accepted = true;
+                    return;
+                case Qt.Key_Return:
+                case Qt.Key_Enter:
+                    dropdownMenu.selectCurrent();
+                    event.accepted = true;
+                    return;
+                }
             }
+        }
 
-            Column {
+        Item {
+            id: menuContainer
+            x: dropdownMenu.menuX
+            y: dropdownMenu.menuY
+            width: root.menuWidth
+            height: root.menuHeight
+            z: 1
+
+            Rectangle {
+                id: contentSurface
+
                 anchors.fill: parent
-                anchors.margins: Style.spacingS
+                LayoutMirroring.enabled: I18n.isRtl
+                LayoutMirroring.childrenInherit: true
+                color: "transparent"
+                border.color: "transparent"
+                border.width: 0
+                radius: Style.cornerRadius
+                opacity: dropdownMenu.visible && !dropdownMenu.closing ? 1 : 0
+                scale: dropdownMenu.visible && !dropdownMenu.closing ? 1 : 0.9
 
-                Rectangle {
-                    id: searchContainer
-
-                    width: parent.width
-                    height: 42
-                    visible: root.enableFuzzySearch
-                    radius: Style.cornerRadius
-                    color: root.usePopupTransparency ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.surfaceContainerHigh
-
-                    DankTextField {
-                        id: searchField
-
-                        anchors.fill: parent
-                        anchors.margins: 1
-                        placeholderText: I18n.tr("Search...")
-                        topPadding: Style.spacingS
-                        bottomPadding: Style.spacingS
-                        onTextChanged: searchDebounce.restart()
-                        Keys.onDownPressed: dropdownMenu.selectNext()
-                        Keys.onUpPressed: dropdownMenu.selectPrevious()
-                        Keys.onReturnPressed: dropdownMenu.selectCurrent()
-                        Keys.onEnterPressed: dropdownMenu.selectCurrent()
-                        Keys.onPressed: event => {
-                            if (!(event.modifiers & Qt.ControlModifier))
-                                return;
-                            switch (event.key) {
-                            case Qt.Key_N:
-                            case Qt.Key_J:
-                                dropdownMenu.selectNext();
-                                event.accepted = true;
-                                break;
-                            case Qt.Key_P:
-                            case Qt.Key_K:
-                                dropdownMenu.selectPrevious();
-                                event.accepted = true;
-                                break;
-                            }
-                        }
-
-                        Timer {
-                            id: searchDebounce
-                            interval: 50
-                            onTriggered: {
-                                if (!dropdownMenu.fzfFinder)
-                                    dropdownMenu.initFinder();
-                                dropdownMenu.searchQuery = searchField.text;
-                                dropdownMenu.selectedIndex = -1;
-                            }
-                        }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Style.shortDuration
+                        easing.type: Style.standardEasing
+                    }
+                }
+                Behavior on scale {
+                    NumberAnimation {
+                        duration: Style.shortDuration
+                        easing.type: Style.emphasizedEasing
                     }
                 }
 
-                Item {
-                    width: 1
-                    height: Style.spacingXS
-                    visible: root.enableFuzzySearch
+                // Block dismiss MouseArea from eating clicks on the menu itself.
+                MouseArea {
+                    anchors.fill: parent
+                    z: -1
+                    acceptedButtons: Qt.AllButtons
+                    onPressed: mouse => mouse.accepted = true
+                    onClicked: mouse => mouse.accepted = true
                 }
 
-                Item {
-                    width: parent.width
-                    height: 32
-                    visible: root.options.length === 0 && root.emptyText !== ""
-
-                    StyledText {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: Style.spacingS
-                        anchors.rightMargin: Style.spacingS
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: root.emptyText
-                        font.pixelSize: Style.fontSizeMedium
-                        color: Style.surfaceVariantText
-                        horizontalAlignment: Text.AlignLeft
-                    }
+                ElevationShadow {
+                    id: shadowLayer
+                    anchors.fill: parent
+                    z: -1
+                    level: Style.elevationLevel2
+                    fallbackOffset: 4
+                    targetRadius: contentSurface.radius
+                    targetColor: root.menuBackgroundColor
+                    borderColor: root.focusedBorderColor
+                    borderWidth: 2
+                    shadowEnabled: Style.elevationEnabled && Style.popoutElevationEnabled
                 }
 
-                DankListView {
-                    id: listView
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: Style.spacingS
 
-                    width: parent.width
-                    height: parent.height - (root.enableFuzzySearch ? searchContainer.height + Style.spacingXS : 0) - (root.options.length === 0 && root.emptyText !== "" ? 32 : 0)
-                    clip: true
-                    visible: root.options.length > 0
-                    model: ScriptModel {
-                        values: dropdownMenu.filteredOptions
-                    }
-                    spacing: Style.spacingXXS
+                    Rectangle {
+                        id: searchContainer
 
-                    interactive: true
-                    flickDeceleration: 1500
-                    maximumFlickVelocity: 2000
-                    boundsBehavior: Flickable.DragAndOvershootBounds
-                    boundsMovement: Flickable.FollowBoundsBehavior
-                    pressDelay: 0
-                    flickableDirection: Flickable.VerticalFlick
-
-                    delegate: Rectangle {
-                        id: delegateRoot
-
-                        required property var modelData
-                        required property int index
-                        property bool isSelected: dropdownMenu.selectedIndex === index
-                        property bool isCurrentValue: root.currentValue === modelData
-                        property string iconName: root.optionIconMap[modelData] ?? ""
-                        property var swatchColor: root.optionColorMap[modelData]
-
-                        width: ListView.view.width
-                        height: 32
+                        width: parent.width
+                        height: 42
+                        visible: root.enableFuzzySearch
                         radius: Style.cornerRadius
-                        color: isSelected ? Style.primaryHover : optionArea.containsMouse ? Style.primaryHoverLight : Style.withAlpha(Style.primaryHoverLight, 0)
+                        color: root.backgroundColor
 
-                        Row {
+                        DankTextField {
+                            id: searchField
+
+                            anchors.fill: parent
+                            anchors.margins: 1
+                            placeholderText: I18n.tr("Search...")
+                            backgroundColor: root.backgroundColor
+                            normalBorderColor: root.normalBorderColor
+                            focusedBorderColor: root.focusedBorderColor
+                            topPadding: Style.spacingS
+                            bottomPadding: Style.spacingS
+                            onTextChanged: searchDebounce.restart()
+                            Keys.onDownPressed: dropdownMenu.selectNext()
+                            Keys.onUpPressed: dropdownMenu.selectPrevious()
+                            Keys.onReturnPressed: dropdownMenu.selectCurrent()
+                            Keys.onEnterPressed: dropdownMenu.selectCurrent()
+                            Keys.onEscapePressed: event => {
+                                root.closeDropdownMenu();
+                                event.accepted = true;
+                            }
+                            Keys.onPressed: event => {
+                                if (!(event.modifiers & Qt.ControlModifier))
+                                    return;
+                                switch (event.key) {
+                                case Qt.Key_N:
+                                case Qt.Key_J:
+                                    dropdownMenu.selectNext();
+                                    event.accepted = true;
+                                    break;
+                                case Qt.Key_P:
+                                case Qt.Key_K:
+                                    dropdownMenu.selectPrevious();
+                                    event.accepted = true;
+                                    break;
+                                }
+                            }
+
+                            Timer {
+                                id: searchDebounce
+                                interval: 50
+                                onTriggered: {
+                                    if (!dropdownMenu.fzfFinder)
+                                        dropdownMenu.initFinder();
+                                    dropdownMenu.searchQuery = searchField.text;
+                                    dropdownMenu.selectedIndex = -1;
+                                }
+                            }
+                        }
+                    }
+
+                    Item {
+                        width: 1
+                        height: Style.spacingXS
+                        visible: root.enableFuzzySearch
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: 32
+                        visible: root.options.length === 0 && root.emptyText !== ""
+
+                        StyledText {
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.leftMargin: Style.spacingS
                             anchors.rightMargin: Style.spacingS
                             anchors.verticalCenter: parent.verticalCenter
-                            spacing: Style.spacingS
-
-                            DankColorSwatch {
-                                id: optionSwatch
-
-                                width: 16
-                                height: 16
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: delegateRoot.swatchColor !== undefined
-                                swatchColor: visible ? delegateRoot.swatchColor : Style.withAlpha(delegateRoot.swatchColor, 0)
-                                ringColor: delegateRoot.isCurrentValue ? Style.primary : Style.outline
-                            }
-
-                            DankIcon {
-                                name: delegateRoot.iconName
-                                size: 18
-                                color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
-                                visible: name !== ""
-                            }
-
-                            StyledText {
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: delegateRoot.modelData
-                                font.pixelSize: Style.fontSizeMedium
-                                color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
-                                font.weight: delegateRoot.isCurrentValue ? Font.Medium : Font.Normal
-                                width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingS * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
-                                elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
-                                wrapMode: Text.NoWrap
-                                horizontalAlignment: Text.AlignLeft
-                            }
+                            text: root.emptyText
+                            font.pixelSize: Style.fontSizeMedium
+                            color: Style.surfaceVariantText
+                            horizontalAlignment: Text.AlignLeft
                         }
+                    }
 
-                        MouseArea {
-                            id: optionArea
+                    DankListView {
+                        id: listView
 
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                root.currentValue = delegateRoot.modelData;
-                                root.valueChanged(delegateRoot.modelData);
-                                root.closeDropdownMenu();
+                        width: parent.width
+                        height: parent.height - (root.enableFuzzySearch ? searchContainer.height + Style.spacingXS : 0) - (root.options.length === 0 && root.emptyText !== "" ? 32 : 0)
+                        clip: true
+                        visible: root.options.length > 0
+                        model: ScriptModel {
+                            values: dropdownMenu.filteredOptions
+                        }
+                        spacing: Style.spacingXXS
+
+                        interactive: true
+                        flickDeceleration: 1500
+                        maximumFlickVelocity: 2000
+                        boundsBehavior: Flickable.DragAndOvershootBounds
+                        boundsMovement: Flickable.FollowBoundsBehavior
+                        pressDelay: 0
+                        flickableDirection: Flickable.VerticalFlick
+
+                        delegate: Rectangle {
+                            id: delegateRoot
+
+                            required property var modelData
+                            required property int index
+                            property bool isSelected: dropdownMenu.selectedIndex === index
+                            property bool isCurrentValue: root.currentValue === modelData
+                            property string iconName: root.optionIconMap[modelData] ?? ""
+                            property var swatchColor: root.optionColorMap[modelData]
+
+                            width: ListView.view.width
+                            height: 32
+                            radius: Style.cornerRadius
+                            color: isSelected ? Style.primaryHover : optionArea.containsMouse ? Style.primaryHoverLight : Style.withAlpha(Style.primaryHoverLight, 0)
+
+                            Row {
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.leftMargin: Style.spacingS
+                                anchors.rightMargin: Style.spacingS
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: Style.spacingS
+
+                                DankColorSwatch {
+                                    id: optionSwatch
+
+                                    width: 16
+                                    height: 16
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    visible: delegateRoot.swatchColor !== undefined
+                                    swatchColor: visible ? delegateRoot.swatchColor : Style.withAlpha(delegateRoot.swatchColor, 0)
+                                    ringColor: delegateRoot.isCurrentValue ? Style.primary : Style.outline
+                                }
+
+                                DankIcon {
+                                    name: delegateRoot.iconName
+                                    size: 18
+                                    color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
+                                    visible: name !== ""
+                                }
+
+                                StyledText {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: delegateRoot.modelData
+                                    font.pixelSize: Style.fontSizeMedium
+                                    color: delegateRoot.isCurrentValue ? Style.primary : Style.surfaceText
+                                    font.weight: delegateRoot.isCurrentValue ? Font.Medium : Font.Normal
+                                    width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingS * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
+                                    elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
+                                    wrapMode: Text.NoWrap
+                                    horizontalAlignment: Text.AlignLeft
+                                }
+                            }
+
+                            MouseArea {
+                                id: optionArea
+
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    root.currentValue = delegateRoot.modelData;
+                                    root.valueChanged(delegateRoot.modelData);
+                                    root.closeDropdownMenu();
+                                }
                             }
                         }
                     }

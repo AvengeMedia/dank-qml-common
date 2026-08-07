@@ -60,6 +60,17 @@ Singleton {
     readonly property color floatingSurface: withAlpha(surfaceContainer, popupTransparency)
     readonly property color nestedSurface: withAlpha(surfaceContainerHigh, popupTransparency)
 
+    property real floatingWindowTransparency: popupTransparency
+    property color floatingWindowSurface: withAlpha(surfaceContainer, floatingWindowTransparency)
+    property color floatingWindowNestedSurface: nestedSurface
+    property color floatingWindowFieldColor: withAlpha(surfaceContainerHigh, floatingWindowTransparency)
+    property color floatingWindowFieldBorderColor: withAlpha(outline, 0.16)
+    property color floatingWindowFieldFocusedBorderColor: primary
+    property color popupFieldColor: withAlpha(surfaceContainerHigh, popupTransparency)
+    property color popupFieldBorderColor: withAlpha(outline, 0.16)
+    property color popupFieldFocusedBorderColor: primary
+    property bool blurLayersActive: true
+
     property color widgetBaseHoverColor: {
         const blended = blend(surfaceContainerHigh, primary, 0.1);
         return withAlpha(blended, Math.max(0.3, blended.a));

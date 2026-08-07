@@ -39,13 +39,14 @@ StyledRect {
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
     property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.surfaceContainerHigh
-    property color focusedBorderColor: Style.primary
-    property color normalBorderColor: Style.outlineMedium
+    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
+    property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
     property color placeholderColor: Style.outlineButton
     property real borderWidth: 1
     property real focusedBorderWidth: 2
     property real cornerRadius: Style.cornerRadius
+
     readonly property real leftPadding: Style.spacingM + (leftIconName ? leftIconSize + Style.spacingM : 0)
     readonly property real rightPadding: {
         let p = Style.spacingS + rightAccessoryWidth;

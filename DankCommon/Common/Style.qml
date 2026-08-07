@@ -79,6 +79,15 @@ Singleton {
 
     readonly property color floatingSurface: theme?.floatingSurface ?? withAlpha(surfaceContainer, popupTransparency)
     readonly property color nestedSurface: theme?.nestedSurface ?? withAlpha(surfaceContainerHigh, popupTransparency)
+    readonly property real floatingWindowTransparency: theme?.floatingWindowTransparency ?? popupTransparency
+    readonly property color floatingWindowSurface: theme?.floatingWindowSurface ?? withAlpha(surfaceContainer, floatingWindowTransparency)
+    readonly property color floatingWindowNestedSurface: theme?.floatingWindowNestedSurface ?? nestedSurface
+    readonly property color floatingWindowFieldColor: theme?.floatingWindowFieldColor ?? withAlpha(surfaceContainerHigh, floatingWindowTransparency)
+    readonly property color floatingWindowFieldBorderColor: theme?.floatingWindowFieldBorderColor ?? withAlpha(outline, 0.16)
+    readonly property color floatingWindowFieldFocusedBorderColor: theme?.floatingWindowFieldFocusedBorderColor ?? primary
+    readonly property color popupFieldColor: theme?.popupFieldColor ?? withAlpha(surfaceContainerHigh, popupTransparency)
+    readonly property color popupFieldBorderColor: theme?.popupFieldBorderColor ?? withAlpha(outline, 0.16)
+    readonly property color popupFieldFocusedBorderColor: theme?.popupFieldFocusedBorderColor ?? primary
     readonly property color shadowStrong: theme?.shadowStrong ?? Qt.rgba(0, 0, 0, 0.3)
 
     readonly property color buttonBg: theme?.buttonBg ?? primary

@@ -866,6 +866,8 @@ FocusScope {
                 folderMode: root.folderMode
                 defaultFileName: root.defaultFileName
                 currentPath: root.currentPath
+                selectedFilePath: root.selectedFilePath
+                selectedFileIsDir: root.selectedFileIsDir
                 onSaveRequested: filePath => handleSaveFile(filePath)
                 onFolderSelected: folderPath => {
                     fileSelected(folderPath);

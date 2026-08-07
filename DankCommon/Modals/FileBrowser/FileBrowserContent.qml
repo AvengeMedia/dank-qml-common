@@ -945,6 +945,8 @@ FocusScope {
         id: itemContextMenu
         parentFocusItem: root
         onTrashed: {
+            if (selectedFilePath === itemContextMenu.filePath)
+                setSelectedFileData("", "", false);
             folderModel.folder = "";
             folderModel.folder = Qt.binding(() => root.encodeFileUrl(root.currentPath || root.homeDir));
         }

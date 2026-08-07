@@ -307,6 +307,8 @@ Item {
     PopupWindow {
         id: dropdownMenu
 
+        grabFocus: true
+
         property string searchQuery: ""
         property var filteredOptions: {
             if (!root.enableFuzzySearch || searchQuery.length === 0)
@@ -373,7 +375,7 @@ Item {
             }
         }
 
-        BackgroundEffect.blurRegion: (visible && root.menuBlurEnabled && !!(Style.theme?.blurLayersActive ?? true)) ? menuBlurRegion : null
+        BackgroundEffect.blurRegion: (visible && !closing && root.menuBlurEnabled && !!(Style.theme?.blurLayersActive ?? true)) ? menuBlurRegion : null
 
         Region {
             id: menuBlurRegion

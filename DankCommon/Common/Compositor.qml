@@ -13,11 +13,20 @@ Singleton {
             return false;
         if (Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE"))
             return false;
+        if (Quickshell.env("SWAYSOCK"))
+            return false;
+        if (Quickshell.env("MANGO_INSTANCE_SIGNATURE"))
+            return false;
+        if (Quickshell.env("MIRACLESOCK"))
+            return false;
 
         switch (desktop) {
         case "niri":
         case "hyprland":
         case "sway":
+        case "scroll":
+        case "mango":
+        case "miracle-wm":
         case "river":
         case "dwl":
             return false;

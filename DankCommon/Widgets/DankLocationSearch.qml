@@ -32,8 +32,10 @@ Item {
             return;
         const value = root.currentLocation || "";
         if (locationInput.text !== value) {
-            root._hasSelection = value !== "";
+            root._internalChange = true;
             locationInput.text = value;
+            root._internalChange = false;
+            root._hasSelection = value !== "";
         }
     }
 

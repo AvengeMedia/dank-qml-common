@@ -20,6 +20,7 @@ Item {
     property string placeholderText: I18n.tr("Search for a location...")
     property bool _internalChange: false
     property bool _hasSelection: false
+    property bool _pendingLocationUpdate: false
     property bool isLoading: false
     property string currentSearchText: ""
     property Item keyNavigationTab: null
@@ -28,8 +29,10 @@ Item {
     signal locationSelected(string displayName, string coordinates)
 
     function applyCurrentLocation() {
-        if (locationInput.getActiveFocus())
+        if (locationInput.getActiveFocus()) {
+            root._pendingLocationUpdate = true;
             return;
+        }
         const value = root.currentLocation || "";
         if (locationInput.text !== value) {
             root._internalChange = true;
@@ -37,6 +40,7 @@ Item {
             root._internalChange = false;
             root._hasSelection = value !== "";
         }
+        root._pendingLocationUpdate = false;
     }
 
     Component.onCompleted: applyCurrentLocation()
@@ -165,6 +169,8 @@ Item {
                     dropdownHideTimer.stop();
                 } else {
                     dropdownHideTimer.start();
+                    if (root._pendingLocationUpdate)
+                        root.applyCurrentLocation();
                 }
             }
         }

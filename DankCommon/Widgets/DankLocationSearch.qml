@@ -19,12 +19,32 @@ Item {
     property string currentLocation: ""
     property string placeholderText: I18n.tr("Search for a location...")
     property bool _internalChange: false
+    property bool _hasSelection: false
+    property bool _pendingLocationUpdate: false
     property bool isLoading: false
     property string currentSearchText: ""
     property Item keyNavigationTab: null
     property Item keyNavigationBacktab: null
 
     signal locationSelected(string displayName, string coordinates)
+
+    function applyCurrentLocation() {
+        if (locationInput.getActiveFocus()) {
+            root._pendingLocationUpdate = true;
+            return;
+        }
+        const value = root.currentLocation || "";
+        if (locationInput.text !== value) {
+            root._internalChange = true;
+            locationInput.text = value;
+            root._internalChange = false;
+            root._hasSelection = value !== "";
+        }
+        root._pendingLocationUpdate = false;
+    }
+
+    Component.onCompleted: applyCurrentLocation()
+    onCurrentLocationChanged: applyCurrentLocation()
 
     function resetSearchState() {
         locationSearchTimer.stop();
@@ -134,6 +154,7 @@ Item {
             onTextEdited: {
                 if (root._internalChange)
                     return;
+                root._hasSelection = false;
                 if (getActiveFocus()) {
                     if (root.canSearch(text)) {
                         root.isLoading = true;
@@ -148,14 +169,16 @@ Item {
                     dropdownHideTimer.stop();
                 } else {
                     dropdownHideTimer.start();
+                    if (root._pendingLocationUpdate)
+                        root.applyCurrentLocation();
                 }
             }
         }
 
         DankIcon {
-            name: root.isLoading ? "hourglass_empty" : (searchResultsModel.count > 0 ? "check_circle" : "error")
+            name: root.isLoading ? "hourglass_empty" : ((searchResultsModel.count > 0 || root._hasSelection) ? "check_circle" : "error")
             size: Style.iconSize - 4
-            color: root.isLoading ? Style.surfaceVariantText : (searchResultsModel.count > 0 ? Style.primary : Style.error)
+            color: root.isLoading ? Style.surfaceVariantText : ((searchResultsModel.count > 0 || root._hasSelection) ? Style.primary : Style.error)
             anchors.right: parent.right
             anchors.rightMargin: Style.spacingM
             anchors.verticalCenter: parent.verticalCenter
@@ -247,6 +270,7 @@ Item {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             root._internalChange = true;
+                            root._hasSelection = true;
                             const selectedName = model.name;
                             const selectedQuery = model.query;
                             locationInput.text = selectedName;

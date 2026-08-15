@@ -9,7 +9,7 @@
     "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Terug • F1/I: Bestandsinfo • F10: Hulp • Esc: Sluiten"
   },
   "Ascending": {
-    "Ascending": ""
+    "Ascending": "Oplopend"
   },
   "Cancel": {
     "Cancel": "Annuleren"
@@ -24,7 +24,7 @@
     "Copy path": "Pad kopiëren"
   },
   "Descending": {
-    "Descending": ""
+    "Descending": "Aflopend"
   },
   "Desktop": {
     "Desktop": "Bureaublad"
@@ -51,7 +51,7 @@
     "File Information": "Bestandsinformatie"
   },
   "Files - %1": {
-    "Files - %1": ""
+    "Files - %1": "Bestanden - %1"
   },
   "Fun": {
     "Fun": "Plezier"
@@ -96,7 +96,7 @@
     "Numbers": "Nummers"
   },
   "Order": {
-    "Order": ""
+    "Order": "Volgorde"
   },
   "Overwrite": {
     "Overwrite": "Overschrijven"
@@ -126,7 +126,7 @@
     "Search...": "Zoeken..."
   },
   "Select File": {
-    "Select File": ""
+    "Select File": "Bestand selecteren"
   },
   "Size": {
     "Size": "Grootte"
@@ -153,7 +153,7 @@
     "Type": "Type"
   },
   "Use this folder": {
-    "Use this folder": ""
+    "Use this folder": "Deze map gebruiken"
   },
   "Videos": {
     "Videos": "Video's"

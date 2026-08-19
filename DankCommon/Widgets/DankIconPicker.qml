@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -11,7 +12,10 @@ Rectangle {
 
     signal iconSelected(string iconName, string iconType)
 
-    width: 240
+    readonly property int windowWidth: root.Window.window?.width ?? Screen.width
+    readonly property int windowHeight: root.Window.window?.height ?? Screen.height
+
+    width: Math.min(240, windowWidth - Style.spacingL * 2)
     height: 32
     radius: Style.cornerRadius
     color: Style.surfaceContainer
@@ -101,7 +105,7 @@ Rectangle {
             font.pixelSize: Style.fontSizeSmall
             color: root.currentIcon ? Style.surfaceText : Style.outline
             anchors.verticalCenter: parent.verticalCenter
-            width: 160
+            width: Math.max(0, root.width - Style.spacingS * 3 - 16 - 16)
             elide: Text.ElideRight
         }
     }
@@ -119,8 +123,8 @@ Rectangle {
         id: iconPopup
 
         parent: root.Overlay.overlay
-        width: 320
-        height: Math.min(500, dropdownContent.implicitHeight + 32)
+        width: Math.min(320, root.windowWidth - Style.spacingL * 2)
+        height: Math.min(500, root.windowHeight - Style.spacingL * 2, dropdownContent.implicitHeight + 32)
         padding: 0
         modal: true
         dim: false

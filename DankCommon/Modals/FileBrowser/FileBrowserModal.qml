@@ -23,6 +23,11 @@ FloatingWindow {
     property bool shouldBeVisible: visible
     property bool allowStacking: true
 
+    readonly property var _screen: screen ?? (Quickshell.screens.length > 0 ? Quickshell.screens[0] : null)
+    readonly property int screenWidth: _screen?.width ?? 1920
+    readonly property int screenHeight: _screen?.height ?? 1080
+    readonly property bool useFullScreen: screenWidth < Style.smallBreakpoint || (screenWidth < Style.mediumBreakpoint && screenHeight > screenWidth)
+
     signal fileSelected(string path)
     signal dialogClosed
 
@@ -36,9 +41,9 @@ FloatingWindow {
 
     objectName: "fileBrowserModal"
     title: I18n.tr("Files - %1", "file browser window title, %1 is the picker purpose").arg(browserTitle)
-    minimumSize: Qt.size(500, 400)
-    implicitWidth: 800
-    implicitHeight: 600
+    minimumSize: Qt.size(Math.min(500, screenWidth), Math.min(400, screenHeight))
+    implicitWidth: useFullScreen ? screenWidth : Math.min(800, screenWidth * 0.9)
+    implicitHeight: useFullScreen ? screenHeight : Math.min(600, screenHeight * 0.9)
     color: "transparent"
     visible: false
 

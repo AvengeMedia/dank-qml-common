@@ -15,6 +15,7 @@ StyledRect {
 
     property int selectedIndex: -1
     property bool keyboardNavigationActive: false
+    readonly property bool compactLayout: width < 400
 
     signal itemClicked(int index, string path, string name, bool isDir)
     signal itemSelected(int index, string path, string name, bool isDir)
@@ -157,12 +158,16 @@ StyledRect {
     }
 
     Row {
+        id: listRow
+
         anchors.fill: parent
         anchors.leftMargin: Style.spacingS
         anchors.rightMargin: Style.spacingS
         spacing: Style.spacingS
 
         Item {
+            id: fileIconSlot
+
             width: 28
             height: 28
             anchors.verticalCenter: parent.verticalCenter
@@ -210,7 +215,7 @@ StyledRect {
             text: listDelegateRoot.fileName || ""
             font.pixelSize: Style.fontSizeMedium
             color: Style.surfaceText
-            width: parent.width - 280
+            width: Math.max(0, listRow.width - fileIconSlot.width - sizeLabel.width - (dateLabel.visible ? dateLabel.width + listRow.spacing : 0) - listRow.spacing * 2)
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter
             maximumLineCount: 1
@@ -218,19 +223,24 @@ StyledRect {
         }
 
         StyledText {
+            id: sizeLabel
+
             text: listDelegateRoot.fileIsDir ? "" : formatFileSize(listDelegateRoot.fileSize)
             font.pixelSize: Style.fontSizeSmall
             color: Style.surfaceTextMedium
-            width: 70
+            width: listDelegateRoot.compactLayout ? 56 : 70
             horizontalAlignment: Text.AlignRight
             anchors.verticalCenter: parent.verticalCenter
         }
 
         StyledText {
+            id: dateLabel
+
             text: Qt.formatDateTime(listDelegateRoot.fileModified, "MMM d, yyyy h:mm AP")
             font.pixelSize: Style.fontSizeSmall
             color: Style.surfaceTextMedium
             width: 140
+            visible: !listDelegateRoot.compactLayout
             horizontalAlignment: Text.AlignRight
             anchors.verticalCenter: parent.verticalCenter
         }

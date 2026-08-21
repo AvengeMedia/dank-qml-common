@@ -11,6 +11,9 @@ Item {
     property real fill: filled ? 1.0 : 0.0
     property int grade: Style.isLightMode ? 0 : -25
     property int weight: filled ? 500 : 400
+    property real weightAnim: weight
+    readonly property int weightStep: Math.round(weightAnim / 25) * 25
+    readonly property real fillStep: Math.round(fill * 4) / 4
     property bool smoothTransform: false
 
     implicitWidth: Math.round(size)
@@ -25,7 +28,7 @@ Item {
 
         font.family: Fonts.icons
         font.pixelSize: Math.round(Style.fontSizeMedium)
-        font.weight: root.weight
+        font.weight: root.weightStep
         font.hintingPreference: Font.PreferNoHinting
         color: Style.surfaceText
         verticalAlignment: Text.AlignVCenter
@@ -33,17 +36,17 @@ Item {
         renderType: root.smoothTransform ? Text.QtRendering : Text.NativeRendering
 
         font.variableAxes: {
-            "FILL": root.fill.toFixed(1),
+            "FILL": root.fillStep,
             "GRAD": root.grade,
             "opsz": 24,
-            "wght": root.weight
+            "wght": root.weightStep
         }
+    }
 
-        Behavior on font.weight {
-            NumberAnimation {
-                duration: Style.shortDuration
-                easing.type: Style.standardEasing
-            }
+    Behavior on weightAnim {
+        NumberAnimation {
+            duration: Style.shortDuration
+            easing.type: Style.standardEasing
         }
     }
 

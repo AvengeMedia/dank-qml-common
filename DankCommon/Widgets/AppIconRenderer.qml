@@ -23,6 +23,7 @@ Item {
     property real fallbackRightMargin: 0
     property real fallbackTopMargin: 0
     property real fallbackBottomMargin: 0
+    property bool animate: false
 
     readonly property bool isMaterial: iconValue && iconValue.startsWith("material:")
     readonly property bool isUnicode: iconValue && iconValue.startsWith("unicode:")
@@ -85,7 +86,7 @@ Item {
         anchors.fill: parent
         imagePath: root.imagePath
         maxCacheSize: root.iconSize * 2
-        animate: false
+        animate: root.animate
         visible: root.isImage && status === Image.Ready
     }
 

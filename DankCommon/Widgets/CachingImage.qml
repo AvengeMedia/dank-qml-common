@@ -14,12 +14,7 @@ Item {
     property bool _fromCache: false
 
     readonly property bool isRemoteUrl: imagePath.startsWith("http://") || imagePath.startsWith("https://")
-    readonly property bool isAnimated: {
-        if (!animate || !imagePath)
-            return false;
-        const lower = imagePath.toLowerCase();
-        return lower.endsWith(".gif") || lower.endsWith(".webp");
-    }
+    readonly property bool isAnimated: animate && !!imagePath && hasAnimatedExtension(imagePath)
     readonly property string normalizedPath: {
         if (!imagePath)
             return "";
@@ -28,6 +23,11 @@ Item {
         if (imagePath.startsWith("file://"))
             return imagePath.substring(7);
         return imagePath;
+    }
+
+    function hasAnimatedExtension(path) {
+        const clean = path.split(/[?#]/)[0].toLowerCase();
+        return clean.endsWith(".gif") || clean.endsWith(".webp");
     }
 
     function djb2Hash(str) {
@@ -105,8 +105,7 @@ Item {
             staticImg.source = "";
             return;
         }
-        const lower = path.toLowerCase();
-        if (animate && (lower.endsWith(".gif") || lower.endsWith(".webp")))
+        if (animate && hasAnimatedExtension(path))
             return;
         if (path.startsWith("http://") || path.startsWith("https://")) {
             _fromCache = false;

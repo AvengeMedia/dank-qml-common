@@ -155,6 +155,27 @@ Singleton {
             alpha: 0.25
         })
 
+    readonly property bool blurLayersActive: theme?.blurLayersActive ?? true
+    readonly property bool connectedSurfaceBlurEnabled: theme?.connectedSurfaceBlurEnabled ?? true
+    readonly property color blurBorderColor: {
+        if (!(settings?.blurBorderEnabled ?? true))
+            return "transparent";
+        const opacity = settings?.blurBorderOpacity ?? 0.35;
+        switch (settings?.blurBorderColor ?? "outline") {
+        case "primary":
+            return withAlpha(primary, opacity);
+        case "secondary":
+            return withAlpha(secondary, opacity);
+        case "surfaceText":
+            return withAlpha(surfaceText, opacity);
+        case "custom":
+            return withAlpha(Qt.color(settings?.blurBorderCustomColor ?? "#ffffff"), opacity);
+        default:
+            return withAlpha(outline, opacity);
+        }
+    }
+    readonly property int blurBorderWidth: (settings?.blurBorderEnabled ?? true) ? 1 : 0
+
     readonly property bool enableRippleEffects: settings?.enableRippleEffects ?? true
     readonly property bool popoutElevationEnabled: settings?.popoutElevationEnabled ?? true
     readonly property int textRenderType: settings?.textRenderType ?? Style.TextRenderType.Qt

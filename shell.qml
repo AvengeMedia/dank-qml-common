@@ -150,6 +150,12 @@ ShellRoot {
                     }
                 }
 
+                DankTextEdit {
+                    width: 616
+                    leftIconName: "edit"
+                    placeholderText: "Multi-line notes..."
+                }
+
                 Section {
                     text: "Dropdown"
                 }

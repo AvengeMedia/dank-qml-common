@@ -43,6 +43,7 @@ StyledRect {
     property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
     property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
     property color placeholderColor: Style.outlineButton
+    property bool hidePlaceholderOnFocus: true
     property real borderWidth: 1
     property real focusedBorderWidth: 2
     property real cornerRadius: Style.cornerRadius
@@ -90,6 +91,7 @@ StyledRect {
     }
 
     readonly property real labelBandHeight: Math.round(Style.fontSizeSmall * 1.4) + Style.spacingXS * 2
+    readonly property bool placeholderVisible: textInput.text.length === 0 && !textInput.inputMethodComposing && (!hidePlaceholderOnFocus || !textInput.activeFocus)
 
     width: 200
     height: labelText !== "" ? Math.round(Style.fontSizeMedium * 3) + labelBandHeight : Math.round(Style.fontSizeMedium * 3)
@@ -145,6 +147,27 @@ StyledRect {
         selectByMouse: !root.ignoreLeftRightKeys
         clip: true
         activeFocusOnTab: true
+        cursorDelegate: DankTextCursor {
+            id: fieldCursor
+
+            color: textInput.color
+            x: textInput.cursorRectangle.x
+            y: textInput.cursorRectangle.y
+            height: textInput.cursorRectangle.height
+            shown: textInput.cursorVisible
+
+            Connections {
+                target: textInput
+
+                function onCursorPositionChanged() {
+                    fieldCursor.resetBlink();
+                }
+
+                function onTextChanged() {
+                    fieldCursor.resetBlink();
+                }
+            }
+        }
         KeyNavigation.tab: root.keyNavigationTab
         KeyNavigation.backtab: root.keyNavigationBacktab
         onTextChanged: root.textEdited()
@@ -271,7 +294,7 @@ StyledRect {
         color: placeholderColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: textInput.verticalAlignment
-        visible: textInput.text.length === 0 && !textInput.activeFocus
+        visible: root.placeholderVisible
         elide: I18n.isRtl ? Text.ElideLeft : Text.ElideRight
     }
 

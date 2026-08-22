@@ -69,7 +69,7 @@ Item {
 
             StyledText {
                 text: toggle.text
-                font.pixelSize: Appearance.fontSize.normal
+                font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
                 opacity: toggle.enabled ? 1 : 0.4
                 width: parent.width
@@ -78,7 +78,7 @@ Item {
 
             StyledText {
                 text: toggle.description
-                font.pixelSize: Appearance.fontSize.small
+                font.pixelSize: Style.fontSizeSmall
                 color: toggle.descriptionColor
                 wrapMode: Text.WordWrap
                 width: parent.width

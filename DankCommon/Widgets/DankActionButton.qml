@@ -23,6 +23,22 @@ StyledRect {
     height: buttonSize
     radius: Style.cornerRadius
     color: backgroundColor
+    activeFocusOnTab: enabled
+
+    Keys.onPressed: event => {
+        if (!root.enabled)
+            return;
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+            root.clicked();
+            event.accepted = true;
+            break;
+        }
+    }
+
+    FocusRing {}
 
     DankIcon {
         anchors.centerIn: parent

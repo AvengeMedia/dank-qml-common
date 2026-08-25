@@ -28,6 +28,18 @@ Item {
 
     width: showText ? parent.width : trackWidth
     height: showText ? Math.max(trackHeight, textColumn.implicitHeight + Style.spacingM * 2) : trackHeight
+    activeFocusOnTab: enabled
+
+    Keys.onPressed: event => {
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+            toggle.handleClick();
+            event.accepted = true;
+            break;
+        }
+    }
 
     function handleClick() {
         if (!enabled)
@@ -189,6 +201,10 @@ Item {
             stateColor: Style.primary
             cornerRadius: parent.radius
             onClicked: toggle.handleClick()
+        }
+
+        FocusRing {
+            visible: toggle.activeFocus
         }
     }
 }

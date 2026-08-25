@@ -25,6 +25,22 @@ Rectangle {
     color: backgroundColor
     opacity: enabled ? 1 : 0.4
     scale: (enableScaleAnimation && pressed) ? 0.98 : 1.0
+    activeFocusOnTab: enabled
+
+    Keys.onPressed: event => {
+        if (!root.enabled)
+            return;
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+            root.clicked();
+            event.accepted = true;
+            break;
+        }
+    }
+
+    FocusRing {}
 
     Behavior on scale {
         enabled: enableScaleAnimation && Style.currentAnimationSpeed !== Style.AnimationSpeed.None

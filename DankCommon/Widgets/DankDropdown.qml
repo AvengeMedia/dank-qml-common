@@ -137,7 +137,6 @@ Item {
         closeTimer.stop();
         dropdownMenu.closing = false;
         dropdownMenu.visible = true;
-        dropdownMenu.selectedIndex = -1;
         const currentIndex = root.options.indexOf(root.currentValue);
         listView.positionViewAtIndex(currentIndex >= 0 ? currentIndex : 0, ListView.Beginning);
         if (searchField.text.length > 0) {
@@ -147,6 +146,7 @@ Item {
             dropdownMenu.fzfFinder = null;
             dropdownMenu.searchQuery = "";
         }
+        dropdownMenu.selectedIndex = dropdownMenu.filteredOptions.indexOf(root.currentValue);
 
         Qt.callLater(() => {
             if (root.enableFuzzySearch)
@@ -173,6 +173,21 @@ Item {
 
     width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
     implicitHeight: !showTrigger ? 0 : (compactMode ? 40 : Math.max(60, labelColumn.implicitHeight + Style.spacingM))
+    activeFocusOnTab: showTrigger && enabled
+
+    Keys.onPressed: event => {
+        if (!root.enabled)
+            return;
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+        case Qt.Key_Down:
+            root.showDropdownMenu();
+            event.accepted = true;
+            break;
+        }
+    }
 
     Component.onDestruction: {
         transientSurfaceTracker?.unregister(root);
@@ -231,8 +246,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         radius: Style.cornerRadius
         color: dropdownArea.containsMouse || dropdownMenu.visible ? root.hoverBackgroundColor : root.backgroundColor
-        border.color: dropdownMenu.visible ? root.focusedBorderColor : root.normalBorderColor
-        border.width: dropdownMenu.visible ? 2 : 1
+        border.color: dropdownMenu.visible || root.activeFocus ? root.focusedBorderColor : root.normalBorderColor
+        border.width: dropdownMenu.visible || root.activeFocus ? 2 : 1
 
         MouseArea {
             id: dropdownArea
@@ -361,6 +376,8 @@ Item {
         onVisibleChanged: {
             if (!visible && root.menuOpen)
                 root.menuOpen = false;
+            if (!visible && root.activeFocusOnTab)
+                root.forceActiveFocus();
             if (visible)
                 Qt.callLater(() => menuKeyHandler.forceActiveFocus());
         }

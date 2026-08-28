@@ -69,7 +69,7 @@ Singleton {
 
     function _launchProc(id, isRandomId) {
         const entry = _procDebouncers[id];
-        if (!entry)
+        if (!entry || !entry.command)
             return;
         if (_ownerDead(entry)) {
             release(id);
@@ -145,6 +145,13 @@ Singleton {
             try {
                 timeoutTimer.destroy();
             } catch (_) {}
+
+            // refs are re-set on every runCommand; dropping them frees dead callers' closures between polls
+            if (!entry.timer.running) {
+                entry.command = null;
+                entry.callback = null;
+                entry.owner = undefined;
+            }
 
             if (isRandomId || entry.isRandomId) {
                 Qt.callLater(function () {

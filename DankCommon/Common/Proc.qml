@@ -15,7 +15,7 @@ Singleton {
     property int defaultTimeoutMs: 10000
     property var _procDebouncers: ({})
 
-    function runCommand(id, command, callback, debounceMs, timeoutMs) {
+    function runCommand(id, command, callback, debounceMs, timeoutMs, owner) {
         const wait = (typeof debounceMs === "number" && debounceMs >= 0) ? debounceMs : defaultDebounceMs;
         const timeout = (typeof timeoutMs === "number") ? timeoutMs : defaultTimeoutMs;
         let procId = id ? id : Math.random();
@@ -32,13 +32,15 @@ Singleton {
                 callback: callback,
                 waitMs: wait,
                 timeoutMs: timeout,
-                isRandomId: isRandomId
+                isRandomId: isRandomId,
+                owner: owner
             };
         } else {
             _procDebouncers[procId].command = command;
             _procDebouncers[procId].callback = callback;
             _procDebouncers[procId].waitMs = wait;
             _procDebouncers[procId].timeoutMs = timeout;
+            _procDebouncers[procId].owner = owner;
         }
 
         const entry = _procDebouncers[procId];
@@ -46,10 +48,33 @@ Singleton {
         entry.timer.restart();
     }
 
+    function release(id) {
+        if (!id)
+            return;
+        const entry = _procDebouncers[id];
+        if (!entry)
+            return;
+        entry.callback = null;
+        try {
+            entry.timer.stop();
+            entry.timer.destroy();
+        } catch (_) {}
+        delete _procDebouncers[id];
+    }
+
+    // destroyed QObject wrappers stay truthy; Qt.isQtObject is the only reliable liveness probe
+    function _ownerDead(entry) {
+        return entry.owner && !Qt.isQtObject(entry.owner);
+    }
+
     function _launchProc(id, isRandomId) {
         const entry = _procDebouncers[id];
         if (!entry)
             return;
+        if (_ownerDead(entry)) {
+            release(id);
+            return;
+        }
         const proc = procComp.createObject(root, {
             command: entry.command
         });
@@ -105,7 +130,7 @@ Singleton {
             if (!exitSeen || !outSeen || !errSeen)
                 return;
             timeoutTimer.stop();
-            if (entry && entry.callback && typeof entry.callback === "function") {
+            if (entry && entry.callback && typeof entry.callback === "function" && !_ownerDead(entry)) {
                 try {
                     const safeOutput = capturedOut !== null && capturedOut !== undefined ? capturedOut : "";
                     const safeExitCode = exitCodeValue !== null && exitCodeValue !== undefined ? exitCodeValue : -1;

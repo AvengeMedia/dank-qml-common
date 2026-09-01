@@ -27,16 +27,16 @@
     "Descending": ""
   },
   "Desktop": {
-    "Desktop": ""
+    "Desktop": "Pulpit"
   },
   "Development": {
     "Development": "Programowanie"
   },
   "Documents": {
-    "Documents": ""
+    "Documents": "Dokumenty"
   },
   "Downloads": {
-    "Downloads": ""
+    "Downloads": "Pobrane"
   },
   "Enter filename...": {
     "Enter filename...": "Podaj nazwę pliku..."
@@ -84,7 +84,7 @@
     "Move to Trash": ""
   },
   "Music": {
-    "Music": ""
+    "Music": "Muzyka"
   },
   "Name": {
     "Name": "Nazwa"
@@ -102,7 +102,7 @@
     "Overwrite": "Nadpisz"
   },
   "Pictures": {
-    "Pictures": ""
+    "Pictures": "Obrazy"
   },
   "Power Off": {
     "Power Off": "Wyłącz komputer"
@@ -111,7 +111,7 @@
     "Power Options": "Opcje zasilania"
   },
   "Quick Access": {
-    "Quick Access": ""
+    "Quick Access": "Szybki Dostęp"
   },
   "Reboot": {
     "Reboot": "Uruchom ponownie"
@@ -156,7 +156,7 @@
     "Use this folder": ""
   },
   "Videos": {
-    "Videos": ""
+    "Videos": "Wideo"
   },
   "Workspace": {
     "Workspace": "Obszar roboczy"

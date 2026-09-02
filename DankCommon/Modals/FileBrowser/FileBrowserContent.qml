@@ -2,6 +2,7 @@ import Qt.labs.folderlistmodel
 import QtCore
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -41,6 +42,9 @@ FocusScope {
     property bool showOverwriteConfirmation: false
     property string pendingFilePath: ""
     property bool showSidebar: true
+    readonly property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
+    readonly property bool sidebarVisible: showSidebar && !compactLayout
+    readonly property int sidebarWidth: 201
     property string viewMode: "grid"
     property string sortBy: "name"
     property bool sortAscending: true
@@ -569,6 +573,8 @@ FocusScope {
         spacing: 0
 
         Item {
+            id: header
+
             width: parent.width
             height: 48
 
@@ -580,16 +586,24 @@ FocusScope {
                     windowControls.tryToggleMaximize()
             }
 
-            Row {
-                spacing: Style.spacingM
+            Item {
+                id: headerTitle
+
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: Style.spacingL
+                anchors.leftMargin: root.compactLayout ? Style.spacingM : Style.spacingL
+                anchors.right: headerActions.left
+                anchors.rightMargin: Style.spacingS
+                height: Style.iconSizeLarge
+                clip: true
 
                 DankIcon {
+                    id: headerIcon
+
                     name: browserIcon
                     size: Style.iconSizeLarge
                     color: Style.primary
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -598,15 +612,23 @@ FocusScope {
                     font.pixelSize: Style.fontSizeXLarge
                     color: Style.surfaceText
                     font.weight: Font.Medium
+                    anchors.left: headerIcon.right
+                    anchors.leftMargin: Style.spacingM
+                    anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
+                    elide: Text.ElideRight
+                    maximumLineCount: 1
+                    wrapMode: Text.NoWrap
                 }
             }
 
             Row {
+                id: headerActions
+
                 anchors.right: parent.right
                 anchors.rightMargin: Style.spacingM
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: Style.spacingS
+                spacing: root.compactLayout ? Style.spacingXXS : Style.spacingS
 
                 DankActionButton {
                     circular: false
@@ -638,11 +660,12 @@ FocusScope {
                     iconName: "info"
                     iconSize: Style.iconSize - 4
                     iconColor: Style.surfaceText
+                    visible: !root.compactLayout
                     onClicked: root.showKeyboardHints = !root.showKeyboardHints
                 }
 
                 DankActionButton {
-                    visible: windowControls?.supported ?? false
+                    visible: (windowControls?.supported ?? false) && !root.compactLayout
                     circular: false
                     iconName: windowControls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
                     iconSize: Style.iconSize - 4
@@ -662,6 +685,8 @@ FocusScope {
         }
 
         StyledRect {
+            id: headerSeparator
+
             width: parent.width
             height: 1
             color: Style.outline
@@ -669,7 +694,7 @@ FocusScope {
 
         Item {
             width: parent.width
-            height: parent.height - 49
+            height: parent.height - header.height - headerSeparator.height
 
             Row {
                 anchors.fill: parent
@@ -677,10 +702,10 @@ FocusScope {
                 spacing: 0
 
                 Row {
-                    width: showSidebar ? 201 : 0
+                    width: root.sidebarVisible ? root.sidebarWidth : 0
                     height: parent.height
                     spacing: 0
-                    visible: showSidebar
+                    visible: root.sidebarVisible
 
                     FileBrowserSidebar {
                         height: parent.height
@@ -697,18 +722,21 @@ FocusScope {
                 }
 
                 Column {
-                    width: parent.width - (showSidebar ? 201 : 0)
+                    width: parent.width - (root.sidebarVisible ? root.sidebarWidth : 0)
                     height: parent.height
                     spacing: 0
 
                     FileBrowserNavigation {
+                        id: navBar
+
                         width: parent.width
                         currentPath: root.currentPath
                         homeDir: root.homeDir
                         backButtonFocused: root.backButtonFocused
                         keyboardNavigationActive: root.keyboardNavigationActive
-                        showSidebar: root.showSidebar
+                        showSidebar: root.sidebarVisible
                         pathEditMode: root.pathEditMode
+                        onSortMenuRequested: sortMenu.visible = !sortMenu.visible
                         onNavigateUp: root.navigateUp()
                         onNavigateTo: path => root.navigateTo(path)
                         onPathInputFocusChanged: hasFocus => {
@@ -720,6 +748,8 @@ FocusScope {
                     }
 
                     StyledRect {
+                        id: navSeparator
+
                         width: parent.width
                         height: 1
                         color: Style.outline
@@ -728,7 +758,7 @@ FocusScope {
                     Item {
                         id: gridContainer
                         width: parent.width
-                        height: parent.height - 41
+                        height: parent.height - navBar.height - navSeparator.height
                         clip: true
 
                         property real gridCellWidth: iconSizes[iconSizeIndex] + 24
@@ -891,7 +921,7 @@ FocusScope {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.margins: Style.spacingL
-                width: 300
+                width: Math.min(300, parent.width - Style.spacingL * 2)
                 showFileInfo: root.showFileInfo
                 selectedIndex: root.selectedIndex
                 sourceFolderModel: folderModel
@@ -911,7 +941,7 @@ FocusScope {
                 id: sortMenu
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.topMargin: 120
+                anchors.topMargin: navBar.height + Style.spacingS
                 anchors.rightMargin: Style.spacingL
                 sortBy: root.sortBy
                 sortAscending: root.sortAscending

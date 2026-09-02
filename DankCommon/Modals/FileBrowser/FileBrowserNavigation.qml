@@ -16,6 +16,7 @@ Row {
     signal navigateUp
     signal navigateTo(string path)
     signal pathInputFocusChanged(bool hasFocus)
+    signal sortMenuRequested
 
     height: 40
     leftPadding: Style.spacingM
@@ -23,8 +24,10 @@ Row {
     spacing: Style.spacingS
 
     StyledRect {
+        id: backButton
+
         width: 32
-        height: 32
+        height: width
         radius: Style.cornerRadius
         color: (backButtonMouseArea.containsMouse || (backButtonFocused && keyboardNavigationActive)) && currentPath !== homeDir ? Style.surfaceVariant : Style.withAlpha(Style.surfaceVariant, 0)
         opacity: currentPath !== homeDir ? 1 : 0
@@ -49,7 +52,7 @@ Row {
     }
 
     Item {
-        width: Math.max(0, (parent?.width ?? 0) - 40 - Style.spacingS - (showSidebar ? 0 : 80))
+        width: Math.max(0, navigation.width - navigation.leftPadding - navigation.rightPadding - backButton.width - navigation.spacing - (navActions.visible ? navActions.width + navigation.spacing : 0))
         height: 32
         anchors.verticalCenter: parent.verticalCenter
 
@@ -116,6 +119,8 @@ Row {
     }
 
     Row {
+        id: navActions
+
         spacing: Style.spacingXS
         visible: !showSidebar
         anchors.verticalCenter: parent.verticalCenter
@@ -125,6 +130,7 @@ Row {
             iconName: "sort"
             iconSize: Style.iconSize - 6
             iconColor: Style.surfaceText
+            onClicked: navigation.sortMenuRequested()
         }
     }
 }

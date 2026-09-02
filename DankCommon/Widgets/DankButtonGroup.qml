@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Window
 import Quickshell
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
@@ -25,8 +26,9 @@ Row {
     property bool checkEnabled: true
     property string size: "medium"
     property int buttonHeight: size === "small" ? 32 : 40
-    property int minButtonWidth: size === "small" ? 56 : 64
-    property int buttonPadding: size === "small" ? Style.spacingM : Style.spacingL
+    property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
+    property int minButtonWidth: size === "small" ? (compactLayout ? 40 : 56) : (compactLayout ? 44 : 64)
+    property int buttonPadding: (size === "small" || compactLayout) ? Style.spacingM : Style.spacingL
     property int checkIconSize: size === "small" ? Style.iconSizeSmall - 2 : Style.iconSizeSmall
     property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium
     property bool userInteracted: false

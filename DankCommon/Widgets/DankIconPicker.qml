@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -11,7 +12,10 @@ Rectangle {
 
     signal iconSelected(string iconName, string iconType)
 
-    width: 240
+    readonly property real windowWidth: root.Window.window?.width ?? Infinity
+    readonly property real windowHeight: root.Window.window?.height ?? Infinity
+
+    width: Math.min(240, windowWidth - Style.spacingL * 2)
     height: 32
     radius: Style.cornerRadius
     color: Style.surfaceContainer
@@ -71,7 +75,7 @@ Rectangle {
                 return;
             }
             const pos = root.mapToItem(Overlay.overlay, 0, 0);
-            const popupHeight = 500;
+            const popupHeight = iconPopup.height;
             const overlayHeight = Overlay.overlay?.height ?? 800;
             iconPopup.x = pos.x;
             if (pos.y + root.height + popupHeight + 4 > overlayHeight) {
@@ -90,6 +94,8 @@ Rectangle {
         spacing: Style.spacingS
 
         DankIcon {
+            id: previewIcon
+
             name: (root.iconType === "icon" && root.currentIcon) ? root.currentIcon : (root.iconType === "text" ? "text_fields" : "add")
             size: 16
             color: root.currentIcon ? Style.surfaceText : Style.outline
@@ -101,12 +107,14 @@ Rectangle {
             font.pixelSize: Style.fontSizeSmall
             color: root.currentIcon ? Style.surfaceText : Style.outline
             anchors.verticalCenter: parent.verticalCenter
-            width: 160
+            width: Math.max(0, root.width - Style.spacingS * 3 - previewIcon.width - chevron.width)
             elide: Text.ElideRight
         }
     }
 
     DankIcon {
+        id: chevron
+
         name: iconPopup.visible ? "expand_less" : "expand_more"
         size: 16
         color: Style.outline
@@ -119,8 +127,8 @@ Rectangle {
         id: iconPopup
 
         parent: root.Overlay.overlay
-        width: 320
-        height: Math.min(500, dropdownContent.implicitHeight + 32)
+        width: Math.min(320, root.windowWidth - Style.spacingL * 2)
+        height: Math.min(500, root.windowHeight - Style.spacingL * 2, dropdownContent.implicitHeight + 32)
         padding: 0
         modal: true
         dim: false

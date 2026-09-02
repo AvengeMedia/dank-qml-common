@@ -96,6 +96,9 @@ Singleton {
     readonly property color buttonPressed: theme?.buttonPressed ?? primaryPressed
     readonly property color widgetBaseHoverColor: theme?.widgetBaseHoverColor ?? _blend(surfaceContainer, primary, 0.1)
 
+    readonly property int smallBreakpoint: theme?.smallBreakpoint ?? 480
+    readonly property int mediumBreakpoint: theme?.mediumBreakpoint ?? 768
+
     readonly property real cornerRadius: theme?.cornerRadius ?? 12
     readonly property real spacingXXS: theme?.spacingXXS ?? 2
     readonly property real spacingXS: theme?.spacingXS ?? 4

@@ -27,6 +27,7 @@ Item {
     property bool wheelEnabled: true
     property bool centerMinimum: false
     property real valueOverride: -1
+    property int decimals: 0
     property bool alwaysShowValue: false
     readonly property bool containsMouse: sliderMouseArea.containsMouse
 
@@ -37,6 +38,12 @@ Item {
 
     signal sliderValueChanged(int newValue)
     signal sliderDragFinished(int finalValue)
+
+    function formatValue(v) {
+        if (decimals <= 0)
+            return Math.round(v) + unit;
+        return (v / Math.pow(10, decimals)).toFixed(decimals) + unit;
+    }
 
     height: 48
 
@@ -268,14 +275,14 @@ Item {
                 NumericText {
                     id: tooltipText
 
-                    text: (slider.valueOverride >= 0 ? Math.round(slider.valueOverride) : slider.value) + slider.unit
+                    text: slider.formatValue(slider.valueOverride >= 0 ? slider.valueOverride : slider.value)
                     reserveText: {
                         let widest = "";
                         const samples = [slider.minimum, slider.maximum];
                         if (slider.valueOverride >= 0)
                             samples.push(slider.valueOverride);
                         for (let i = 0; i < samples.length; i++) {
-                            const candidate = Math.round(samples[i]) + slider.unit;
+                            const candidate = slider.formatValue(samples[i]);
                             if (candidate.length > widest.length)
                                 widest = candidate;
                         }

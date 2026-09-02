@@ -27,7 +27,7 @@ Row {
     property string size: "medium"
     property int buttonHeight: size === "small" ? 32 : 40
     property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
-    property int minButtonWidth: compactLayout ? (size === "small" ? 40 : 44) : (size === "small" ? 56 : 64)
+    property int minButtonWidth: size === "small" ? (compactLayout ? 40 : 56) : (compactLayout ? 44 : 64)
     property int buttonPadding: (size === "small" || compactLayout) ? Style.spacingM : Style.spacingL
     property int checkIconSize: size === "small" ? Style.iconSizeSmall - 2 : Style.iconSizeSmall
     property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium

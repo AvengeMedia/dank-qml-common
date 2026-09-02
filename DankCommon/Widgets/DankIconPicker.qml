@@ -12,8 +12,8 @@ Rectangle {
 
     signal iconSelected(string iconName, string iconType)
 
-    readonly property int windowWidth: root.Window.window?.width ?? Screen.width
-    readonly property int windowHeight: root.Window.window?.height ?? Screen.height
+    readonly property real windowWidth: root.Window.window?.width ?? Infinity
+    readonly property real windowHeight: root.Window.window?.height ?? Infinity
 
     width: Math.min(240, windowWidth - Style.spacingL * 2)
     height: 32
@@ -75,7 +75,7 @@ Rectangle {
                 return;
             }
             const pos = root.mapToItem(Overlay.overlay, 0, 0);
-            const popupHeight = 500;
+            const popupHeight = iconPopup.height;
             const overlayHeight = Overlay.overlay?.height ?? 800;
             iconPopup.x = pos.x;
             if (pos.y + root.height + popupHeight + 4 > overlayHeight) {
@@ -94,6 +94,8 @@ Rectangle {
         spacing: Style.spacingS
 
         DankIcon {
+            id: previewIcon
+
             name: (root.iconType === "icon" && root.currentIcon) ? root.currentIcon : (root.iconType === "text" ? "text_fields" : "add")
             size: 16
             color: root.currentIcon ? Style.surfaceText : Style.outline
@@ -105,12 +107,14 @@ Rectangle {
             font.pixelSize: Style.fontSizeSmall
             color: root.currentIcon ? Style.surfaceText : Style.outline
             anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(0, root.width - Style.spacingS * 3 - 16 - 16)
+            width: Math.max(0, root.width - Style.spacingS * 3 - previewIcon.width - chevron.width)
             elide: Text.ElideRight
         }
     }
 
     DankIcon {
+        id: chevron
+
         name: iconPopup.visible ? "expand_less" : "expand_more"
         size: 16
         color: Style.outline

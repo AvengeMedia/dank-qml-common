@@ -21,7 +21,7 @@ StyledRect {
 
     width: buttonSize
     height: buttonSize
-    radius: circular ? buttonSize / 2 : Style.cornerRadius
+    radius: Style.cornerRadius
     color: backgroundColor
 
     DankIcon {

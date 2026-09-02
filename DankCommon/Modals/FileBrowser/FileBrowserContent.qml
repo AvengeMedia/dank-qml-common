@@ -42,7 +42,7 @@ FocusScope {
     property bool showOverwriteConfirmation: false
     property string pendingFilePath: ""
     property bool showSidebar: true
-    readonly property bool compactLayout: (root.Window.window?.width ?? width) < Style.smallBreakpoint
+    readonly property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
     readonly property bool sidebarVisible: showSidebar && !compactLayout
     readonly property int sidebarWidth: 201
     property string viewMode: "grid"
@@ -665,7 +665,6 @@ FocusScope {
                 }
 
                 DankActionButton {
-                    // Already full screen on a small layout, so nothing to maximize.
                     visible: (windowControls?.supported ?? false) && !root.compactLayout
                     circular: false
                     iconName: windowControls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"

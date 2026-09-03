@@ -1,6 +1,7 @@
 import QtQuick
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
+import qs.DankCommon.Widgets.Expressive as Expressive
 
 Row {
     id: navigation
@@ -90,7 +91,7 @@ Row {
             }
         }
 
-        DankTextField {
+        Expressive.DankTextField {
             id: pathInput
             anchors.fill: parent
             visible: pathEditMode
@@ -125,7 +126,7 @@ Row {
         visible: !showSidebar
         anchors.verticalCenter: parent.verticalCenter
 
-        DankActionButton {
+        Expressive.DankActionButton {
             circular: false
             iconName: "sort"
             iconSize: Style.iconSize - 6

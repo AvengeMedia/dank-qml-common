@@ -49,11 +49,61 @@ Singleton {
     readonly property color surfaceContainerHigh: theme?.surfaceContainerHigh ?? "#2b292f"
     readonly property color error: theme?.error ?? "#F2B8B5"
     readonly property color warning: theme?.warning ?? "#FF9800"
+    readonly property color tertiary: theme?.tertiary ?? "#EFB8C8"
+    readonly property color surfaceContainerLowest: theme?.surfaceContainerLowest ?? "#0f0d13"
+    readonly property color surfaceContainerLow: theme?.surfaceContainerLow ?? "#1d1b20"
+    readonly property color surfaceContainerHighest: theme?.surfaceContainerHighest ?? "#36343b"
+    readonly property color surfaceBright: theme?.surfaceBright ?? "#3b383e"
+    readonly property color surfaceDim: theme?.surfaceDim ?? "#141218"
+    readonly property color outlineVariant: theme?.outlineVariant ?? "#49454f"
+    readonly property color secondaryContainer: theme?.secondaryContainer ?? "#4a4458"
+    readonly property color tertiaryContainer: theme?.tertiaryContainer ?? "#633b48"
+    readonly property color inverseSurface: theme?.inverseSurface ?? "#E6E0E9"
+    readonly property color inverseOnSurface: theme?.inverseOnSurface ?? "#322F35"
 
-    readonly property color onSurface: theme?.onSurface ?? surfaceText
-    readonly property color onPrimary: theme?.onPrimary ?? primaryText
+    // on<Role> next to a <role> property parses as a signal handler; only Binding elements assign them.
+    property color onSurface
+    property color onPrimary
+    property color onSurfaceVariant
+    property color onPrimaryContainer
+    property color onSecondaryContainer
+    property color onTertiaryContainer
     readonly property color onSurface_12: theme?.onSurface_12 ?? withAlpha(onSurface, 0.12)
     readonly property color onSurface_38: theme?.onSurface_38 ?? withAlpha(onSurface, 0.38)
+    readonly property color onSurfaceVariant_30: theme?.onSurfaceVariant_30 ?? withAlpha(onSurfaceVariant, 0.3)
+    readonly property list<QtObject> roleBindings: [
+        Binding {
+            target: root
+            property: "onSurface"
+            value: root.theme?.onSurface ?? root.surfaceText
+        },
+        Binding {
+            target: root
+            property: "onPrimary"
+            value: root.theme?.onPrimary ?? root.primaryText
+        },
+        Binding {
+            target: root
+            property: "onSurfaceVariant"
+            value: root.theme?.onSurfaceVariant ?? root.surfaceVariantText
+        },
+        Binding {
+            target: root
+            property: "onPrimaryContainer"
+            value: root.theme?.onPrimaryContainer ?? "#EADDFF"
+        },
+        Binding {
+            target: root
+            property: "onSecondaryContainer"
+            value: root.theme?.onSecondaryContainer ?? "#E8DEF8"
+        },
+        Binding {
+            target: root
+            property: "onTertiaryContainer"
+            value: root.theme?.onTertiaryContainer ?? "#FFD8E4"
+        }
+    ]
+    readonly property real tonalTintAlpha: theme?.tonalTintAlpha ?? 0.16
 
     readonly property color primaryHover: theme?.primaryHover ?? withAlpha(primary, 0.12)
     readonly property color primaryHoverLight: theme?.primaryHoverLight ?? withAlpha(primary, 0.08)
@@ -100,6 +150,19 @@ Singleton {
     readonly property int mediumBreakpoint: theme?.mediumBreakpoint ?? 768
 
     readonly property real cornerRadius: theme?.cornerRadius ?? 12
+    readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Math.round(4 * shapeScale)
+    readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Math.round(8 * shapeScale)
+    readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Math.round(12 * shapeScale)
+    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? cornerRadius
+    readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Math.round(28 * shapeScale)
+    readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Math.round(48 * shapeScale)
+    readonly property real cornerRadiusFull: theme?.cornerRadiusFull ?? 9999
+    readonly property real cornerRadiusSmall: cornerRadiusS
+    readonly property real cornerRadiusLarge: cornerRadiusL
+    readonly property real groupedListGap: theme?.groupedListGap ?? spacingXXS
+    readonly property real groupedListInnerRadius: theme?.groupedListInnerRadius ?? cornerRadiusXS
+    readonly property real groupedListOuterRadius: theme?.groupedListOuterRadius ?? cornerRadiusL
     readonly property real spacingXXS: theme?.spacingXXS ?? 2
     readonly property real spacingXS: theme?.spacingXS ?? 4
     readonly property real spacingS: theme?.spacingS ?? 8
@@ -110,9 +173,62 @@ Singleton {
     readonly property real fontSizeMedium: theme?.fontSizeMedium ?? 14
     readonly property real fontSizeLarge: theme?.fontSizeLarge ?? 16
     readonly property real fontSizeXLarge: theme?.fontSizeXLarge ?? 20
+    readonly property real fontSizeXXLarge: theme?.fontSizeXXLarge ?? 28
+    readonly property real fontSizeDisplay: theme?.fontSizeDisplay ?? 36
     readonly property real iconSize: theme?.iconSize ?? 24
     readonly property real iconSizeSmall: theme?.iconSizeSmall ?? 16
+    readonly property real iconSizeMedium: theme?.iconSizeMedium ?? 20
     readonly property real iconSizeLarge: theme?.iconSizeLarge ?? 32
+    readonly property real iconButtonSize: theme?.iconButtonSize ?? 40
+    readonly property real listItemHeight: theme?.listItemHeight ?? 56
+    readonly property real listItemTwoLineHeight: theme?.listItemTwoLineHeight ?? 72
+    readonly property real avatarSize: theme?.avatarSize ?? 36
+    readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
+    readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
+    readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44
+    readonly property real sliderHandleGap: theme?.sliderHandleGap ?? 6
+    readonly property real switchTrackWidth: theme?.switchTrackWidth ?? 52
+    readonly property real switchTrackHeight: theme?.switchTrackHeight ?? 32
+    readonly property real switchOutlineWidth: theme?.switchOutlineWidth ?? 2
+    readonly property real switchThumbUnselected: theme?.switchThumbUnselected ?? 16
+    readonly property real switchThumbSelected: theme?.switchThumbSelected ?? 24
+    readonly property real switchThumbPressed: theme?.switchThumbPressed ?? 28
+    readonly property real sliderStopSize: theme?.sliderStopSize ?? 4
+    readonly property real sliderTickSize: theme?.sliderTickSize ?? 3
+    readonly property real menuItemHeight: theme?.menuItemHeight ?? 40
+    readonly property real outlineWidth: theme?.outlineWidth ?? 1
+    readonly property real outlineWidthFocused: theme?.outlineWidthFocused ?? 2
+    readonly property real dividerWidth: theme?.dividerWidth ?? 1
+    readonly property real focusRingWidth: theme?.focusRingWidth ?? 2
+    readonly property real focusRingOffset: theme?.focusRingOffset ?? 4
+    readonly property color focusRingColor: theme?.focusRingColor ?? primary
+    readonly property real scrimAlpha: theme?.scrimAlpha ?? 0.55
+    readonly property real buttonHeightXS: theme?.buttonHeightXS ?? 32
+    readonly property real buttonHeightS: theme?.buttonHeightS ?? 40
+    readonly property real buttonHeightM: theme?.buttonHeightM ?? 56
+    readonly property real buttonMinWidth: theme?.buttonMinWidth ?? 58
+    readonly property real pressScale: theme?.pressScale ?? 0.98
+    readonly property real iconEnterScale: theme?.iconEnterScale ?? 0.6
+    readonly property real popupEnterScale: theme?.popupEnterScale ?? 0.92
+    readonly property real pendingOpacity: theme?.pendingOpacity ?? 0.6
+    readonly property real spinnerStrokeWidth: theme?.spinnerStrokeWidth ?? 2
+    readonly property real tabMinWidth: theme?.tabMinWidth ?? 64
+    readonly property real tabIndicatorHeight: theme?.tabIndicatorHeight ?? 3
+    readonly property real fieldDefaultWidth: theme?.fieldDefaultWidth ?? 200
+    readonly property real fieldHeight: theme?.fieldHeight ?? Math.round(fontSizeMedium * 3)
+    readonly property real fieldHeightLarge: theme?.fieldHeightLarge ?? 48
+    readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
+    readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
+    readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400
+    readonly property real clockFaceSize: theme?.clockFaceSize ?? 250
+    readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 0.34
+    readonly property real clockInnerRingRatio: theme?.clockInnerRingRatio ?? 0.2
+    readonly property real clockHandWidth: theme?.clockHandWidth ?? 2
+    readonly property real clockHandleSize: theme?.clockHandleSize ?? 40
+    readonly property real clockCenterSize: theme?.clockCenterSize ?? 8
+    readonly property int clockSwitchDelay: theme?.clockSwitchDelay ?? 100
+    readonly property real chipIconSize: theme?.chipIconSize ?? 18
+    readonly property real buttonGroupExpandRatio: theme?.buttonGroupExpandRatio ?? 0.15
     readonly property string fontFamily: theme?.fontFamily ?? Fonts.sans
     readonly property string monoFontFamily: theme?.monoFontFamily ?? Fonts.mono
     readonly property int fontWeight: theme?.fontWeight ?? Font.Normal
@@ -158,6 +274,34 @@ Singleton {
             alpha: 0.25
         })
 
+    readonly property var elevationLevel1: theme?.elevationLevel1 ?? ({
+            blurPx: 4,
+            offsetX: 0,
+            offsetY: 1,
+            spreadPx: 0,
+            alpha: 0.2
+        })
+    readonly property var elevationLevel3: theme?.elevationLevel3 ?? ({
+            blurPx: 12,
+            offsetX: 0,
+            offsetY: 6,
+            spreadPx: 0,
+            alpha: 0.3
+        })
+
+    readonly property real stateLayerHover: theme?.stateLayerHover ?? 0.08
+    readonly property real stateLayerFocus: theme?.stateLayerFocus ?? 0.12
+    readonly property real stateLayerPressed: theme?.stateLayerPressed ?? 0.12
+    readonly property real stateLayerDrag: theme?.stateLayerDrag ?? 0.16
+
+    readonly property var springSpecs: theme?.springSpecs ?? ({
+            "expressive": [560, 37],
+            "fast": [220, 23],
+            "default": [100, 16]
+        })
+    readonly property var springDampingScales: theme?.springDampingScales ?? [1.22, 1.0, 0.82]
+    readonly property bool springMotionDisabled: theme?.springMotionDisabled ?? (currentAnimationBaseDuration <= 0)
+
     readonly property bool blurLayersActive: theme?.blurLayersActive ?? true
     readonly property bool connectedSurfaceBlurEnabled: theme?.connectedSurfaceBlurEnabled ?? true
     readonly property color blurBorderColor: {
@@ -188,6 +332,21 @@ Singleton {
     readonly property var powerMenuActions: settings?.powerMenuActions ?? ["reboot", "logout", "poweroff", "lock", "suspend", "restart"]
     readonly property string powerMenuDefaultAction: settings?.powerMenuDefaultAction ?? "logout"
     readonly property bool powerMenuGridLayout: settings?.powerMenuGridLayout ?? false
+    readonly property bool reduceMotion: settings?.reduceMotion ?? false
+    readonly property int springBounce: settings?.springBounce ?? 1
+
+    function springPreset(name, baseDuration) {
+        if (theme && typeof theme.springPreset === "function")
+            return theme.springPreset(name, baseDuration);
+        const spec = springSpecs[name] ?? springSpecs["default"];
+        const f = Math.max(0.05, baseDuration / 500);
+        const bounce = springBounce >= 0 && springBounce < springDampingScales.length ? springDampingScales[Math.round(springBounce)] : 1;
+        return {
+            "stiffness": spec[0] / (f * f),
+            "damping": spec[1] / f * bounce,
+            "mass": 1
+        };
+    }
 
     function withAlpha(c, a) {
         if (!c || c.r === undefined)
@@ -206,25 +365,25 @@ Singleton {
     }
 
     function elevationOffsetXFor(level, direction, fallback) {
-        if (theme)
+        if (typeof theme?.elevationOffsetXFor === "function")
             return theme.elevationOffsetXFor(level, direction, fallback);
         return level?.offsetX ?? 0;
     }
 
     function elevationOffsetYFor(level, direction, fallback) {
-        if (theme)
+        if (typeof theme?.elevationOffsetYFor === "function")
             return theme.elevationOffsetYFor(level, direction, fallback);
         return level?.offsetY ?? (fallback ?? 0);
     }
 
     function elevationShadowColor(level) {
-        if (theme)
+        if (typeof theme?.elevationShadowColor === "function")
             return theme.elevationShadowColor(level);
         return Qt.rgba(0, 0, 0, level?.alpha ?? 0.3);
     }
 
     function elevationAmbient(level) {
-        if (theme)
+        if (typeof theme?.elevationAmbient === "function")
             return theme.elevationAmbient(level);
         return {
             blurPx: (level?.blurPx ?? 0) * 1.75,

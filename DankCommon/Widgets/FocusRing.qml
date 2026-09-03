@@ -3,10 +3,10 @@ import qs.DankCommon.Common
 
 Rectangle {
     anchors.fill: parent
-    anchors.margins: -4
-    radius: parent.radius + 4
+    anchors.margins: -Style.focusRingOffset
+    radius: parent.radius + Style.focusRingOffset
     color: "transparent"
-    border.width: 2
-    border.color: Style.primary
+    border.width: Style.focusRingWidth
+    border.color: Style.focusRingColor
     visible: parent.activeFocus
 }

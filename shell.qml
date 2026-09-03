@@ -3,13 +3,27 @@
 import QtQuick
 import Quickshell
 import qs.Common
+import qs.Common as App
+import qs.Services as AppServices
 import qs.DankCommon.Common
+import qs.DankCommon.Common as DC
 import qs.DankCommon.Modals.FileBrowser
 import qs.DankCommon.Widgets
+import qs.DankCommon.Widgets.Expressive as X
 import qs.Services
 
 ShellRoot {
     readonly property var log: Log.scoped("Gallery")
+
+    Component.onCompleted: {
+        DC.Style.theme = App.Theme;
+        DC.Style.settings = App.SettingsData;
+        DC.I18n.backend = App.I18n;
+        DC.Paths.backend = App.Paths;
+        DC.Log.backend = AppServices.Log;
+        DC.Host.session = AppServices.SessionService;
+        DC.Host.cache = App.CacheData;
+    }
 
     FloatingWindow {
         id: window
@@ -124,6 +138,205 @@ ShellRoot {
 
                         width: parent.width
                         spacing: Theme.spacingL
+
+                        Section {
+                            text: "Expressive: buttons and groups"
+                        }
+
+                        Flow {
+                            width: parent.width
+                            spacing: Theme.spacingM
+
+                            X.DankButton {
+                                property int clicks: 0
+
+                                text: clicks > 0 ? `Clicked ${clicks}x` : "Filled"
+                                iconName: "ads_click"
+                                onClicked: clicks++
+                            }
+
+                            X.DankButton {
+                                text: "Tonal"
+                                backgroundColor: Theme.secondaryContainer
+                                textColor: Theme.onSecondaryContainer
+                            }
+
+                            X.DankButton {
+                                text: "Large"
+                                buttonHeight: 56
+                                iconName: "schedule"
+                                onClicked: timePicker.open()
+                            }
+
+                            X.DankActionButton {
+                                iconName: "info"
+                                buttonSize: Theme.iconButtonSize
+                                tooltipText: "Expressive icon button"
+                            }
+
+                            X.DankRefreshButton {
+                                property bool spin: false
+                                busy: spin
+                                onClicked: spin = !spin
+                            }
+                        }
+
+                        X.DankButtonGroup {
+                            model: ["List", "Grid", "Tree"]
+                            currentIndex: 0
+                            onSelectionChanged: (index, selected) => {
+                                if (selected)
+                                    currentIndex = index;
+                            }
+                        }
+
+                        X.DankButtonGroup {
+                            model: ["Mon", "Tue", "Wed", "Thu", "Fri"]
+                            selectionMode: "multi"
+                            initialSelection: ["Mon", "Fri"]
+                        }
+
+                        Section {
+                            text: "Expressive: toggles, chips, tabs"
+                        }
+
+                        X.DankToggle {
+                            id: xToggle
+
+                            text: "Expressive toggle"
+                            description: "Spring thumb, M3 switch metrics"
+                            checked: true
+                            onToggled: checked => xToggle.checked = checked
+                        }
+
+                        X.DankToggle {
+                            id: xGated
+
+                            text: "Gated toggle"
+                            description: xToggle.checked ? "Enabled by the one above" : "Disabled by the one above"
+                            enabled: xToggle.checked
+                            onToggled: checked => xGated.checked = checked
+                        }
+
+                        X.DankFilterChips {
+                            width: Math.min(340, gallery.width)
+                            model: ["All", "Active", "Muted"]
+                        }
+
+                        X.DankTabBar {
+                            width: Math.min(340, gallery.width)
+                            model: [
+                                {
+                                    "icon": "home",
+                                    "text": "Home"
+                                },
+                                {
+                                    "icon": "palette",
+                                    "text": "Theme"
+                                },
+                                {
+                                    "icon": "info",
+                                    "text": "About"
+                                }
+                            ]
+                            onTabClicked: index => currentIndex = index
+                        }
+
+                        Section {
+                            text: "Expressive: sliders"
+                        }
+
+                        X.DankSlider {
+                            width: Math.min(340, gallery.width)
+                            value: 40
+                            leftIcon: "volume_down"
+                            rightIcon: "volume_up"
+                            onSliderValueChanged: newValue => value = newValue
+                        }
+
+                        X.DankSlider {
+                            width: Math.min(340, gallery.width)
+                            value: 50
+                            step: 25
+                            unit: ""
+                            onSliderValueChanged: newValue => value = newValue
+                        }
+
+                        X.DankSlider {
+                            width: Math.min(340, gallery.width)
+                            value: 30
+                            enabled: false
+                        }
+
+                        Section {
+                            text: "Expressive: fields and dropdown"
+                        }
+
+                        Flow {
+                            width: parent.width
+                            spacing: Theme.spacingM
+
+                            X.DankTextField {
+                                width: Math.min(300, gallery.width)
+                                leftIconName: "search"
+                                placeholderText: "Search settings"
+                                cornerRadius: Theme.cornerRadiusFull
+                                showClearButton: true
+                            }
+
+                            X.DankTextField {
+                                width: Math.min(300, gallery.width)
+                                labelText: "Password"
+                                leftIconName: "lock"
+                                placeholderText: "Reveal with the eye"
+                                echoMode: TextInput.Password
+                                showPasswordToggle: true
+                            }
+                        }
+
+                        X.DankTextEdit {
+                            width: parent.width
+                            leftIconName: "edit"
+                            placeholderText: "Multi-line notes..."
+                        }
+
+                        X.DankDropdown {
+                            width: Math.min(320, gallery.width)
+                            text: "Fruit"
+                            description: "Fuzzy search enabled"
+                            enableFuzzySearch: true
+                            options: ["Apple", "Banana", "Cherry", "Dragonfruit", "Elderberry", "Fig", "Grape"]
+                            currentValue: "Apple"
+                            onValueChanged: value => currentValue = value
+                        }
+
+                        X.DankCollapsibleSection {
+                            width: Math.min(340, gallery.width)
+                            title: "Details"
+                            description: "Grouped header, expands below"
+                            showBackground: true
+                            onToggleRequested: expanded = !expanded
+
+                            StyledText {
+                                text: "Collapsible content"
+                            }
+                        }
+
+                        X.DankNumberStepper {
+                            property int count: 5
+
+                            text: count
+                            onIncrement: () => count++
+                            onDecrement: () => count--
+                        }
+
+                        X.DankTimePicker {
+                            id: timePicker
+                            parent: window.contentItem
+                            hour: 7
+                            minute: 0
+                            onAccepted: (h, m) => log.info("time:", h, m)
+                        }
 
                         Section {
                             text: "Buttons"

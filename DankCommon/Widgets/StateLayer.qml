@@ -11,7 +11,7 @@ MouseArea {
     property string tooltipSide: "bottom"
     property bool enableRipple: Style.enableRippleEffects
 
-    readonly property real stateOpacity: disabled ? 0 : pressed ? 0.12 : containsMouse ? 0.08 : 0
+    readonly property real stateOpacity: disabled ? 0 : pressed ? Style.stateLayerPressed : containsMouse ? Style.stateLayerHover : 0
 
     anchors.fill: parent
     cursorShape: disabled ? undefined : Qt.PointingHandCursor
@@ -64,6 +64,18 @@ MouseArea {
     onExited: {
         if (!tooltipText)
             return;
+        hoverDelay.stop();
+        tooltip.hide();
+    }
+
+    onVisibleChanged: {
+        if (visible)
+            return;
+        hoverDelay.stop();
+        tooltip.hide();
+    }
+
+    Component.onDestruction: {
         hoverDelay.stop();
         tooltip.hide();
     }

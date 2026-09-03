@@ -28,6 +28,12 @@ Singleton {
     }
 
     property int animationSpeed: SettingsData.AnimationSpeed.Short
+    property bool reduceMotion: false
+    property bool blurBorderEnabled: true
+    property real blurBorderOpacity: 0.35
+    property string blurBorderColor: "outline"
+    property string blurBorderCustomColor: "#ffffff"
+    property int springBounce: 1
     property bool enableRippleEffects: true
     property bool powerActionConfirm: true
     property real powerActionHoldDuration: 0.5

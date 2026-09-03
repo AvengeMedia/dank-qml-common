@@ -29,32 +29,40 @@ Anything that copies the quickshell tree for packaging must dereference the syml
 The repo root is a runnable Quickshell config with stub singletons and a widget gallery:
 
 ```sh
-qs -c /path/to/dank-qml-common
+qs -p /path/to/dank-qml-common
 ```
 
 For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch .qmlls.ini`, gitignored) - quickshell replaces it with a generated config on the next launch, and every file in the repo gets language-server support. The stubs in `Common/` and `Services/` double as the executable contract below - if a shared widget needs a new singleton property, add it to the stub in the same change.
 
+## Expressive variants
+
+`DankCommon/Widgets/Expressive/` (`qs.DankCommon.Widgets.Expressive`) holds Material 3 Expressive restyles of the interactive widgets (toggle, slider, buttons, button group, chips, tabs, dropdown, text fields, stepper, collapsible section, location search, refresh button, tooltip) plus `DankTimePicker`. Each file keeps the exact public API of its classic sibling so an app switches by changing the import in its re-export stubs. Files there import the classic module `as Base` for shared leaves (`Base.StyledText`, `Base.DankIcon`, ...); an unqualified `import qs.DankCommon.Widgets` would outrank the directory and instantiate the classic sibling. Expressive widgets read the shape scale, state layer, spring and on-role tokens listed below.
+
 ## The contract
 
-Shared code never imports app singletons by path - it imports `qs.Common` and `qs.Services`, which resolve to the consuming app at runtime. Every consuming app must provide these singletons with at least the properties the library reads:
+Shared code never imports app singletons. The app injects them once at startup (`DC.Style.theme = Theme`, `DC.Style.settings = SettingsData`, `DC.I18n.backend = I18n`, `DC.Paths.backend = Paths`, `DC.Log.backend = Log`, `DC.Host.session = SessionService`, `DC.Host.cache = CacheData`, with `import qs.DankCommon.Common as DC`), and `Style` reads every token through `theme?.x ?? fallback`. The gallery's `shell.qml` does the same with the stubs in `Common/` and `Services/`. Every consuming app must provide these singletons with at least the properties the library reads:
 
 ### `qs.Common` → Theme
 
 Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `primaryPressed`, `primarySelected`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceTextSecondary`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfaceHover`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceTint`, `surfaceLight`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `errorSelected`, `warning`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `floatingWindowSurface`, `floatingWindowNestedSurface`, `floatingWindowFieldColor`, `floatingWindowFieldBorderColor`, `floatingWindowFieldFocusedBorderColor`, `popupFieldColor`, `popupFieldBorderColor`, `popupFieldFocusedBorderColor`, `widgetBaseHoverColor`, `onPrimary`, `onSurface`, `onSurface_12`, `onSurface_38`.
+ M3 Expressive widgets (`qs.DankCommon.Widgets.Expressive`) additionally read `tertiary`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainerHighest`, `surfaceBright`, `surfaceDim`, `outlineVariant`, `secondaryContainer`, `tertiaryContainer`, `onSurfaceVariant`, `onSurfaceVariant_30`, `onPrimaryContainer`, `onSecondaryContainer`, `onTertiaryContainer`, `inverseSurface`, `inverseOnSurface`, `tonalTintAlpha`.
 
 Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
+ Expressive: `fontSizeXXLarge`, the shape scale `shapeScale`, `cornerRadiusXS`..`cornerRadiusXXL`, `cornerRadiusFull` (`cornerRadiusSmall`/`cornerRadiusLarge` alias S/L), `groupedListGap`, `groupedListInnerRadius`, `groupedListOuterRadius`, `iconButtonSize`, `listItemHeight`, `listItemTwoLineHeight`, `avatarSize`, `sliderTrackHeight`, `sliderHandleWidth`, `sliderHandleHeight`, `sliderHandleGap`, `switchTrackWidth`, `switchTrackHeight`, `switchOutlineWidth`, `switchThumbUnselected`, `switchThumbSelected`, `switchThumbPressed`, `sliderStopSize`, `sliderTickSize`, `menuItemHeight`, `iconSizeMedium`, `outlineWidth`, `outlineWidthFocused`, `dividerWidth`, `focusRingWidth`, `focusRingOffset`, `focusRingColor`, `scrimAlpha`, `smallBreakpoint`, `mediumBreakpoint`, `fontSizeDisplay`, `buttonHeightXS/S/M`, `buttonMinWidth`, `pressScale`, `iconEnterScale`, `popupEnterScale`, `pendingOpacity`, `spinnerStrokeWidth`, `tabMinWidth`, `tabIndicatorHeight`, `fieldDefaultWidth`, `fieldHeight`, `fieldHeightLarge`, `textEditHeight`, `tooltipMaxWidth`, `menuMaxHeight`, `clockFaceSize`, `clockOuterRingRatio`, `clockInnerRingRatio`, `clockHandWidth`, `clockHandleSize`, `clockCenterSize`, `clockSwitchDelay`, `chipIconSize`, `buttonGroupExpandRatio`.
 
 Typography: `fontFamily`, `monoFontFamily`, `defaultFontFamily`, `defaultMonoFontFamily`, `fontWeight`. The library bundles and registers its own fonts (Inter, FiraCode Nerd Font, Material Symbols - `DankCommon/assets/fonts/`) through the `Fonts` singleton in `qs.DankCommon.Common`; apps typically bind `defaultFontFamily: Fonts.sans` and `defaultMonoFontFamily: Fonts.mono` rather than shipping font files of their own.
 
 Animation: `shorterDuration`, `shortDuration`, `mediumDuration`, `standardEasing`, `emphasizedEasing`, `currentAnimationSpeed`, `expressiveCurves`, `expressiveDurations`.
+ Expressive: `stateLayerHover`, `stateLayerFocus`, `stateLayerPressed`, `stateLayerDrag`, `springSpecs`, `springDampingScales`, `springMotionDisabled`, `springPreset(name, baseDuration)` returning `{stiffness, damping, mass}`, `elevationLevel1`, `elevationLevel3`.
 
-Misc: `isLightMode`, `popupTransparency`, `floatingWindowTransparency`, `blurLayersActive`, `elevationEnabled`, `elevationLevel2` (`{blurPx, offsetX, offsetY, spreadPx, alpha}`), `currentAnimationBaseDuration`, `withAlpha(color, alpha)` - which must tolerate an undefined color and return transparent - and `blendAlpha(color, alpha)` with the same tolerance.
+Misc: `isLightMode`, `popupTransparency`, `floatingWindowTransparency`, `blurLayersActive`, `connectedSurfaceBlurEnabled`, `elevationEnabled`, `elevationLevel2` (`{blurPx, offsetX, offsetY, spreadPx, alpha}`), `currentAnimationBaseDuration`, `withAlpha(color, alpha)` - which must tolerate an undefined color and return transparent - and `blendAlpha(color, alpha)` with the same tolerance.
 
 Optional (used by `ElevationShadow` when present, static fallbacks otherwise): `elevationLightDirection`, `elevationOffsetXFor()`, `elevationOffsetYFor()`, `elevationShadowColor()`, `elevationAmbient()`.
 
 ### `qs.Common` → SettingsData
 
 Enums `AnimationSpeed`, `TextRenderType`, `TextRenderQuality`; properties `animationSpeed`, `enableRippleEffects`, `popoutElevationEnabled`, `textRenderType`, `textRenderQuality`.
+ Expressive motion: `reduceMotion`, `springBounce`. Blur border (FileBrowser): `blurBorderEnabled`, `blurBorderOpacity`, `blurBorderColor`, `blurBorderCustomColor`.
 
 Power menu (Session components): `powerActionConfirm`, `powerActionHoldDuration`, `powerMenuActions`, `powerMenuDefaultAction`, `powerMenuGridLayout`.
 

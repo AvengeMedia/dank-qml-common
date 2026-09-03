@@ -1,6 +1,7 @@
 import QtQuick
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
+import qs.DankCommon.Widgets.Expressive as Expressive
 
 Row {
     id: saveRow
@@ -20,7 +21,7 @@ Row {
     visible: saveMode || folderMode
     spacing: Style.spacingM
 
-    DankTextField {
+    Expressive.DankTextField {
         id: fileNameInput
 
         visible: saveRow.saveMode

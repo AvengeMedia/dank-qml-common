@@ -62,14 +62,26 @@ MouseArea {
     }
 
     onExited: {
-        if (!tooltipText)
-            return;
         hoverDelay.stop();
         tooltip.hide();
     }
 
     onVisibleChanged: {
         if (visible)
+            return;
+        hoverDelay.stop();
+        tooltip.hide();
+    }
+
+    onTooltipTextChanged: {
+        if (tooltipText)
+            return;
+        hoverDelay.stop();
+        tooltip.hide();
+    }
+
+    onDisabledChanged: {
+        if (!disabled)
             return;
         hoverDelay.stop();
         tooltip.hide();

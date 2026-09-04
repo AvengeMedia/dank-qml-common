@@ -163,8 +163,16 @@ Singleton {
     readonly property real avatarSize: 36
     readonly property real sliderTrackHeight: 16
     readonly property real sliderHandleWidth: 4
-    readonly property real sliderHandleHeight: 44
+    readonly property real sliderHandleHeight: 28
     readonly property real sliderHandleGap: 6
+    readonly property real sliderTrackHeightS: 20
+    readonly property real sliderHandleHeightS: 32
+    readonly property real sliderTrackHeightM: 32
+    readonly property real sliderHandleHeightM: 44
+    readonly property real sliderTrackHeightL: 40
+    readonly property real sliderHandleHeightL: 52
+    readonly property real sliderTrackHeightXL: 56
+    readonly property real sliderHandleHeightXL: 68
     readonly property real switchTrackWidth: 52
     readonly property real switchTrackHeight: 32
     readonly property real switchOutlineWidth: 2

@@ -268,6 +268,22 @@ ShellRoot {
                             enabled: false
                         }
 
+                        X.DankSlider {
+                            width: Math.min(340, gallery.width)
+                            value: 65
+                            size: "m"
+                            onSliderValueChanged: newValue => value = newValue
+                        }
+
+                        X.DankSlider {
+                            width: Math.min(340, gallery.width)
+                            value: 45
+                            size: "xl"
+                            leftIcon: "brightness_low"
+                            rightIcon: "brightness_high"
+                            onSliderValueChanged: newValue => value = newValue
+                        }
+
                         Section {
                             text: "Expressive: fields and dropdown"
                         }

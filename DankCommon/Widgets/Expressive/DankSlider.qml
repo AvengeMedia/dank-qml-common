@@ -29,6 +29,7 @@ Item {
     property real valueOverride: -1
     property int decimals: 0
     property bool alwaysShowValue: false
+    property string size: "xs"
     readonly property bool containsMouse: sliderMouseArea.containsMouse
 
     property color thumbOutlineColor: Style.surfaceContainer
@@ -51,6 +52,44 @@ Item {
         return centerMinimum ? (0.5 + raw * 0.5) : raw;
     }
     readonly property bool mirrored: I18n.isRtl
+    readonly property real trackHeight: {
+        switch (size) {
+        case "s":
+            return Style.sliderTrackHeightS;
+        case "m":
+            return Style.sliderTrackHeightM;
+        case "l":
+            return Style.sliderTrackHeightL;
+        case "xl":
+            return Style.sliderTrackHeightXL;
+        default:
+            return Style.sliderTrackHeight;
+        }
+    }
+    readonly property real handleHeight: {
+        switch (size) {
+        case "s":
+            return Style.sliderHandleHeightS;
+        case "m":
+            return Style.sliderHandleHeightM;
+        case "l":
+            return Style.sliderHandleHeightL;
+        case "xl":
+            return Style.sliderHandleHeightXL;
+        default:
+            return Style.sliderHandleHeight;
+        }
+    }
+    readonly property real insideCorner: {
+        switch (size) {
+        case "l":
+            return Style.cornerRadiusS;
+        case "xl":
+            return Style.cornerRadiusM;
+        default:
+            return Style.cornerRadiusXS;
+        }
+    }
     readonly property real visualRatio: mirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)
@@ -61,7 +100,7 @@ Item {
     readonly property int keyStep: step > 1 ? step : Math.max(1, Math.round((maximum - minimum) / 100))
     readonly property int pageSteps: Math.max(1, Math.min(10, Math.round((maximum - minimum) / keyStep / 10)))
 
-    height: Style.sliderHandleHeight + Style.spacingXS
+    height: handleHeight + Style.spacingXS
     activeFocusOnTab: enabled
 
     function commit(newValue) {
@@ -157,7 +196,7 @@ Item {
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
 
             width: parent.width - (leftIconWidth + rightIconWidth + (slider.leftIcon.length > 0 ? Style.spacingM : 0) + (slider.rightIcon.length > 0 ? Style.spacingM : 0))
-            height: Style.sliderHandleHeight
+            height: slider.handleHeight
             anchors.verticalCenter: parent.verticalCenter
 
             Base.StyledRect {
@@ -166,11 +205,11 @@ Item {
                 readonly property real endX: slider.centerMinimum ? Math.max(sliderTrack.centerX, slider.mirrored ? sliderTrack.filledStart : sliderTrack.filledEnd) : sliderTrack.filledEnd
                 x: startX
                 width: Math.max(0, endX - startX)
-                height: Style.sliderTrackHeight
+                height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored || slider.centerMinimum ? Style.cornerRadiusXS : height / 2
+                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : height / 2
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored && !slider.centerMinimum ? height / 2 : Style.cornerRadiusXS
+                topRightRadius: slider.mirrored && !slider.centerMinimum ? height / 2 : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.primary : Style.onSurface_38
                 visible: width > 0
@@ -180,11 +219,11 @@ Item {
                 id: inactiveTrack
                 x: sliderTrack.emptyStart
                 width: Math.max(0, sliderTrack.emptyEnd - sliderTrack.emptyStart)
-                height: Style.sliderTrackHeight
+                height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored ? height / 2 : Style.cornerRadiusXS
+                topLeftRadius: slider.mirrored ? height / 2 : slider.insideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored ? Style.cornerRadiusXS : height / 2
+                topRightRadius: slider.mirrored ? slider.insideCorner : height / 2
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
                 visible: width > 0
@@ -221,7 +260,7 @@ Item {
                 id: sliderHandle
 
                 width: sliderMouseArea.pressed ? Style.sliderHandleWidth / 2 : Style.sliderHandleWidth
-                height: Style.sliderHandleHeight
+                height: slider.handleHeight
                 radius: width / 2
                 x: sliderTrack.handleLeft
                 anchors.verticalCenter: parent.verticalCenter

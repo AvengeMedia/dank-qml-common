@@ -5,14 +5,14 @@ import QtQuick
 import Quickshell
 
 Singleton {
-    readonly property string sans: interFont.name || "Inter Variable"
+    readonly property string sans: googleSansFont.name || "Google Sans Flex"
     readonly property string mono: firaCodeFont.name || "Fira Code"
     readonly property string icons: materialSymbolsFont.name || "Material Symbols Rounded"
     readonly property string nerd: firaCodeFont.name || "FiraCode Nerd Font"
 
     FontLoader {
-        id: interFont
-        source: Qt.resolvedUrl("../assets/fonts/inter/InterVariable.ttf")
+        id: googleSansFont
+        source: Qt.resolvedUrl("../assets/fonts/google-sans-flex/GoogleSansFlex.ttf")
     }
 
     FontLoader {

@@ -12,6 +12,13 @@ ColumnLayout {
     property bool showBackground: false
     property alias headerColor: headerRect.color
 
+    function toggle() {
+        if (!enabled)
+            return;
+        toggleRequested();
+        expanded = !expanded;
+    }
+
     signal toggleRequested
 
     spacing: Style.groupedListGap
@@ -19,6 +26,26 @@ ColumnLayout {
 
     Rectangle {
         id: headerRect
+        activeFocusOnTab: root.enabled
+        Accessible.role: Accessible.Button
+        Accessible.name: root.title
+        Accessible.description: root.description
+        Accessible.onPressAction: root.toggle()
+
+        Keys.onPressed: event => {
+            switch (event.key) {
+            case Qt.Key_Space:
+            case Qt.Key_Return:
+            case Qt.Key_Enter:
+                root.toggle();
+                event.accepted = true;
+                break;
+            }
+        }
+
+        Base.FocusRing {
+            radius: Style.groupedListOuterRadius + Style.focusRingOffset
+        }
         Layout.fillWidth: true
         Layout.preferredHeight: Math.max(titleRow.implicitHeight + Style.spacingM * 2, Style.listItemHeight)
         topLeftRadius: Style.groupedListOuterRadius
@@ -55,6 +82,7 @@ ColumnLayout {
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
                 Layout.fillWidth: true
+                wrapMode: Text.WordWrap
             }
 
             Base.DankIcon {
@@ -76,10 +104,8 @@ ColumnLayout {
         Base.StateLayer {
             anchors.fill: parent
             cornerRadius: Style.groupedListOuterRadius
-            onClicked: {
-                root.toggleRequested();
-                root.expanded = !root.expanded;
-            }
+            disabled: !root.enabled
+            onClicked: root.toggle()
         }
     }
 
@@ -87,6 +113,8 @@ ColumnLayout {
 
     Item {
         id: contentWrapper
+        visible: root.expanded || height > 0
+        enabled: root.expanded
         Layout.fillWidth: true
         Layout.preferredHeight: root.expanded ? (contentColumn.implicitHeight + Style.spacingM * 2) : 0
         clip: true

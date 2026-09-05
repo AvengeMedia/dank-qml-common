@@ -28,6 +28,12 @@ Rectangle {
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     activeFocusOnTab: enabled
+    Accessible.role: Accessible.Button
+    Accessible.name: text
+    Accessible.onPressAction: {
+        if (enabled)
+            clicked();
+    }
 
     Keys.onPressed: event => {
         if (!root.enabled)

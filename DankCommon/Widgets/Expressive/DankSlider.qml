@@ -49,7 +49,8 @@ Item {
     readonly property real ratio: {
         const range = maximum - minimum;
         const raw = range === 0 ? 0 : (value - minimum) / range;
-        return centerMinimum ? (0.5 + raw * 0.5) : raw;
+        const clamped = Math.max(0, Math.min(1, raw));
+        return centerMinimum ? (0.5 + clamped * 0.5) : clamped;
     }
     readonly property bool mirrored: I18n.isRtl
     readonly property real trackHeight: {
@@ -102,6 +103,19 @@ Item {
 
     height: handleHeight + Style.spacingXS
     activeFocusOnTab: enabled
+    readonly property int minimumValue: minimum
+    readonly property int maximumValue: maximum
+    readonly property int stepSize: keyStep
+    Accessible.role: Accessible.Slider
+    Accessible.focusable: enabled
+    Accessible.onIncreaseAction: {
+        if (enabled)
+            stepBy(1);
+    }
+    Accessible.onDecreaseAction: {
+        if (enabled)
+            stepBy(-1);
+    }
 
     function commit(newValue) {
         const clamped = Math.max(minimum, Math.min(maximum, newValue));
@@ -114,19 +128,21 @@ Item {
     function stepBy(direction) {
         let next = value + direction * keyStep;
         if (step > 1)
-            next = Math.round(next / step) * step;
+            next = minimum + Math.round((next - minimum) / step) * step;
         commit(Math.round(next));
         sliderDragFinished(value);
     }
 
     function updateValueFromPosition(x) {
+        if (sliderTrack.width <= sliderHandle.width)
+            return;
         let ratio = Math.max(0, Math.min(1, (x - sliderHandle.width / 2) / (sliderTrack.width - sliderHandle.width)));
         if (mirrored)
             ratio = 1 - ratio;
         if (centerMinimum)
             ratio = Math.max(0, (ratio - 0.5) * 2);
         let rawValue = minimum + ratio * (maximum - minimum);
-        let newValue = step > 1 ? Math.round(rawValue / step) * step : Math.round(rawValue);
+        let newValue = step > 1 ? minimum + Math.round((rawValue - minimum) / step) * step : Math.round(rawValue);
         commit(newValue);
     }
 

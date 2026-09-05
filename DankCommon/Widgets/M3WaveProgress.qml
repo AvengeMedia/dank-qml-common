@@ -1,8 +1,6 @@
 import QtQuick
 import qs.DankCommon.Common
 
-// Wave progress indicator: track, animated fill, seek preview and playhead are
-// all drawn in a single fragment shader (Shaders/frag/wave_progress.frag).
 Item {
     id: root
 
@@ -14,20 +12,19 @@ Item {
     property real amp: 1.6
     property real phase: 0.0
     property bool isPlaying: false
-    property real currentAmp: 1.6
+    property real currentAmp: isPlaying ? amp : 0
     property color trackColor: Style.withAlpha(Style.surfaceVariant, 0.40)
     property color fillColor: Style.primary
     property color playheadColor: Style.primary
     property color actualProgressColor: Style.onSurface_38
 
     Behavior on currentAmp {
+        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         NumberAnimation {
             duration: 300
             easing.type: Easing.OutCubic
         }
     }
-    onIsPlayingChanged: currentAmp = isPlaying ? amp : 0
-    Component.onCompleted: currentAmp = isPlaying ? amp : 0
 
     ShaderEffect {
         anchors.fill: parent
@@ -53,7 +50,7 @@ Item {
     signal frameTicked
 
     FrameAnimation {
-        running: root.visible && (root.isPlaying || root.currentAmp > 0) && (root.Window.window?.visible ?? false)
+        running: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None && root.visible && (root.isPlaying || root.currentAmp > 0) && (root.Window.window?.visible ?? false)
         onTriggered: {
             if (!root.isPlaying)
                 return;

@@ -24,6 +24,12 @@ Base.StyledRect {
     radius: pressed ? Math.min(Style.cornerRadiusS, height / 2) : (circular ? height / 2 : Style.cornerRadiusM)
     color: backgroundColor
     activeFocusOnTab: enabled
+    Accessible.role: Accessible.Button
+    Accessible.name: tooltipText || iconName
+    Accessible.onPressAction: {
+        if (enabled)
+            clicked();
+    }
 
     Behavior on radius {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

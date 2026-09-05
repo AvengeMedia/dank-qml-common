@@ -29,7 +29,6 @@ Item {
 
     readonly property int columns: 7
     readonly property int rows: 6
-    // Anchored at local noon so day stepping never lands on a missing midnight (DST).
     readonly property date firstDay: {
         const first = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1, 12);
         const diff = (first.getDay() - firstDayOfWeek + columns) % columns;
@@ -48,7 +47,7 @@ Item {
     }
     readonly property real gridLeft: showWeekNumbers ? weekColumnWidth + cellGap : 0
     readonly property real cellWidth: (width - gridLeft - cellGap * (columns - 1)) / columns
-    readonly property real cellHeight: (height - weekdayRowHeight - cellGap * (rows - 1)) / rows
+    readonly property real cellHeight: Math.max(0, (height - weekdayRowHeight - cellGap * rows) / rows)
 
     function dateAt(index) {
         const date = new Date(firstDay);
@@ -112,12 +111,20 @@ Item {
             required property int index
 
             readonly property date dayDate: root.dateAt(index)
+            Accessible.role: Accessible.Button
+            Accessible.name: dayDate.toLocaleDateString(Qt.locale(), Locale.LongFormat)
+            Accessible.selected: isSelected
+            Accessible.focusable: root.interactive
+            Accessible.onPressAction: {
+                if (root.interactive && root.enabled)
+                    root.dayClicked(dayDate);
+            }
             readonly property bool inMonth: dayDate.getMonth() === root.displayDate.getMonth()
             readonly property bool isToday: root.sameDay(dayDate, root.today)
             readonly property bool isSelected: root.sameDay(dayDate, root.selectedDate)
             readonly property bool weekend: root.highlightWeekends && root.isWeekend(dayDate)
             readonly property var dotColors: {
-                root.revision; // dependency only
+                root.revision;
                 return root.dotColorsFor ? (root.dotColorsFor(dayDate) ?? []) : [];
             }
             readonly property int extraCount: Math.max(0, dotColors.length - root.maxDots)
@@ -135,8 +142,8 @@ Item {
                     easing.bezierCurve: Style.expressiveCurves.standard
                 }
             }
-            color: Style.withAlpha(Style.surfaceContainerHighest, inMonth ? Style.popupTransparency : Style.stateLayerFocus)
-            border.width: isSelected ? Style.outlineWidthFocused : 0
+            color: isSelected ? Style.primary : Style.withAlpha(Style.surfaceContainerHighest, inMonth ? Style.popupTransparency : Style.stateLayerFocus)
+            border.width: isToday && !isSelected ? Style.outlineWidthFocused : 0
             border.color: Style.primary
 
             Base.StyledText {
@@ -146,6 +153,8 @@ Item {
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: cell.inMonth ? Font.Bold : Font.Medium
                 color: {
+                    if (cell.isSelected)
+                        return Style.onPrimary;
                     if (cell.isToday)
                         return Style.primary;
                     if (cell.weekend && cell.inMonth)
@@ -187,7 +196,7 @@ Item {
 
             Base.StateLayer {
                 id: cellLayer
-                stateColor: Style.primary
+                stateColor: cell.isSelected ? Style.onPrimary : Style.primary
                 cornerRadius: cell.radius
                 disabled: !root.interactive
                 onClicked: root.dayClicked(cell.dayDate)

@@ -19,7 +19,7 @@ Flow {
 
     spacing: Style.spacingS
     width: parent ? parent.width : Style.smallBreakpoint
-    activeFocusOnTab: enabled
+    activeFocusOnTab: enabled && !multiSelect
 
     Keys.onPressed: event => {
         const count = model?.length ?? 0;
@@ -48,6 +48,36 @@ Flow {
             required property int index
 
             property var value: typeof modelData === "string" ? modelData : (modelData.value !== undefined ? modelData.value : (modelData.label || ""))
+            activeFocusOnTab: root.enabled && root.multiSelect
+            Accessible.role: Accessible.CheckBox
+            Accessible.name: label
+            Accessible.checkable: true
+            Accessible.checked: selected
+            Accessible.onPressAction: activate()
+            Accessible.onToggleAction: activate()
+
+            function activate() {
+                if (!root.enabled)
+                    return;
+                if (root.multiSelect) {
+                    root.selectionToggled(index, !selected);
+                    return;
+                }
+                root.currentIndex = index;
+                root.selectionChanged(index);
+            }
+
+            Keys.onPressed: event => {
+                switch (event.key) {
+                case Qt.Key_Space:
+                case Qt.Key_Return:
+                case Qt.Key_Enter:
+                    activate();
+                    event.accepted = true;
+                    break;
+                }
+            }
+
             property bool selected: root.multiSelect ? root.selectedValues.includes(value) : (index === root.currentIndex)
             property bool hovered: mouseArea.containsMouse
             property bool pressed: mouseArea.pressed
@@ -79,7 +109,7 @@ Flow {
                 color: "transparent"
                 border.width: Style.focusRingWidth
                 border.color: Style.focusRingColor
-                visible: root.activeFocus && chip.selected && !root.multiSelect
+                visible: chip.activeFocus || (root.activeFocus && chip.selected) && !root.multiSelect
             }
 
             Behavior on color {
@@ -144,14 +174,7 @@ Flow {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onPressed: mouse => chipRipple.trigger(mouse.x, mouse.y)
-                onClicked: {
-                    if (root.multiSelect) {
-                        root.selectionToggled(chip.index, !chip.selected);
-                        return;
-                    }
-                    root.currentIndex = chip.index;
-                    root.selectionChanged(chip.index);
-                }
+                onClicked: chip.activate()
             }
         }
     }

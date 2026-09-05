@@ -181,6 +181,13 @@ Item {
     width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
     implicitHeight: !showTrigger ? 0 : (compactMode ? triggerHeight : Math.max(Style.listItemHeight + Style.spacingXS, labelColumn.implicitHeight + Style.spacingM))
     activeFocusOnTab: showTrigger && enabled
+    Accessible.role: Accessible.ComboBox
+    Accessible.name: text || currentValue
+    Accessible.description: description
+    Accessible.onPressAction: {
+        if (enabled)
+            openDropdownMenu();
+    }
 
     Keys.onPressed: event => {
         if (!root.enabled)

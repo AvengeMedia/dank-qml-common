@@ -130,6 +130,19 @@ Row {
         delegate: Rectangle {
             id: segment
 
+            Accessible.role: root.multiSelect ? Accessible.CheckBox : Accessible.RadioButton
+            Accessible.name: buttonText.text
+            Accessible.checkable: true
+            Accessible.checked: selected
+            Accessible.onPressAction: {
+                if (root.enabled)
+                    root.selectItem(index);
+            }
+            Accessible.onToggleAction: {
+                if (root.enabled)
+                    root.selectItem(index);
+            }
+
             property bool selected: multiSelect ? root.currentSelection.includes(modelData) : (index === root.currentIndex)
             property bool hovered: mouseArea.containsMouse
             property bool pressed: mouseArea.pressed

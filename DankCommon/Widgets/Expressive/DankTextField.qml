@@ -148,7 +148,9 @@ Base.StyledRect {
         selectByMouse: !root.ignoreLeftRightKeys
         echoMode: root.passwordVisible && root.echoMode === TextInput.Password ? TextInput.Normal : root.echoMode
         clip: true
-        activeFocusOnTab: true
+        activeFocusOnTab: root.enabled
+        Accessible.name: root.Accessible.name || root.labelText || root.placeholderText
+        Accessible.description: root.Accessible.description
         cursorDelegate: Base.DankTextCursor {
             id: fieldCursor
 

@@ -268,6 +268,7 @@ FocusScope {
             return;
         }
 
+        tabRow.forceLayout();
         const tabPos = item.mapToItem(tabBar, 0, 0);
         const tabCenterX = tabPos.x + item.width / 2;
         const indicatorWidth = Math.max(Style.spacingXL, Math.min(item.width, item.contentWidth + Style.spacingS * 2));

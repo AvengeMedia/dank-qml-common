@@ -29,8 +29,9 @@ Item {
 
     readonly property int columns: 7
     readonly property int rows: 6
+    // Anchored at local noon so day stepping never lands on a missing midnight (DST).
     readonly property date firstDay: {
-        const first = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1);
+        const first = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1, 12);
         const diff = (first.getDay() - firstDayOfWeek + columns) % columns;
         first.setDate(first.getDate() - diff);
         return first;

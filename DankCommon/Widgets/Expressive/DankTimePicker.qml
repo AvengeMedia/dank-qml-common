@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
@@ -22,8 +23,8 @@ FocusScope {
     property bool _dragging: false
 
     readonly property bool animationsEnabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-    readonly property real digitHeight: Style.iconButtonSize + Style.spacingXL
-    readonly property real digitWidth: digitHeight + Style.spacingM
+    readonly property real digitHeight: Style.iconButtonSize * 2
+    readonly property real digitWidth: is24Hour ? digitHeight + Style.spacingL * 2 + Style.spacingXXS : digitHeight + Style.spacingL
     readonly property real outerRingRadius: faceSize * Style.clockOuterRingRatio
     readonly property real innerRingRadius: faceSize * Style.clockInnerRingRatio
     readonly property real numberSize: Style.clockHandleSize
@@ -167,7 +168,8 @@ FocusScope {
     Rectangle {
         id: card
 
-        width: root.faceSize + Style.spacingXL * 2 + Style.spacingXL
+        // width: root.faceSize + Style.spacingXL * 2
+        width: root.faceSize + Style.spacingXL * 3
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent
         radius: Style.cornerRadiusXL
@@ -196,13 +198,14 @@ FocusScope {
             shadowEnabled: Style.elevationEnabled
         }
 
-        Column {
+        ColumnLayout {
             id: cardColumn
+
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.margins: Style.spacingXL
-            spacing: Style.spacingL
+            spacing: Style.spacingXL
 
             Base.StyledText {
                 text: root.title
@@ -211,7 +214,7 @@ FocusScope {
                 color: Style.onSurfaceVariant
             }
 
-            Row {
+            RowLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: Style.spacingS
 
@@ -221,8 +224,6 @@ FocusScope {
                     height: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.surfaceContainerHighest : Style.primaryContainer
-                    border.width: root._minuteMode ? 0 : Style.outlineWidthFocused
-                    border.color: Style.primary
 
                     Behavior on color {
                         enabled: root.animationsEnabled
@@ -262,8 +263,6 @@ FocusScope {
                     height: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.primaryContainer : Style.surfaceContainerHighest
-                    border.width: root._minuteMode ? Style.outlineWidthFocused : 0
-                    border.color: Style.primary
 
                     Behavior on color {
                         enabled: root.animationsEnabled
@@ -289,15 +288,11 @@ FocusScope {
                     }
                 }
 
-                Item {
-                    width: Style.spacingXS
-                    height: parent.height
-                    visible: !root.is24Hour
-                }
-
                 Rectangle {
                     id: periodColumn
-                    width: Style.iconButtonSize + Style.spacingXS
+
+                    Layout.leftMargin: style.spacingXL
+                    width: Style.iconButtonSize + Style.spacingM
                     height: root.digitHeight
                     radius: Style.cornerRadiusS
                     color: "transparent"
@@ -314,18 +309,18 @@ FocusScope {
                             height: parent.height / 2
                             topLeftRadius: periodColumn.radius
                             topRightRadius: periodColumn.radius
-                            color: root.isPm ? "transparent" : Style.primaryContainer
+                            color: root.isPm ? "transparent" : Style.tertiaryContainer
 
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("AM")
                                 font.pixelSize: Style.fontSizeSmall
                                 font.weight: Font.DemiBold
-                                color: root.isPm ? Style.onSurfaceVariant : Style.onPrimaryContainer
+                                color: root.isPm ? Style.onSurfaceVariant : Style.onTertiaryContainer
                             }
 
                             Base.StateLayer {
-                                cornerRadius: 0
+                                cornerRadius: periodColumn.radius
                                 onClicked: root.setPeriod(false)
                             }
                         }
@@ -341,14 +336,14 @@ FocusScope {
                             height: parent.height / 2 - Style.dividerWidth
                             bottomLeftRadius: periodColumn.radius
                             bottomRightRadius: periodColumn.radius
-                            color: root.isPm ? Style.primaryContainer : "transparent"
+                            color: root.isPm ? Style.tertiaryContainer : "transparent"
 
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("PM")
                                 font.pixelSize: Style.fontSizeSmall
                                 font.weight: Font.DemiBold
-                                color: root.isPm ? Style.onPrimaryContainer : Style.onSurfaceVariant
+                                color: root.isPm ? Style.onTertiaryContainer : Style.onSurfaceVariant
                             }
 
                             Base.StateLayer {
@@ -363,13 +358,12 @@ FocusScope {
             Rectangle {
                 id: face
 
+                Layout.topMargin: Style.spacingM
                 width: root.faceSize
                 height: root.faceSize
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: width / 2
-                color: faceArea.containsMouse ? Style.surfaceContainerHigh : Style.surfaceContainerHighest
-                border.width: Style.outlineWidth
-                border.color: Style.outlineVariant
+                color:  Style.surfaceContainerHighest
 
                 Behavior on color {
                     enabled: root.animationsEnabled
@@ -497,8 +491,8 @@ FocusScope {
 
                 DankButton {
                     text: I18n.tr("OK")
-                    backgroundColor: Style.primary
-                    textColor: Style.onPrimary
+                    backgroundColor: "transparent"
+                    textColor: Style.primary
                     onClicked: {
                         root.accepted(root._hour, root._minute);
                         root.close();

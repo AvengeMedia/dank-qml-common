@@ -228,11 +228,11 @@ Singleton {
     readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
     readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400
-    readonly property real clockFaceSize: theme?.clockFaceSize ?? 250
-    readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 0.34
-    readonly property real clockInnerRingRatio: theme?.clockInnerRingRatio ?? 0.2
+    readonly property real clockFaceSize: theme?.clockFaceSize ?? 256
+    readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 101 / clockFaceSize
+    readonly property real clockInnerRingRatio: theme?.clockInnerRingRatio ?? 69 / clockFaceSize
     readonly property real clockHandWidth: theme?.clockHandWidth ?? 2
-    readonly property real clockHandleSize: theme?.clockHandleSize ?? 40
+    readonly property real clockHandleSize: theme?.clockHandleSize ?? 48
     readonly property real clockCenterSize: theme?.clockCenterSize ?? 8
     readonly property int clockSwitchDelay: theme?.clockSwitchDelay ?? 100
     readonly property real chipIconSize: theme?.chipIconSize ?? 18

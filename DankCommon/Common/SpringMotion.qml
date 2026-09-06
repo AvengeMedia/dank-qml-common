@@ -63,20 +63,27 @@ QtObject {
         if (frameTime <= 0)
             return;
 
-        const steps = Math.max(1, Math.ceil(frameTime / integrationStep));
-        const step = frameTime / steps;
         const inverseMass = 1 / Math.max(0.001, mass);
+        const stableStep = 1 / Math.max(1, damping * inverseMass, Math.sqrt(stiffness * inverseMass));
+        const steps = Math.max(1, Math.ceil(frameTime / Math.min(integrationStep, stableStep)));
+        const step = frameTime / steps;
+        let nextValue = value;
+        let nextVelocity = velocity;
 
         for (let i = 0; i < steps; i++) {
-            velocity += (stiffness * (target - value) - damping * velocity) * inverseMass * step;
-            value += velocity * step;
+            nextVelocity += (stiffness * (target - nextValue) - damping * nextVelocity) * inverseMass * step;
+            nextValue += nextVelocity * step;
         }
 
-        if (isSettled()) {
-            value = target;
+        if (Math.abs(target - nextValue) <= positionEpsilon && Math.abs(nextVelocity) <= velocityEpsilon) {
             velocity = 0;
+            value = target;
             _running = false;
+            return;
         }
+
+        velocity = nextVelocity;
+        value = nextValue;
     }
 
     onEffectiveReducedMotionChanged: {

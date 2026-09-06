@@ -47,6 +47,7 @@ Rectangle {
     readonly property color mutedColor: tinted ? Style.withAlpha(contentColor, 0.72) : Style.onSurfaceVariant
     readonly property color chipColor: tinted ? Style.withAlpha(contentColor, Style.stateLayerFocus) : Style.withAlpha(Style.surfaceContainerHighest, Style.popupTransparency)
     readonly property color surfaceColor: Style.withAlpha(containerColor, Style.popupTransparency)
+    property bool showFocusRing: true
     property real restRadius: Style.cornerRadiusXL
     property real bodyRadius: layer.pressed ? Style.cornerRadiusM : restRadius
 
@@ -87,7 +88,9 @@ Rectangle {
         onClicked: card.clicked()
     }
 
-    Base.FocusRing {}
+    Base.FocusRing {
+        visible: card.showFocusRing && card.activeFocus
+    }
 
     Base.StyledText {
         id: titleLabel

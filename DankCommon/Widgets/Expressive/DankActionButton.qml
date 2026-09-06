@@ -52,7 +52,10 @@ Base.StyledRect {
         }
     }
 
-    Base.FocusRing {}
+    Base.FocusRing {
+        anchors.margins: Style.focusRingWidth / 2
+        radius: Math.max(0, parent.radius - Style.focusRingWidth / 2)
+    }
 
     Base.DankIcon {
         anchors.centerIn: parent

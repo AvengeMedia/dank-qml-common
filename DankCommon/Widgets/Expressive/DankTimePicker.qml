@@ -168,7 +168,6 @@ FocusScope {
     Rectangle {
         id: card
 
-        // width: root.faceSize + Style.spacingXL * 2
         width: root.faceSize + Style.spacingXL * 3
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent

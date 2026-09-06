@@ -6,6 +6,8 @@ Rectangle {
     id: root
 
     property string text: ""
+    property real maximumWidth: Infinity
+    property bool wrapText: false
     property string iconName: ""
     property int iconSize: Style.iconSizeMedium
     property bool hovered: mouseArea.containsMouse
@@ -19,8 +21,8 @@ Rectangle {
 
     signal clicked
 
-    width: Math.max(contentRow.implicitWidth + horizontalPadding * 2, Style.buttonMinWidth)
-    height: buttonHeight
+    width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, Style.buttonMinWidth))
+    height: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
     readonly property real pressedRadius: buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS
 
@@ -48,7 +50,10 @@ Rectangle {
         }
     }
 
-    Base.FocusRing {}
+    Base.FocusRing {
+        anchors.margins: Style.focusRingWidth / 2
+        radius: Math.max(0, parent.radius - Style.focusRingWidth / 2)
+    }
 
     Behavior on radius {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -108,6 +113,9 @@ Rectangle {
         }
 
         Base.StyledText {
+            width: Math.min(implicitWidth, Math.max(0, root.maximumWidth - root.horizontalPadding * 2 - (root.iconName ? root.iconSize + contentRow.spacing : 0)))
+            wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
+            elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text
             font.pixelSize: Style.fontSizeMedium
             font.weight: Font.Medium

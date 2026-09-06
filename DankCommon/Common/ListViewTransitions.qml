@@ -13,6 +13,7 @@ Singleton {
 
     readonly property Transition add: enabled ? _add : null
     readonly property Transition remove: null
+    readonly property Transition fadeRemove: enabled ? _fadeRemove : null
     readonly property Transition displaced: enabled ? _displaced : null
     readonly property Transition move: enabled ? _move : null
 
@@ -37,6 +38,15 @@ Singleton {
                 duration: Style.expressiveDurations.fast
                 easing.bezierCurve: Style.expressiveCurves.emphasizedDecel
             }
+        }
+    }
+
+    readonly property Transition _fadeRemove: Transition {
+        DankAnim {
+            property: "opacity"
+            to: 0
+            duration: Style.expressiveDurations.fast
+            easing.bezierCurve: Style.expressiveCurves.expressiveEffects
         }
     }
 

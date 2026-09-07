@@ -99,3 +99,5 @@ The submodule is a real worktree; edit it in place inside whichever app you are 
 
 - `Common/Proc.qml` exposes `dmsBin` (`DMS_EXECUTABLE` env override) as a DMS convenience; it is inert elsewhere.
 - Log stays app-owned so each app keeps its own env-var prefix (`DMS_LOG_LEVEL`, `DANKCAL_LOG_LEVEL`, ...).
+
+Launcher metrics: `launcherTileSize`, `launcherImageRatio`, `launcherMaxVisibleRows`, `launcherWidthMicro`, `launcherWidthDefault`, `launcherWidthWide`, `launcherWidthLarge`, `launcherHeightDefault`, `launcherScreenMargin`. Rows use a uniform `listItemHeight`, `avatarSize` and the grouped list tokens. Modal dimming uses `scrimColor` with `scrimAlpha`.

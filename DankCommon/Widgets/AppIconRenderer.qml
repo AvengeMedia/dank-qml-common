@@ -14,6 +14,7 @@ Item {
     property real contrastOverride: 0.0
     property real saturationOverride: 0.0
     property color fallbackBackgroundColor: Style.surfaceLight
+    property real fallbackRadius: Style.cornerRadius
     property color fallbackTextColor: Style.primary
     property real materialIconSizeAdjustment: Style.spacingM
     property real unicodeIconScale: 0.7
@@ -115,7 +116,7 @@ Item {
         anchors.bottomMargin: root.fallbackBottomMargin
         visible: !root.hasSpecialPrefix && (root.iconPath === "" || !iconImgLoader.item || iconImgLoader.item.status !== Image.Ready)
         color: root.fallbackBackgroundColor
-        radius: Style.cornerRadius
+        radius: root.fallbackRadius
         border.width: 0
         border.color: Style.primarySelected
 

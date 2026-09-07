@@ -211,6 +211,7 @@ Singleton {
     readonly property real focusRingOffset: theme?.focusRingOffset ?? 4
     readonly property color focusRingColor: theme?.focusRingColor ?? primary
     readonly property real scrimAlpha: theme?.scrimAlpha ?? 0.55
+    readonly property color scrimColor: theme?.scrimColor ?? "#000000"
     readonly property real buttonHeightXS: theme?.buttonHeightXS ?? 32
     readonly property real buttonHeightS: theme?.buttonHeightS ?? 40
     readonly property real buttonHeightM: theme?.buttonHeightM ?? 56
@@ -222,6 +223,16 @@ Singleton {
     readonly property real spinnerStrokeWidth: theme?.spinnerStrokeWidth ?? 2
     readonly property real tabMinWidth: theme?.tabMinWidth ?? 64
     readonly property real tabIndicatorHeight: theme?.tabIndicatorHeight ?? 3
+    readonly property real launcherTileSize: theme?.launcherTileSize ?? 120
+    readonly property real launcherImageRatio: theme?.launcherImageRatio ?? 0.75
+    readonly property int launcherMaxVisibleRows: theme?.launcherMaxVisibleRows ?? 8
+    readonly property real launcherWidthMicro: theme?.launcherWidthMicro ?? 500
+    readonly property real launcherWidthDefault: theme?.launcherWidthDefault ?? 620
+    readonly property real launcherWidthWide: theme?.launcherWidthWide ?? 720
+    readonly property real launcherWidthLarge: theme?.launcherWidthLarge ?? 860
+    readonly property real launcherHeightDefault: theme?.launcherHeightDefault ?? 600
+    readonly property real launcherScreenMargin: theme?.launcherScreenMargin ?? 100
+
     readonly property real fieldDefaultWidth: theme?.fieldDefaultWidth ?? 200
     readonly property real fieldHeight: theme?.fieldHeight ?? Math.round(fontSizeMedium * 3)
     readonly property real fieldHeightLarge: theme?.fieldHeightLarge ?? 48

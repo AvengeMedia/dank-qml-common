@@ -69,7 +69,7 @@ Item {
 
     onMenuOpenChanged: transientSurfaceTracker?.setActive(root, menuOpen, menuOpen ? dropdownMenu : null)
 
-    readonly property int triggerHeight: Style.iconButtonSize
+    property int triggerHeight: Style.iconButtonSize
     readonly property int menuItemHeight: Style.menuItemHeight
     readonly property int menuPadding: Style.spacingS
     readonly property int menuSpacing: Style.spacingXXS

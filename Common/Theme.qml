@@ -189,6 +189,7 @@ Singleton {
     readonly property real focusRingOffset: 4
     readonly property color focusRingColor: primary
     readonly property real scrimAlpha: 0.55
+    readonly property color scrimColor: "#000000"
     readonly property real buttonHeightXS: 32
     readonly property real buttonHeightS: 40
     readonly property real buttonHeightM: 56
@@ -200,6 +201,16 @@ Singleton {
     readonly property real spinnerStrokeWidth: 2
     readonly property real tabMinWidth: 64
     readonly property real tabIndicatorHeight: 3
+    readonly property real launcherTileSize: 120
+    readonly property real launcherImageRatio: 0.75
+    readonly property int launcherMaxVisibleRows: 8
+    readonly property real launcherWidthMicro: 500
+    readonly property real launcherWidthDefault: 620
+    readonly property real launcherWidthWide: 720
+    readonly property real launcherWidthLarge: 860
+    readonly property real launcherHeightDefault: 600
+    readonly property real launcherScreenMargin: 100
+
     readonly property real fieldDefaultWidth: 200
     readonly property real fieldHeight: Math.round(fontSizeMedium * 3)
     readonly property real fieldHeightLarge: 48

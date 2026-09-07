@@ -79,8 +79,8 @@ Flow {
             }
 
             property bool selected: root.multiSelect ? root.selectedValues.includes(value) : (index === root.currentIndex)
-            property bool hovered: mouseArea.containsMouse
-            property bool pressed: mouseArea.pressed
+            property bool hovered: stateLayer.containsMouse
+            property bool pressed: stateLayer.pressed
             property string label: typeof modelData === "string" ? modelData : (modelData.label || "")
             property int count: typeof modelData === "object" ? (modelData.count || 0) : 0
             property bool showCount: root.showCounts && count > 0
@@ -102,13 +102,7 @@ Flow {
             border.width: selected ? 0 : Style.outlineWidth
             border.color: Style.outlineVariant
 
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: -Style.focusRingOffset
-                radius: chip.radius + Style.focusRingOffset
-                color: "transparent"
-                border.width: Style.focusRingWidth
-                border.color: Style.focusRingColor
+            Base.FocusRing {
                 visible: chip.activeFocus || (root.activeFocus && chip.selected) && !root.multiSelect
             }
 
@@ -120,30 +114,13 @@ Flow {
                 }
             }
 
-            Rectangle {
-                anchors.fill: parent
-                radius: parent.radius
-                color: {
-                    if (pressed)
-                        return Style.withAlpha(chip.contentColor, Style.stateLayerPressed);
-                    if (hovered)
-                        return Style.withAlpha(chip.contentColor, Style.stateLayerHover);
-                    return "transparent";
-                }
-
-                Behavior on color {
-                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                    DankColorAnim {
-                        duration: Style.expressiveDurations.expressiveEffects
-                        easing.bezierCurve: Style.expressiveCurves.expressiveEffects
-                    }
-                }
-            }
-
-            Base.DankRipple {
-                id: chipRipple
-                cornerRadius: chip.radius
-                rippleColor: chip.contentColor
+            Base.StateLayer {
+                id: stateLayer
+                disabled: !root.enabled
+                stateColor: chip.contentColor
+                transitionDuration: Style.expressiveDurations.expressiveEffects
+                transitionCurve: Style.expressiveCurves.expressiveEffects
+                onClicked: chip.activate()
             }
 
             Row {
@@ -166,15 +143,6 @@ Flow {
                     color: chip.contentColor
                     anchors.verticalCenter: parent.verticalCenter
                 }
-            }
-
-            MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onPressed: mouse => chipRipple.trigger(mouse.x, mouse.y)
-                onClicked: chip.activate()
             }
         }
     }

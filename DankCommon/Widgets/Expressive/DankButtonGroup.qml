@@ -144,8 +144,8 @@ Row {
             }
 
             property bool selected: multiSelect ? root.currentSelection.includes(modelData) : (index === root.currentIndex)
-            property bool hovered: mouseArea.containsMouse
-            property bool pressed: mouseArea.pressed
+            property bool hovered: stateLayer.containsMouse
+            property bool pressed: stateLayer.pressed
             property bool visualFirst: index === 0
             property bool visualLast: index === repeater.count - 1
             property bool prevSelected: index > 0 ? root.isSelected(index - 1) : false
@@ -234,43 +234,23 @@ Row {
                 }
             }
 
-            Rectangle {
+            Base.StateLayer {
                 id: stateLayer
-                anchors.fill: parent
-                topLeftRadius: parent.topLeftRadius
-                bottomLeftRadius: parent.bottomLeftRadius
-                topRightRadius: parent.topRightRadius
-                bottomRightRadius: parent.bottomRightRadius
-                color: {
-                    if (pressed)
-                        return Style.withAlpha(segment.contentColor, Style.stateLayerPressed);
-                    if (hovered)
-                        return Style.withAlpha(segment.contentColor, Style.stateLayerHover);
-                    return "transparent";
-                }
-
-                Behavior on color {
-                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                    DankColorAnim {
-                        duration: Style.expressiveDurations.expressiveEffects
-                        easing.bezierCurve: Style.expressiveCurves.expressiveEffects
-                    }
-                }
-            }
-
-            Base.DankRipple {
-                id: segmentRipple
+                enabled: root.enabled
+                disabled: !root.enabled
+                stateColor: segment.contentColor
                 cornerRadius: root.outerRadius
-                rippleColor: segment.contentColor
+                topLeftRadius: segment.topLeftRadius
+                bottomLeftRadius: segment.bottomLeftRadius
+                topRightRadius: segment.topRightRadius
+                bottomRightRadius: segment.bottomRightRadius
+                transitionDuration: Style.expressiveDurations.expressiveEffects
+                transitionCurve: Style.expressiveCurves.expressiveEffects
+                onClicked: root.selectItem(index)
             }
 
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: -Style.focusRingOffset
+            Base.FocusRing {
                 radius: root.outerRadius + Style.focusRingOffset
-                color: "transparent"
-                border.width: Style.focusRingWidth
-                border.color: Style.focusRingColor
                 visible: root.activeFocus && index === root.focusIndex
             }
 
@@ -330,16 +310,6 @@ Row {
                         maximumLineCount: 1
                     }
                 }
-            }
-
-            MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-                enabled: root.enabled
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onPressed: mouse => segmentRipple.trigger(mouse.x, mouse.y)
-                onClicked: root.selectItem(index)
             }
         }
     }

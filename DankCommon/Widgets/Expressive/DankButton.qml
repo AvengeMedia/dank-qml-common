@@ -10,8 +10,8 @@ Rectangle {
     property bool wrapText: false
     property string iconName: ""
     property int iconSize: Style.iconSizeMedium
-    property bool hovered: mouseArea.containsMouse
-    property bool pressed: mouseArea.pressed
+    property bool hovered: stateLayer.containsMouse
+    property bool pressed: stateLayer.pressed
     property color backgroundColor: Style.buttonBg
     property color textColor: Style.buttonText
     property int buttonHeight: Style.buttonHeightS
@@ -72,32 +72,15 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    Base.StateLayer {
         id: stateLayer
-        anchors.fill: parent
-        radius: parent.radius
-        color: {
-            if (pressed)
-                return Style.withAlpha(root.textColor, Style.stateLayerPressed);
-            if (hovered)
-                return Style.withAlpha(root.textColor, Style.stateLayerHover);
-            return Style.withAlpha(root.textColor, 0);
-        }
-
-        Behavior on color {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-            DankColorAnim {
-                duration: Style.expressiveDurations.expressiveEffects
-                easing.bezierCurve: Style.expressiveCurves.expressiveEffects
-            }
-        }
-    }
-
-    Base.DankRipple {
-        id: rippleLayer
-        rippleColor: root.textColor
-        cornerRadius: root.radius
+        enabled: root.enabled
+        disabled: !root.enabled
+        stateColor: root.textColor
         enableRipple: root.enableRipple
+        transitionDuration: Style.expressiveDurations.expressiveEffects
+        transitionCurve: Style.expressiveCurves.expressiveEffects
+        onClicked: root.clicked()
     }
 
     Row {
@@ -123,18 +106,5 @@ Rectangle {
             color: root.contentColor
             anchors.verticalCenter: parent.verticalCenter
         }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-        enabled: root.enabled
-        onPressed: mouse => {
-            if (root.enableRipple)
-                rippleLayer.trigger(mouse.x, mouse.y);
-        }
-        onClicked: root.clicked()
     }
 }

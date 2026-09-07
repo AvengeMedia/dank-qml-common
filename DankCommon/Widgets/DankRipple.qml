@@ -13,97 +13,112 @@ Item {
     property bool enableRipple: Style.enableRippleEffects
     property int animationDuration: Style.expressiveDurations.expressiveDefaultSpatial
 
-    property real _rippleX: 0
-    property real _rippleY: 0
-    property real _rippleMaxRadius: 0
-    readonly property alias animating: rippleAnim.running
+    property Item fxItem: null
+    readonly property bool animating: fxItem?.animating ?? false
 
     anchors.fill: parent
 
     function trigger(x, y) {
         if (!enableRipple || Style.currentAnimationSpeed === Style.AnimationSpeed.None)
             return;
-
-        _rippleX = x;
-        _rippleY = y;
-
-        const dist = (ox, oy) => ox * ox + oy * oy;
-        _rippleMaxRadius = Math.sqrt(Math.max(dist(x, y), dist(x, height - y), dist(width - x, y), dist(width - x, height - y)));
-
-        rippleAnim.restart();
+        if (!fxItem)
+            fxItem = fxComponent.createObject(root);
+        fxItem.trigger(x, y);
     }
 
-    SequentialAnimation {
-        id: rippleAnim
+    Component {
+        id: fxComponent
 
-        PropertyAction {
-            target: rippleFx
-            property: "rippleCenterX"
-            value: root._rippleX
-        }
-        PropertyAction {
-            target: rippleFx
-            property: "rippleCenterY"
-            value: root._rippleY
-        }
-        PropertyAction {
-            target: rippleFx
-            property: "rippleRadius"
-            value: 0
-        }
-        PropertyAction {
-            target: rippleFx
-            property: "rippleOpacity"
-            value: 0.10
-        }
+        Item {
+            id: fx
+            anchors.fill: parent
 
-        ParallelAnimation {
-            DankAnim {
-                target: rippleFx
-                property: "rippleRadius"
-                from: 0
-                to: root._rippleMaxRadius
-                duration: root.animationDuration
-                easing.bezierCurve: Style.expressiveCurves.standardDecel
+            property real rippleX: 0
+            property real rippleY: 0
+            property real rippleMaxRadius: 0
+            readonly property alias animating: rippleAnim.running
+
+            function trigger(x, y) {
+                rippleX = x;
+                rippleY = y;
+                const dist = (ox, oy) => ox * ox + oy * oy;
+                rippleMaxRadius = Math.sqrt(Math.max(dist(x, y), dist(x, height - y), dist(width - x, y), dist(width - x, height - y)));
+                rippleAnim.restart();
             }
+
             SequentialAnimation {
-                PauseAnimation {
-                    duration: Math.round(root.animationDuration * 0.6)
+                id: rippleAnim
+
+                PropertyAction {
+                    target: rippleFx
+                    property: "rippleCenterX"
+                    value: fx.rippleX
                 }
-                DankAnim {
+                PropertyAction {
+                    target: rippleFx
+                    property: "rippleCenterY"
+                    value: fx.rippleY
+                }
+                PropertyAction {
+                    target: rippleFx
+                    property: "rippleRadius"
+                    value: 0
+                }
+                PropertyAction {
                     target: rippleFx
                     property: "rippleOpacity"
-                    to: 0
-                    duration: root.animationDuration
-                    easing.bezierCurve: Style.expressiveCurves.standard
+                    value: 0.10
+                }
+
+                ParallelAnimation {
+                    DankAnim {
+                        target: rippleFx
+                        property: "rippleRadius"
+                        from: 0
+                        to: fx.rippleMaxRadius
+                        duration: root.animationDuration
+                        easing.bezierCurve: Style.expressiveCurves.standardDecel
+                    }
+                    SequentialAnimation {
+                        PauseAnimation {
+                            duration: Math.round(root.animationDuration * 0.6)
+                        }
+                        DankAnim {
+                            target: rippleFx
+                            property: "rippleOpacity"
+                            to: 0
+                            duration: root.animationDuration
+                            easing.bezierCurve: Style.expressiveCurves.standard
+                        }
+                    }
                 }
             }
+
+            ShaderEffect {
+                id: rippleFx
+                visible: rippleAnim.running
+
+                property real rippleCenterX: 0
+                property real rippleCenterY: 0
+                property real rippleRadius: 0
+                property real rippleOpacity: 0
+
+                x: Math.max(0, rippleCenterX - rippleRadius)
+                y: Math.max(0, rippleCenterY - rippleRadius)
+                width: Math.max(0, Math.min(fx.width, rippleCenterX + rippleRadius) - x)
+                height: Math.max(0, Math.min(fx.height, rippleCenterY + rippleRadius) - y)
+
+                property real widthPx: width
+                property real heightPx: height
+                property vector4d cornerRadiiPx: Qt.vector4d(root.topLeftRadius, root.topRightRadius, root.bottomRightRadius, root.bottomLeftRadius)
+                property real offsetX: x
+                property real offsetY: y
+                property real parentWidth: fx.width
+                property real parentHeight: fx.height
+                property vector4d rippleCol: Qt.vector4d(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, root.rippleColor.a)
+
+                fragmentShader: Qt.resolvedUrl("../Shaders/qsb/ripple.frag.qsb")
+            }
         }
-    }
-
-    ShaderEffect {
-        id: rippleFx
-        visible: rippleAnim.running
-
-        property real rippleCenterX: 0
-        property real rippleCenterY: 0
-        property real rippleRadius: 0
-        property real rippleOpacity: 0
-
-        x: Math.max(0, rippleCenterX - rippleRadius)
-        y: Math.max(0, rippleCenterY - rippleRadius)
-        width: Math.max(0, Math.min(root.width, rippleCenterX + rippleRadius) - x)
-        height: Math.max(0, Math.min(root.height, rippleCenterY + rippleRadius) - y)
-
-        property real widthPx: width
-        property real heightPx: height
-        property vector4d cornerRadiiPx: Qt.vector4d(root.topLeftRadius, root.topRightRadius, root.bottomRightRadius, root.bottomLeftRadius)
-        property real offsetX: x
-        property real offsetY: y
-        property real parentWidth: root.width
-        property real parentHeight: root.height
-        property vector4d rippleCol: Qt.vector4d(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, root.rippleColor.a)
-
-        fragmentShader: Qt.resolvedUrl("../Shaders/qsb/ripple.frag.qsb")
     }
 }

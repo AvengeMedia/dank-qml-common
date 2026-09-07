@@ -14,6 +14,8 @@ MouseArea {
     property var tooltipText: null
     property string tooltipSide: "bottom"
     property bool enableRipple: Style.enableRippleEffects
+    property int transitionDuration: Style.shorterDuration
+    property var transitionCurve: Style.expressiveCurves.standardDecel
 
     readonly property real stateOpacity: disabled ? 0 : pressed ? Style.stateLayerPressed : containsMouse ? Style.stateLayerHover : 0
 
@@ -40,8 +42,8 @@ MouseArea {
         Behavior on color {
             enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankColorAnim {
-                duration: Style.shorterDuration
-                easing.bezierCurve: Style.expressiveCurves.standardDecel
+                duration: root.transitionDuration
+                easing.bezierCurve: root.transitionCurve
             }
         }
     }

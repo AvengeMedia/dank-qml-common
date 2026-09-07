@@ -103,50 +103,24 @@ FocusScope {
                     }
                 }
 
-                Rectangle {
-                    id: stateLayer
-                    anchors.fill: parent
-                    color: Style.primary
-                    opacity: tabArea.pressed ? Style.stateLayerPressed : (tabArea.containsMouse ? Style.stateLayerHover : 0)
-                    visible: opacity > 0
-                    radius: Style.cornerRadiusM
-                    Behavior on opacity {
-                        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                        DankAnim {
-                            duration: Style.expressiveDurations.expressiveEffects
-                            easing.bezierCurve: Style.expressiveCurves.expressiveEffects
-                        }
-                    }
-                }
-
-                Base.DankRipple {
-                    id: tabRipple
+                Base.StateLayer {
+                    disabled: !tabBar.enabled
+                    stateColor: Style.primary
                     cornerRadius: Style.cornerRadiusM
-                }
-
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.margins: -Style.focusRingOffset
-                    radius: Style.cornerRadiusM + Style.focusRingOffset
-                    color: "transparent"
-                    border.width: Style.focusRingWidth
-                    border.color: Style.focusRingColor
-                    visible: tabBar.activeFocus && tabItem.isActive
-                }
-
-                MouseArea {
-                    id: tabArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onPressed: mouse => tabRipple.trigger(mouse.x, mouse.y)
+                    transitionDuration: Style.expressiveDurations.expressiveEffects
+                    transitionCurve: Style.expressiveCurves.expressiveEffects
                     onClicked: {
                         if (tabItem.isAction) {
                             tabBar.actionTriggered(index);
-                        } else {
-                            tabBar.tabClicked(index);
+                            return;
                         }
+                        tabBar.tabClicked(index);
                     }
+                }
+
+                Base.FocusRing {
+                    radius: Style.cornerRadiusM + Style.focusRingOffset
+                    visible: tabBar.activeFocus && tabItem.isActive
                 }
             }
         }

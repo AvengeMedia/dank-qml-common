@@ -23,6 +23,7 @@ Item {
     signal toggleCompleted(bool checked)
 
     readonly property bool showText: text && !hideText
+    readonly property bool rowPressed: rowLoader.item?.pressed ?? false
     property bool _ready: false
     property bool _settling: false
     property bool _keyboardPressed: false
@@ -90,20 +91,23 @@ Item {
         toggled(!checked);
     }
 
-    Base.StyledRect {
-        id: background
+    Loader {
+        id: rowLoader
         anchors.fill: parent
-        radius: showText ? Style.cornerRadiusM : 0
-        color: "transparent"
-        visible: showText
+        active: toggle.showText
+        sourceComponent: Base.StyledRect {
+            readonly property bool pressed: rowStateLayer.pressed
 
-        Base.StateLayer {
-            id: rowStateLayer
-            visible: showText
-            disabled: !toggle.enabled || toggle.toggling
-            stateColor: Style.primary
-            cornerRadius: parent.radius
-            onClicked: toggle.handleClick()
+            radius: Style.cornerRadiusM
+            color: "transparent"
+
+            Base.StateLayer {
+                id: rowStateLayer
+                disabled: !toggle.enabled || toggle.toggling
+                stateColor: Style.primary
+                cornerRadius: parent.radius
+                onClicked: toggle.handleClick()
+            }
         }
     }
 
@@ -147,7 +151,7 @@ Item {
     Base.StyledRect {
         id: toggleTrack
 
-        readonly property bool pressed: (trackStateLayer.pressed || rowStateLayer.pressed || toggle._keyboardPressed) && toggle.enabled && !toggle.toggling
+        readonly property bool pressed: (trackStateLayer.pressed || toggle.rowPressed || toggle._keyboardPressed) && toggle.enabled && !toggle.toggling
         readonly property real thumbSize: pressed ? Style.switchThumbPressed : (toggle.checked || toggle.thumbIcon ? Style.switchThumbSelected : Style.switchThumbUnselected)
         readonly property real edgeLeft: (trackHeight - Style.switchThumbSelected) / 2
         readonly property real edgeRight: width - Style.switchThumbSelected - edgeLeft
@@ -198,8 +202,6 @@ Item {
             enabled: !Style.springMotionDisabled
             stiffness: Style.springPreset("fast", Style.expressiveDurations.expressiveFastSpatial).stiffness
             damping: Style.springPreset("fast", Style.expressiveDurations.expressiveFastSpatial).damping
-            value: toggleTrack.thumbTarget
-            target: toggleTrack.thumbTarget
             onRunningChanged: {
                 if (running || !toggle._settling)
                     return;
@@ -223,8 +225,6 @@ Item {
             enabled: !Style.springMotionDisabled
             stiffness: thumbSpring.stiffness
             damping: thumbSpring.damping
-            value: toggleTrack.thumbSize
-            target: toggleTrack.thumbSize
         }
 
         Rectangle {

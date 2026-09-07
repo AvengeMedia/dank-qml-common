@@ -58,53 +58,46 @@ MouseArea {
         enableRipple: root.enableRipple
     }
 
-    Timer {
-        id: hoverDelay
-        interval: 400
-        repeat: false
-        onTriggered: {
-            tooltip.show(root.tooltipText, root, 0, 0, root.tooltipSide);
-        }
-    }
-
-    onEntered: {
-        if (!tooltipText)
-            return;
-        hoverDelay.restart();
-    }
-
-    onExited: {
-        hoverDelay.stop();
-        tooltip.hide();
-    }
+    onEntered: tooltipLoader.item?.schedule()
+    onExited: tooltipLoader.item?.dismiss()
 
     onVisibleChanged: {
-        if (visible)
-            return;
-        hoverDelay.stop();
-        tooltip.hide();
+        if (!visible)
+            tooltipLoader.item?.dismiss();
     }
 
     onTooltipTextChanged: {
-        if (tooltipText)
-            return;
-        hoverDelay.stop();
-        tooltip.hide();
+        if (!tooltipText)
+            tooltipLoader.item?.dismiss();
     }
 
     onDisabledChanged: {
-        if (!disabled)
-            return;
-        hoverDelay.stop();
-        tooltip.hide();
+        if (disabled)
+            tooltipLoader.item?.dismiss();
     }
 
-    Component.onDestruction: {
-        hoverDelay.stop();
-        tooltip.hide();
-    }
+    Component.onDestruction: tooltipLoader.item?.dismiss()
 
-    DankTooltipV2 {
-        id: tooltip
+    Loader {
+        id: tooltipLoader
+        active: !!root.tooltipText
+        sourceComponent: DankTooltipV2 {
+            id: tooltip
+
+            function schedule() {
+                hoverDelay.restart();
+            }
+
+            function dismiss() {
+                hoverDelay.stop();
+                hide();
+            }
+
+            Timer {
+                id: hoverDelay
+                interval: 400
+                onTriggered: tooltip.show(root.tooltipText, root, 0, 0, root.tooltipSide)
+            }
+        }
     }
 }

@@ -428,7 +428,7 @@ Item {
             }
         }
 
-        BackgroundEffect.blurRegion: (visible && !closing && root.menuBlurEnabled && !!(Style.theme?.blurLayersActive ?? true)) ? menuBlurRegion : null
+        BackgroundEffect.blurRegion: (visible && !closing && root.menuBlurEnabled && Style.blurLayersActive) ? menuBlurRegion : null
 
         Region {
             id: menuBlurRegion

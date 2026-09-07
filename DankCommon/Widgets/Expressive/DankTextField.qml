@@ -227,22 +227,28 @@ Base.StyledRect {
         spacing: Style.spacingXS
         visible: showPasswordToggle || (showClearButton && text.length > 0)
 
-        DankActionButton {
-            buttonSize: root.accessorySize
-            iconName: passwordVisible ? "visibility_off" : "visibility"
-            iconSize: Style.iconSizeSmall
-            iconColor: Style.onSurfaceVariant
-            visible: showPasswordToggle
-            onClicked: passwordVisible = !passwordVisible
+        Loader {
+            active: root.showPasswordToggle
+            visible: active
+            sourceComponent: DankActionButton {
+                buttonSize: root.accessorySize
+                iconName: root.passwordVisible ? "visibility_off" : "visibility"
+                iconSize: Style.iconSizeSmall
+                iconColor: Style.onSurfaceVariant
+                onClicked: root.passwordVisible = !root.passwordVisible
+            }
         }
 
-        DankActionButton {
-            buttonSize: root.accessorySize
-            iconName: "close"
-            iconSize: Style.iconSizeSmall
-            iconColor: Style.onSurfaceVariant
-            visible: showClearButton && text.length > 0
-            onClicked: textInput.text = ""
+        Loader {
+            active: root.showClearButton
+            visible: active && root.text.length > 0
+            sourceComponent: DankActionButton {
+                buttonSize: root.accessorySize
+                iconName: "close"
+                iconSize: Style.iconSizeSmall
+                iconColor: Style.onSurfaceVariant
+                onClicked: textInput.text = ""
+            }
         }
     }
 

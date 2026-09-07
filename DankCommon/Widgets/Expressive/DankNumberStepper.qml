@@ -42,16 +42,12 @@ Column {
         tooltipText: root.incrementTooltipText
     }
 
-    Row {
+    Base.StyledText {
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: Style.spacingXS
-
-        Base.StyledText {
-            isMonospace: true
-            text: root.text
-            font.pixelSize: root.textSize
-            color: root.textColor
-        }
+        isMonospace: true
+        text: root.text
+        font.pixelSize: root.textSize
+        color: root.textColor
     }
 
     DankActionButton {

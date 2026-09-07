@@ -48,8 +48,9 @@ Rectangle {
     readonly property color chipColor: tinted ? Style.withAlpha(contentColor, Style.stateLayerFocus) : Style.withAlpha(Style.surfaceContainerHighest, Style.popupTransparency)
     readonly property color surfaceColor: Style.withAlpha(containerColor, Style.popupTransparency)
     property bool showFocusRing: true
+    property bool clipContent: false
     property real restRadius: Style.cornerRadiusXL
-    property real bodyRadius: layer.pressed ? Style.cornerRadiusM : restRadius
+    property real bodyRadius: stateLayer.pressed ? Style.cornerRadiusM : restRadius
 
     radius: bodyRadius
     color: surfaceColor
@@ -72,15 +73,14 @@ Rectangle {
 
     Behavior on bodyRadius {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-        NumberAnimation {
+        DankAnim {
             duration: Style.expressiveDurations.expressiveFastSpatial
-            easing.type: Easing.BezierSpline
             easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
         }
     }
 
     Base.StateLayer {
-        id: layer
+        id: stateLayer
         visible: card.acceptsInput
         disabled: !card.acceptsInput
         stateColor: card.accentColor
@@ -106,16 +106,26 @@ Rectangle {
         visible: text !== ""
     }
 
-    ClippingRectangle {
+    Item {
+        id: contentHost
         anchors.fill: parent
-        radius: card.bodyRadius
-        color: "transparent"
         opacity: card.interactive ? 1 : 0.45
         scale: card.interactive ? 1 : 0.92
         transformOrigin: Item.Center
 
+        Loader {
+            id: clipLoader
+            anchors.fill: parent
+            active: card.clipContent
+            sourceComponent: ClippingRectangle {
+                radius: card.bodyRadius
+                color: "transparent"
+            }
+        }
+
         Item {
             id: contentItem
+            parent: clipLoader.item ?? contentHost
             anchors.fill: parent
             anchors.margins: card.pad
             anchors.topMargin: card.pad + (titleLabel.visible ? titleLabel.height + Style.spacingXS : 0)
@@ -123,18 +133,16 @@ Rectangle {
 
         Behavior on opacity {
             enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-            NumberAnimation {
+            DankAnim {
                 duration: Style.expressiveDurations.expressiveEffects
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
             }
         }
 
         Behavior on scale {
             enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-            NumberAnimation {
+            DankAnim {
                 duration: Style.expressiveDurations.expressiveFastSpatial
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
             }
         }

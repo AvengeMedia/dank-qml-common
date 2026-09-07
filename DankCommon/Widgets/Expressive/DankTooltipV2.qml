@@ -126,23 +126,21 @@ Item {
         }
 
         enter: Transition {
-            NumberAnimation {
+            DankAnim {
                 property: "opacity"
                 from: 0
                 to: 1
                 duration: Style.expressiveDurations.expressiveEffects
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
             }
         }
 
         exit: Transition {
-            NumberAnimation {
+            DankAnim {
                 property: "opacity"
                 from: 1
                 to: 0
                 duration: Style.shorterDuration
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
             }
         }

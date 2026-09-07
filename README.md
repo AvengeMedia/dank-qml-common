@@ -11,7 +11,9 @@ import qs.DankCommon.Modals.FileBrowser
 import qs.DankCommon.Session
 ```
 
-`DankCommon/Session/` holds the components shared between the DMS lock screen and [dms-greeter](https://github.com/AvengeMedia/dank-greeter): the power menu (`LockPowerMenu`) and the on-screen keyboard (`Keyboard`, `KeyboardController`, `CustomButtonKeyboard`). `DankCommon/Common/LayoutCodes.js` (keyboard layout name → short code) is imported by relative path.
+`DankCommon/Session/` holds the components shared between the DMS lock screen and [dms-greeter](https://github.com/AvengeMedia/dank-greeter): the power menu (`LockPowerMenu`) and the on-screen keyboard (`Keyboard`, `KeyboardController`, `CustomButtonKeyboard`). `LockMetrics`, `LockActionButton`, and `LockNotificationCard` provide reusable lock-screen geometry and surfaces. `PowerMenuView` supplies the shared grid/list controls for the shell and lock power menus. `KeyboardController.expressive` and `LockPowerMenu.expressive` opt into Expressive styling; both default to `false`.
+
+`DankCommon/Common/LayoutCodes.js` (keyboard layout name → short code) is imported by relative path.
 
 ## Consuming from an app
 
@@ -48,7 +50,7 @@ Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHo
  M3 Expressive widgets (`qs.DankCommon.Widgets.Expressive`) additionally read `tertiary`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainerHighest`, `surfaceBright`, `surfaceDim`, `outlineVariant`, `secondaryContainer`, `tertiaryContainer`, `onSurfaceVariant`, `onSurfaceVariant_30`, `onPrimaryContainer`, `onSecondaryContainer`, `onTertiaryContainer`, `inverseSurface`, `inverseOnSurface`, `tonalTintAlpha`.
 
 Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
- Expressive: `fontSizeXXLarge`, the shape scale `shapeScale`, `cornerRadiusXS`..`cornerRadiusXXL`, `cornerRadiusFull` (`cornerRadiusSmall`/`cornerRadiusLarge` alias S/L), `groupedListGap`, `groupedListInnerRadius`, `groupedListOuterRadius`, `iconButtonSize`, `listItemHeight`, `listItemTwoLineHeight`, `avatarSize`, `sliderTrackHeight`, `sliderHandleWidth`, `sliderHandleHeight`, `sliderHandleGap`, `sliderTrackHeightS/M/L/XL`, `sliderHandleHeightS/M/L/XL`, `switchTrackWidth`, `switchTrackHeight`, `switchOutlineWidth`, `switchThumbUnselected`, `switchThumbSelected`, `switchThumbPressed`, `sliderStopSize`, `sliderTickSize`, `menuItemHeight`, `iconSizeMedium`, `outlineWidth`, `outlineWidthFocused`, `dividerWidth`, `focusRingWidth`, `focusRingOffset`, `focusRingColor`, `scrimAlpha`, `smallBreakpoint`, `mediumBreakpoint`, `fontSizeDisplay`, `buttonHeightXS/S/M`, `buttonMinWidth`, `pressScale`, `iconEnterScale`, `popupEnterScale`, `pendingOpacity`, `spinnerStrokeWidth`, `tabMinWidth`, `tabIndicatorHeight`, `fieldDefaultWidth`, `fieldHeight`, `fieldHeightLarge`, `textEditHeight`, `tooltipMaxWidth`, `menuMaxHeight`, `clockFaceSize`, `clockOuterRingRatio`, `clockInnerRingRatio`, `clockHandWidth`, `clockHandleSize`, `clockCenterSize`, `clockSwitchDelay`, `chipIconSize`, `buttonGroupExpandRatio`.
+ Expressive: `fontSizeXXLarge`, the shape scale `shapeScale`, `cornerRadiusXS`..`cornerRadiusXXL`, `cornerRadiusFull` (zero when `cornerRadius` is zero; `cornerRadiusSmall`/`cornerRadiusLarge` alias S/L), `groupedListGap`, `groupedListInnerRadius`, `groupedListOuterRadius`, `iconButtonSize`, `listItemHeight`, `listItemTwoLineHeight`, `avatarSize`, `sliderTrackHeight`, `sliderHandleWidth`, `sliderHandleHeight`, `sliderHandleGap`, `sliderTrackHeightS/M/L/XL`, `sliderHandleHeightS/M/L/XL`, `switchTrackWidth`, `switchTrackHeight`, `switchOutlineWidth`, `switchThumbUnselected`, `switchThumbSelected`, `switchThumbPressed`, `sliderStopSize`, `sliderTickSize`, `menuItemHeight`, `iconSizeMedium`, `outlineWidth`, `outlineWidthFocused`, `dividerWidth`, `focusRingWidth`, `focusRingOffset`, `focusRingColor`, `scrimAlpha`, `smallBreakpoint`, `mediumBreakpoint`, `fontSizeDisplay`, `fontSizeDisplayLarge`, `buttonHeightXS/S/M`, `buttonMinWidth`, `pressScale`, `iconEnterScale`, `popupEnterScale`, `pendingOpacity`, `spinnerStrokeWidth`, `tabMinWidth`, `tabIndicatorHeight`, `tabIndicatorMinWidth`, `tabIndicatorInset`, `fieldDefaultWidth`, `fieldHeight`, `fieldHeightLarge`, `textEditHeight`, `tooltipMaxWidth`, `menuMaxHeight`, `clockFaceSize`, `clockOuterRingRatio`, `clockInnerRingRatio`, `clockHandWidth`, `clockHandleSize`, `clockCenterSize`, `clockSwitchDelay`, `chipIconSize`, `buttonGroupExpandRatio`.
 
 `DankLayer` groups content for opacity effects and sizes its texture in physical pixels using the window's device pixel ratio.
 
@@ -67,6 +69,8 @@ Optional (used by `ElevationShadow` when present, static fallbacks otherwise): `
 
 Enums `AnimationSpeed`, `TextRenderType`, `TextRenderQuality`; properties `animationSpeed`, `enableRippleEffects`, `popoutElevationEnabled`, `textRenderType`, `textRenderQuality`.
  Expressive motion: `reduceMotion`, `springBounce`. Blur border (FileBrowser): `blurBorderEnabled`, `blurBorderOpacity`, `blurBorderColor`, `blurBorderCustomColor`.
+
+Lock surfaces: `lockScreenContentColor`, `lockScreenScrimAlpha`, `lockScreenBlur`, `lockScreenBlurMax`, `screenOffColor`.
 
 Power menu (Session components): `powerActionConfirm`, `powerActionHoldDuration`, `powerMenuActions`, `powerMenuDefaultAction`, `powerMenuGridLayout`.
 

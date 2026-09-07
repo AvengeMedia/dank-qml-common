@@ -158,7 +158,7 @@ Rectangle {
             Rectangle {
                 width: 24
                 height: 24
-                radius: 12
+                radius: Style.cornerRadiusM
                 color: closeMouseArea.containsMouse ? Style.errorHover : Style.withAlpha(Style.errorHover, 0)
                 anchors.top: parent.top
                 anchors.right: parent.right

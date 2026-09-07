@@ -40,7 +40,7 @@ Row {
             return -1;
         return (maximumWidth - spacing * (count - 1)) / count - Style.spacingXS;
     }
-    readonly property real outerRadius: buttonHeight / 2
+    readonly property real outerRadius: Math.min(Style.cornerRadiusFull, buttonHeight / 2)
     readonly property real innerRadius: Math.min(Style.cornerRadiusS, outerRadius)
     readonly property real pressedInnerRadius: Math.min(Style.cornerRadiusXS, outerRadius)
 
@@ -250,7 +250,7 @@ Row {
             }
 
             Base.FocusRing {
-                radius: root.outerRadius + Style.focusRingOffset
+                radius: Math.min(Style.cornerRadiusFull, root.outerRadius + Style.focusRingOffset)
                 visible: root.activeFocus && index === root.focusIndex
             }
 

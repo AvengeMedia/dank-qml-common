@@ -162,7 +162,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: showText ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: height / 2
+        radius: Math.min(Style.cornerRadiusFull, height / 2)
 
         color: {
             if (!toggle.enabled)
@@ -234,7 +234,7 @@ Item {
 
             width: sizeSpring.value
             height: width
-            radius: height / 2
+            radius: Math.min(Style.cornerRadiusFull, height / 2)
             x: I18n.isRtl ? toggleTrack.width - centerX - width / 2 : centerX - width / 2
             anchors.verticalCenter: parent.verticalCenter
 
@@ -270,7 +270,7 @@ Item {
         Rectangle {
             width: Style.iconButtonSize
             height: Style.iconButtonSize
-            radius: width / 2
+            radius: Math.min(Style.cornerRadiusFull, width / 2)
             anchors.verticalCenter: parent.verticalCenter
             x: thumb.x + thumb.width / 2 - width / 2
             color: toggle.checked ? Style.primary : Style.onSurface

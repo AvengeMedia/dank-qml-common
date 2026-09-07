@@ -364,9 +364,8 @@ FocusScope {
                             }
 
                             Base.FocusRing {
-                                anchors.margins: Style.focusRingWidth / 2
-                                topLeftRadius: Math.max(0, parent.topLeftRadius - Style.focusRingWidth / 2)
-                                topRightRadius: Math.max(0, parent.topRightRadius - Style.focusRingWidth / 2)
+                                topLeftRadius: parent.topLeftRadius + Style.focusRingWidth
+                                topRightRadius: parent.topRightRadius + Style.focusRingWidth
                                 bottomLeftRadius: 0
                                 bottomRightRadius: 0
                             }
@@ -415,11 +414,10 @@ FocusScope {
                             }
 
                             Base.FocusRing {
-                                anchors.margins: Style.focusRingWidth / 2
                                 topLeftRadius: 0
                                 topRightRadius: 0
-                                bottomLeftRadius: Math.max(0, parent.bottomLeftRadius - Style.focusRingWidth / 2)
-                                bottomRightRadius: Math.max(0, parent.bottomRightRadius - Style.focusRingWidth / 2)
+                                bottomLeftRadius: parent.bottomLeftRadius + Style.focusRingWidth
+                                bottomRightRadius: parent.bottomRightRadius + Style.focusRingWidth
                             }
                         }
                     }

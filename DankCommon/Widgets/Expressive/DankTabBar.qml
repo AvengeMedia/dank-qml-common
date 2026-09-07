@@ -22,29 +22,38 @@ FocusScope {
 
     focus: false
     activeFocusOnTab: true
-    height: tabHeight
+    implicitHeight: Math.max(tabHeight, tabRow.implicitHeight + Style.tabIndicatorHeight)
+    height: implicitHeight
 
     Keys.onPressed: event => {
+        if (!enabled)
+            return;
         event.accepted = TabNavigation.handleKeyEvent(event, tabBar, tabRepeater, I18n.isRtl);
     }
 
     Row {
         id: tabRow
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         spacing: tabBar.spacing
+        LayoutMirroring.enabled: false
+        layoutDirection: I18n.isRtl ? Qt.RightToLeft : Qt.LeftToRight
+        onLayoutDirectionChanged: indicatorUpdate.restart()
 
         Repeater {
             id: tabRepeater
 
-            onItemAdded: Qt.callLater(tabBar.updateIndicator)
-            onItemRemoved: Qt.callLater(tabBar.updateIndicator)
+            onItemAdded: indicatorUpdate.restart()
+            onItemRemoved: indicatorUpdate.restart()
 
             Item {
                 id: tabItem
                 property bool isAction: modelData && modelData.isAction === true
+                onIsActionChanged: indicatorUpdate.restart()
                 property bool isActive: !isAction && tabBar.currentIndex === index
-                property bool hasIcon: tabBar.showIcons && modelData && modelData.icon && modelData.icon.length > 0
-                property bool hasText: modelData && modelData.text && modelData.text.length > 0
+                property bool hasIcon: tabBar.showIcons && !!modelData?.icon?.length
+                property bool hasText: !!modelData?.text?.length
                 Accessible.role: isAction ? Accessible.Button : Accessible.PageTab
                 Accessible.name: modelData?.text ?? ""
                 Accessible.selected: isActive
@@ -59,12 +68,13 @@ FocusScope {
                 }
                 readonly property real contentWidth: contentCol.implicitWidth
 
-                width: tabBar.equalWidthTabs ? (tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, Style.tabMinWidth)
-                height: tabBar.tabHeight
+                width: tabBar.equalWidthTabs ? Math.max(0, tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, Style.tabMinWidth)
+                height: Math.max(tabBar.tabHeight - Style.tabIndicatorHeight, contentCol.implicitHeight + Style.spacingXS * 2)
+                anchors.verticalCenter: parent.verticalCenter
 
                 Column {
                     id: contentCol
-                    onImplicitWidthChanged: Qt.callLater(tabBar.updateIndicator)
+                    onImplicitWidthChanged: indicatorUpdate.restart()
                     anchors.centerIn: parent
                     spacing: Style.spacingXS
 
@@ -77,7 +87,7 @@ FocusScope {
                         visible: hasIcon
 
                         Behavior on color {
-                            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                             DankColorAnim {
                                 duration: Style.expressiveDurations.expressiveEffects
                                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -94,7 +104,7 @@ FocusScope {
                         visible: hasText
 
                         Behavior on color {
-                            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                             DankColorAnim {
                                 duration: Style.expressiveDurations.expressiveEffects
                                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -119,7 +129,7 @@ FocusScope {
                 }
 
                 Base.FocusRing {
-                    radius: Style.cornerRadiusM + Style.focusRingOffset
+                    radius: Math.min(Style.cornerRadiusFull, Style.cornerRadiusM + Style.focusRingOffset)
                     visible: tabBar.activeFocus && tabItem.isActive
                 }
             }
@@ -127,6 +137,13 @@ FocusScope {
     }
 
     Rectangle {
+        width: parent.width
+        height: Style.dividerWidth
+        anchors.bottom: parent.bottom
+        color: Style.outlineVariant
+    }
+
+    Item {
         id: indicator
 
         property bool animationEnabled: false
@@ -135,36 +152,41 @@ FocusScope {
         property real leftX: 0
         property real rightX: 0
 
-        y: parent.height + Style.spacingS
+        anchors.bottom: parent.bottom
         height: Style.tabIndicatorHeight
         x: leftX
         width: Math.max(0, rightX - leftX)
-        radius: height / 2
-        color: Style.primary
+        clip: true
         visible: false
 
+        Rectangle {
+            width: parent.width
+            height: parent.height * 2
+            radius: Math.min(width / 2, parent.height, parent.height * Style.shapeScale)
+            color: Style.primary
+        }
+
         Behavior on leftX {
-            enabled: indicator.animationEnabled && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: indicator.animationEnabled && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: indicator.movingRight ? Style.expressiveDurations.expressiveDefaultSpatial : Style.expressiveDurations.expressiveFastSpatial
-                easing.bezierCurve: indicator.movingRight ? Style.expressiveCurves.standard : Style.expressiveCurves.expressiveDefaultSpatial
+                easing.bezierCurve: Style.expressiveCurves.emphasized
             }
         }
 
         Behavior on rightX {
-            enabled: indicator.animationEnabled && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: indicator.animationEnabled && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: indicator.movingRight ? Style.expressiveDurations.expressiveFastSpatial : Style.expressiveDurations.expressiveDefaultSpatial
-                easing.bezierCurve: indicator.movingRight ? Style.expressiveCurves.expressiveDefaultSpatial : Style.expressiveCurves.standard
+                easing.bezierCurve: Style.expressiveCurves.emphasized
             }
         }
     }
 
-    Rectangle {
-        width: parent.width
-        height: Style.dividerWidth
-        y: parent.height + Style.spacingS + Style.tabIndicatorHeight
-        color: Style.outlineVariant
+    Timer {
+        id: indicatorUpdate
+        interval: 0
+        onTriggered: tabBar.updateIndicator()
     }
 
     function updateIndicator() {
@@ -176,13 +198,15 @@ FocusScope {
 
         const item = tabRepeater.itemAt(currentIndex);
         if (!item || item.isAction) {
+            indicator.visible = false;
+            indicator.initialSetupComplete = false;
             return;
         }
 
         tabRow.forceLayout();
         const tabPos = item.mapToItem(tabBar, 0, 0);
         const tabCenterX = tabPos.x + item.width / 2;
-        const indicatorWidth = Math.max(Style.spacingXL, Math.min(item.width, item.contentWidth + Style.spacingS * 2));
+        const indicatorWidth = Math.max(0, Math.min(item.width, Math.max(Style.tabIndicatorMinWidth, item.contentWidth - Style.tabIndicatorInset * 2)));
         const targetLeft = tabCenterX - indicatorWidth / 2;
         const targetRight = tabCenterX + indicatorWidth / 2;
 
@@ -207,10 +231,10 @@ FocusScope {
     }
 
     onCurrentIndexChanged: {
-        Qt.callLater(updateIndicator);
+        indicatorUpdate.restart();
     }
-    onWidthChanged: Qt.callLater(updateIndicator)
-    onSpacingChanged: Qt.callLater(updateIndicator)
-    onEqualWidthTabsChanged: Qt.callLater(updateIndicator)
-    Component.onCompleted: Qt.callLater(updateIndicator)
+    onWidthChanged: indicatorUpdate.restart()
+    onSpacingChanged: indicatorUpdate.restart()
+    onEqualWidthTabsChanged: indicatorUpdate.restart()
+    Component.onCompleted: indicatorUpdate.restart()
 }

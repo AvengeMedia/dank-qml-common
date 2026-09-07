@@ -4,20 +4,37 @@ import qs.DankCommon.Common
 Rectangle {
     id: root
     property Item target
-    height: 60 * 5
+    property bool expressive: false
+    property bool closing: false
+    signal closed
+    height: expressive ? LockMetrics.keyboardHeight : 60 * 5
     anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.horizontalCenter: parent.horizontalCenter
+    width: expressive ? Math.min(parent.width, LockMetrics.keyboardWidth) : parent.width
+    radius: expressive ? Style.cornerRadiusXL : 0
+    Keys.onEscapePressed: root.dismissed()
+    onOpacityChanged: {
+        if (closing && opacity === 0)
+            closed();
+    }
+    Behavior on opacity {
+        enabled: root.expressive
+        NumberAnimation {
+            duration: LockMetrics.effectsDuration
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+        }
+    }
     color: Style.surfaceContainerHigh
 
     signal dismissed
 
-    property double rowSpacing: 0.01 * width // horizontal spacing between keyboard
-    property double columnSpacing: 0.02 * height // vertical   spacing between keyboard
-    property bool shift: false //Boolean for the shift state
-    property bool symbols: false //Boolean for the symbol state
-    property double columns: 10 // Number of column
-    property double rows: 4 // Number of row
+    property double rowSpacing: expressive ? Style.spacingS : 0.01 * width
+    property double columnSpacing: expressive ? Style.spacingS : 0.02 * height
+    property bool shift: false
+    property bool symbols: false
+    property double columns: 10
+    property double rows: 4
 
     property string strShift: '\u2191'
     property string strBackspace: "Backspace"
@@ -200,7 +217,6 @@ Rectangle {
         ]
     }
 
-    //Here is the corresponding table between the ascii and the key event
     property var tableKeyEvent: {
         "_0": Qt.Key_0,
         "_1": Qt.Key_1,
@@ -247,8 +263,7 @@ Rectangle {
         "_;": Qt.Key_Semicolon,
         "_(": Qt.Key_BracketLeft,
         "_)": Qt.Key_BracketRight,
-        "_€": parseInt("20ac", 16) // I didn't find the appropriate Qt event so I used the hex format
-        ,
+        "_€": parseInt("20ac", 16),
         "_&": Qt.Key_Ampersand,
         "_@": Qt.Key_At,
         '_"': Qt.Key_QuoteDbl,
@@ -261,17 +276,44 @@ Rectangle {
         "_*": Qt.Key_Asterisk
     }
 
+    component Key: Loader {
+        id: keySlot
+        required property var modelData
+        readonly property string keyText: root.symbols ? modelData.symbol : root.shift ? modelData.text.toUpperCase() : modelData.text
+        width: modelData.width * (keyboard_container.width + (root.expressive ? root.rowSpacing : 0)) / root.columns - root.rowSpacing
+        height: (keyboard_container.height + (root.expressive ? root.columnSpacing : 0)) / root.rows - root.columnSpacing
+        sourceComponent: root.expressive ? expressiveKey : classicKey
+
+        Component {
+            id: expressiveKey
+            ExpressiveKeyboardKey {
+                text: keySlot.keyText
+                isShift: root.shift && text === root.strShift
+                onClicked: root.clicked(text)
+            }
+        }
+
+        Component {
+            id: classicKey
+            CustomButtonKeyboard {
+                text: keySlot.keyText
+                isShift: root.shift && text === root.strShift
+                onClicked: root.clicked(text)
+            }
+        }
+    }
+
     Item {
         id: keyboard_container
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: root.expressive ? Style.spacingS : 5
         anchors.right: parent.right
+        anchors.rightMargin: root.expressive ? Style.spacingS : 0
         anchors.top: parent.top
-        anchors.topMargin: 5
+        anchors.topMargin: root.expressive ? Style.spacingS : 5
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
+        anchors.bottomMargin: root.expressive ? Style.spacingS : 5
 
-        //One column which contains 5 rows
         Column {
             spacing: columnSpacing
 
@@ -280,13 +322,7 @@ Rectangle {
                 spacing: rowSpacing
                 Repeater {
                     model: modelKeyboard["row_1"]
-                    delegate: CustomButtonKeyboard {
-                        text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
-                        width: modelData.width * keyboard_container.width / columns - rowSpacing
-                        height: keyboard_container.height / rows - columnSpacing
-
-                        onClicked: root.clicked(text)
-                    }
+                    delegate: Key {}
                 }
             }
             Row {
@@ -294,13 +330,7 @@ Rectangle {
                 spacing: rowSpacing
                 Repeater {
                     model: modelKeyboard["row_2"]
-                    delegate: CustomButtonKeyboard {
-                        text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
-                        width: modelData.width * keyboard_container.width / columns - rowSpacing
-                        height: keyboard_container.height / rows - columnSpacing
-
-                        onClicked: root.clicked(text)
-                    }
+                    delegate: Key {}
                 }
             }
             Row {
@@ -308,14 +338,7 @@ Rectangle {
                 spacing: rowSpacing
                 Repeater {
                     model: modelKeyboard["row_3"]
-                    delegate: CustomButtonKeyboard {
-                        text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
-                        width: modelData.width * keyboard_container.width / columns - rowSpacing
-                        height: keyboard_container.height / rows - columnSpacing
-                        isShift: shift && text === strShift
-
-                        onClicked: root.clicked(text)
-                    }
+                    delegate: Key {}
                 }
             }
             Row {
@@ -323,13 +346,7 @@ Rectangle {
                 spacing: rowSpacing
                 Repeater {
                     model: modelKeyboard["row_4"]
-                    delegate: CustomButtonKeyboard {
-                        text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
-                        width: modelData.width * keyboard_container.width / columns - rowSpacing
-                        height: keyboard_container.height / rows - columnSpacing
-
-                        onClicked: root.clicked(text)
-                    }
+                    delegate: Key {}
                 }
             }
         }
@@ -339,31 +356,33 @@ Rectangle {
     Connections {
         target: root
         function onClicked(text) {
-            if (!keyboard_controller.target)
+            if (!root.target)
                 return;
-            if (text === strShift) {
+            switch (text) {
+            case root.strShift:
                 root.shift = !root.shift;
-            } else if (text === '123') {
+                return;
+            case '123':
                 root.symbols = true;
-            } else if (text === 'ABC') {
+                return;
+            case 'ABC':
                 root.symbols = false;
-            } else if (text === strEnter) {
-                if (keyboard_controller.target.accepted) {
-                    keyboard_controller.target.accepted();
-                }
-            } else if (text === strClose) {
+                return;
+            case root.strEnter:
+                if (root.target.accepted)
+                    root.target.accepted();
+                return;
+            case root.strClose:
                 root.dismissed();
-            } else {
-                if (text === strBackspace) {
-                    keyboard_controller.target.backspace();
-                } else {
-                    var charToInsert = root.symbols ? text : (root.shift ? text.toUpperCase() : text);
-                    keyboard_controller.target.insertText(charToInsert);
-                }
-
-                if (root.shift && text !== strShift)
-                    root.shift = false;
+                return;
+            case root.strBackspace:
+                root.target.backspace();
+                break;
+            default:
+                root.target.insertText(root.symbols ? text : root.shift ? text.toUpperCase() : text);
             }
+            if (root.shift)
+                root.shift = false;
         }
     }
 }

@@ -158,7 +158,7 @@ Singleton {
     readonly property real cornerRadiusL: theme?.cornerRadiusL ?? cornerRadius
     readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Math.round(28 * shapeScale)
     readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Math.round(48 * shapeScale)
-    readonly property real cornerRadiusFull: theme?.cornerRadiusFull ?? 9999
+    readonly property real cornerRadiusFull: shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
     readonly property real groupedListGap: theme?.groupedListGap ?? spacingXXS
@@ -212,6 +212,11 @@ Singleton {
     readonly property real focusRingWidth: theme?.focusRingWidth ?? 2
     readonly property real focusRingOffset: theme?.focusRingOffset ?? 4
     readonly property color focusRingColor: theme?.focusRingColor ?? primary
+    readonly property color lockScreenContentColor: theme?.lockScreenContentColor ?? "#ffffff"
+    readonly property real lockScreenScrimAlpha: theme?.lockScreenScrimAlpha ?? 0.4
+    readonly property real lockScreenBlur: theme?.lockScreenBlur ?? 0.8
+    readonly property int lockScreenBlurMax: theme?.lockScreenBlurMax ?? 32
+    readonly property color screenOffColor: theme?.screenOffColor ?? "#000000"
     readonly property real scrimAlpha: theme?.scrimAlpha ?? 0.55
     readonly property color scrimColor: theme?.scrimColor ?? "#000000"
     readonly property real buttonHeightXS: theme?.buttonHeightXS ?? 32
@@ -225,6 +230,8 @@ Singleton {
     readonly property real spinnerStrokeWidth: theme?.spinnerStrokeWidth ?? 2
     readonly property real tabMinWidth: theme?.tabMinWidth ?? 64
     readonly property real tabIndicatorHeight: theme?.tabIndicatorHeight ?? 3
+    readonly property real tabIndicatorMinWidth: theme?.tabIndicatorMinWidth ?? 24
+    readonly property real tabIndicatorInset: theme?.tabIndicatorInset ?? 2
     readonly property real launcherTileSize: theme?.launcherTileSize ?? 120
     readonly property real launcherImageRatio: theme?.launcherImageRatio ?? 0.75
     readonly property int launcherMaxVisibleRows: theme?.launcherMaxVisibleRows ?? 8

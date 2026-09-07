@@ -214,9 +214,9 @@ Item {
                 width: Math.max(0, endX - startX)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : height / 2
+                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : Math.min(Style.cornerRadiusFull, height / 2)
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored && !slider.centerMinimum ? height / 2 : slider.insideCorner
+                topRightRadius: slider.mirrored && !slider.centerMinimum ? Math.min(Style.cornerRadiusFull, height / 2) : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.primary : Style.onSurface_38
                 visible: width > 0
@@ -228,9 +228,9 @@ Item {
                 width: Math.max(0, sliderTrack.emptyEnd - sliderTrack.emptyStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored ? height / 2 : slider.insideCorner
+                topLeftRadius: slider.mirrored ? Math.min(Style.cornerRadiusFull, height / 2) : slider.insideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored ? slider.insideCorner : height / 2
+                topRightRadius: slider.mirrored ? slider.insideCorner : Math.min(Style.cornerRadiusFull, height / 2)
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
                 visible: width > 0
@@ -238,7 +238,7 @@ Item {
                 Base.StyledRect {
                     width: Style.sliderStopSize
                     height: Style.sliderStopSize
-                    radius: width / 2
+                    radius: Math.min(Style.cornerRadiusFull, width / 2)
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? Style.primary : Style.onSurface_38
@@ -255,7 +255,7 @@ Item {
                     readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
-                    radius: width / 2
+                    radius: Math.min(Style.cornerRadiusFull, width / 2)
                     x: tickX - width / 2
                     anchors.verticalCenter: parent.verticalCenter
                     color: onFilled ? Style.onPrimary : Style.onSurfaceVariant
@@ -268,7 +268,7 @@ Item {
 
                 width: sliderMouseArea.pressed ? Style.sliderHandleWidth / 2 : Style.sliderHandleWidth
                 height: slider.handleHeight
-                radius: width / 2
+                radius: Math.min(Style.cornerRadiusFull, width / 2)
                 x: sliderTrack.handleLeft
                 anchors.verticalCenter: parent.verticalCenter
                 color: slider.enabled ? Style.primary : Style.onSurface_38
@@ -286,7 +286,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -Style.focusRingOffset
-                    radius: parent.radius + Style.focusRingOffset
+                    radius: Math.min(Style.cornerRadiusFull, parent.radius + Style.focusRingOffset)
                     color: "transparent"
                     border.width: Style.focusRingWidth
                     border.color: Style.focusRingColor
@@ -343,7 +343,7 @@ Item {
 
                 width: tooltipText.reservedWidth + Style.spacingM * 2
                 height: tooltipText.contentHeight + Style.spacingS * 2
-                radius: height / 2
+                radius: Math.min(Style.cornerRadiusFull, height / 2)
                 color: Style.primary
                 anchors.bottom: parent.top
                 anchors.bottomMargin: -Style.spacingXS

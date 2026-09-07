@@ -13,6 +13,10 @@ Base.StyledRect {
     property int buttonSize: Style.buttonHeightXS
     property var tooltipText: null
     property string tooltipSide: "bottom"
+    property int shapeDuration: Style.expressiveDurations.expressiveEffects
+    property var shapeCurve: Style.expressiveCurves.standard
+    property int stateDuration: Style.shorterDuration
+    property var stateCurve: Style.expressiveCurves.standardDecel
     readonly property alias pressed: stateLayer.pressed
 
     signal clicked
@@ -21,7 +25,7 @@ Base.StyledRect {
 
     width: buttonSize
     height: buttonSize
-    radius: pressed ? Math.min(Style.cornerRadiusS, height / 2) : (circular ? height / 2 : Style.cornerRadiusM)
+    radius: pressed ? Math.min(Style.cornerRadiusS, height / 2) : (circular ? Math.min(Style.cornerRadiusFull, height / 2) : Style.cornerRadiusM)
     color: backgroundColor
     activeFocusOnTab: enabled
     Accessible.role: Accessible.Button
@@ -34,8 +38,8 @@ Base.StyledRect {
     Behavior on radius {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         DankAnim {
-            duration: Style.expressiveDurations.expressiveEffects
-            easing.bezierCurve: Style.expressiveCurves.standard
+            duration: root.shapeDuration
+            easing.bezierCurve: root.shapeCurve
         }
     }
 
@@ -69,6 +73,8 @@ Base.StyledRect {
         disabled: !root.enabled
         stateColor: Style.primary
         cornerRadius: root.radius
+        transitionDuration: root.stateDuration
+        transitionCurve: root.stateCurve
         onClicked: root.clicked()
         onEntered: root.entered()
         onExited: root.exited()

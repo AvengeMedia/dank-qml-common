@@ -153,7 +153,7 @@ Singleton {
     readonly property real cornerRadiusL: cornerRadius
     readonly property real cornerRadiusXL: Math.round(28 * shapeScale)
     readonly property real cornerRadiusXXL: Math.round(48 * shapeScale)
-    readonly property real cornerRadiusFull: 9999
+    readonly property real cornerRadiusFull: shapeScale > 0 ? 9999 : 0
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
     readonly property real groupedListGap: spacingXXS
@@ -190,6 +190,11 @@ Singleton {
     readonly property real focusRingWidth: 2
     readonly property real focusRingOffset: 4
     readonly property color focusRingColor: primary
+    readonly property color lockScreenContentColor: "#ffffff"
+    readonly property real lockScreenScrimAlpha: 0.4
+    readonly property real lockScreenBlur: 0.8
+    readonly property int lockScreenBlurMax: 32
+    readonly property color screenOffColor: "#000000"
     readonly property real scrimAlpha: 0.55
     readonly property color scrimColor: "#000000"
     readonly property real buttonHeightXS: 32
@@ -203,6 +208,8 @@ Singleton {
     readonly property real spinnerStrokeWidth: 2
     readonly property real tabMinWidth: 64
     readonly property real tabIndicatorHeight: 3
+    readonly property real tabIndicatorMinWidth: 24
+    readonly property real tabIndicatorInset: 2
     readonly property real launcherTileSize: 120
     readonly property real launcherImageRatio: 0.75
     readonly property int launcherMaxVisibleRows: 8

@@ -147,8 +147,9 @@ Item {
             border.color: Style.primary
 
             Base.StyledText {
-                anchors.centerIn: parent
-                anchors.verticalCenterOffset: cell.dotColors.length > 0 ? -Style.spacingXS : 0
+                anchors.top: parent.top
+                anchors.topMargin: Style.spacingXS
+                anchors.horizontalCenter: parent.horizontalCenter
                 text: cell.dayDate.getDate()
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: cell.inMonth ? Font.Bold : Font.Medium
@@ -179,7 +180,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: Style.spacingXS
                         height: Style.spacingXS
-                        radius: width / 2
+                        radius: Math.min(Style.cornerRadiusFull, width / 2)
                         color: modelData
                     }
                 }

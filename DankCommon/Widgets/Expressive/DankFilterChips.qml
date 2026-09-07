@@ -88,7 +88,7 @@ Flow {
 
             width: contentRow.implicitWidth + root.chipPadding * 2
             height: root.chipHeight
-            radius: pressed ? Style.cornerRadiusS : (selected ? height / 2 : Style.cornerRadiusM)
+            radius: pressed ? Style.cornerRadiusS : (selected ? Math.min(Style.cornerRadiusFull, height / 2) : Style.cornerRadiusM)
 
             Behavior on radius {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

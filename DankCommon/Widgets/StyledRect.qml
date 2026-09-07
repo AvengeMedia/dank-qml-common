@@ -3,7 +3,7 @@ import qs.DankCommon.Common
 
 Rectangle {
     color: "transparent"
-    radius: Appearance.rounding.normal
+    radius: Style.cornerRadiusM
 
     readonly property var standardAnimation: {
         "duration": Appearance.anim.durations.normal,

@@ -136,7 +136,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width + 20
                     height: parent.height + 20
-                    radius: width / 2
+                    radius: Math.min(Style.cornerRadiusFull, width / 2)
                     color: "transparent"
                     border.width: 2
                     border.color: Style.primary
@@ -149,7 +149,7 @@ Item {
                     anchors.centerIn: parent
                     width: 0
                     height: 0
-                    radius: width / 2
+                    radius: Math.min(Style.cornerRadiusFull, width / 2)
                     color: Style.onPrimary
                     opacity: 0
 

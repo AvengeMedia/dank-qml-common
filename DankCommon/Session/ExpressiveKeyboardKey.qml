@@ -1,0 +1,56 @@
+import QtQuick
+import qs.DankCommon.Common
+import qs.DankCommon.Widgets as Base
+import qs.DankCommon.Widgets.Expressive as Expressive
+
+Expressive.DankActionButton {
+    id: root
+
+    property string text: ""
+    property bool isShift: false
+
+    buttonSize: LockMetrics.keyboardKeySize
+    backgroundColor: isShift ? Style.primaryContainer : Style.secondaryContainer
+    iconColor: isShift ? Style.onPrimaryContainer : Style.onSecondaryContainer
+    radius: pressed ? Style.cornerRadiusS : Style.cornerRadiusM
+    shapeDuration: LockMetrics.effectsDuration
+    shapeCurve: Style.expressiveCurves.expressiveEffects
+    stateDuration: LockMetrics.effectsDuration
+    stateCurve: Style.expressiveCurves.expressiveEffects
+    iconName: {
+        switch (text) {
+        case "keyboard_hide":
+            return "keyboard_hide";
+        case "Backspace":
+            return "backspace";
+        case "Enter":
+            return "keyboard_return";
+        default:
+            return "";
+        }
+    }
+    Accessible.name: {
+        switch (text) {
+        case "keyboard_hide":
+            return I18n.tr("Hide keyboard");
+        case "Backspace":
+            return I18n.tr("Backspace");
+        case "Enter":
+            return I18n.tr("Enter");
+        case " ":
+            return I18n.tr("Space");
+        case "↑":
+            return I18n.tr("Shift");
+        default:
+            return text;
+        }
+    }
+
+    Base.StyledText {
+        anchors.centerIn: parent
+        text: root.text
+        color: root.iconColor
+        font.pixelSize: Style.fontSizeXLarge
+        visible: root.iconName === ""
+    }
+}

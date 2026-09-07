@@ -138,6 +138,7 @@ Singleton {
     property real fontSizeXLarge: 20
     property real fontSizeXXLarge: 28
     property real fontSizeDisplay: 36
+    property real fontSizeDisplayLarge: 57
 
     property real iconSizeSmall: 16
     property real iconSize: 24
@@ -145,6 +146,7 @@ Singleton {
 
     property real cornerRadius: 12
     readonly property real shapeScale: Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real cornerRadiusXXS: Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: Math.round(12 * shapeScale)

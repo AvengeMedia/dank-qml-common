@@ -6,6 +6,10 @@ Item {
 
     property color rippleColor: Style.primary
     property real cornerRadius: 0
+    property real topLeftRadius: cornerRadius
+    property real topRightRadius: cornerRadius
+    property real bottomLeftRadius: cornerRadius
+    property real bottomRightRadius: cornerRadius
     property bool enableRipple: Style.enableRippleEffects
     property int animationDuration: Style.expressiveDurations.expressiveDefaultSpatial
 
@@ -93,7 +97,7 @@ Item {
 
         property real widthPx: width
         property real heightPx: height
-        property real cornerRadiusPx: root.cornerRadius
+        property vector4d cornerRadiiPx: Qt.vector4d(root.topLeftRadius, root.topRightRadius, root.bottomRightRadius, root.bottomLeftRadius)
         property real offsetX: x
         property real offsetY: y
         property real parentWidth: root.width

@@ -151,6 +151,7 @@ Singleton {
 
     readonly property real cornerRadius: theme?.cornerRadius ?? 12
     readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Math.round(12 * shapeScale)
@@ -175,6 +176,7 @@ Singleton {
     readonly property real fontSizeXLarge: theme?.fontSizeXLarge ?? 20
     readonly property real fontSizeXXLarge: theme?.fontSizeXXLarge ?? 28
     readonly property real fontSizeDisplay: theme?.fontSizeDisplay ?? 36
+    readonly property real fontSizeDisplayLarge: theme?.fontSizeDisplayLarge ?? 57
     readonly property real iconSize: theme?.iconSize ?? 24
     readonly property real iconSizeSmall: theme?.iconSizeSmall ?? 16
     readonly property real iconSizeMedium: theme?.iconSizeMedium ?? 20

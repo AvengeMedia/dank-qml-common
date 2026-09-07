@@ -8,7 +8,6 @@ layout(std140, binding = 0) uniform buf {
     float qt_Opacity;
     float widthPx;
     float heightPx;
-    float cornerRadiusPx;
     float rippleCenterX;
     float rippleCenterY;
     float rippleRadius;
@@ -18,7 +17,14 @@ layout(std140, binding = 0) uniform buf {
     float parentWidth;
     float parentHeight;
     vec4 rippleCol;
+    vec4 cornerRadiiPx;
 } ubuf;
+
+float cornerRadius(vec2 p, vec4 radii) {
+    if (p.y < 0.0)
+        return p.x < 0.0 ? radii.x : radii.y;
+    return p.x < 0.0 ? radii.w : radii.z;
+}
 
 float sdRoundRect(vec2 p, vec2 b, float r) {
     vec2 q = abs(p) - (b - vec2(r));
@@ -42,10 +48,11 @@ void main() {
     }
 
     float rrMask = 1.0;
-    if (ubuf.cornerRadiusPx > 0.0) {
+    if (any(greaterThan(ubuf.cornerRadiiPx, vec4(0.0)))) {
         vec2 halfSize = vec2(ubuf.parentWidth, ubuf.parentHeight) * 0.5;
-        float r = clamp(ubuf.cornerRadiusPx, 0.0, min(halfSize.x, halfSize.y));
-        float rrD = sdRoundRect(px - halfSize, halfSize, r);
+        vec2 p = px - halfSize;
+        float r = clamp(cornerRadius(p, ubuf.cornerRadiiPx), 0.0, min(halfSize.x, halfSize.y));
+        float rrD = sdRoundRect(p, halfSize, r);
         float aaRR = max(fwidth(rrD), 0.001);
         rrMask = 1.0 - smoothstep(-aaRR, aaRR, rrD);
     }

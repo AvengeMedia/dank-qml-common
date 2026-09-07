@@ -86,9 +86,9 @@ Flow {
             property bool showCount: root.showCounts && count > 0
             readonly property color contentColor: selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
 
-            width: contentRow.implicitWidth + root.chipPadding * 2
+            width: selected ? contentRow.implicitWidth + root.chipPadding + root.chipPadding * 0.5 : contentRow.implicitWidth + root.chipPadding * 2
             height: root.chipHeight
-            radius: pressed ? Style.cornerRadiusS : (selected ? Math.min(Style.cornerRadiusFull, height / 2) : Style.cornerRadiusM)
+            radius: pressed ? Style.cornerRadiusS : Style.cornerRadiusM
 
             Behavior on radius {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -125,8 +125,10 @@ Flow {
 
             Row {
                 id: contentRow
-                anchors.centerIn: parent
-                spacing: Style.spacingXS
+                anchors.left: parent.left
+                anchors.leftMargin: chip.selected ? root.chipPadding * 0.5 : root.chipPadding
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Style.spacingS
 
                 Base.DankIcon {
                     name: "check"

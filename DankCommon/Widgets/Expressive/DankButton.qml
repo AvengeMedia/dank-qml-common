@@ -18,10 +18,11 @@ Rectangle {
     property int horizontalPadding: buttonHeight >= Style.buttonHeightM ? Style.spacingXL : Style.spacingL
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
+    property real minimumWidth: Style.buttonMinWidth
 
     signal clicked
 
-    width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, Style.buttonMinWidth))
+    width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
     height: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
     readonly property real pressedRadius: buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS

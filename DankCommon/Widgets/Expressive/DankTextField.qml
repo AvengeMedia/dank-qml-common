@@ -223,7 +223,7 @@ Base.StyledRect {
 
         anchors.right: parent.right
         anchors.rightMargin: Style.spacingS + root.rightAccessoryWidth
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: textInput.verticalCenter
         spacing: Style.spacingXS
         visible: showPasswordToggle || (showClearButton && text.length > 0)
 

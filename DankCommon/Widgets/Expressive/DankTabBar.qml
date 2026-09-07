@@ -165,7 +165,9 @@ FocusScope {
         height: Style.tabIndicatorHeight
         x: leftX
         width: Math.max(0, rightX - leftX)
-        radius: height / 2
+        radius: 0
+        topLeftRadius: height
+        topRightRadius: height
         color: Style.primary
         visible: false
 
@@ -173,7 +175,7 @@ FocusScope {
             enabled: indicator.animationEnabled && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: indicator.movingRight ? Style.expressiveDurations.expressiveDefaultSpatial : Style.expressiveDurations.expressiveFastSpatial
-                easing.bezierCurve: indicator.movingRight ? Style.expressiveCurves.standard : Style.expressiveCurves.expressiveDefaultSpatial
+                easing.bezierCurve: Style.expressiveCurves.emphasized
             }
         }
 
@@ -181,7 +183,7 @@ FocusScope {
             enabled: indicator.animationEnabled && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: indicator.movingRight ? Style.expressiveDurations.expressiveFastSpatial : Style.expressiveDurations.expressiveDefaultSpatial
-                easing.bezierCurve: indicator.movingRight ? Style.expressiveCurves.expressiveDefaultSpatial : Style.expressiveCurves.standard
+                easing.bezierCurve: Style.expressiveCurves.emphasized
             }
         }
     }
@@ -208,7 +210,7 @@ FocusScope {
         tabRow.forceLayout();
         const tabPos = item.mapToItem(tabBar, 0, 0);
         const tabCenterX = tabPos.x + item.width / 2;
-        const indicatorWidth = Math.max(Style.spacingXL, Math.min(item.width, item.contentWidth + Style.spacingS * 2));
+        const indicatorWidth = Math.max(Style.spacingXL, item.contentWidth - Style.spacingXXS * 2);
         const targetLeft = tabCenterX - indicatorWidth / 2;
         const targetRight = tabCenterX + indicatorWidth / 2;
 

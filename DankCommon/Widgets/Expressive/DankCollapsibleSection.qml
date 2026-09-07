@@ -103,9 +103,28 @@ ColumnLayout {
 
         Base.StateLayer {
             anchors.fill: parent
-            cornerRadius: Style.groupedListOuterRadius
+            topLeftRadius: Style.groupedListOuterRadius
+            topRightRadius: Style.groupedListOuterRadius
+            bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
+            bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
             disabled: !root.enabled
             onClicked: root.toggle()
+
+            Behavior on bottomLeftRadius {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveFastSpatial
+                    easing.bezierCurve: Style.expressiveCurves.standard
+                }
+            }
+
+            Behavior on bottomRightRadius {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveFastSpatial
+                    easing.bezierCurve: Style.expressiveCurves.standard
+                }
+            }
         }
     }
 

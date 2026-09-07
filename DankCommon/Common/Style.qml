@@ -187,16 +187,22 @@ Singleton {
     readonly property real avatarSize: theme?.avatarSize ?? 36
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
-    readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 28
+    readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44
     readonly property real sliderHandleGap: theme?.sliderHandleGap ?? 6
-    readonly property real sliderTrackHeightS: theme?.sliderTrackHeightS ?? 20
-    readonly property real sliderHandleHeightS: theme?.sliderHandleHeightS ?? 32
-    readonly property real sliderTrackHeightM: theme?.sliderTrackHeightM ?? 32
+    readonly property real sliderTrackHeightS: theme?.sliderTrackHeightS ?? 24
+    readonly property real sliderHandleHeightS: theme?.sliderHandleHeightS ?? 44
+    readonly property real sliderTrackHeightM: theme?.sliderTrackHeightM ?? 40
     readonly property real sliderHandleHeightM: theme?.sliderHandleHeightM ?? 44
-    readonly property real sliderTrackHeightL: theme?.sliderTrackHeightL ?? 40
-    readonly property real sliderHandleHeightL: theme?.sliderHandleHeightL ?? 52
-    readonly property real sliderTrackHeightXL: theme?.sliderTrackHeightXL ?? 56
-    readonly property real sliderHandleHeightXL: theme?.sliderHandleHeightXL ?? 68
+    readonly property real sliderTrackHeightL: theme?.sliderTrackHeightL ?? 56
+    readonly property real sliderHandleHeightL: theme?.sliderHandleHeightL ?? 68
+    readonly property real sliderTrackHeightXL: theme?.sliderTrackHeightXL ?? 96
+    readonly property real sliderHandleHeightXL: theme?.sliderHandleHeightXL ?? 108
+    readonly property real sliderTrackCornerRadius: theme?.sliderTrackCornerRadius ?? 8
+    readonly property real sliderTrackCornerRadiusS: theme?.sliderTrackCornerRadiusS ?? 8
+    readonly property real sliderTrackCornerRadiusM: theme?.sliderTrackCornerRadiusM ?? 12
+    readonly property real sliderTrackCornerRadiusL: theme?.sliderTrackCornerRadiusL ?? 16
+    readonly property real sliderTrackCornerRadiusXL: theme?.sliderTrackCornerRadiusXL ?? 28
+    readonly property real sliderTrackInsideCornerRadius: theme?.sliderTrackInsideCornerRadius ?? 2
     readonly property real switchTrackWidth: theme?.switchTrackWidth ?? 52
     readonly property real switchTrackHeight: theme?.switchTrackHeight ?? 32
     readonly property real switchOutlineWidth: theme?.switchOutlineWidth ?? 2

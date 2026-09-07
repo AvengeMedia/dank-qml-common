@@ -83,7 +83,23 @@ Item {
             return Style.sliderHandleHeight;
         }
     }
-    readonly property real insideCorner: Style.cornerRadiusXXS
+    readonly property real cornerScale: Math.max(0, Style.cornerRadius / 12)
+    readonly property real trackCornerRadius: {
+        switch (size) {
+        case "s":
+            return Style.sliderTrackCornerRadiusS;
+        case "m":
+            return Style.sliderTrackCornerRadiusM;
+        case "l":
+            return Style.sliderTrackCornerRadiusL;
+        case "xl":
+            return Style.sliderTrackCornerRadiusXL;
+        default:
+            return Style.sliderTrackCornerRadius;
+        }
+    }
+    readonly property real outsideCorner: Math.min(trackHeight / 2, trackCornerRadius * cornerScale)
+    readonly property real insideCorner: Math.min(trackHeight / 2, Style.sliderTrackInsideCornerRadius * cornerScale)
     readonly property real visualRatio: mirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)
@@ -216,9 +232,9 @@ Item {
                 width: Math.max(0, endX - startX)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : Math.min(Style.cornerRadiusFull, height / 2)
+                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : slider.outsideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored && !slider.centerMinimum ? Math.min(Style.cornerRadiusFull, height / 2) : slider.insideCorner
+                topRightRadius: slider.mirrored && !slider.centerMinimum ? slider.outsideCorner : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 visible: width > 0
@@ -230,9 +246,9 @@ Item {
                 width: Math.max(0, sliderTrack.emptyEnd - sliderTrack.emptyStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored ? Math.min(Style.cornerRadiusFull, height / 2) : slider.insideCorner
+                topLeftRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored ? slider.insideCorner : Math.min(Style.cornerRadiusFull, height / 2)
+                topRightRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
                 visible: width > 0
@@ -240,7 +256,7 @@ Item {
                 Base.StyledRect {
                     width: Style.sliderStopSize
                     height: Style.sliderStopSize
-                    radius: Math.min(Style.cornerRadiusFull, width / 2)
+                    radius: Math.min(1, slider.cornerScale) * width / 2
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
@@ -257,7 +273,7 @@ Item {
                     readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
-                    radius: Math.min(Style.cornerRadiusFull, width / 2)
+                    radius: Math.min(1, slider.cornerScale) * width / 2
                     x: tickX - width / 2
                     anchors.verticalCenter: parent.verticalCenter
                     color: onFilled ? slider.fillTextColor : Style.onSurfaceVariant
@@ -270,7 +286,7 @@ Item {
 
                 width: sliderMouseArea.pressed ? Style.sliderHandleWidth / 2 : Style.sliderHandleWidth
                 height: slider.handleHeight
-                radius: Math.min(Style.cornerRadiusFull, width / 2)
+                radius: Math.min(1, slider.cornerScale) * width / 2
                 x: sliderTrack.handleLeft
                 anchors.verticalCenter: parent.verticalCenter
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
@@ -288,7 +304,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -Style.focusRingOffset
-                    radius: Math.min(Style.cornerRadiusFull, parent.radius + Style.focusRingOffset)
+                    radius: parent.radius + Style.focusRingOffset * Math.min(1, slider.cornerScale)
                     color: "transparent"
                     border.width: Style.focusRingWidth
                     border.color: Style.focusRingColor
@@ -345,7 +361,7 @@ Item {
 
                 width: tooltipText.reservedWidth + Style.spacingM * 2
                 height: tooltipText.contentHeight + Style.spacingS * 2
-                radius: Math.min(Style.cornerRadiusFull, height / 2)
+                radius: Math.min(1, slider.cornerScale) * height / 2
                 color: slider.fillColor
                 anchors.bottom: parent.top
                 anchors.bottomMargin: -Style.spacingXS

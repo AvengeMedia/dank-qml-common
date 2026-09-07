@@ -24,6 +24,10 @@ Base.StyledRect {
     signal entered
     signal exited
 
+    function showTooltip() {
+        stateLayer.showTooltip();
+    }
+
     width: buttonSize
     height: buttonSize
     radius: pressed ? Math.min(Style.cornerRadiusS, height / 2) : (circular ? Math.min(Style.cornerRadiusFull, height / 2) : Style.cornerRadiusM)

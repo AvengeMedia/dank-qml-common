@@ -43,7 +43,7 @@ Rectangle {
         return Style.surfaceText;
     }
     readonly property color accentColor: tinted ? contentColor : Style.primary
-    readonly property color onAccentColor: tinted ? containerColor : Style.onPrimary
+    property color onAccentColor
     readonly property color mutedColor: tinted ? Style.withAlpha(contentColor, 0.72) : Style.onSurfaceVariant
     readonly property color chipColor: tinted ? Style.withAlpha(contentColor, Style.stateLayerFocus) : Style.withAlpha(Style.surfaceContainerHighest, Style.popupTransparency)
     readonly property color surfaceColor: Style.withAlpha(containerColor, Style.popupTransparency)
@@ -57,6 +57,12 @@ Rectangle {
     activeFocusOnTab: acceptsInput
     Accessible.role: clickable ? Accessible.Button : Accessible.Pane
     Accessible.name: title
+
+    Binding {
+        target: card
+        property: "onAccentColor"
+        value: card.tinted ? card.containerColor : Style.onPrimary
+    }
 
     Keys.onPressed: event => {
         if (!acceptsInput)
@@ -72,7 +78,7 @@ Rectangle {
     }
 
     Behavior on bodyRadius {
-        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         DankAnim {
             duration: Style.expressiveDurations.expressiveFastSpatial
             easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
@@ -132,7 +138,7 @@ Rectangle {
         }
 
         Behavior on opacity {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: Style.expressiveDurations.expressiveEffects
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -140,7 +146,7 @@ Rectangle {
         }
 
         Behavior on scale {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 duration: Style.expressiveDurations.expressiveFastSpatial
                 easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial

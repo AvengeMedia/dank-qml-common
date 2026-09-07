@@ -19,7 +19,7 @@ Item {
     anchors.fill: parent
 
     function trigger(x, y) {
-        if (!enableRipple || Style.currentAnimationSpeed === Style.AnimationSpeed.None)
+        if (!enableRipple || Style.reduceMotion || Style.currentAnimationSpeed === Style.AnimationSpeed.None)
             return;
         if (!fxItem)
             fxItem = fxComponent.createObject(root);

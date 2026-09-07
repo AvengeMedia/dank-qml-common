@@ -136,7 +136,7 @@ Item {
             radius: Math.min(cellLayer.pressed ? Style.cornerRadiusS : root.cellRadius, height / 2)
 
             Behavior on radius {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -190,7 +190,7 @@ Item {
                     text: "+" + cell.extraCount
                     font.pixelSize: Style.fontSizeSmall
                     font.weight: Font.Bold
-                    color: Style.primary
+                    color: cell.isSelected ? Style.onPrimary : Style.primary
                     visible: cell.extraCount > 0
                 }
             }
@@ -200,6 +200,7 @@ Item {
                 stateColor: cell.isSelected ? Style.onPrimary : Style.primary
                 cornerRadius: cell.radius
                 disabled: !root.interactive
+                enabled: root.interactive
                 onClicked: root.dayClicked(cell.dayDate)
             }
         }

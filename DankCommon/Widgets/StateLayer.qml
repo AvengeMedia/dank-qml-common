@@ -20,8 +20,12 @@ MouseArea {
     readonly property real stateOpacity: disabled ? 0 : pressed ? Style.stateLayerPressed : containsMouse ? Style.stateLayerHover : 0
 
     anchors.fill: parent
-    cursorShape: disabled ? undefined : Qt.PointingHandCursor
+    cursorShape: disabled ? Qt.ArrowCursor : Qt.PointingHandCursor
     hoverEnabled: true
+
+    function showTooltip() {
+        tooltipLoader.item?.showNow();
+    }
 
     onPressed: mouse => {
         if (!disabled && enableRipple) {
@@ -40,7 +44,7 @@ MouseArea {
         color: Style.withAlpha(stateColor, stateOpacity)
 
         Behavior on color {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankColorAnim {
                 duration: root.transitionDuration
                 easing.bezierCurve: root.transitionCurve
@@ -69,8 +73,11 @@ MouseArea {
     }
 
     onTooltipTextChanged: {
-        if (!tooltipText)
+        if (!tooltipText) {
             tooltipLoader.item?.dismiss();
+            return;
+        }
+        tooltipLoader.item?.refresh();
     }
 
     onDisabledChanged: {
@@ -86,6 +93,21 @@ MouseArea {
         sourceComponent: DankTooltipV2 {
             id: tooltip
 
+            property bool shown: false
+
+            function showNow() {
+                if (root.disabled || !root.visible || !root.tooltipText)
+                    return;
+                hoverDelay.stop();
+                show(root.tooltipText, root, 0, 0, root.tooltipSide);
+                shown = true;
+            }
+
+            function refresh() {
+                if (shown)
+                    showNow();
+            }
+
             function schedule() {
                 hoverDelay.restart();
             }
@@ -93,12 +115,13 @@ MouseArea {
             function dismiss() {
                 hoverDelay.stop();
                 hide();
+                shown = false;
             }
 
             Timer {
                 id: hoverDelay
                 interval: 400
-                onTriggered: tooltip.show(root.tooltipText, root, 0, 0, root.tooltipSide)
+                onTriggered: tooltip.showNow()
             }
         }
     }

@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 import "../../Common/TabNavigation.js" as TabNavigation
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
@@ -11,6 +12,7 @@ FocusScope {
     property int spacing: Style.spacingL
     property int tabHeight: Style.buttonHeightM
     property bool showIcons: true
+    property bool showDivider: true
     property bool equalWidthTabs: true
     property bool enableArrowNavigation: true
     property bool cycleOnTab: false
@@ -141,9 +143,10 @@ FocusScope {
         height: Style.dividerWidth
         anchors.bottom: parent.bottom
         color: Style.outlineVariant
+        visible: tabBar.showDivider
     }
 
-    Item {
+    Shape {
         id: indicator
 
         property bool animationEnabled: false
@@ -151,19 +154,49 @@ FocusScope {
         property bool movingRight: true
         property real leftX: 0
         property real rightX: 0
+        readonly property real cornerRadius: Math.min(width / 2, height, Style.cornerRadiusS)
 
         anchors.bottom: parent.bottom
         height: Style.tabIndicatorHeight
         x: leftX
         width: Math.max(0, rightX - leftX)
-        clip: true
         visible: false
+        preferredRendererType: Shape.CurveRenderer
 
-        Rectangle {
-            width: parent.width
-            height: parent.height * 2
-            radius: Math.min(width / 2, parent.height, parent.height * Style.shapeScale)
-            color: Style.primary
+        ShapePath {
+            strokeWidth: 0
+            fillColor: Style.primary
+            startX: 0
+            startY: indicator.height
+
+            PathLine {
+                x: 0
+                y: indicator.cornerRadius
+            }
+            PathArc {
+                x: indicator.cornerRadius
+                y: 0
+                radiusX: indicator.cornerRadius
+                radiusY: indicator.cornerRadius
+            }
+            PathLine {
+                x: indicator.width - indicator.cornerRadius
+                y: 0
+            }
+            PathArc {
+                x: indicator.width
+                y: indicator.cornerRadius
+                radiusX: indicator.cornerRadius
+                radiusY: indicator.cornerRadius
+            }
+            PathLine {
+                x: indicator.width
+                y: indicator.height
+            }
+            PathLine {
+                x: 0
+                y: indicator.height
+            }
         }
 
         Behavior on leftX {

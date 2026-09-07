@@ -1,17 +1,12 @@
 .pragma library
+.import "FocusNavigation.js" as FocusNavigation
 
 function focusItem(item) {
     if (!item)
         return false;
     if (item.focusTarget && item.focusTarget !== item)
         return focusItem(item.focusTarget);
-    Qt.callLater(() => {
-        if (typeof item.requestFocus === "function") {
-            item.requestFocus();
-            return;
-        }
-        item.forceActiveFocus();
-    });
+    Qt.callLater(() => FocusNavigation.focusItem(item, false));
     return true;
 }
 

@@ -86,7 +86,10 @@ Flow {
             property bool showCount: root.showCounts && count > 0
             readonly property color contentColor: selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
 
-            width: selected ? contentRow.implicitWidth + root.chipPadding + root.chipPadding * 0.5 : contentRow.implicitWidth + root.chipPadding * 2
+            readonly property bool hasCheck: root.showCheck && selected
+            readonly property real leadingPadding: hasCheck ? root.chipPadding * 0.5 : root.chipPadding
+
+            width: contentRow.implicitWidth + leadingPadding + root.chipPadding
             height: root.chipHeight
             radius: pressed ? Style.cornerRadiusS : Style.cornerRadiusM
 
@@ -126,7 +129,7 @@ Flow {
             Row {
                 id: contentRow
                 anchors.left: parent.left
-                anchors.leftMargin: chip.selected ? root.chipPadding * 0.5 : root.chipPadding
+                anchors.leftMargin: chip.leadingPadding
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: Style.spacingS
 
@@ -135,7 +138,7 @@ Flow {
                     size: Style.chipIconSize
                     anchors.verticalCenter: parent.verticalCenter
                     color: chip.contentColor
-                    visible: root.showCheck && chip.selected
+                    visible: chip.hasCheck
                 }
 
                 Base.StyledText {

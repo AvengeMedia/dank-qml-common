@@ -33,6 +33,8 @@ Item {
     readonly property bool containsMouse: sliderMouseArea.containsMouse
 
     property color thumbOutlineColor: Style.surfaceContainer
+    property color fillColor: Style.primary
+    property color fillTextColor: Style.onPrimary
     property color trackColor: Style.secondaryContainer
     property bool usePopupTransparency: !checkParentDisablesTransparency()
     property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
@@ -218,7 +220,7 @@ Item {
                 bottomLeftRadius: topLeftRadius
                 topRightRadius: slider.mirrored && !slider.centerMinimum ? Math.min(Style.cornerRadiusFull, height / 2) : slider.insideCorner
                 bottomRightRadius: topRightRadius
-                color: slider.enabled ? Style.primary : Style.onSurface_38
+                color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 visible: width > 0
             }
 
@@ -241,7 +243,7 @@ Item {
                     radius: Math.min(Style.cornerRadiusFull, width / 2)
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
-                    color: slider.enabled ? Style.primary : Style.onSurface_38
+                    color: slider.enabled ? slider.fillColor : Style.onSurface_38
                     visible: parent.width > Style.sliderHandleGap * 2 + width
                 }
             }
@@ -258,7 +260,7 @@ Item {
                     radius: Math.min(Style.cornerRadiusFull, width / 2)
                     x: tickX - width / 2
                     anchors.verticalCenter: parent.verticalCenter
-                    color: onFilled ? Style.onPrimary : Style.onSurfaceVariant
+                    color: onFilled ? slider.fillTextColor : Style.onSurfaceVariant
                     visible: index !== 0 && index !== slider.tickCount - 1 && Math.abs(tickX - sliderHandle.x - sliderHandle.width / 2) > Style.sliderHandleGap * 2
                 }
             }
@@ -271,7 +273,7 @@ Item {
                 radius: Math.min(Style.cornerRadiusFull, width / 2)
                 x: sliderTrack.handleLeft
                 anchors.verticalCenter: parent.verticalCenter
-                color: slider.enabled ? Style.primary : Style.onSurface_38
+                color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 border.width: 0
                 border.color: slider.thumbOutlineColor
 
@@ -344,7 +346,7 @@ Item {
                 width: tooltipText.reservedWidth + Style.spacingM * 2
                 height: tooltipText.contentHeight + Style.spacingS * 2
                 radius: Math.min(Style.cornerRadiusFull, height / 2)
-                color: Style.primary
+                color: slider.fillColor
                 anchors.bottom: parent.top
                 anchors.bottomMargin: -Style.spacingXS
                 x: Math.max(0, Math.min(parent.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
@@ -369,7 +371,7 @@ Item {
                         return widest;
                     }
                     font.pixelSize: Style.fontSizeSmall
-                    color: Style.onPrimary
+                    color: slider.fillTextColor
                     font.weight: Font.Medium
                     anchors.centerIn: parent
                     font.hintingPreference: Font.PreferFullHinting

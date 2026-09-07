@@ -5,11 +5,13 @@ StyledText {
     id: root
 
     property string reserveText: ""
-    readonly property real reservedWidth: reserveText !== "" ? Math.max(contentWidth, reserveMetrics.width) : contentWidth
+    readonly property real reservedWidth: reserveText !== "" ? Math.max(implicitWidth, reserveMetrics.width) : implicitWidth
 
     isMonospace: true
     wrapMode: Text.NoWrap
-    font.features: { "tnum": 1 }
+    font.features: {
+        "tnum": 1
+    }
 
     StyledTextMetrics {
         id: reserveMetrics

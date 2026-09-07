@@ -9,6 +9,7 @@ Base.StyledRect {
     property int iconSize: Style.iconSizeMedium
     property color iconColor: Style.onSurfaceVariant
     property color backgroundColor: "transparent"
+    property color stateColor: iconColor
     property bool circular: true
     property int buttonSize: Style.buttonHeightXS
     property var tooltipText: null
@@ -36,7 +37,7 @@ Base.StyledRect {
     }
 
     Behavior on radius {
-        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         DankAnim {
             duration: root.shapeDuration
             easing.bezierCurve: root.shapeCurve
@@ -71,7 +72,7 @@ Base.StyledRect {
     Base.StateLayer {
         id: stateLayer
         disabled: !root.enabled
-        stateColor: Style.primary
+        stateColor: root.stateColor
         cornerRadius: root.radius
         transitionDuration: root.stateDuration
         transitionCurve: root.stateCurve

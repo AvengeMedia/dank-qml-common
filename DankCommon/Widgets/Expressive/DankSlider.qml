@@ -81,7 +81,7 @@ Item {
             return Style.sliderHandleHeight;
         }
     }
-    readonly property real insideCorner: Style.cornerRadiusXS
+    readonly property real insideCorner: Style.cornerRadiusXXS
     readonly property real visualRatio: mirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)

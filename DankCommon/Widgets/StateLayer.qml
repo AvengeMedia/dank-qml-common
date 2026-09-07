@@ -7,6 +7,10 @@ MouseArea {
     property bool disabled: false
     property color stateColor: Style.surfaceText
     property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
+    property real topLeftRadius: cornerRadius
+    property real topRightRadius: cornerRadius
+    property real bottomLeftRadius: cornerRadius
+    property real bottomRightRadius: cornerRadius
     property var tooltipText: null
     property string tooltipSide: "bottom"
     property bool enableRipple: Style.enableRippleEffects
@@ -27,6 +31,10 @@ MouseArea {
         id: stateRect
         anchors.fill: parent
         radius: root.cornerRadius
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        bottomLeftRadius: root.bottomLeftRadius
+        bottomRightRadius: root.bottomRightRadius
         color: Style.withAlpha(stateColor, stateOpacity)
 
         Behavior on color {
@@ -43,6 +51,10 @@ MouseArea {
         anchors.fill: parent
         rippleColor: root.stateColor
         cornerRadius: root.cornerRadius
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        bottomLeftRadius: root.bottomLeftRadius
+        bottomRightRadius: root.bottomRightRadius
         enableRipple: root.enableRipple
     }
 

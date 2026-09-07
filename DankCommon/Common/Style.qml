@@ -151,6 +151,7 @@ Singleton {
 
     readonly property real cornerRadius: theme?.cornerRadius ?? 12
     readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Math.round(12 * shapeScale)
@@ -175,6 +176,7 @@ Singleton {
     readonly property real fontSizeXLarge: theme?.fontSizeXLarge ?? 20
     readonly property real fontSizeXXLarge: theme?.fontSizeXXLarge ?? 28
     readonly property real fontSizeDisplay: theme?.fontSizeDisplay ?? 36
+    readonly property real fontSizeDisplayLarge: theme?.fontSizeDisplayLarge ?? 57
     readonly property real iconSize: theme?.iconSize ?? 24
     readonly property real iconSizeSmall: theme?.iconSizeSmall ?? 16
     readonly property real iconSizeMedium: theme?.iconSizeMedium ?? 20
@@ -239,11 +241,11 @@ Singleton {
     readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
     readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400
-    readonly property real clockFaceSize: theme?.clockFaceSize ?? 250
-    readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 0.34
-    readonly property real clockInnerRingRatio: theme?.clockInnerRingRatio ?? 0.2
+    readonly property real clockFaceSize: theme?.clockFaceSize ?? 256
+    readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 101 / clockFaceSize
+    readonly property real clockInnerRingRatio: theme?.clockInnerRingRatio ?? 69 / clockFaceSize
     readonly property real clockHandWidth: theme?.clockHandWidth ?? 2
-    readonly property real clockHandleSize: theme?.clockHandleSize ?? 40
+    readonly property real clockHandleSize: theme?.clockHandleSize ?? 48
     readonly property real clockCenterSize: theme?.clockCenterSize ?? 8
     readonly property int clockSwitchDelay: theme?.clockSwitchDelay ?? 100
     readonly property real chipIconSize: theme?.chipIconSize ?? 18

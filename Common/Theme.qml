@@ -138,6 +138,7 @@ Singleton {
     property real fontSizeXLarge: 20
     property real fontSizeXXLarge: 28
     property real fontSizeDisplay: 36
+    property real fontSizeDisplayLarge: 57
 
     property real iconSizeSmall: 16
     property real iconSize: 24
@@ -145,6 +146,7 @@ Singleton {
 
     property real cornerRadius: 12
     readonly property real shapeScale: Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real cornerRadiusXXS: Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: Math.round(12 * shapeScale)
@@ -217,11 +219,11 @@ Singleton {
     readonly property real textEditHeight: Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: 500
     readonly property real menuMaxHeight: 400
-    readonly property real clockFaceSize: 250
-    readonly property real clockOuterRingRatio: 0.34
-    readonly property real clockInnerRingRatio: 0.2
+    readonly property real clockFaceSize: 256
+    readonly property real clockOuterRingRatio: 101 / clockFaceSize
+    readonly property real clockInnerRingRatio: 69 / clockFaceSize
     readonly property real clockHandWidth: 2
-    readonly property real clockHandleSize: 40
+    readonly property real clockHandleSize: 48
     readonly property real clockCenterSize: 8
     readonly property int clockSwitchDelay: 100
     readonly property real chipIconSize: 18

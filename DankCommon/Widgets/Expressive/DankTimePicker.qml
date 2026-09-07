@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
@@ -22,8 +23,8 @@ FocusScope {
     property bool _dragging: false
 
     readonly property bool animationsEnabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-    readonly property real digitHeight: Style.iconButtonSize + Style.spacingXL
-    readonly property real digitWidth: digitHeight + Style.spacingM
+    readonly property real digitHeight: Style.iconButtonSize * 2
+    readonly property real digitWidth: is24Hour ? digitHeight + Style.spacingL * 2 + Style.spacingXXS : digitHeight + Style.spacingL
     readonly property real outerRingRadius: faceSize * Style.clockOuterRingRatio
     readonly property real innerRingRadius: faceSize * Style.clockInnerRingRatio
     readonly property real numberSize: Style.clockHandleSize
@@ -113,10 +114,6 @@ FocusScope {
             root.accepted(root._hour, root._minute);
             root.close();
             break;
-        case Qt.Key_Tab:
-        case Qt.Key_Backtab:
-            root._minuteMode = !root._minuteMode;
-            break;
         case Qt.Key_Up:
         case Qt.Key_Right:
             root.nudge(1);
@@ -148,7 +145,11 @@ FocusScope {
     Timer {
         id: advanceTimer
         interval: Style.clockSwitchDelay
-        onTriggered: root._minuteMode = true
+        onTriggered: {
+            root._minuteMode = true;
+            if (hourDigit.activeFocus)
+                minuteDigit.forceActiveFocus();
+        }
     }
 
     Rectangle {
@@ -167,7 +168,7 @@ FocusScope {
     Rectangle {
         id: card
 
-        width: root.faceSize + Style.spacingXL * 2 + Style.spacingXL
+        width: root.faceSize + Style.spacingXL * 3
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent
         radius: Style.cornerRadiusXL
@@ -196,13 +197,14 @@ FocusScope {
             shadowEnabled: Style.elevationEnabled
         }
 
-        Column {
+        ColumnLayout {
             id: cardColumn
+
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.margins: Style.spacingXL
-            spacing: Style.spacingL
+            spacing: 0
 
             Base.StyledText {
                 text: root.title
@@ -211,18 +213,25 @@ FocusScope {
                 color: Style.onSurfaceVariant
             }
 
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: Style.spacingS
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: Style.spacingL + Style.spacingXS
+                spacing: 0
 
                 Rectangle {
                     id: hourDigit
-                    width: root.digitWidth
-                    height: root.digitHeight
+
+                    Layout.preferredWidth: root.digitWidth
+                    Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.surfaceContainerHighest : Style.primaryContainer
-                    border.width: root._minuteMode ? 0 : Style.outlineWidthFocused
-                    border.color: Style.primary
+                    activeFocusOnTab: true
+                    KeyNavigation.backtab: okButton
+                    onActiveFocusChanged: {
+                        if (!activeFocus)
+                            return;
+                        root._minuteMode = false;
+                    }
 
                     Behavior on color {
                         enabled: root.animationsEnabled
@@ -236,7 +245,8 @@ FocusScope {
                         anchors.centerIn: parent
                         text: root.pad(root.displayHour)
                         reserveText: "00"
-                        font.pixelSize: Style.fontSizeDisplay
+                        isMonospace: false
+                        font.pixelSize: Style.fontSizeDisplayLarge
                         font.weight: Font.Medium
                         color: root._minuteMode ? Style.surfaceText : Style.onPrimaryContainer
                     }
@@ -246,24 +256,33 @@ FocusScope {
                         cornerRadius: parent.radius
                         onClicked: root._minuteMode = false
                     }
+
+                    Base.FocusRing {}
                 }
 
                 Base.StyledText {
+                    Layout.preferredWidth: Style.spacingXL
+                    Layout.fillHeight: true
                     text: ":"
-                    font.pixelSize: Style.fontSizeDisplay
-                    font.weight: Font.DemiBold
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: Style.fontSizeDisplayLarge
+                    font.weight: Font.Medium
                     color: Style.surfaceText
-                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Rectangle {
                     id: minuteDigit
-                    width: root.digitWidth
-                    height: root.digitHeight
+
+                    Layout.preferredWidth: root.digitWidth
+                    Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.primaryContainer : Style.surfaceContainerHighest
-                    border.width: root._minuteMode ? Style.outlineWidthFocused : 0
-                    border.color: Style.primary
+                    activeFocusOnTab: true
+                    onActiveFocusChanged: {
+                        if (!activeFocus)
+                            return;
+                        root._minuteMode = true;
+                    }
 
                     Behavior on color {
                         enabled: root.animationsEnabled
@@ -277,7 +296,8 @@ FocusScope {
                         anchors.centerIn: parent
                         text: root.pad(root._minute)
                         reserveText: "00"
-                        font.pixelSize: Style.fontSizeDisplay
+                        isMonospace: false
+                        font.pixelSize: Style.fontSizeDisplayLarge
                         font.weight: Font.Medium
                         color: root._minuteMode ? Style.onPrimaryContainer : Style.surfaceText
                     }
@@ -287,73 +307,119 @@ FocusScope {
                         cornerRadius: parent.radius
                         onClicked: root._minuteMode = true
                     }
-                }
 
-                Item {
-                    width: Style.spacingXS
-                    height: parent.height
-                    visible: !root.is24Hour
+                    Base.FocusRing {}
                 }
 
                 Rectangle {
                     id: periodColumn
-                    width: Style.iconButtonSize + Style.spacingXS
-                    height: root.digitHeight
+
+                    readonly property real innerRadius: radius - border.width
+
+                    Layout.leftMargin: Style.spacingM
+                    Layout.preferredWidth: Style.iconButtonSize + Style.spacingM
+                    Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusS
                     color: "transparent"
                     border.width: Style.outlineWidth
-                    border.color: Style.outlineVariant
+                    border.color: Style.outline
                     visible: !root.is24Hour
-                    clip: true
 
                     Column {
                         anchors.fill: parent
+                        anchors.margins: periodColumn.border.width
 
                         Rectangle {
+                            id: amItem
+
                             width: parent.width
-                            height: parent.height / 2
-                            topLeftRadius: periodColumn.radius
-                            topRightRadius: periodColumn.radius
-                            color: root.isPm ? "transparent" : Style.primaryContainer
+                            height: Math.floor((parent.height - periodDivider.height) / 2)
+                            topLeftRadius: periodColumn.innerRadius
+                            topRightRadius: periodColumn.innerRadius
+                            color: root.isPm ? "transparent" : Style.tertiaryContainer
+                            activeFocusOnTab: true
+                            Keys.onPressed: event => {
+                                switch (event.key) {
+                                case Qt.Key_Space:
+                                case Qt.Key_Return:
+                                case Qt.Key_Enter:
+                                    root.setPeriod(false);
+                                    event.accepted = true;
+                                    break;
+                                }
+                            }
 
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("AM")
                                 font.pixelSize: Style.fontSizeSmall
                                 font.weight: Font.DemiBold
-                                color: root.isPm ? Style.onSurfaceVariant : Style.onPrimaryContainer
+                                color: root.isPm ? Style.onSurfaceVariant : Style.onTertiaryContainer
                             }
 
                             Base.StateLayer {
-                                cornerRadius: 0
+                                topLeftRadius: parent.topLeftRadius
+                                topRightRadius: parent.topRightRadius
                                 onClicked: root.setPeriod(false)
+                            }
+
+                            Base.FocusRing {
+                                anchors.margins: Style.focusRingWidth / 2
+                                topLeftRadius: Math.max(0, parent.topLeftRadius - Style.focusRingWidth / 2)
+                                topRightRadius: Math.max(0, parent.topRightRadius - Style.focusRingWidth / 2)
+                                bottomLeftRadius: 0
+                                bottomRightRadius: 0
                             }
                         }
 
                         Rectangle {
+                            id: periodDivider
+
                             width: parent.width
-                            height: Style.dividerWidth
-                            color: Style.outlineVariant
+                            height: periodColumn.border.width
+                            color: periodColumn.border.color
                         }
 
                         Rectangle {
+                            id: pmItem
+
                             width: parent.width
-                            height: parent.height / 2 - Style.dividerWidth
-                            bottomLeftRadius: periodColumn.radius
-                            bottomRightRadius: periodColumn.radius
-                            color: root.isPm ? Style.primaryContainer : "transparent"
+                            height: parent.height - amItem.height - periodDivider.height
+                            bottomLeftRadius: periodColumn.innerRadius
+                            bottomRightRadius: periodColumn.innerRadius
+                            color: root.isPm ? Style.tertiaryContainer : "transparent"
+                            activeFocusOnTab: true
+                            Keys.onPressed: event => {
+                                switch (event.key) {
+                                case Qt.Key_Space:
+                                case Qt.Key_Return:
+                                case Qt.Key_Enter:
+                                    root.setPeriod(true);
+                                    event.accepted = true;
+                                    break;
+                                }
+                            }
 
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("PM")
                                 font.pixelSize: Style.fontSizeSmall
                                 font.weight: Font.DemiBold
-                                color: root.isPm ? Style.onPrimaryContainer : Style.onSurfaceVariant
+                                color: root.isPm ? Style.onTertiaryContainer : Style.onSurfaceVariant
                             }
 
                             Base.StateLayer {
-                                cornerRadius: 0
+                                bottomLeftRadius: parent.bottomLeftRadius
+                                bottomRightRadius: parent.bottomRightRadius
                                 onClicked: root.setPeriod(true)
+                            }
+
+                            Base.FocusRing {
+                                anchors.margins: Style.focusRingWidth / 2
+                                topLeftRadius: 0
+                                topRightRadius: 0
+                                bottomLeftRadius: Math.max(0, parent.bottomLeftRadius - Style.focusRingWidth / 2)
+                                bottomRightRadius: Math.max(0, parent.bottomRightRadius - Style.focusRingWidth / 2)
                             }
                         }
                     }
@@ -363,13 +429,12 @@ FocusScope {
             Rectangle {
                 id: face
 
-                width: root.faceSize
-                height: root.faceSize
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: Style.spacingXL + Style.spacingM
+                Layout.preferredWidth: root.faceSize
+                Layout.preferredHeight: root.faceSize
                 radius: width / 2
-                color: faceArea.containsMouse ? Style.surfaceContainerHigh : Style.surfaceContainerHighest
-                border.width: Style.outlineWidth
-                border.color: Style.outlineVariant
+                color: Style.surfaceContainerHighest
 
                 Behavior on color {
                     enabled: root.animationsEnabled
@@ -451,6 +516,7 @@ FocusScope {
                             anchors.centerIn: parent
                             text: root._minuteMode || parent.innerRing ? root.pad(parent.value) : parent.value
                             reserveText: "00"
+                            isMonospace: false
                             font.pixelSize: parent.innerRing ? Style.fontSizeSmall : Style.fontSizeMedium
                             font.weight: parent.selected ? Font.DemiBold : Font.Medium
                             color: parent.selected ? Style.onPrimary : Style.surfaceText
@@ -482,7 +548,8 @@ FocusScope {
             }
 
             Row {
-                anchors.right: parent.right
+                Layout.alignment: Qt.AlignRight
+                Layout.topMargin: Style.spacingXL
                 spacing: Style.spacingS
 
                 DankButton {
@@ -496,9 +563,12 @@ FocusScope {
                 }
 
                 DankButton {
+                    id: okButton
+
                     text: I18n.tr("OK")
-                    backgroundColor: Style.primary
-                    textColor: Style.onPrimary
+                    KeyNavigation.tab: hourDigit
+                    backgroundColor: "transparent"
+                    textColor: Style.primary
                     onClicked: {
                         root.accepted(root._hour, root._minute);
                         root.close();

@@ -331,7 +331,6 @@ ShellRoot {
                             title: "Details"
                             description: "Grouped header, expands below"
                             showBackground: true
-                            onToggleRequested: expanded = !expanded
 
                             StyledText {
                                 text: "Collapsible content"

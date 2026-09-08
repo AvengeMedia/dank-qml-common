@@ -145,13 +145,15 @@ Singleton {
     property real iconSizeLarge: 32
 
     property real cornerRadius: 12
-    readonly property real shapeScale: Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real shapeScale: Math.max(0, cornerRadius / 12)
     readonly property real cornerRadiusXXS: Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: Math.round(12 * shapeScale)
-    readonly property real cornerRadiusL: cornerRadius
+    readonly property real cornerRadiusL: Math.round(16 * shapeScale)
+    readonly property real cornerRadiusLIncreased: Math.round(20 * shapeScale)
     readonly property real cornerRadiusXL: Math.round(28 * shapeScale)
+    readonly property real cornerRadiusXLIncreased: Math.round(32 * shapeScale)
     readonly property real cornerRadiusXXL: Math.round(48 * shapeScale)
     readonly property real cornerRadiusFull: shapeScale > 0 ? 9999 : 0
     readonly property real cornerRadiusSmall: cornerRadiusS

@@ -150,13 +150,15 @@ Singleton {
     readonly property int mediumBreakpoint: theme?.mediumBreakpoint ?? 768
 
     readonly property real cornerRadius: theme?.cornerRadius ?? 12
-    readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, Math.min(cornerRadius / 16, 1.5))
+    readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, cornerRadius / 12)
     readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Math.round(2 * shapeScale)
     readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Math.round(4 * shapeScale)
     readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Math.round(8 * shapeScale)
     readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Math.round(12 * shapeScale)
-    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? cornerRadius
+    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? Math.round(16 * shapeScale)
+    readonly property real cornerRadiusLIncreased: theme?.cornerRadiusLIncreased ?? Math.round(20 * shapeScale)
     readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Math.round(28 * shapeScale)
+    readonly property real cornerRadiusXLIncreased: theme?.cornerRadiusXLIncreased ?? Math.round(32 * shapeScale)
     readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Math.round(48 * shapeScale)
     readonly property real cornerRadiusFull: shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0
     readonly property real cornerRadiusSmall: cornerRadiusS

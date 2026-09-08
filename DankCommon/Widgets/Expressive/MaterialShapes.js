@@ -1,111 +1,48 @@
 .pragma library
+.import "MaterialShapeData.js" as Data
 
-var catalog = {
-    "circle": {
-        "lobes": 0
-    },
-    "square": {
-        "polygon": 4,
-        "roundness": 0.55,
-        "phase": Math.PI / 4
-    },
-    "cookie4": {
-        "lobes": 4,
-        "depth": 0.12
-    },
-    "cookie6": {
-        "lobes": 6,
-        "depth": 0.1
-    },
-    "cookie7": {
-        "lobes": 7,
-        "depth": 0.09
-    },
-    "cookie9": {
-        "lobes": 9,
-        "depth": 0.08
-    },
-    "cookie12": {
-        "lobes": 12,
-        "depth": 0.06
-    },
-    "clover4": {
-        "lobes": 4,
-        "depth": 0.3
-    },
-    "clover8": {
-        "lobes": 8,
-        "depth": 0.18
-    },
-    "flower": {
-        "lobes": 8,
-        "depth": 0.14
-    },
-    "sunny": {
-        "lobes": 8,
-        "depth": 0.22
-    },
-    "burst": {
-        "lobes": 10,
-        "depth": 0.2
-    },
-    "gem": {
-        "polygon": 6,
-        "roundness": 0.4,
-        "phase": 0
-    },
-    "diamond": {
-        "polygon": 4,
-        "roundness": 0.45,
-        "phase": 0
-    },
-    "pentagon": {
-        "polygon": 5,
-        "roundness": 0.4,
-        "phase": -Math.PI / 2
-    }
-};
+var catalog = Data.cubics;
 
-function radiusAt(spec, theta) {
-    if (spec.polygon) {
-        const n = spec.polygon;
-        const a = (((theta - spec.phase) % (2 * Math.PI / n)) + 2 * Math.PI / n) % (2 * Math.PI / n);
-        const poly = Math.cos(Math.PI / n) / Math.cos(a - Math.PI / n);
-        return poly + (1 - poly) * spec.roundness;
+function rotationScale(kind, aspectRatio = 1) {
+    const cubics = catalog[kind] ?? catalog.circle;
+    let radiusSquared = 0;
+    for (const cubic of cubics) {
+        const centered = cubic.map((value, index) => (value - 0.5) * (index % 2 === 0 ? aspectRatio : 1));
+        radiusSquared = Math.max(radiusSquared, cubicRadiusSquared(centered, 4));
     }
-    if (!spec.lobes)
-        return 1;
-    return 1 - spec.depth * (1 - Math.cos(spec.lobes * theta)) / 2;
+    return radiusSquared > 0 ? 0.5 / Math.sqrt(radiusSquared) : 1;
 }
 
-function buildPath(kind, w, h, samplesPerLobe) {
-    if (w <= 0 || h <= 0)
+function cubicRadiusSquared(cubic, depth) {
+    if (depth === 0) {
+        let radiusSquared = 0;
+        for (let i = 0; i < cubic.length; i += 2)
+            radiusSquared = Math.max(radiusSquared, cubic[i] * cubic[i] + cubic[i + 1] * cubic[i + 1]);
+        return radiusSquared;
+    }
+    const midpoint = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    const start = cubic.slice(0, 2);
+    const control1 = cubic.slice(2, 4);
+    const control2 = cubic.slice(4, 6);
+    const end = cubic.slice(6, 8);
+    const a = midpoint(start, control1);
+    const b = midpoint(control1, control2);
+    const c = midpoint(control2, end);
+    const d = midpoint(a, b);
+    const e = midpoint(b, c);
+    const split = midpoint(d, e);
+    return Math.max(cubicRadiusSquared(start.concat(a, d, split), depth - 1), cubicRadiusSquared(split.concat(e, c, end), depth - 1));
+}
+
+function buildPath(kind, width, height, square) {
+    if (width <= 0 || height <= 0)
         return "";
-    const spec = catalog[kind] ?? catalog.circle;
-    const count = Math.max(48, samplesPerLobe * (spec.lobes || spec.polygon || 4));
-    const rx = w / 2;
-    const ry = h / 2;
-    const pts = [];
-    for (let i = 0; i < count; i++) {
-        const theta = i / count * 2 * Math.PI;
-        const r = radiusAt(spec, theta);
-        pts.push({
-            "x": rx + rx * r * Math.cos(theta),
-            "y": ry + ry * r * Math.sin(theta)
-        });
-    }
-    const f = v => v.toFixed(2);
-    let d = "M " + f(pts[0].x) + " " + f(pts[0].y);
-    for (let i = 0; i < count; i++) {
-        const p0 = pts[(i - 1 + count) % count];
-        const p1 = pts[i];
-        const p2 = pts[(i + 1) % count];
-        const p3 = pts[(i + 2) % count];
-        const c1x = p1.x + (p2.x - p0.x) / 6;
-        const c1y = p1.y + (p2.y - p0.y) / 6;
-        const c2x = p2.x - (p3.x - p1.x) / 6;
-        const c2y = p2.y - (p3.y - p1.y) / 6;
-        d += " C " + f(c1x) + " " + f(c1y) + " " + f(c2x) + " " + f(c2y) + " " + f(p2.x) + " " + f(p2.y);
-    }
-    return d + " Z";
+    if (square)
+        return "M 0 0 H " + width + " V " + height + " H 0 Z";
+    const cubics = catalog[kind] ?? catalog.circle;
+    const pair = (x, y) => (x * width).toFixed(4) + " " + (y * height).toFixed(4);
+    let path = "M " + pair(cubics[0][0], cubics[0][1]);
+    for (const cubic of cubics)
+        path += " C " + pair(cubic[2], cubic[3]) + " " + pair(cubic[4], cubic[5]) + " " + pair(cubic[6], cubic[7]);
+    return path + " Z";
 }

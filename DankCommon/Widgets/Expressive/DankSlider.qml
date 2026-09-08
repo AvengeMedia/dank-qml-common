@@ -21,6 +21,8 @@ Item {
     property int step: 1
     property string leftIcon: ""
     property string rightIcon: ""
+    property string insetIcon: ""
+    property string insetIconPosition: "start"
     property string unit: "%"
     property bool showValue: true
     property bool isDragging: false
@@ -219,6 +221,14 @@ Item {
             readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
             readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
+            readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
+            readonly property bool insetIconBehindHandle: {
+                if (insetIconLeftAligned) {
+                    return sliderHandle.x <= (Style.iconSizeLarge + Style.spacingS);
+                } else {
+                    return (width - sliderHandle.x) <= Style.iconSizeLarge + Style.spacingS;
+                }
+            }
 
             width: parent.width - (leftIconWidth + rightIconWidth + (slider.leftIcon.length > 0 ? Style.spacingM : 0) + (slider.rightIcon.length > 0 ? Style.spacingM : 0))
             height: slider.handleHeight
@@ -260,7 +270,7 @@ Item {
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
-                    visible: parent.width > Style.sliderHandleGap * 2 + width
+                    visible: (slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
                 }
             }
 
@@ -309,6 +319,48 @@ Item {
                     border.width: Style.focusRingWidth
                     border.color: Style.focusRingColor
                     visible: slider.activeFocus
+                }
+            }
+
+            // inset icon behind handle
+            Base.DankIcon {
+                name: slider.insetIcon
+                size: Style.iconSizeLarge
+                color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onSecondaryContainer : Style.onPrimary) : Style.onSurface_38
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: sliderTrack.insetIconLeftAligned ? sliderHandle.left : undefined
+                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderHandle.right
+                anchors.leftMargin: Style.spacingS
+                anchors.rightMargin: Style.spacingS
+                opacity: sliderTrack.insetIconBehindHandle ? 1 : 0
+                visible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1
+
+                Behavior on opacity {
+                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                    DankAnim {
+                        duration: Style.shorterDuration
+                        easing.bezierCurve: Style.expressiveCurves.standard
+                    }
+                }
+            }
+
+            // inset icon aligned at the edge of the track
+            Base.DankIcon {
+                name: slider.insetIcon
+                size: Style.iconSizeLarge
+                color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onPrimary : Style.onSecondaryContainer) : Style.onSurface_38
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: sliderTrack.insetIconLeftAligned  ? sliderTrack.left : undefined
+                anchors.right: sliderTrack.insetIconLeftAligned  ? undefined : sliderTrack.right
+                opacity: sliderTrack.insetIconBehindHandle ? 0 : 1
+                visible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1
+
+                Behavior on opacity {
+                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                    DankAnim {
+                        duration: Style.shorterDuration
+                        easing.bezierCurve: Style.expressiveCurves.standard
+                    }
                 }
             }
 

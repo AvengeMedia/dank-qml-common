@@ -9,7 +9,7 @@ Rectangle {
     property real maximumWidth: Infinity
     property bool wrapText: false
     property string iconName: ""
-    property int iconSize: Style.iconSizeMedium
+    property int iconSize: root.buttonHeight <= Style.buttonHeightS ? Style.iconSizeMedium : Style.iconSize
     property bool hovered: stateLayer.containsMouse
     property bool pressed: stateLayer.pressed
     property color backgroundColor: Style.buttonBg

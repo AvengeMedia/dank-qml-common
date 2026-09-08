@@ -5,6 +5,7 @@ import qs.DankCommon.Widgets as Base
 Rectangle {
     id: root
 
+    property string shape: "round"
     property string text: ""
     property real maximumWidth: Infinity
     property bool wrapText: false
@@ -35,7 +36,23 @@ Rectangle {
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
     readonly property real pressedRadius: buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS
 
-    radius: pressed ? pressedRadius : Math.min(Style.cornerRadiusFull, height / 2)
+    radius: {
+        if (pressed) {
+            return pressedRadius;
+        } else {
+            if (shape === "round") {
+                return Math.min(Style.cornerRadiusFull, height / 2)
+            } else {
+                if (buttonHeight <= Style.buttonHeightS) {
+                    return Style.spacingM;
+                } else if (buttonHeight <= Style.buttonHeightM) {
+                    return Style.spacingL;
+                } else {
+                    return Style.spacingXL + Style.spacingXS;
+                }
+            }
+        }
+    }
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     activeFocusOnTab: enabled

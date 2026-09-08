@@ -168,6 +168,14 @@ ShellRoot {
                                 onClicked: timePicker.open()
                             }
 
+                            X.DankButton {
+                                text: "Square button"
+                                buttonHeight: 56
+                                shape: "square"
+                                iconName: "schedule"
+                                onClicked: timePicker.open()
+                            }
+
                             X.DankActionButton {
                                 iconName: "info"
                                 buttonSize: Theme.iconButtonSize

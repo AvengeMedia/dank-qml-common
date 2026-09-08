@@ -221,6 +221,7 @@ Item {
             readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
             readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
+            readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
             readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
             readonly property bool insetIconBehindHandle: {
                 if (insetIconLeftAligned) {
@@ -270,7 +271,7 @@ Item {
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
-                    visible: (slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
+                    visible: (sliderTrack.insetIconVisible && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
                 }
             }
 
@@ -333,7 +334,7 @@ Item {
                 anchors.leftMargin: Style.spacingS
                 anchors.rightMargin: Style.spacingS
                 opacity: sliderTrack.insetIconBehindHandle ? 1 : 0
-                visible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1
+                visible: sliderTrack.insetIconVisible
 
                 Behavior on opacity {
                     enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -355,7 +356,7 @@ Item {
                 anchors.leftMargin: Style.spacingXS
                 anchors.rightMargin: Style.spacingXS
                 opacity: sliderTrack.insetIconBehindHandle ? 0 : 1
-                visible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1
+                visible: sliderTrack.insetIconVisible
 
                 Behavior on opacity {
                     enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

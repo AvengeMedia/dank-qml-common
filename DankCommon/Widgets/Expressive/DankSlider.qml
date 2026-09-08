@@ -328,8 +328,8 @@ Item {
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onSecondaryContainer : Style.onPrimary) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: sliderTrack.insetIconLeftAligned ? sliderHandle.left : undefined
-                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderHandle.right
+                anchors.left: sliderTrack.insetIconLeftAligned ? sliderHandle.right : undefined
+                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderHandle.left
                 anchors.leftMargin: Style.spacingS
                 anchors.rightMargin: Style.spacingS
                 opacity: sliderTrack.insetIconBehindHandle ? 1 : 0
@@ -352,6 +352,8 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: sliderTrack.insetIconLeftAligned  ? sliderTrack.left : undefined
                 anchors.right: sliderTrack.insetIconLeftAligned  ? undefined : sliderTrack.right
+                anchors.leftMargin: Style.spacingXS
+                anchors.rightMargin: Style.spacingXS
                 opacity: sliderTrack.insetIconBehindHandle ? 0 : 1
                 visible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1
 

@@ -280,8 +280,8 @@ ShellRoot {
                             value: 65
                             size: "m"
                             onSliderValueChanged: newValue => value = newValue
-                            insetIcon: "volume_up"
-                            insetIconPosition: "start"
+                            insetIcon: "brightness_high"
+                            insetIconPosition: "end"
                         }
 
                         X.DankSlider {

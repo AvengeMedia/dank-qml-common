@@ -1,8 +1,9 @@
 import QtQuick
+import QtQuick.Controls
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Item {
+Control {
     id: slider
 
     function checkParentDisablesTransparency() {
@@ -15,6 +16,9 @@ Item {
         return false;
     }
 
+    focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
+    wheelEnabled: true
+
     property int value: 50
     property int minimum: 0
     property int maximum: 100
@@ -26,7 +30,6 @@ Item {
     property string unit: "%"
     property bool showValue: true
     property bool isDragging: false
-    property bool wheelEnabled: true
     property bool centerMinimum: false
     property real valueOverride: -1
     property int decimals: 0
@@ -58,7 +61,7 @@ Item {
     }
 
     readonly property real ratio: ratioForValue(value)
-    readonly property bool mirrored: I18n.isRtl
+    readonly property bool isMirrored: I18n.isRtl
     readonly property real trackHeight: {
         switch (size) {
         case "s":
@@ -104,7 +107,7 @@ Item {
     }
     readonly property real outsideCorner: Math.min(trackHeight / 2, trackCornerRadius * cornerScale)
     readonly property real insideCorner: Math.min(trackHeight / 2, Style.sliderTrackInsideCornerRadius * cornerScale)
-    readonly property real visualRatio: mirrored ? 1 - ratio : ratio
+    readonly property real visualRatio: isMirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)
             return 0;
@@ -150,7 +153,7 @@ Item {
         if (sliderTrack.width <= sliderHandle.width)
             return;
         let ratio = Math.max(0, Math.min(1, (x - sliderHandle.width / 2) / (sliderTrack.width - sliderHandle.width)));
-        if (mirrored)
+        if (isMirrored)
             ratio = 1 - ratio;
         if (centerMinimum)
             ratio = Math.max(0, (ratio - 0.5) * 2);
@@ -162,8 +165,8 @@ Item {
     Keys.onPressed: event => {
         if (!enabled)
             return;
-        const upKey = mirrored ? Qt.Key_Left : Qt.Key_Right;
-        const downKey = mirrored ? Qt.Key_Right : Qt.Key_Left;
+        const upKey = isMirrored ? Qt.Key_Left : Qt.Key_Right;
+        const downKey = isMirrored ? Qt.Key_Right : Qt.Key_Left;
         switch (event.key) {
         case upKey:
         case Qt.Key_Up:
@@ -196,11 +199,11 @@ Item {
         }
     }
 
-    Row {
+    contentItem: Row {
         anchors.centerIn: parent
         width: parent.width
         spacing: Style.spacingM
-        LayoutMirroring.enabled: slider.mirrored
+        LayoutMirroring.enabled: slider.isMirrored
 
         Base.DankIcon {
             name: slider.leftIcon
@@ -218,12 +221,12 @@ Item {
             readonly property real travel: width - sliderHandle.width
             readonly property real handleLeft: Math.max(0, Math.min(travel, travel * slider.visualRatio))
             readonly property real gap: Style.sliderHandleGap
-            readonly property real filledStart: slider.mirrored ? sliderHandle.x + sliderHandle.width + gap : 0
-            readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
-            readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
-            readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
+            readonly property real filledStart: slider.isMirrored ? sliderHandle.x + sliderHandle.width + gap : 0
+            readonly property real filledEnd: slider.isMirrored ? width : sliderHandle.x - gap
+            readonly property real emptyStart: slider.isMirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
+            readonly property real emptyEnd: slider.isMirrored ? sliderHandle.x - gap : width
             readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
-            readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
+            readonly property bool insetIconLeftAligned: (!slider.isMirrored && slider.insetIconPosition === "start") || (slider.isMirrored && slider.insetIconPosition === "end")
             readonly property bool insetIconBehindHandle: {
                 if (insetIconLeftAligned) {
                     return sliderHandle.x <= (Style.iconSizeLarge + Style.spacingS);
@@ -242,9 +245,9 @@ Item {
                 width: Math.max(0, sliderTrack.filledEnd - sliderTrack.filledStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
+                topLeftRadius: slider.isMirrored ? slider.insideCorner : slider.outsideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
+                topRightRadius: slider.isMirrored ? slider.outsideCorner : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 visible: width > 0
@@ -256,9 +259,9 @@ Item {
                 width: Math.max(0, sliderTrack.emptyEnd - sliderTrack.emptyStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
+                topLeftRadius: slider.isMirrored ? slider.outsideCorner : slider.insideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
+                topRightRadius: slider.isMirrored ? slider.insideCorner : slider.outsideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
                 visible: width > 0
@@ -267,7 +270,7 @@ Item {
                     width: Style.sliderStopSize
                     height: Style.sliderStopSize
                     radius: Math.min(1, slider.cornerScale) * width / 2
-                    x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
+                    x: slider.isMirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
                     visible: (sliderTrack.insetIconVisible && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
@@ -280,8 +283,8 @@ Item {
                 Base.StyledRect {
                     required property int index
                     readonly property real tickRatio: slider.ratioForValue(slider.minimum + index * slider.step)
-                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.mirrored ? 1 - tickRatio : tickRatio)
-                    readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
+                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.isMirrored ? 1 - tickRatio : tickRatio)
+                    readonly property bool onFilled: slider.isMirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
                     radius: Math.min(1, slider.cornerScale) * width / 2
@@ -313,7 +316,7 @@ Item {
                 }
 
                 Base.FocusRing {
-                    visible: slider.activeFocus
+                    visible: slider.visualFocus
                 }
             }
 
@@ -345,8 +348,8 @@ Item {
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onPrimary : Style.onSecondaryContainer) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: sliderTrack.insetIconLeftAligned  ? sliderTrack.left : undefined
-                anchors.right: sliderTrack.insetIconLeftAligned  ? undefined : sliderTrack.right
+                anchors.left: sliderTrack.insetIconLeftAligned ? sliderTrack.left : undefined
+                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderTrack.right
                 anchors.leftMargin: Style.spacingXS
                 anchors.rightMargin: Style.spacingXS
                 opacity: sliderTrack.insetIconBehindHandle ? 0 : 1

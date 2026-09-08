@@ -124,7 +124,9 @@ Item {
             "tf": "\u{F09EE}",
             "tfvars": "\u{F09EE}",
 
-            // --- moon phases
+            "sunrise": "\u{F059C}",
+            "sunset": "\u{F059B}",
+
             "moon_new": "\u{F0F64}",
             "moon_waxing_crescent": "\u{F0F67}",
             "moon_first_quarter": "\u{F0F61}",

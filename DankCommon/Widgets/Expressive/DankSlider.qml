@@ -50,12 +50,14 @@ Item {
         return (v / Math.pow(10, decimals)).toFixed(decimals) + unit;
     }
 
-    readonly property real ratio: {
+    function ratioForValue(v) {
         const range = maximum - minimum;
-        const raw = range === 0 ? 0 : (value - minimum) / range;
+        const raw = range === 0 ? 0 : (v - minimum) / range;
         const clamped = Math.max(0, Math.min(1, raw));
         return centerMinimum ? (0.5 + clamped * 0.5) : clamped;
     }
+
+    readonly property real ratio: ratioForValue(value)
     readonly property bool mirrored: I18n.isRtl
     readonly property real trackHeight: {
         switch (size) {
@@ -106,7 +108,7 @@ Item {
     readonly property int tickCount: {
         if (step <= 1)
             return 0;
-        const steps = Math.floor((maximum - minimum) / step);
+        const steps = Math.ceil((maximum - minimum) / step);
         return steps >= 2 && steps <= 12 ? steps + 1 : 0;
     }
     readonly property int keyStep: step > 1 ? step : Math.max(1, Math.round((maximum - minimum) / 100))
@@ -215,7 +217,6 @@ Item {
             property int rightIconWidth: slider.rightIcon.length > 0 ? Style.iconSize : 0
             readonly property real travel: width - sliderHandle.width
             readonly property real handleLeft: Math.max(0, Math.min(travel, travel * slider.visualRatio))
-            readonly property real centerX: width / 2
             readonly property real gap: Style.sliderHandleGap
             readonly property real filledStart: slider.mirrored ? sliderHandle.x + sliderHandle.width + gap : 0
             readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
@@ -237,15 +238,13 @@ Item {
 
             Base.StyledRect {
                 id: activeTrack
-                readonly property real startX: slider.centerMinimum ? Math.min(sliderTrack.centerX, slider.mirrored ? sliderTrack.filledStart : sliderTrack.filledEnd) : sliderTrack.filledStart
-                readonly property real endX: slider.centerMinimum ? Math.max(sliderTrack.centerX, slider.mirrored ? sliderTrack.filledStart : sliderTrack.filledEnd) : sliderTrack.filledEnd
-                x: startX
-                width: Math.max(0, endX - startX)
+                x: sliderTrack.filledStart
+                width: Math.max(0, sliderTrack.filledEnd - sliderTrack.filledStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.mirrored || slider.centerMinimum ? slider.insideCorner : slider.outsideCorner
+                topLeftRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.mirrored && !slider.centerMinimum ? slider.outsideCorner : slider.insideCorner
+                topRightRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 visible: width > 0
@@ -280,7 +279,8 @@ Item {
 
                 Base.StyledRect {
                     required property int index
-                    readonly property real tickX: Style.sliderHandleGap + (sliderTrack.width - Style.sliderHandleGap * 2) * index / Math.max(1, slider.tickCount - 1)
+                    readonly property real tickRatio: slider.ratioForValue(slider.minimum + index * slider.step)
+                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.mirrored ? 1 - tickRatio : tickRatio)
                     readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width

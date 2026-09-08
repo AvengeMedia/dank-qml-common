@@ -23,6 +23,7 @@ Item {
     property real dotRadius: 3
     property real insetTop: lineWidth
     property real insetBottom: lineWidth
+    property real edgeExtension: 0
 
     readonly property var range: {
         const series = [values ?? [], secondaryValues ?? []];
@@ -57,7 +58,7 @@ Item {
     readonly property var points: project(values)
     readonly property var secondaryPoints: project(secondaryValues)
     readonly property string linePath: tracePath(points)
-    readonly property string fillPath: closePath(points, linePath)
+    readonly property string fillPath: fillOpacity > 0 ? closePath(points, linePath) : ""
     readonly property string secondaryLinePath: tracePath(secondaryPoints)
 
     implicitHeight: Style.iconButtonSize
@@ -88,17 +89,32 @@ Item {
         return out;
     }
 
+    function extendPoint(point, neighbor, distance) {
+        const span = point.x - neighbor.x;
+        const y = span === 0 ? point.y : point.y + distance * (point.y - neighbor.y) / span;
+        return {
+            "x": point.x + distance,
+            "y": Math.max(insetTop, Math.min(height - insetBottom, y))
+        };
+    }
+
     function tracePath(pts) {
         if (pts.length === 0)
             return "";
         const f = v => v.toFixed(2);
-        let d = "M " + f(pts[0].x) + " " + f(pts[0].y);
+        const extension = Math.max(0, edgeExtension);
+        const first = extendPoint(pts[0], pts[Math.min(1, pts.length - 1)], -extension);
+        const last = extendPoint(pts[pts.length - 1], pts[Math.max(0, pts.length - 2)], extension);
+        const tail = extension > 0 ? " L " + f(last.x) + " " + f(last.y) : "";
+        let d = "M " + f(first.x) + " " + f(first.y);
+        if (extension > 0)
+            d += " L " + f(pts[0].x) + " " + f(pts[0].y);
         if (pts.length === 1)
-            return d;
+            return d + tail;
         if (!curved) {
             for (let i = 1; i < pts.length; i++)
                 d += " L " + f(pts[i].x) + " " + f(pts[i].y);
-            return d;
+            return d + tail;
         }
         for (let i = 0; i < pts.length - 1; i++) {
             const p0 = pts[Math.max(0, i - 1)];
@@ -107,7 +123,7 @@ Item {
             const p3 = pts[Math.min(pts.length - 1, i + 2)];
             d += " C " + f(p1.x + (p2.x - p0.x) / 6) + " " + f(p1.y + (p2.y - p0.y) / 6) + " " + f(p2.x - (p3.x - p1.x) / 6) + " " + f(p2.y - (p3.y - p1.y) / 6) + " " + f(p2.x) + " " + f(p2.y);
         }
-        return d;
+        return d + tail;
     }
 
     function closePath(pts, line) {
@@ -115,7 +131,8 @@ Item {
             return "";
         const f = v => v.toFixed(2);
         const bottom = f(height);
-        return line + " L " + f(pts[pts.length - 1].x) + " " + bottom + " L " + f(pts[0].x) + " " + bottom + " Z";
+        const extension = Math.max(0, edgeExtension);
+        return line + " L " + f(pts[pts.length - 1].x + extension) + " " + bottom + " L " + f(pts[0].x - extension) + " " + bottom + " Z";
     }
 
     Shape {

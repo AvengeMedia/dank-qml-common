@@ -254,7 +254,7 @@ FocusScope {
     Timer {
         id: closeTimer
 
-        interval: Style.expressiveDurations.expressiveEffects
+        interval: Style.reduceMotion ? 0 : Style.expressiveDurations.expressiveEffects
         onTriggered: {
             const menu = menuLoader.item;
             if (menu)
@@ -320,7 +320,7 @@ FocusScope {
         border.width: active ? Style.outlineWidthFocused : Style.outlineWidth
 
         Behavior on color {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankColorAnim {
                 duration: Style.expressiveDurations.expressiveEffects
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -328,7 +328,7 @@ FocusScope {
         }
 
         Behavior on border.color {
-            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankColorAnim {
                 duration: Style.expressiveDurations.expressiveEffects
                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -396,7 +396,7 @@ FocusScope {
             rotation: root.menuVisible ? 180 : 0
 
             Behavior on rotation {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.expressiveDefaultSpatial
@@ -524,14 +524,14 @@ FocusScope {
                     transformOrigin: dropdownMenu.opensUpwards ? Item.Bottom : Item.Top
 
                     Behavior on opacity {
-                        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                         DankAnim {
                             duration: Style.expressiveDurations.expressiveEffects
                             easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                         }
                     }
                     Behavior on scale {
-                        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                         DankAnim {
                             duration: Style.expressiveDurations.expressiveFastSpatial
                             easing.bezierCurve: Style.expressiveCurves.expressiveDefaultSpatial
@@ -714,7 +714,7 @@ FocusScope {
                                 }
 
                                 Behavior on color {
-                                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                                    enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                                     DankColorAnim {
                                         duration: Style.expressiveDurations.expressiveEffects
                                         easing.bezierCurve: Style.expressiveCurves.expressiveEffects

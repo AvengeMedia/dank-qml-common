@@ -35,6 +35,7 @@ Row {
     property bool interactionStarted: false
     property bool usePopupTransparency: !checkParentDisablesTransparency()
     property real maximumWidth: -1
+    property bool fillWidth: false
     readonly property real _segmentCap: {
         const count = model?.length ?? 0;
         if (maximumWidth <= 0 || count === 0)
@@ -162,6 +163,8 @@ Row {
             readonly property real contentNaturalWidth: (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) + buttonText.implicitWidth
 
             readonly property real baseWidth: {
+                if (root.fillWidth)
+                    return Math.max(0, (root.width - root.spacing * (repeater.count - 1)) / Math.max(1, repeater.count));
                 const natural = Math.max(contentNaturalWidth + root.buttonPadding * 2, root.minButtonWidth);
                 return root._segmentCap > 0 ? Math.min(natural, Math.max(root._segmentCap, root.minButtonWidth)) : natural;
             }
@@ -192,7 +195,7 @@ Row {
             bottomRightRadius: mirrored ? leftRadius : rightRadius
 
             Behavior on width {
-                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
@@ -200,7 +203,7 @@ Row {
             }
 
             Behavior on topLeftRadius {
-                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -208,7 +211,7 @@ Row {
             }
 
             Behavior on topRightRadius {
-                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -216,7 +219,7 @@ Row {
             }
 
             Behavior on bottomLeftRadius {
-                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -224,7 +227,7 @@ Row {
             }
 
             Behavior on bottomRightRadius {
-                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -232,7 +235,7 @@ Row {
             }
 
             Behavior on color {
-                enabled: root.userInteracted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.userInteracted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankColorAnim {
                     duration: Style.expressiveDurations.expressiveEffects
                     easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -280,7 +283,7 @@ Row {
                         anchors.verticalCenter: parent.verticalCenter
 
                         Behavior on opacity {
-                            enabled: root.userInteracted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            enabled: root.userInteracted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                             DankAnim {
                                 duration: Style.expressiveDurations.expressiveEffects
                                 easing.bezierCurve: Style.expressiveCurves.expressiveEffects
@@ -288,7 +291,7 @@ Row {
                         }
 
                         Behavior on scale {
-                            enabled: root.userInteracted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            enabled: root.userInteracted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                             DankAnim {
                                 duration: Style.expressiveDurations.expressiveFastSpatial
                                 easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial

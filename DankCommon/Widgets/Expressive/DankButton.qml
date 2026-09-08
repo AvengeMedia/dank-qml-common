@@ -15,7 +15,15 @@ Rectangle {
     property color backgroundColor: Style.buttonBg
     property color textColor: Style.buttonText
     property int buttonHeight: Style.buttonHeightS
-    property int horizontalPadding: buttonHeight >= Style.buttonHeightM ? Style.spacingXL : Style.spacingL
+    property int horizontalPadding: {
+        if (buttonHeight <= Style.buttonHeightXS) {
+            return Style.spacingM;
+        } else if (buttonHeight <= Style.buttonHeightS) {
+            return Style.spacingL;
+        } else {
+            return Style.spacingXL;
+        }
+    }
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
     property real minimumWidth: Style.buttonMinWidth
@@ -85,7 +93,15 @@ Rectangle {
     Row {
         id: contentRow
         anchors.centerIn: parent
-        spacing: Style.spacingS
+        spacing: {
+            if (buttonHeight <= Style.buttonHeightXS) {
+                return Style.spacingXS;
+            } else if (buttonHeight <= Style.buttonHeightM) {
+                return Style.spacingS;
+            } else {
+                return Style.spacingM;
+            }
+        }
 
         Base.DankIcon {
             name: root.iconName

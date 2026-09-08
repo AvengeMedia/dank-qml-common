@@ -5,17 +5,26 @@ import qs.DankCommon.Widgets as Base
 Rectangle {
     id: root
 
+    property string shape: "round"
     property string text: ""
     property real maximumWidth: Infinity
     property bool wrapText: false
     property string iconName: ""
-    property int iconSize: Style.iconSizeMedium
+    property int iconSize: root.buttonHeight <= Style.buttonHeightS ? Style.iconSizeMedium : Style.iconSize
     property bool hovered: stateLayer.containsMouse
     property bool pressed: stateLayer.pressed
     property color backgroundColor: Style.buttonBg
     property color textColor: Style.buttonText
     property int buttonHeight: Style.buttonHeightS
-    property int horizontalPadding: buttonHeight >= Style.buttonHeightM ? Style.spacingXL : Style.spacingL
+    property int horizontalPadding: {
+        if (buttonHeight <= Style.buttonHeightXS) {
+            return Style.spacingM;
+        } else if (buttonHeight <= Style.buttonHeightS) {
+            return Style.spacingL;
+        } else {
+            return Style.spacingXL;
+        }
+    }
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
     property real minimumWidth: Style.buttonMinWidth
@@ -25,9 +34,24 @@ Rectangle {
     width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
     height: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
-    readonly property real pressedRadius: buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS
 
-    radius: pressed ? pressedRadius : Math.min(Style.cornerRadiusFull, height / 2)
+    radius: {
+        if (pressed) {
+            return buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS;
+        } else {
+            if (shape === "round") {
+                return Math.min(Style.cornerRadiusFull, height / 2)
+            } else {
+                if (buttonHeight <= Style.buttonHeightS) {
+                    return Style.spacingM;
+                } else if (buttonHeight <= Style.buttonHeightM) {
+                    return Style.spacingL;
+                } else {
+                    return Style.spacingXL + Style.spacingXS;
+                }
+            }
+        }
+    }
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     activeFocusOnTab: enabled
@@ -52,8 +76,7 @@ Rectangle {
     }
 
     Base.FocusRing {
-        anchors.margins: Style.focusRingWidth / 2
-        radius: Math.max(0, parent.radius - Style.focusRingWidth / 2)
+        radius: Math.max(0, parent.radius + 2 * Style.focusRingWidth)
     }
 
     Behavior on radius {
@@ -86,7 +109,15 @@ Rectangle {
     Row {
         id: contentRow
         anchors.centerIn: parent
-        spacing: Style.spacingS
+        spacing: {
+            if (buttonHeight <= Style.buttonHeightXS) {
+                return Style.spacingXS;
+            } else if (buttonHeight <= Style.buttonHeightM) {
+                return Style.spacingS;
+            } else {
+                return Style.spacingM;
+            }
+        }
 
         Base.DankIcon {
             name: root.iconName

@@ -92,18 +92,27 @@ Item {
         tooltip.close();
     }
 
-    Popup {
+    ToolTip {
         id: tooltip
-
-        property string text: ""
 
         leftPadding: Style.spacingM
         rightPadding: Style.spacingM
         topPadding: Style.spacingS
         bottomPadding: Style.spacingS
+        margins: Style.spacingXS
         closePolicy: Popup.NoAutoClose
         modal: false
         dim: false
+
+        Binding {
+            target: tooltip.contentItem?.parent ?? null
+            property: "containmentMask"
+            value: QtObject {
+                function contains(position: point): bool {
+                    return false;
+                }
+            }
+        }
 
         background: Rectangle {
             color: Style.inverseSurface

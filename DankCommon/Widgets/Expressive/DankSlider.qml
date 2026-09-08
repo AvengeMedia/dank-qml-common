@@ -1,9 +1,9 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls as Controls
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Control {
+Controls.Control {
     id: slider
 
     function checkParentDisablesTransparency() {
@@ -27,6 +27,8 @@ Control {
     property string rightIcon: ""
     property string insetIcon: ""
     property string insetIconPosition: "start"
+    property bool insetIconClickable: false
+    property string insetIconTooltip: ""
     property string unit: "%"
     property bool showValue: true
     property bool isDragging: false
@@ -36,14 +38,17 @@ Control {
     property bool alwaysShowValue: false
     property string size: "xs"
     readonly property bool containsMouse: sliderMouseArea.containsMouse
+    readonly property var focusTargets: insetAction.enabled ? [insetAction, slider] : [slider]
 
     property color thumbOutlineColor: Style.surfaceContainer
     property color fillColor: Style.primary
     property color fillTextColor: Style.onPrimary
     property color trackColor: Style.secondaryContainer
+    property color trackTextColor: Style.onSecondaryContainer
     property bool usePopupTransparency: !checkParentDisablesTransparency()
     property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
 
+    signal insetIconClicked
     signal sliderValueChanged(int newValue)
     signal sliderDragFinished(int finalValue)
 
@@ -320,16 +325,13 @@ Control {
                 }
             }
 
-            // inset icon behind handle
             Base.DankIcon {
+                id: movingInsetIcon
                 name: slider.insetIcon
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
-                color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onSecondaryContainer : Style.onPrimary) : Style.onSurface_38
+                color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.trackTextColor : slider.fillTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: sliderTrack.insetIconLeftAligned ? sliderHandle.right : undefined
-                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderHandle.left
-                anchors.leftMargin: Style.spacingS
-                anchors.rightMargin: Style.spacingS
+                x: sliderTrack.insetIconLeftAligned ? sliderHandle.x + sliderHandle.width + Style.spacingS : sliderHandle.x - width - Style.spacingS
                 opacity: sliderTrack.insetIconBehindHandle ? 1 : 0
                 visible: sliderTrack.insetIconVisible
 
@@ -342,16 +344,12 @@ Control {
                 }
             }
 
-            // inset icon aligned at the edge of the track
             Base.DankIcon {
                 name: slider.insetIcon
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
-                color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onPrimary : Style.onSecondaryContainer) : Style.onSurface_38
+                color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.fillTextColor : slider.trackTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: sliderTrack.insetIconLeftAligned ? sliderTrack.left : undefined
-                anchors.right: sliderTrack.insetIconLeftAligned ? undefined : sliderTrack.right
-                anchors.leftMargin: Style.spacingXS
-                anchors.rightMargin: Style.spacingXS
+                x: sliderTrack.insetIconLeftAligned ? Style.spacingXS : sliderTrack.width - width - Style.spacingXS
                 opacity: sliderTrack.insetIconBehindHandle ? 0 : 1
                 visible: sliderTrack.insetIconVisible
 
@@ -364,10 +362,82 @@ Control {
                 }
             }
 
+            Item {
+                id: insetAction
+
+                readonly property bool hovered: sliderMouseArea.containsMouse && containsPosition(sliderMouseArea.mouseX, sliderMouseArea.mouseY)
+                readonly property real iconX: sliderTrack.insetIconBehindHandle ? movingInsetIcon.x : (sliderTrack.insetIconLeftAligned ? Style.spacingXS : sliderTrack.width - movingInsetIcon.width - Style.spacingXS)
+                x: Math.max(0, Math.min(sliderTrack.width - width, iconX + (movingInsetIcon.width - width) / 2))
+                width: Math.min(sliderTrack.width, Style.iconButtonSize)
+                height: slider.trackHeight
+                anchors.verticalCenter: parent.verticalCenter
+                visible: sliderTrack.insetIconVisible && slider.insetIconClickable
+                enabled: slider.enabled && visible
+                activeFocusOnTab: enabled
+                Accessible.role: Accessible.Button
+                Accessible.name: slider.insetIconTooltip
+                Accessible.onPressAction: activate()
+
+                function activate() {
+                    if (enabled)
+                        slider.insetIconClicked();
+                }
+
+                function containsPosition(px, py) {
+                    if (!enabled || px < x || px > x + width || py < y || py > y + height)
+                        return false;
+                    return px < sliderHandle.x - sliderTrack.gap || px > sliderHandle.x + sliderHandle.width + sliderTrack.gap;
+                }
+
+                function syncTooltip() {
+                    if (!hovered || !visible || !slider.visible || slider.isDragging || slider.insetIconTooltip.length === 0) {
+                        actionTooltip.hide();
+                        return;
+                    }
+                    actionTooltip.show(slider.insetIconTooltip, insetAction, 0, 0, "top");
+                }
+
+                onHoveredChanged: syncTooltip()
+                onVisibleChanged: syncTooltip()
+                Component.onDestruction: actionTooltip.hide()
+
+                Keys.onPressed: event => {
+                    switch (event.key) {
+                    case Qt.Key_Space:
+                    case Qt.Key_Return:
+                    case Qt.Key_Enter:
+                        activate();
+                        event.accepted = true;
+                    }
+                }
+
+                Base.FocusRing {
+                    radius: Style.cornerRadiusFull
+                }
+                DankTooltipV2 {
+                    id: actionTooltip
+                }
+            }
+
+            Connections {
+                target: slider
+                function onInsetIconTooltipChanged() {
+                    insetAction.syncTooltip();
+                }
+                function onIsDraggingChanged() {
+                    insetAction.syncTooltip();
+                }
+                function onVisibleChanged() {
+                    insetAction.syncTooltip();
+                }
+            }
+
             MouseArea {
                 id: sliderMouseArea
 
-                property bool isDragging: false
+                property bool pressedInsetIcon: false
+                property real pressX: 0
+                property real pressY: 0
 
                 anchors.fill: parent
                 hoverEnabled: true
@@ -384,45 +454,70 @@ Control {
                     wheelEvent.accepted = true;
                 }
                 onPressed: mouse => {
-                    if (!slider.enabled)
+                    pressX = mouse.x;
+                    pressY = mouse.y;
+                    pressedInsetIcon = insetAction.containsPosition(mouse.x, mouse.y);
+                    if (pressedInsetIcon)
                         return;
                     slider.forceActiveFocus();
                     slider.isDragging = true;
-                    sliderMouseArea.isDragging = true;
                     updateValueFromPosition(mouse.x);
                 }
                 onReleased: {
-                    if (!slider.enabled)
-                        return;
+                    if (pressedInsetIcon && !slider.isDragging)
+                        insetAction.activate();
+                    if (slider.isDragging)
+                        slider.sliderDragFinished(slider.value);
                     slider.isDragging = false;
-                    sliderMouseArea.isDragging = false;
-                    slider.sliderDragFinished(slider.value);
+                    pressedInsetIcon = false;
+                }
+                onCanceled: {
+                    slider.isDragging = false;
+                    pressedInsetIcon = false;
                 }
                 onPositionChanged: mouse => {
-                    if (pressed && slider.isDragging && slider.enabled)
-                        updateValueFromPosition(mouse.x);
-                }
-                onClicked: mouse => {
-                    if (slider.enabled && !slider.isDragging)
-                        updateValueFromPosition(mouse.x);
+                    if (!pressed || !slider.enabled)
+                        return;
+                    if (pressedInsetIcon && !slider.isDragging && Math.hypot(mouse.x - pressX, mouse.y - pressY) < Qt.styleHints.startDragDistance)
+                        return;
+                    slider.forceActiveFocus();
+                    slider.isDragging = true;
+                    updateValueFromPosition(mouse.x);
                 }
             }
 
-            Base.StyledRect {
+            Controls.ToolTip {
                 id: valueTooltip
 
                 width: tooltipText.reservedWidth + Style.spacingL * 2
                 height: tooltipText.contentHeight + Style.spacingM * 2
-                radius: Math.min(1, slider.cornerScale) * height / 2
-                color: slider.fillColor
-                anchors.bottom: parent.top
-                anchors.bottomMargin: Style.spacingXS
-                x: Math.max(0, Math.min(parent.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
-                visible: opacity > 0
-                opacity: slider.alwaysShowValue ? (slider.showValue ? 1 : 0) : (((sliderMouseArea.containsMouse && slider.showValue) || (slider.isDragging && slider.showValue)) ? 1 : 0)
-                scale: opacity > 0 ? 1 : Style.popupEnterScale
+                padding: 0
+                horizontalPadding: 0
+                margins: Style.spacingXS
+                x: Math.max(0, Math.min(sliderTrack.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
+                y: -height - Style.spacingXS
+                visible: slider.visible && slider.enabled && slider.showValue && (slider.alwaysShowValue || (sliderMouseArea.containsMouse && !insetAction.hovered) || slider.isDragging)
+                closePolicy: Controls.Popup.NoAutoClose
+                modal: false
+                dim: false
+                focus: false
 
-                Base.NumericText {
+                Binding {
+                    target: valueTooltip.contentItem?.parent ?? null
+                    property: "containmentMask"
+                    value: QtObject {
+                        function contains(position: point): bool {
+                            return false;
+                        }
+                    }
+                }
+
+                background: Base.StyledRect {
+                    radius: Math.min(1, slider.cornerScale) * height / 2
+                    color: slider.fillColor
+                }
+
+                contentItem: Base.NumericText {
                     id: tooltipText
 
                     text: slider.formatValue(slider.valueOverride >= 0 ? slider.valueOverride : slider.value)
@@ -441,23 +536,37 @@ Control {
                     font.pixelSize: Style.fontSizeSmall
                     color: slider.fillTextColor
                     font.weight: Font.Medium
-                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
                     font.hintingPreference: Font.PreferFullHinting
                 }
 
-                Behavior on opacity {
-                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enter: Transition {
+                    enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                     DankAnim {
+                        property: "opacity"
+                        from: 0
+                        to: 1
                         duration: Style.expressiveDurations.expressiveEffects
                         easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                     }
-                }
-
-                Behavior on scale {
-                    enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                     DankAnim {
+                        property: "scale"
+                        from: Style.popupEnterScale
+                        to: 1
                         duration: Style.expressiveDurations.expressiveFastSpatial
                         easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+                    }
+                }
+
+                exit: Transition {
+                    enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                    DankAnim {
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: Style.expressiveDurations.expressiveEffects
+                        easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                     }
                 }
             }

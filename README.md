@@ -42,6 +42,9 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSlider.centerMinimum` places `minimum` halfway along the track and fills the track up to the handle. The remaining half covers `minimum` through `maximum`; positions before the midpoint select `minimum`. For a 100–200 range, 100 is at the centre, 150 at three-quarters, and 200 at the end. RTL reverses the direction.
 
+`DankSlider.insetIcon` places an icon inside medium and larger standard sliders. `insetIconPosition` accepts `"start"` or `"end"` and follows RTL. Set `insetIconClickable` and `insetIconTooltip` for an action, and handle `insetIconClicked`. Clicking activates the icon; dragging from it adjusts the slider. `focusTargets` exposes the icon action and slider for explicit keyboard traversal. `fillTextColor` and `trackTextColor` control icon contrast on their respective track segments. Value bubbles render above clipped content.
+
+
 `DankSparkline.edgeExtension` extends the strokes past the end samples using their neighbouring slopes, bounded by the vertical insets. It does not add sample dots.
 
 ## The contract

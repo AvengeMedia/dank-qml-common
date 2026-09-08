@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls as Controls
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets
 
@@ -244,6 +245,10 @@ Item {
                             slider.sliderDragFinished(slider.value);
                         }
                     }
+                    onCanceled: {
+                        slider.isDragging = false;
+                        sliderMouseArea.isDragging = false;
+                    }
                     onPositionChanged: mouse => {
                         if (pressed && slider.isDragging && slider.enabled) {
                             updateValueFromPosition(mouse.x);
@@ -257,22 +262,40 @@ Item {
                 }
             }
 
-            StyledRect {
+            Controls.ToolTip {
                 id: valueTooltip
 
                 width: tooltipText.reservedWidth + Style.spacingS * 2
                 height: tooltipText.contentHeight + Style.spacingXS * 2
-                radius: Style.cornerRadius
-                color: Style.surfaceContainer
-                border.color: Style.outline
-                border.width: 1
-                anchors.bottom: parent.top
-                anchors.bottomMargin: Style.spacingM
-                x: Math.max(0, Math.min(parent.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
-                visible: slider.alwaysShowValue ? slider.showValue : ((sliderMouseArea.containsMouse && slider.showValue) || (slider.isDragging && slider.showValue))
-                opacity: visible ? 1 : 0
+                padding: 0
+                horizontalPadding: 0
+                margins: Style.spacingXS
+                x: Math.max(0, Math.min(sliderTrack.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
+                y: -height - Style.spacingM
+                visible: slider.visible && slider.enabled && slider.showValue && (slider.alwaysShowValue || sliderMouseArea.containsMouse || slider.isDragging)
+                closePolicy: Controls.Popup.NoAutoClose
+                modal: false
+                dim: false
+                focus: false
 
-                NumericText {
+                Binding {
+                    target: valueTooltip.contentItem?.parent ?? null
+                    property: "containmentMask"
+                    value: QtObject {
+                        function contains(position: point): bool {
+                            return false;
+                        }
+                    }
+                }
+
+                background: StyledRect {
+                    radius: Style.cornerRadius
+                    color: Style.surfaceContainer
+                    border.color: Style.outline
+                    border.width: Style.outlineWidth
+                }
+
+                contentItem: NumericText {
                     id: tooltipText
 
                     text: slider.formatValue(slider.valueOverride >= 0 ? slider.valueOverride : slider.value)
@@ -291,12 +314,26 @@ Item {
                     font.pixelSize: Style.fontSizeSmall
                     color: Style.surfaceText
                     font.weight: Font.Medium
-                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
                     font.hintingPreference: Font.PreferFullHinting
                 }
 
-                Behavior on opacity {
+                enter: Transition {
                     NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: Style.shortDuration
+                        easing.type: Style.standardEasing
+                    }
+                }
+
+                exit: Transition {
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 1
+                        to: 0
                         duration: Style.shortDuration
                         easing.type: Style.standardEasing
                     }

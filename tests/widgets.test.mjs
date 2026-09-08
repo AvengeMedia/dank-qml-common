@@ -6,15 +6,17 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
-for (const fixture of ["slider", "foreground", "states"]) {
+for (const fixture of ["slider", "foreground", "states", "selection"]) {
     test(`${fixture} component behavior`, () => {
         const directory = mkdtempSync(join(tmpdir(), "dank-widgets-"));
         try {
+            const configDirectory = join(directory, "shell");
+            mkdirSync(configDirectory);
             for (const name of ["DankCommon", "Common", "Services"])
-                symlinkSync(fileURLToPath(new URL(`../${name}`, import.meta.url)), join(directory, name));
-            copyFileSync(new URL(`qml/${fixture}.qml`, import.meta.url), join(directory, "shell.qml"));
+                symlinkSync(fileURLToPath(new URL(`../${name}`, import.meta.url)), join(configDirectory, name));
+            copyFileSync(new URL(`qml/${fixture}.qml`, import.meta.url), join(configDirectory, "shell.qml"));
             mkdirSync(join(directory, "runtime"), { mode: 0o700 });
-            const output = execFileSync("qs", ["-p", directory], {
+            const output = execFileSync("qs", ["-p", configDirectory], {
                 encoding: "utf8",
                 timeout: 30000,
                 env: {
@@ -27,6 +29,9 @@ for (const fixture of ["slider", "foreground", "states"]) {
                 }
             });
             assert.match(output, /PASS/);
+            assert.doesNotMatch(output, /\b(?:ERROR|TypeError|ReferenceError|SyntaxError)\b|Binding loop detected/);
+        } catch (error) {
+            throw new Error([error.message, error.stdout, error.stderr].filter(Boolean).join("\n"), { cause: error });
         } finally {
             rmSync(directory, { recursive: true, force: true });
         }

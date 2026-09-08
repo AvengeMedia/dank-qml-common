@@ -36,7 +36,7 @@ StyledButton {
     Accessible.role: Accessible.ListItem
     Accessible.selected: isSelected
     color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.primaryContainer : Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
-    radius: isSelected || visualFocus || pressed ? Style.groupedListOuterRadius : isHovered && enabled ? Style.cornerRadiusM : Style.groupedListInnerRadius
+    radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius
     bottomLeftRadius: lastInGroup ? Style.groupedListOuterRadius : radius

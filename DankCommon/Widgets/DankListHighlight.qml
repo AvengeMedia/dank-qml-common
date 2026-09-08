@@ -3,8 +3,14 @@ import qs.DankCommon.Common
 
 Rectangle {
     property bool animate: true
+    property bool firstInGroup: true
+    property bool lastInGroup: true
     color: Style.primaryContainer
-    radius: Style.groupedListOuterRadius
+    radius: Style.groupedListInnerRadius
+    topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
+    topRightRadius: topLeftRadius
+    bottomLeftRadius: lastInGroup ? Style.groupedListOuterRadius : radius
+    bottomRightRadius: bottomLeftRadius
 
     Behavior on x {
         enabled: parent && parent.visible && animate && !Style.reduceMotion && !Style.springMotionDisabled

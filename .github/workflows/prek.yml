@@ -21,7 +21,16 @@ jobs:
           pacman -Syu --noconfirm --needed git nodejs python quickshell ttf-dejavu
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
 
       - name: run pre-commit hooks
-        uses: j178/prek-action@v2
+        uses: j178/prek-action@5337cb91e0fa35a7ff31b9ca345126d8bbbcdf16
+        with:
+          prek-version: "0.5.2"
+          cache: ${{ github.event_name != 'pull_request' }}
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}

@@ -37,10 +37,11 @@ Item {
     function run() {
         let cases = 0;
         try {
-            for (const [strength, outer, inner, hover, chipRadius] of [[0, 0, 0, 0, 0], [25, 8, 2, 6, 4], [50, 16, 4, 12, 8], [100, 43, 11, 32, 21]]) {
+            for (const [strength, outer, inner, chipRadius] of [[0, 0, 0, 0], [25, 8, 2, 4], [50, 16, 4, 8], [100, 43, 11, 21]]) {
                 theme.radiusStrength = strength;
                 const highlight = highlightFactory.createObject(root);
-                equal(highlight.radius, outer, "selection highlight radius");
+                equal(highlight.topLeftRadius, outer, "standalone highlight top radius");
+                equal(highlight.bottomLeftRadius, outer, "standalone highlight bottom radius");
                 highlight.destroy();
                 for (const first of [false, true]) {
                     for (const last of [false, true]) {
@@ -52,11 +53,10 @@ Item {
                                     isSelected: selected,
                                     isHovered: hovered
                                 });
-                                const middle = selected ? outer : hovered ? hover : inner;
-                                equal(row.topLeftRadius, first ? outer : middle, "row top left");
-                                equal(row.topRightRadius, first ? outer : middle, "row top right");
-                                equal(row.bottomLeftRadius, last ? outer : middle, "row bottom left");
-                                equal(row.bottomRightRadius, last ? outer : middle, "row bottom right");
+                                equal(row.topLeftRadius, first ? outer : inner, "row top left");
+                                equal(row.topRightRadius, first ? outer : inner, "row top right");
+                                equal(row.bottomLeftRadius, last ? outer : inner, "row bottom left");
+                                equal(row.bottomRightRadius, last ? outer : inner, "row bottom right");
                                 row.destroy();
                                 cases++;
                             }

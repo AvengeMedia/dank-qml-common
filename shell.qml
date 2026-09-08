@@ -278,9 +278,9 @@ ShellRoot {
                         X.DankSlider {
                             width: Math.min(340, gallery.width)
                             value: 65
-                            size: "xl"
+                            size: "m"
                             onSliderValueChanged: newValue => value = newValue
-                            insetIcon: "volume_down"
+                            insetIcon: "volume_up"
                             insetIconPosition: "start"
                         }
 

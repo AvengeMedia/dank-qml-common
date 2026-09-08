@@ -325,7 +325,7 @@ Item {
             // inset icon behind handle
             Base.DankIcon {
                 name: slider.insetIcon
-                size: Style.iconSizeLarge
+                size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onSecondaryContainer : Style.onPrimary) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: sliderTrack.insetIconLeftAligned ? sliderHandle.left : undefined
@@ -347,7 +347,7 @@ Item {
             // inset icon aligned at the edge of the track
             Base.DankIcon {
                 name: slider.insetIcon
-                size: Style.iconSizeLarge
+                size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? Style.onPrimary : Style.onSecondaryContainer) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: sliderTrack.insetIconLeftAligned  ? sliderTrack.left : undefined

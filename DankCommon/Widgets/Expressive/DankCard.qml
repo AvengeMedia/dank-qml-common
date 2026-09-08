@@ -29,6 +29,7 @@ FocusScope {
     readonly property var focusTargets: acceptsInput ? [input] : []
 
     readonly property bool acceptsInput: clickable && interactive && enabled
+    readonly property bool floatingWindow: Style.isFloatingWindow(card)
     readonly property bool tinted: tone === "primary" || tone === "secondary" || tone === "tertiary"
     readonly property color containerColor: {
         switch (tone) {
@@ -55,12 +56,12 @@ FocusScope {
     readonly property color accentColor: tinted ? contentColor : Style.primary
     property color onAccentColor
     readonly property color mutedColor: tinted ? Style.withAlpha(contentColor, 0.72) : Style.onSurfaceVariant
-    readonly property color chipColor: tinted ? Style.withAlpha(contentColor, Style.stateLayerFocus) : Style.withAlpha(Style.surfaceContainerHighest, Style.popupTransparency)
-    readonly property color surfaceColor: Style.withAlpha(containerColor, Style.popupTransparency)
+    readonly property color chipColor: tinted ? Style.foregroundColor(Style.withAlpha(contentColor, Style.stateLayerFocus), floatingWindow) : Style.foregroundColor(Style.surfaceContainerHighest, floatingWindow)
+    readonly property color surfaceColor: Style.foregroundColor(containerColor, floatingWindow)
     property bool showFocusRing: true
     property bool clipContent: false
-    property real restRadius: Style.cornerRadiusXL
-    property real bodyRadius: input.pressed ? Style.cornerRadiusM : restRadius
+    property real restRadius: Style.cornerRadiusM
+    property real bodyRadius: restRadius
 
     radius: bodyRadius
     color: surfaceColor

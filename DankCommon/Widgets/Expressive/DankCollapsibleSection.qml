@@ -43,7 +43,7 @@ ColumnLayout {
         topRightRadius: Style.groupedListOuterRadius
         bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
         bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
-        color: Style.surfaceContainerLow
+        color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
 
         Behavior on bottomLeftRadius {
             enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -144,7 +144,7 @@ ColumnLayout {
             topRightRadius: Style.groupedListInnerRadius
             bottomLeftRadius: Style.groupedListOuterRadius
             bottomRightRadius: Style.groupedListOuterRadius
-            color: Style.surfaceContainerLow
+            color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
             opacity: root.showBackground && root.expanded ? 1.0 : 0.0
             visible: root.showBackground
 

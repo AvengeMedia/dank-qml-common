@@ -132,7 +132,7 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: showText ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: Math.min(Style.cornerRadiusFull, height / 2)
+        radius: Style.fullRadius(width, height)
 
         color: {
             if (!toggle.enabled)
@@ -204,7 +204,7 @@ FocusScope {
 
             width: sizeSpring.value
             height: width
-            radius: Math.min(Style.cornerRadiusFull, height / 2)
+            radius: Style.fullRadius(width, height)
             x: input.mirrored ? toggleTrack.width - centerX - width / 2 : centerX - width / 2
             anchors.verticalCenter: parent.verticalCenter
 
@@ -240,7 +240,7 @@ FocusScope {
         Rectangle {
             width: Style.iconButtonSize
             height: Style.iconButtonSize
-            radius: Math.min(Style.cornerRadiusFull, width / 2)
+            radius: Style.fullRadius(width, height)
             anchors.verticalCenter: parent.verticalCenter
             x: thumb.x + thumb.width / 2 - width / 2
             color: toggle.checked ? Style.primary : Style.onSurface

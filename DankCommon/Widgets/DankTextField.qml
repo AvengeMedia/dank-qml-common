@@ -11,16 +11,6 @@ StyledRect {
     KeyNavigation.tab: keyNavigationTab
     KeyNavigation.backtab: keyNavigationBacktab
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property alias text: textInput.text
     property alias cursorPosition: textInput.cursorPosition
     property string placeholderText: ""
@@ -38,15 +28,15 @@ StyledRect {
     property bool showPasswordToggle: false
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainerHigh
     property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
     property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
     property color placeholderColor: Style.outlineButton
     property bool hidePlaceholderOnFocus: true
     property real borderWidth: 1
     property real focusedBorderWidth: 2
-    property real cornerRadius: Style.cornerRadius
+    property real cornerRadius: Style.cornerRadiusXS
 
     readonly property real leftPadding: Style.spacingM + (leftIconName ? leftIconSize + Style.spacingM : 0)
     readonly property real rightPadding: {
@@ -96,7 +86,7 @@ StyledRect {
     width: 200
     height: labelText !== "" ? Math.round(Style.fontSizeMedium * 3) + labelBandHeight : Math.round(Style.fontSizeMedium * 3)
     radius: cornerRadius
-    color: backgroundColor
+    color: Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
     border.width: textInput.activeFocus ? focusedBorderWidth : borderWidth
 
@@ -237,7 +227,7 @@ StyledRect {
 
             width: 20
             height: 20
-            radius: 10
+            radius: Style.fullRadius(width, height)
             color: passwordToggleArea.containsMouse ? Style.outlineStrong : Style.withAlpha(Style.outlineStrong, 0)
             visible: showPasswordToggle
 
@@ -263,7 +253,7 @@ StyledRect {
 
             width: 20
             height: 20
-            radius: 10
+            radius: Style.fullRadius(width, height)
             color: clearArea.containsMouse ? Style.outlineStrong : Style.withAlpha(Style.outlineStrong, 0)
             visible: showClearButton && text.length > 0
 

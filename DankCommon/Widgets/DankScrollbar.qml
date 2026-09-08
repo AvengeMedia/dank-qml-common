@@ -31,7 +31,7 @@ ScrollBar {
 
     contentItem: Rectangle {
         implicitWidth: 6
-        radius: Math.min(Style.cornerRadiusFull, width / 2)
+        radius: Style.fullRadius(width, height)
         color: scrollbar.pressed ? Style.primary : scrollbar._shouldShow ? Style.outline : Style.outlineMedium
         opacity: scrollbar.pressed ? 1.0 : scrollbar._shouldShow ? 1.0 : 0.6
     }

@@ -136,7 +136,7 @@ T.Control {
                 }
 
                 Base.FocusRing {
-                    radius: Math.min(Style.cornerRadiusFull, Style.cornerRadiusM + Style.focusRingOffset)
+                    radius: Math.min(Style.fullRadius(width, height), Style.cornerRadiusM + Style.focusRingOffset)
                     visible: tabItem.visualFocus || (tabBar.visualFocus && tabItem.isActive)
                 }
             }

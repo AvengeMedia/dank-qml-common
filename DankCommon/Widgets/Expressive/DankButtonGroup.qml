@@ -7,16 +7,6 @@ import qs.DankCommon.Widgets as Base
 Row {
     id: root
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property var model: []
     property int currentIndex: -1
     property string selectionMode: "single"
@@ -33,7 +23,7 @@ Row {
     property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium
     property bool userInteracted: false
     property bool interactionStarted: false
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
     property real maximumWidth: -1
     property bool fillWidth: false
     readonly property real _segmentCap: {
@@ -42,7 +32,7 @@ Row {
             return -1;
         return (maximumWidth - spacing * (count - 1)) / count - Style.spacingXS;
     }
-    readonly property real outerRadius: Math.min(Style.cornerRadiusFull, buttonHeight / 2)
+    readonly property real outerRadius: Style.fullRadius(buttonHeight, buttonHeight)
     readonly property real innerRadius: Math.min(Style.cornerRadiusS, outerRadius)
     readonly property real pressedInnerRadius: Math.min(Style.cornerRadiusXS, outerRadius)
 
@@ -185,7 +175,7 @@ Row {
             }
             height: root.buttonHeight
 
-            color: !root.enabled ? Style.onSurface_12 : (selected ? Style.buttonBg : (root.usePopupTransparency ? Style.withAlpha(Style.secondaryContainer, Style.popupTransparency) : Style.secondaryContainer))
+            color: !root.enabled ? Style.onSurface_12 : (selected ? Style.buttonBg : Style.foregroundColor(Style.secondaryContainer, !root.usePopupTransparency))
             border.color: "transparent"
             border.width: 0
 
@@ -258,7 +248,7 @@ Row {
             }
 
             Base.FocusRing {
-                radius: Math.min(Style.cornerRadiusFull, root.outerRadius + Style.focusRingOffset)
+                radius: Math.min(Style.fullRadius(width, height), root.outerRadius + Style.focusRingOffset)
                 visible: segment.visualFocus
             }
 

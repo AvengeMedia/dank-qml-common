@@ -228,7 +228,7 @@ FocusScope {
 
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
-                    radius: Style.cornerRadiusM
+                    radius: Style.cornerRadiusS
                     color: root._minuteMode ? Style.surfaceContainerHighest : Style.primaryContainer
                     KeyNavigation.backtab: okButton
                     onActiveFocusChanged: {
@@ -286,7 +286,7 @@ FocusScope {
 
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
-                    radius: Style.cornerRadiusM
+                    radius: Style.cornerRadiusS
                     color: root._minuteMode ? Style.primaryContainer : Style.surfaceContainerHighest
                     onActiveFocusChanged: {
                         if (!activeFocus)

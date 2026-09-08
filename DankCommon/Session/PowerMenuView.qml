@@ -54,7 +54,7 @@ Rectangle {
                 readonly property color contentColor: warningAction && (stateLayer.containsMouse || holding) ? (modelData === "poweroff" ? Style.error : Style.warning) : selected ? Style.onPrimaryContainer : Style.onSecondaryContainer
                 width: (buttons.width - buttons.spacing * (buttons.columns - 1)) / buttons.columns
                 height: root.gridLayout ? Math.max(LockMetrics.powerGridButtonHeight, label.implicitHeight + icon.height + keycap.height + Style.spacingS * 4) : Math.max(LockMetrics.powerButtonHeight, label.implicitHeight + Style.spacingM * 2)
-                radius: stateLayer.pressed || holding ? Style.cornerRadiusM : root.gridLayout ? Style.cornerRadiusXL : Style.shapeScale > 0 ? height / 2 : 0
+                radius: stateLayer.pressed || holding ? Style.cornerRadiusM : root.gridLayout ? Style.cornerRadiusXL : Style.fullRadius(width, height)
                 color: selected ? Style.primaryContainer : Style.secondaryContainer
                 border.width: selected ? Style.focusRingWidth : 0
                 border.color: Style.focusRingColor

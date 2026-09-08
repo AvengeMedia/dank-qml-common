@@ -8,16 +8,6 @@ StyledRect {
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property alias text: textEdit.text
     property alias cursorPosition: textEdit.cursorPosition
     property alias font: textEdit.font
@@ -29,15 +19,15 @@ StyledRect {
     property int leftIconSize: Style.iconSize
     property color leftIconColor: Style.surfaceVariantText
     property color leftIconFocusedColor: Style.primary
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainerHigh
     property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
     property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
     property color placeholderColor: Style.outlineButton
     property bool hidePlaceholderOnFocus: true
     property real borderWidth: 1
     property real focusedBorderWidth: 2
-    property real cornerRadius: Style.cornerRadius
+    property real cornerRadius: Style.cornerRadiusXS
     property real topPadding: Style.spacingS
     property real bottomPadding: Style.spacingS
     property var keyForwardTargets: []
@@ -70,7 +60,7 @@ StyledRect {
     width: 200
     height: Math.round(Style.fontSizeMedium * 8)
     radius: cornerRadius
-    color: backgroundColor
+    color: Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textEdit.activeFocus ? focusedBorderColor : normalBorderColor
     border.width: textEdit.activeFocus ? focusedBorderWidth : borderWidth
 

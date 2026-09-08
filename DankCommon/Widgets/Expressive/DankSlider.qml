@@ -6,16 +6,6 @@ import qs.DankCommon.Widgets as Base
 Controls.Control {
     id: slider
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
     wheelEnabled: true
 
@@ -31,6 +21,7 @@ Controls.Control {
     property string insetIconTooltip: ""
     property string unit: "%"
     property bool showValue: true
+    property bool showStops: false
     property bool isDragging: false
     property bool centerMinimum: false
     property real valueOverride: -1
@@ -45,7 +36,7 @@ Controls.Control {
     property color fillTextColor: Style.onPrimary
     property color trackColor: Style.secondaryContainer
     property color trackTextColor: Style.onSecondaryContainer
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
+    property bool usePopupTransparency: !Style.isFloatingWindow(slider)
     property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
 
     signal insetIconClicked
@@ -95,7 +86,6 @@ Controls.Control {
             return Style.sliderHandleHeight;
         }
     }
-    readonly property real cornerScale: Math.max(0, Style.cornerRadius / 12)
     readonly property real trackCornerRadius: {
         switch (size) {
         case "s":
@@ -110,14 +100,14 @@ Controls.Control {
             return Style.sliderTrackCornerRadius;
         }
     }
-    readonly property real outsideCorner: Math.min(trackHeight / 2, trackCornerRadius * cornerScale)
-    readonly property real insideCorner: Math.min(trackHeight / 2, Style.sliderTrackInsideCornerRadius * cornerScale)
+    readonly property real outsideCorner: Style.scaledRadius(trackCornerRadius, trackHeight / 2)
+    readonly property real insideCorner: Style.scaledRadius(Style.sliderTrackInsideCornerRadius, trackHeight / 2)
     readonly property real visualRatio: mirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)
             return 0;
         const steps = Math.ceil((maximum - minimum) / step);
-        return steps >= 2 && steps <= 12 ? steps + 1 : 0;
+        return steps >= 2 ? steps + 1 : 0;
     }
     readonly property int keyStep: step > 1 ? step : Math.max(1, Math.round((maximum - minimum) / 100))
     readonly property int pageSteps: Math.max(1, Math.min(10, Math.round((maximum - minimum) / keyStep / 10)))
@@ -229,6 +219,8 @@ Controls.Control {
             readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
             readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
+            readonly property real tickSpacing: slider.tickCount > 1 ? (width - Style.sliderHandleWidth) / (slider.tickCount - 1) : 0
+            readonly property bool ticksVisible: slider.showStops && slider.tickCount > 0 && tickSpacing >= Style.sliderTickSize + Style.sliderHandleGap
             readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
             readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
             readonly property bool insetIconBehindHandle: {
@@ -273,16 +265,16 @@ Controls.Control {
                 Base.StyledRect {
                     width: Style.sliderStopSize
                     height: Style.sliderStopSize
-                    radius: Math.min(1, slider.cornerScale) * width / 2
+                    radius: Style.fullRadius(width, height)
                     x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
-                    visible: (sliderTrack.insetIconVisible && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
+                    visible: slider.showStops && !(sliderTrack.insetIconVisible && slider.insetIconPosition === "end") && parent.width > Style.sliderHandleGap * 2 + width
                 }
             }
 
             Repeater {
-                model: slider.tickCount
+                model: sliderTrack.ticksVisible ? slider.tickCount : 0
 
                 Base.StyledRect {
                     required property int index
@@ -291,7 +283,7 @@ Controls.Control {
                     readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
-                    radius: Math.min(1, slider.cornerScale) * width / 2
+                    radius: Style.fullRadius(width, height)
                     x: tickX - width / 2
                     anchors.verticalCenter: parent.verticalCenter
                     color: onFilled ? slider.fillTextColor : Style.onSurfaceVariant
@@ -304,7 +296,7 @@ Controls.Control {
 
                 width: sliderMouseArea.pressed ? Style.sliderHandleWidth / 2 : Style.sliderHandleWidth
                 height: slider.handleHeight
-                radius: Math.min(1, slider.cornerScale) * width / 2
+                radius: Style.fullRadius(width, height)
                 x: sliderTrack.handleLeft
                 anchors.verticalCenter: parent.verticalCenter
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
@@ -400,7 +392,7 @@ Controls.Control {
 
                 Base.FocusRing {
                     visible: insetAction.visualFocus
-                    radius: Style.cornerRadiusFull
+                    radius: Style.fullRadius(width, height)
                 }
                 DankTooltipV2 {
                     id: actionTooltip
@@ -501,7 +493,7 @@ Controls.Control {
                 }
 
                 background: Base.StyledRect {
-                    radius: Math.min(1, slider.cornerScale) * height / 2
+                    radius: Style.fullRadius(width, height)
                     color: slider.fillColor
                 }
 

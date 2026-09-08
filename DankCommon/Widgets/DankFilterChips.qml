@@ -38,7 +38,7 @@ Flow {
 
             width: contentRow.implicitWidth + root.chipPadding * 2
             height: root.chipHeight
-            radius: Math.min(Style.cornerRadiusFull, height / 2)
+            radius: Style.cornerRadiusS
 
             color: selected ? Style.primary : Style.surfaceVariant
 

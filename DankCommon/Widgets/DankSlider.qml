@@ -6,16 +6,6 @@ import qs.DankCommon.Widgets
 Item {
     id: slider
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property int value: 50
     property int minimum: 0
     property int maximum: 100
@@ -34,7 +24,7 @@ Item {
 
     property color thumbOutlineColor: Style.surfaceContainer
     property color trackColor: enabled ? Style.outline : Style.outline
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
+    property bool usePopupTransparency: !Style.isFloatingWindow(slider)
     property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
 
     signal sliderValueChanged(int newValue)
@@ -137,7 +127,7 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width + 20
                     height: parent.height + 20
-                    radius: Math.min(Style.cornerRadiusFull, width / 2)
+                    radius: Style.fullRadius(width, height)
                     color: "transparent"
                     border.width: 2
                     border.color: Style.primary
@@ -150,7 +140,7 @@ Item {
                     anchors.centerIn: parent
                     width: 0
                     height: 0
-                    radius: Math.min(Style.cornerRadiusFull, width / 2)
+                    radius: Style.fullRadius(width, height)
                     color: Style.onPrimary
                     opacity: 0
 

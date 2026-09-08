@@ -2,6 +2,8 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import "Shape.js" as Shape
+import "Surface.js" as Surface
 import Quickshell
 
 Singleton {
@@ -127,15 +129,26 @@ Singleton {
     readonly property color errorHover: theme?.errorHover ?? withAlpha(error, 0.12)
     readonly property color errorSelected: theme?.errorSelected ?? withAlpha(error, 0.3)
 
+    readonly property real foregroundAlpha: theme?.foregroundAlpha ?? Surface.foregroundAlpha(theme?.foregroundLayers ?? true, theme?.foregroundLayerTransparency ?? 1)
+    readonly property real floatingWindowForegroundAlpha: theme?.floatingWindowForegroundAlpha ?? Surface.foregroundAlpha(theme?.floatingWindowForegroundLayers ?? theme?.foregroundLayers ?? true, theme?.floatingWindowForegroundTransparency ?? theme?.foregroundLayerTransparency ?? 1)
+
+    function isFloatingWindow(item) {
+        return Surface.isFloatingWindow(item);
+    }
+
+    function foregroundColor(baseColor, floatingWindow = false) {
+        return blendAlpha(baseColor, floatingWindow ? floatingWindowForegroundAlpha : foregroundAlpha);
+    }
+
     readonly property color floatingSurface: theme?.floatingSurface ?? withAlpha(surfaceContainer, popupTransparency)
-    readonly property color nestedSurface: theme?.nestedSurface ?? withAlpha(surfaceContainerHigh, popupTransparency)
+    readonly property color nestedSurface: theme?.nestedSurface ?? foregroundColor(surfaceContainerHigh)
     readonly property real floatingWindowTransparency: theme?.floatingWindowTransparency ?? popupTransparency
     readonly property color floatingWindowSurface: theme?.floatingWindowSurface ?? withAlpha(surfaceContainer, floatingWindowTransparency)
-    readonly property color floatingWindowNestedSurface: theme?.floatingWindowNestedSurface ?? nestedSurface
-    readonly property color floatingWindowFieldColor: theme?.floatingWindowFieldColor ?? withAlpha(surfaceContainerHigh, floatingWindowTransparency)
+    readonly property color floatingWindowNestedSurface: theme?.floatingWindowNestedSurface ?? foregroundColor(surfaceContainerHigh, true)
+    readonly property color floatingWindowFieldColor: theme?.floatingWindowFieldColor ?? foregroundColor(surfaceContainerHigh, true)
     readonly property color floatingWindowFieldBorderColor: theme?.floatingWindowFieldBorderColor ?? withAlpha(outline, 0.16)
     readonly property color floatingWindowFieldFocusedBorderColor: theme?.floatingWindowFieldFocusedBorderColor ?? primary
-    readonly property color popupFieldColor: theme?.popupFieldColor ?? withAlpha(surfaceContainerHigh, popupTransparency)
+    readonly property color popupFieldColor: theme?.popupFieldColor ?? foregroundColor(surfaceContainerHigh)
     readonly property color popupFieldBorderColor: theme?.popupFieldBorderColor ?? withAlpha(outline, 0.16)
     readonly property color popupFieldFocusedBorderColor: theme?.popupFieldFocusedBorderColor ?? primary
     readonly property color shadowStrong: theme?.shadowStrong ?? Qt.rgba(0, 0, 0, 0.3)
@@ -149,20 +162,37 @@ Singleton {
     readonly property int smallBreakpoint: theme?.smallBreakpoint ?? 480
     readonly property int mediumBreakpoint: theme?.mediumBreakpoint ?? 768
 
-    readonly property real cornerRadius: theme?.cornerRadius ?? 12
-    readonly property real shapeScale: theme?.shapeScale ?? Math.max(0, cornerRadius / 12)
-    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Math.round(2 * shapeScale)
-    readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Math.round(4 * shapeScale)
-    readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Math.round(8 * shapeScale)
-    readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Math.round(12 * shapeScale)
-    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? Math.round(16 * shapeScale)
-    readonly property real cornerRadiusLIncreased: theme?.cornerRadiusLIncreased ?? Math.round(20 * shapeScale)
-    readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Math.round(28 * shapeScale)
-    readonly property real cornerRadiusXLIncreased: theme?.cornerRadiusXLIncreased ?? Math.round(32 * shapeScale)
-    readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Math.round(48 * shapeScale)
+    readonly property real radiusStrength: theme?.radiusStrength ?? Shape.strengthFromRadius(theme?.cornerRadius ?? 12)
+    readonly property real shapeScale: theme?.radiusStrength !== undefined ? Shape.scaleForStrength(radiusStrength) : (theme?.shapeScale ?? Shape.scaleForStrength(radiusStrength))
+    readonly property real cornerRadius: cornerRadiusM
+    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Shape.radius("xxs", shapeScale)
+    readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Shape.radius("xs", shapeScale)
+    readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Shape.radius("s", shapeScale)
+    readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Shape.radius("m", shapeScale)
+    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? Shape.radius("l", shapeScale)
+    readonly property real cornerRadiusLIncreased: theme?.cornerRadiusLIncreased ?? Shape.radius("lIncreased", shapeScale)
+    readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Shape.radius("xl", shapeScale)
+    readonly property real cornerRadiusXLIncreased: theme?.cornerRadiusXLIncreased ?? Shape.radius("xlIncreased", shapeScale)
+    readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Shape.radius("xxl", shapeScale)
     readonly property real cornerRadiusFull: shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
+
+    function scaledRadius(radius, limit) {
+        return Shape.scaledRadius(radius, limit, shapeScale);
+    }
+
+    function fullRadius(width, height) {
+        return Shape.fullRadius(width, height, shapeScale);
+    }
+
+    function buttonRadius(width, height, sizeHeight, pressed, round) {
+        if (!pressed && round)
+            return fullRadius(width, height);
+        const token = Shape.buttonCorner(sizeHeight, pressed);
+        return root["cornerRadius" + token.toUpperCase()];
+    }
+
     readonly property real groupedListGap: theme?.groupedListGap ?? spacingXXS
     readonly property real groupedListInnerRadius: theme?.groupedListInnerRadius ?? cornerRadiusXS
     readonly property real groupedListOuterRadius: theme?.groupedListOuterRadius ?? cornerRadiusL

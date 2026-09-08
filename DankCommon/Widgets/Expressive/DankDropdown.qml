@@ -12,16 +12,6 @@ FocusScope {
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property string text: ""
     property string description: ""
     property string currentValue: ""
@@ -54,10 +44,10 @@ FocusScope {
     property Item popupAnchorItem: null
     property bool addHorizontalPadding: false
     property string emptyText: ""
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceContainer, Style.popupTransparency) : Style.surfaceContainer
-    property color hoverBackgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.surfaceContainerHigh
-    property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.surfaceContainer
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainer
+    property color hoverBackgroundColor: Style.surfaceContainerHigh
+    property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.floatingWindowSurface
     property color normalBorderColor: Style.outlineVariant
     property color focusedBorderColor: Style.primary
     property var transientSurfaceTracker: null
@@ -314,8 +304,8 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: Style.cornerRadiusM
-        color: !root.enabled ? Style.onSurface_12 : (dropdown.hovered || root.menuVisible ? root.hoverBackgroundColor : root.backgroundColor)
+        radius: Style.cornerRadiusXS
+        color: !root.enabled ? Style.onSurface_12 : (dropdown.hovered || root.menuVisible ? root.hoverBackgroundColor : Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency))
         border.color: !root.enabled ? "transparent" : (active || dropdown.hovered ? root.focusedBorderColor : root.normalBorderColor)
         border.width: active ? Style.outlineWidthFocused : Style.outlineWidth
 

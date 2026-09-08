@@ -7,16 +7,6 @@ import qs.DankCommon.Widgets
 Row {
     id: root
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property var model: []
     property int currentIndex: -1
     property string selectionMode: "single"
@@ -32,7 +22,7 @@ Row {
     property int checkIconSize: size === "small" ? Style.iconSizeSmall - 2 : Style.iconSizeSmall
     property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium
     property bool userInteracted: false
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
     property real maximumWidth: -1
     readonly property real _segmentCap: {
         const count = model?.length ?? 0;
@@ -116,14 +106,14 @@ Row {
             }
             height: root.buttonHeight
 
-            color: selected ? Style.buttonBg : (root.usePopupTransparency ? Style.withAlpha(Style.surfaceVariant, Style.popupTransparency) : Style.surfaceVariant)
+            color: selected ? Style.buttonBg : Style.foregroundColor(Style.surfaceVariant, !root.usePopupTransparency)
             border.color: "transparent"
             border.width: 0
 
-            topLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
-            bottomLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
-            topRightRadius: (visualLast || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
-            bottomRightRadius: (visualLast || selected) ? Style.cornerRadius : Math.min(4, Style.cornerRadius)
+            topLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Style.cornerRadiusXS
+            bottomLeftRadius: (visualFirst || selected) ? Style.cornerRadius : Style.cornerRadiusXS
+            topRightRadius: (visualLast || selected) ? Style.cornerRadius : Style.cornerRadiusXS
+            bottomRightRadius: (visualLast || selected) ? Style.cornerRadius : Style.cornerRadiusXS
 
             Behavior on width {
                 enabled: root.userInteracted

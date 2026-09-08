@@ -2,6 +2,8 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import "../DankCommon/Common/Shape.js" as Shape
+import "../DankCommon/Common/Surface.js" as Surface
 import Quickshell
 import qs.DankCommon.Common
 
@@ -106,16 +108,22 @@ Singleton {
     property color buttonPressed: withAlpha(primary, 0.16)
 
     property real popupTransparency: 1.0
+    property bool foregroundLayers: true
+    property real foregroundLayerTransparency: 1.0
+    readonly property real foregroundAlpha: Surface.foregroundAlpha(foregroundLayers, foregroundLayerTransparency)
     readonly property color floatingSurface: withAlpha(surfaceContainer, popupTransparency)
-    readonly property color nestedSurface: withAlpha(surfaceContainerHigh, popupTransparency)
+    readonly property color nestedSurface: withAlpha(surfaceContainerHigh, foregroundAlpha)
 
     property real floatingWindowTransparency: popupTransparency
+    property bool floatingWindowForegroundLayers: foregroundLayers
+    property real floatingWindowForegroundTransparency: foregroundLayerTransparency
+    readonly property real floatingWindowForegroundAlpha: Surface.foregroundAlpha(floatingWindowForegroundLayers, floatingWindowForegroundTransparency)
     property color floatingWindowSurface: withAlpha(surfaceContainer, floatingWindowTransparency)
-    property color floatingWindowNestedSurface: nestedSurface
-    property color floatingWindowFieldColor: withAlpha(surfaceContainerHigh, floatingWindowTransparency)
+    property color floatingWindowNestedSurface: withAlpha(surfaceContainerHigh, floatingWindowForegroundAlpha)
+    property color floatingWindowFieldColor: floatingWindowNestedSurface
     property color floatingWindowFieldBorderColor: withAlpha(outline, 0.16)
     property color floatingWindowFieldFocusedBorderColor: primary
-    property color popupFieldColor: withAlpha(surfaceContainerHigh, popupTransparency)
+    property color popupFieldColor: nestedSurface
     property color popupFieldBorderColor: withAlpha(outline, 0.16)
     property color popupFieldFocusedBorderColor: primary
     property bool blurLayersActive: true
@@ -144,20 +152,34 @@ Singleton {
     property real iconSize: 24
     property real iconSizeLarge: 32
 
-    property real cornerRadius: 12
-    readonly property real shapeScale: Math.max(0, cornerRadius / 12)
-    readonly property real cornerRadiusXXS: Math.round(2 * shapeScale)
-    readonly property real cornerRadiusXS: Math.round(4 * shapeScale)
-    readonly property real cornerRadiusS: Math.round(8 * shapeScale)
-    readonly property real cornerRadiusM: Math.round(12 * shapeScale)
-    readonly property real cornerRadiusL: Math.round(16 * shapeScale)
-    readonly property real cornerRadiusLIncreased: Math.round(20 * shapeScale)
-    readonly property real cornerRadiusXL: Math.round(28 * shapeScale)
-    readonly property real cornerRadiusXLIncreased: Math.round(32 * shapeScale)
-    readonly property real cornerRadiusXXL: Math.round(48 * shapeScale)
+    property real radiusStrength: 50
+    readonly property real shapeScale: Shape.scaleForStrength(radiusStrength)
+    readonly property real cornerRadius: cornerRadiusM
+    readonly property real cornerRadiusXXS: Shape.radius("xxs", shapeScale)
+    readonly property real cornerRadiusXS: Shape.radius("xs", shapeScale)
+    readonly property real cornerRadiusS: Shape.radius("s", shapeScale)
+    readonly property real cornerRadiusM: Shape.radius("m", shapeScale)
+    readonly property real cornerRadiusL: Shape.radius("l", shapeScale)
+    readonly property real cornerRadiusLIncreased: Shape.radius("lIncreased", shapeScale)
+    readonly property real cornerRadiusXL: Shape.radius("xl", shapeScale)
+    readonly property real cornerRadiusXLIncreased: Shape.radius("xlIncreased", shapeScale)
+    readonly property real cornerRadiusXXL: Shape.radius("xxl", shapeScale)
     readonly property real cornerRadiusFull: shapeScale > 0 ? 9999 : 0
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
+
+    function scaledRadius(radius, limit) {
+        return Shape.scaledRadius(radius, limit, shapeScale);
+    }
+
+    function fullRadius(width, height) {
+        return Shape.fullRadius(width, height, shapeScale);
+    }
+
+    function buttonRadius(width, height, sizeHeight, pressed, round) {
+        return Shape.buttonRadius(width, height, sizeHeight, pressed, round, shapeScale);
+    }
+
     readonly property real groupedListGap: spacingXXS
     readonly property real groupedListInnerRadius: cornerRadiusXS
     readonly property real groupedListOuterRadius: cornerRadiusL

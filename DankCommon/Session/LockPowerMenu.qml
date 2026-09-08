@@ -677,7 +677,7 @@ Rectangle {
                                     Rectangle {
                                         width: 20
                                         height: 16
-                                        radius: 4
+                                        radius: Style.cornerRadiusXS
                                         color: Style.onSurface_12
                                         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -802,7 +802,7 @@ Rectangle {
                                 Rectangle {
                                     width: 28
                                     height: 20
-                                    radius: 4
+                                    radius: Style.cornerRadiusXS
                                     color: Style.onSurface_12
                                     anchors.right: parent.right
                                     anchors.rightMargin: Style.spacingM

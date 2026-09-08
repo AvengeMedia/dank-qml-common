@@ -28,17 +28,7 @@ StyledButton {
     implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
 
-    radius: {
-        if (pressed)
-            return buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS;
-        if (shape === "round")
-            return Math.min(Style.cornerRadiusFull, height / 2);
-        if (buttonHeight <= Style.buttonHeightS)
-            return Style.spacingM;
-        if (buttonHeight <= Style.buttonHeightM)
-            return Style.spacingL;
-        return Style.spacingXL + Style.spacingXS;
-    }
+    radius: Style.buttonRadius(width, height, buttonHeight, pressed, shape === "round")
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     Accessible.role: Accessible.Button

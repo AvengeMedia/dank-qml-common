@@ -313,7 +313,7 @@ ShellRoot {
                                 width: Math.min(300, gallery.width)
                                 leftIconName: "search"
                                 placeholderText: "Search settings"
-                                cornerRadius: Theme.cornerRadiusFull
+                                cornerRadius: Theme.fullRadius(width, height)
                                 showClearButton: true
                             }
 

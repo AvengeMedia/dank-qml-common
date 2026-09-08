@@ -11,16 +11,6 @@ Item {
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property string text: ""
     property string description: ""
     property string currentValue: ""
@@ -53,10 +43,10 @@ Item {
     property Item popupAnchorItem: null
     property bool addHorizontalPadding: false
     property string emptyText: ""
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
-    property color hoverBackgroundColor: usePopupTransparency ? Style.withAlpha(Style.surfaceVariant, Style.popupTransparency) : Style.withAlpha(Style.surfaceVariant, Style.floatingWindowTransparency)
-    property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.floatingWindowFieldColor
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainer
+    property color hoverBackgroundColor: Style.surfaceContainerHigh
+    property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.floatingWindowSurface
     property color normalBorderColor: usePopupTransparency ? Style.popupFieldBorderColor : Style.floatingWindowFieldBorderColor
     property color focusedBorderColor: usePopupTransparency ? Style.popupFieldFocusedBorderColor : Style.floatingWindowFieldFocusedBorderColor
     property var transientSurfaceTracker: null
@@ -245,7 +235,7 @@ Item {
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
         radius: Style.cornerRadius
-        color: dropdownArea.containsMouse || dropdownMenu.visible ? root.hoverBackgroundColor : root.backgroundColor
+        color: dropdownArea.containsMouse || dropdownMenu.visible ? root.hoverBackgroundColor : Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency)
         border.color: dropdownMenu.visible || root.activeFocus ? root.focusedBorderColor : root.normalBorderColor
         border.width: dropdownMenu.visible || root.activeFocus ? 2 : 1
 

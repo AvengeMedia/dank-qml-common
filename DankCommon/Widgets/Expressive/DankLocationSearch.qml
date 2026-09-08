@@ -149,7 +149,7 @@ Item {
             leftIconName: "search"
             placeholderText: root.placeholderText
             text: ""
-            cornerRadius: Style.cornerRadiusFull
+            cornerRadius: Style.fullRadius(width, height)
             keyNavigationTab: searchResultsList.count > 0 ? searchResultsList.itemAtIndex(0) : root.keyNavigationTab
             Keys.onDownPressed: {
                 const first = searchResultsList.itemAtIndex(0);

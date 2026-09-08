@@ -6,6 +6,7 @@ MouseArea {
     id: root
 
     property bool disabled: false
+    property bool hovered: control ? control.hovered : containsMouse
     property T.AbstractButton control: null
     property color stateColor: Style.surfaceText
     property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
@@ -19,7 +20,7 @@ MouseArea {
     property int transitionDuration: Style.shorterDuration
     property var transitionCurve: Style.expressiveCurves.standardDecel
 
-    readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : (control ? control.hovered : containsMouse) ? Style.stateLayerHover : 0
+    readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : hovered ? Style.stateLayerHover : 0
 
     anchors.fill: parent
     cursorShape: disabled ? Qt.ArrowCursor : Qt.PointingHandCursor

@@ -8,16 +8,6 @@ Base.StyledRect {
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property alias text: textEdit.text
     property alias cursorPosition: textEdit.cursorPosition
     property alias font: textEdit.font
@@ -29,15 +19,15 @@ Base.StyledRect {
     property int leftIconSize: Style.iconSize
     property color leftIconColor: Style.onSurfaceVariant
     property color leftIconFocusedColor: Style.primary
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainerHigh
     property color focusedBorderColor: Style.primary
     property color normalBorderColor: Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant
     property bool hidePlaceholderOnFocus: true
     property real borderWidth: Style.outlineWidth
     property real focusedBorderWidth: Style.outlineWidthFocused
-    property real cornerRadius: Style.cornerRadiusM
+    property real cornerRadius: Style.cornerRadiusXS
     property real topPadding: Style.spacingS
     property real bottomPadding: Style.spacingS
     property var keyForwardTargets: []
@@ -70,7 +60,7 @@ Base.StyledRect {
     width: Style.fieldDefaultWidth
     height: Style.textEditHeight
     radius: cornerRadius
-    color: backgroundColor
+    color: Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textEdit.activeFocus ? focusedBorderColor : normalBorderColor
     border.width: textEdit.activeFocus ? focusedBorderWidth : borderWidth
 

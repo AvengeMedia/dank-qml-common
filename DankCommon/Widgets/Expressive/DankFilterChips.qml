@@ -15,6 +15,13 @@ Flow {
     property bool showCounts: true
     readonly property int focusIndex: Math.max(0, Math.min(currentIndex, (model?.length ?? 0) - 1))
 
+    readonly property real singleRowWidth: {
+        let total = spacing * Math.max(0, chipRepeater.count - 1);
+        for (let i = 0; i < chipRepeater.count; i++)
+            total += chipRepeater.itemAt(i)?.width ?? 0;
+        return total;
+    }
+
     signal selectionChanged(int index)
     signal selectionToggled(int index, bool selected)
 
@@ -78,14 +85,14 @@ Flow {
             property string label: typeof modelData === "string" ? modelData : (modelData.label || "")
             property int count: typeof modelData === "object" ? (modelData.count || 0) : 0
             property bool showCount: root.showCounts && count > 0
-            readonly property color contentColor: selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
+            readonly property color contentColor: !enabled ? Style.onSurface_38 : selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
 
             readonly property bool hasCheck: root.showCheck && selected
             readonly property real leadingPadding: hasCheck ? root.chipPadding * 0.5 : root.chipPadding
 
             width: contentRow.implicitWidth + leadingPadding + root.chipPadding
             height: root.chipHeight
-            radius: pressed ? Style.cornerRadiusS : Style.cornerRadiusM
+            radius: Style.cornerRadiusS
 
             Behavior on radius {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -95,9 +102,9 @@ Flow {
                 }
             }
 
-            color: selected ? Style.secondaryContainer : "transparent"
+            color: selected ? (enabled ? Style.secondaryContainer : Style.onSurface_12) : "transparent"
             border.width: selected ? 0 : Style.outlineWidth
-            border.color: Style.outlineVariant
+            border.color: enabled ? Style.outlineVariant : Style.onSurface_38
 
             Base.FocusRing {
                 visible: chip.visualFocus

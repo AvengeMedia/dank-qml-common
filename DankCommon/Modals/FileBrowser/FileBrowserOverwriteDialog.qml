@@ -40,7 +40,7 @@ Item {
         width: 400
         height: 160
         color: Style.surfaceContainer
-        radius: Style.cornerRadius
+        radius: Style.cornerRadiusXL
         border.color: Style.outlineMedium
         border.width: 1
 
@@ -73,7 +73,7 @@ Item {
                 StyledRect {
                     width: 80
                     height: 36
-                    radius: Style.cornerRadius
+                    radius: Style.buttonRadius(width, height, height, cancelArea.pressed, true)
                     color: cancelArea.containsMouse ? Qt.lighter(Style.surfaceVariant, 1.2) : Style.surfaceVariant
                     border.color: Style.outline
                     border.width: 1
@@ -100,7 +100,7 @@ Item {
                 StyledRect {
                     width: 90
                     height: 36
-                    radius: Style.cornerRadius
+                    radius: Style.buttonRadius(width, height, height, overwriteArea.pressed, true)
                     color: overwriteArea.containsMouse ? Qt.darker(Style.primary, 1.1) : Style.primary
 
                     StyledText {

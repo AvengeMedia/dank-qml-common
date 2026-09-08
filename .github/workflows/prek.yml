@@ -4,10 +4,22 @@ on:
   push:
   pull_request:
     branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   pre-commit-check:
     runs-on: ubuntu-latest
+    container: archlinux:base
+    timeout-minutes: 15
     steps:
+      - name: Install test dependencies
+        run: |
+          pacman-key --init
+          pacman -Syu --noconfirm --needed git nodejs python quickshell ttf-dejavu
+
       - name: Checkout
         uses: actions/checkout@v6
 

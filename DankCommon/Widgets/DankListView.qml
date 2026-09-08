@@ -15,6 +15,42 @@ ListView {
     property real momentumVelocity: 0
     property bool isMomentumActive: false
     property real friction: Scroll.friction
+    readonly property real maximumContentY: Math.max(originY, contentHeight - height + originY)
+
+    property bool highlightSelection: false
+    property bool animateSelection: true
+    property bool _selectionMotionReady: false
+
+    highlightFollowsCurrentItem: !highlightSelection
+    highlight: highlightSelection ? selectionHighlight : null
+    onHighlightSelectionChanged: {
+        _selectionMotionReady = false;
+        if (highlightSelection)
+            selectionReady.restart();
+    }
+
+    Timer {
+        id: selectionReady
+        interval: 0
+        onTriggered: listView._selectionMotionReady = true
+    }
+
+    Component {
+        id: selectionHighlight
+        DankListHighlight {
+            readonly property Item row: listView.currentItem
+            visible: row !== null
+            animate: listView.animateSelection && listView._selectionMotionReady
+            x: row?.x ?? 0
+            y: row?.y ?? 0
+            width: row?.width ?? 0
+            height: row?.height ?? 0
+            topLeftRadius: row?.topLeftRadius ?? radius
+            topRightRadius: row?.topRightRadius ?? radius
+            bottomLeftRadius: row?.bottomLeftRadius ?? radius
+            bottomRightRadius: row?.bottomRightRadius ?? radius
+        }
+    }
 
     flickDeceleration: Scroll.flickDeceleration
     maximumFlickVelocity: Scroll.maximumFlickVelocity
@@ -110,6 +146,9 @@ ListView {
     }
 
     onModelChanged: {
+        _selectionMotionReady = false;
+        if (highlightSelection)
+            selectionReady.restart();
         justChanged = true;
         contentY = savedY;
     }
@@ -155,7 +194,7 @@ ListView {
                 const lines = Math.round(Math.abs(deltaY) / 120);
                 const scrollAmount = (deltaY > 0 ? -lines : lines) * mouseWheelSpeed;
                 let newY = listView.contentY + scrollAmount;
-                const maxY = Math.max(0, listView.contentHeight - listView.height + listView.originY);
+                const maxY = listView.maximumContentY;
                 newY = Math.max(listView.originY, Math.min(maxY, newY));
 
                 if (listView.flicking) {
@@ -174,7 +213,7 @@ ListView {
 
                 let delta = deltaY / 8 * touchpadSpeed;
                 let newY = listView.contentY - delta;
-                const maxY = Math.max(0, listView.contentHeight - listView.height + listView.originY);
+                const maxY = listView.maximumContentY;
                 newY = Math.max(listView.originY, Math.min(maxY, newY));
 
                 if (listView.flicking) {
@@ -212,7 +251,7 @@ ListView {
                 }
 
                 let newY = listView.contentY - delta;
-                const maxY = Math.max(0, listView.contentHeight - listView.height + listView.originY);
+                const maxY = listView.maximumContentY;
                 newY = Math.max(listView.originY, Math.min(maxY, newY));
 
                 if (listView.flicking) {
@@ -246,7 +285,7 @@ ListView {
         onTriggered: {
             const dt = frameTime;
             const newY = contentY - momentumVelocity * dt;
-            const maxY = Math.max(0, contentHeight - height + originY);
+            const maxY = listView.maximumContentY;
             const minY = originY;
 
             if (newY < minY || newY > maxY) {

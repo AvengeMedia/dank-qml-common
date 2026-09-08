@@ -21,7 +21,7 @@ Item {
     property real cellGap: Style.spacingXS
     property real weekdayRowHeight: Style.iconSizeMedium
     property real weekColumnWidth: Style.iconSizeLarge
-    property real cellRadius: Style.cornerRadiusM
+    property real cellRadius: Style.fullRadius(cellWidth, cellHeight)
     property bool highlightWeekends: false
     property color weekendColor: Style.tertiary
 
@@ -167,7 +167,7 @@ Item {
             y: root.weekdayRowHeight + root.cellGap + Math.floor(index / root.columns) * (root.cellHeight + root.cellGap)
             width: root.cellWidth
             height: root.cellHeight
-            radius: Math.min(cell.pressed ? Style.cornerRadiusS : root.cellRadius, height / 2)
+            radius: Math.min(root.cellRadius, height / 2)
 
             Behavior on radius {
                 enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -214,7 +214,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: Style.spacingXS
                         height: Style.spacingXS
-                        radius: Math.min(Style.cornerRadiusFull, width / 2)
+                        radius: Style.fullRadius(width, height)
                         color: modelData
                     }
                 }

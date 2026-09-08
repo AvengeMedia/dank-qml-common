@@ -11,16 +11,6 @@ Base.StyledRect {
     KeyNavigation.tab: keyNavigationTab
     KeyNavigation.backtab: keyNavigationBacktab
 
-    function checkParentDisablesTransparency() {
-        let p = parent;
-        while (p) {
-            if (p.disablePopupTransparency === true)
-                return true;
-            p = p.parent;
-        }
-        return false;
-    }
-
     property alias text: textInput.text
     property alias cursorPosition: textInput.cursorPosition
     property string placeholderText: ""
@@ -38,15 +28,15 @@ Base.StyledRect {
     property bool showPasswordToggle: false
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
-    property bool usePopupTransparency: !checkParentDisablesTransparency()
-    property color backgroundColor: usePopupTransparency ? Style.popupFieldColor : Style.floatingWindowFieldColor
+    property bool usePopupTransparency: !Style.isFloatingWindow(root)
+    property color backgroundColor: Style.surfaceContainerHigh
     property color focusedBorderColor: Style.primary
     property color normalBorderColor: Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant
     property bool hidePlaceholderOnFocus: true
     property real borderWidth: Style.outlineWidth
     property real focusedBorderWidth: Style.outlineWidthFocused
-    property real cornerRadius: Style.cornerRadiusM
+    property real cornerRadius: Style.cornerRadiusXS
 
     readonly property real accessorySize: Style.buttonHeightXS
     readonly property real leftPadding: Style.spacingM + (leftIconName ? leftIconSize + Style.spacingM : 0)
@@ -97,7 +87,7 @@ Base.StyledRect {
     width: Style.fieldDefaultWidth
     height: labelText !== "" ? Style.fieldHeight + labelBandHeight : Style.fieldHeight
     radius: cornerRadius
-    color: backgroundColor
+    color: Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
     border.width: textInput.activeFocus ? focusedBorderWidth : borderWidth
 

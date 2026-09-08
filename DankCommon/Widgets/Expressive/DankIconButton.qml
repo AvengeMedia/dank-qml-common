@@ -13,8 +13,8 @@ DankActionButton {
 
     readonly property bool medium: size === "m"
     readonly property bool filled: variant === "filled" || variant === "tonal" || (checkable && checked)
-    readonly property real squareRadius: medium ? Style.cornerRadiusL : Style.cornerRadiusM
-    readonly property real roundRadius: Math.min(Style.cornerRadiusFull, height / 2)
+    readonly property real squareRadius: Style.buttonRadius(width, height, buttonSize, false, false)
+    readonly property real roundRadius: Style.fullRadius(width, height)
     readonly property real horizontalInset: {
         switch (widthMode) {
         case "narrow":
@@ -30,7 +30,7 @@ DankActionButton {
     iconSize: Style.iconSize
     radius: {
         if (pressed)
-            return medium ? Style.cornerRadiusM : Style.cornerRadiusS;
+            return Style.buttonRadius(width, height, buttonSize, true, false);
         return round !== (checkable && checked) ? roundRadius : squareRadius;
     }
     iconColor: filled ? contentColor : Style.onSurfaceVariant

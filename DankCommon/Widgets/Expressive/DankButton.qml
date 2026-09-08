@@ -34,11 +34,10 @@ Rectangle {
     width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
     height: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
-    readonly property real pressedRadius: buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS
 
     radius: {
         if (pressed) {
-            return pressedRadius;
+            return buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS;
         } else {
             if (shape === "round") {
                 return Math.min(Style.cornerRadiusFull, height / 2)

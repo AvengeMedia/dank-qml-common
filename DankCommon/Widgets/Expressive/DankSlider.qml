@@ -414,12 +414,12 @@ Item {
             Base.StyledRect {
                 id: valueTooltip
 
-                width: tooltipText.reservedWidth + Style.spacingM * 2
-                height: tooltipText.contentHeight + Style.spacingS * 2
+                width: tooltipText.reservedWidth + Style.spacingL * 2
+                height: tooltipText.contentHeight + Style.spacingM * 2
                 radius: Math.min(1, slider.cornerScale) * height / 2
                 color: slider.fillColor
                 anchors.bottom: parent.top
-                anchors.bottomMargin: -Style.spacingXS
+                anchors.bottomMargin: Style.spacingXS
                 x: Math.max(0, Math.min(parent.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
                 visible: opacity > 0
                 opacity: slider.alwaysShowValue ? (slider.showValue ? 1 : 0) : (((sliderMouseArea.containsMouse && slider.showValue) || (slider.isDragging && slider.showValue)) ? 1 : 0)

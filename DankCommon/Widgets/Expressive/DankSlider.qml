@@ -312,13 +312,7 @@ Item {
                     }
                 }
 
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.margins: -Style.focusRingOffset
-                    radius: parent.radius + Style.focusRingOffset * Math.min(1, slider.cornerScale)
-                    color: "transparent"
-                    border.width: Style.focusRingWidth
-                    border.color: Style.focusRingColor
+                Base.FocusRing {
                     visible: slider.activeFocus
                 }
             }

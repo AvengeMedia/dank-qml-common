@@ -42,7 +42,7 @@ FocusScope {
         _minute = Math.max(0, Math.min(59, minute));
         _minuteMode = false;
         _opened = true;
-        forceActiveFocus();
+        hourDigit.forceActiveFocus();
     }
 
     function close() {

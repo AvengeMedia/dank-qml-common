@@ -32,6 +32,7 @@ Row {
     property int checkIconSize: Style.iconSizeSmall
     property int textSize: size === "small" ? Style.fontSizeSmall : Style.fontSizeMedium
     property bool userInteracted: false
+    property bool interactionStarted: false
     property bool usePopupTransparency: !checkParentDisablesTransparency()
     property real maximumWidth: -1
     readonly property real _segmentCap: {
@@ -48,7 +49,6 @@ Row {
     signal animationCompleted
 
     spacing: Style.groupedListGap
-    activeFocusOnTab: enabled
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
@@ -61,7 +61,13 @@ Row {
         }
     }
 
-    readonly property int focusIndex: currentIndex >= 0 ? currentIndex : 0
+    property int focusedIndex: currentIndex
+    readonly property int focusIndex: Math.max(0, Math.min(focusedIndex, (model?.length ?? 0) - 1))
+    onCurrentIndexChanged: focusedIndex = currentIndex
+
+    function requestFocus(backwards) {
+        repeater.itemAt(focusIndex)?.forceActiveFocus(backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason);
+    }
 
     Keys.onPressed: event => {
         if (!enabled || (model?.length ?? 0) === 0)
@@ -69,33 +75,32 @@ Row {
         const count = model.length;
         const forwardKey = I18n.isRtl ? Qt.Key_Left : Qt.Key_Right;
         const backwardKey = I18n.isRtl ? Qt.Key_Right : Qt.Key_Left;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            selectItem(focusIndex);
-            event.accepted = true;
-            return;
-        }
         if (event.key === forwardKey) {
-            selectItem((focusIndex + 1) % count);
+            focusSegment((focusIndex + 1) % count);
             event.accepted = true;
             return;
         }
         if (event.key === backwardKey) {
-            selectItem((focusIndex - 1 + count) % count);
+            focusSegment((focusIndex - 1 + count) % count);
             event.accepted = true;
         }
     }
 
+    function focusSegment(index) {
+        focusedIndex = index;
+        repeater.itemAt(index)?.forceActiveFocus(Qt.TabFocusReason);
+        if (!multiSelect)
+            selectItem(index);
+    }
+
     function isSelected(index) {
-        if (multiSelect) {
+        if (multiSelect)
             return repeater.itemAt(index)?.selected || false;
-        }
         return index === currentIndex;
     }
 
     function selectItem(index) {
+        interactionStarted = true;
         userInteracted = true;
         if (multiSelect) {
             const modelValue = model[index];
@@ -127,25 +132,25 @@ Row {
             values: root.model
         }
 
-        delegate: Rectangle {
+        delegate: StyledButton {
             id: segment
+
+            focusPolicy: activeFocus || index === root.focusIndex ? Qt.StrongFocus : Qt.ClickFocus
+            onActiveFocusChanged: {
+                if (activeFocus)
+                    root.focusedIndex = index;
+            }
+            onClicked: root.selectItem(index)
+            onPressedChanged: {
+                if (pressed)
+                    root.interactionStarted = true;
+            }
 
             Accessible.role: root.multiSelect ? Accessible.CheckBox : Accessible.RadioButton
             Accessible.name: buttonText.text
-            Accessible.checkable: true
-            Accessible.checked: selected
-            Accessible.onPressAction: {
-                if (root.enabled)
-                    root.selectItem(index);
-            }
-            Accessible.onToggleAction: {
-                if (root.enabled)
-                    root.selectItem(index);
-            }
-
+            checkable: true
+            checked: selected
             property bool selected: multiSelect ? root.currentSelection.includes(modelData) : (index === root.currentIndex)
-            property bool hovered: stateLayer.containsMouse
-            property bool pressed: stateLayer.pressed
             property bool visualFirst: index === 0
             property bool visualLast: index === repeater.count - 1
             property bool prevSelected: index > 0 ? root.isSelected(index - 1) : false
@@ -181,13 +186,13 @@ Row {
             border.color: "transparent"
             border.width: 0
 
-            topLeftRadius: leftRadius
-            bottomLeftRadius: leftRadius
-            topRightRadius: rightRadius
-            bottomRightRadius: rightRadius
+            topLeftRadius: mirrored ? rightRadius : leftRadius
+            bottomLeftRadius: mirrored ? rightRadius : leftRadius
+            topRightRadius: mirrored ? leftRadius : rightRadius
+            bottomRightRadius: mirrored ? leftRadius : rightRadius
 
             Behavior on width {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
@@ -195,7 +200,7 @@ Row {
             }
 
             Behavior on topLeftRadius {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -203,7 +208,7 @@ Row {
             }
 
             Behavior on topRightRadius {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -211,7 +216,7 @@ Row {
             }
 
             Behavior on bottomLeftRadius {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -219,7 +224,7 @@ Row {
             }
 
             Behavior on bottomRightRadius {
-                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                enabled: root.interactionStarted && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
                     easing.bezierCurve: Style.expressiveCurves.standard
@@ -236,6 +241,7 @@ Row {
 
             Base.StateLayer {
                 id: stateLayer
+                control: segment
                 enabled: root.enabled
                 disabled: !root.enabled
                 stateColor: segment.contentColor
@@ -246,12 +252,11 @@ Row {
                 bottomRightRadius: segment.bottomRightRadius
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
-                onClicked: root.selectItem(index)
             }
 
             Base.FocusRing {
                 radius: Math.min(Style.cornerRadiusFull, root.outerRadius + Style.focusRingOffset)
-                visible: root.activeFocus && index === root.focusIndex
+                visible: segment.visualFocus
             }
 
             Item {

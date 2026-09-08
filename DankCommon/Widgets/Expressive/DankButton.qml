@@ -2,80 +2,50 @@ import QtQuick
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Rectangle {
+StyledButton {
     id: root
 
     property string shape: "round"
-    property string text: ""
     property real maximumWidth: Infinity
     property bool wrapText: false
     property string iconName: ""
     property int iconSize: root.buttonHeight <= Style.buttonHeightS ? Style.iconSizeMedium : Style.iconSize
-    property bool hovered: stateLayer.containsMouse
-    property bool pressed: stateLayer.pressed
     property color backgroundColor: Style.buttonBg
     property color textColor: Style.buttonText
     property int buttonHeight: Style.buttonHeightS
-    property int horizontalPadding: {
-        if (buttonHeight <= Style.buttonHeightXS) {
+    horizontalPadding: {
+        if (buttonHeight <= Style.buttonHeightXS)
             return Style.spacingM;
-        } else if (buttonHeight <= Style.buttonHeightS) {
+        if (buttonHeight <= Style.buttonHeightS)
             return Style.spacingL;
-        } else {
-            return Style.spacingXL;
-        }
+        return Style.spacingXL;
     }
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
     property real minimumWidth: Style.buttonMinWidth
 
-    signal clicked
-
-    width: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
-    height: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
+    implicitWidth: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
+    implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
 
     radius: {
-        if (pressed) {
+        if (pressed)
             return buttonHeight >= Style.buttonHeightM ? Style.cornerRadiusM : Style.cornerRadiusS;
-        } else {
-            if (shape === "round") {
-                return Math.min(Style.cornerRadiusFull, height / 2)
-            } else {
-                if (buttonHeight <= Style.buttonHeightS) {
-                    return Style.spacingM;
-                } else if (buttonHeight <= Style.buttonHeightM) {
-                    return Style.spacingL;
-                } else {
-                    return Style.spacingXL + Style.spacingXS;
-                }
-            }
-        }
+        if (shape === "round")
+            return Math.min(Style.cornerRadiusFull, height / 2);
+        if (buttonHeight <= Style.buttonHeightS)
+            return Style.spacingM;
+        if (buttonHeight <= Style.buttonHeightM)
+            return Style.spacingL;
+        return Style.spacingXL + Style.spacingXS;
     }
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
-    activeFocusOnTab: enabled
     Accessible.role: Accessible.Button
     Accessible.name: text
-    Accessible.onPressAction: {
-        if (enabled)
-            clicked();
-    }
-
-    Keys.onPressed: event => {
-        if (!root.enabled)
-            return;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            root.clicked();
-            event.accepted = true;
-            break;
-        }
-    }
 
     Base.FocusRing {
+        visible: root.visualFocus
         radius: Math.max(0, parent.radius + 2 * Style.focusRingWidth)
     }
 
@@ -97,13 +67,13 @@ Rectangle {
 
     Base.StateLayer {
         id: stateLayer
+        control: root
         enabled: root.enabled
         disabled: !root.enabled
         stateColor: root.textColor
         enableRipple: root.enableRipple
         transitionDuration: Style.expressiveDurations.expressiveEffects
         transitionCurve: Style.expressiveCurves.expressiveEffects
-        onClicked: root.clicked()
     }
 
     Row {

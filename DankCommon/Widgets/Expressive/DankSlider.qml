@@ -66,7 +66,7 @@ Controls.Control {
     }
 
     readonly property real ratio: ratioForValue(value)
-    readonly property bool isMirrored: I18n.isRtl
+    LayoutMirroring.enabled: I18n.isRtl
     readonly property real trackHeight: {
         switch (size) {
         case "s":
@@ -112,7 +112,7 @@ Controls.Control {
     }
     readonly property real outsideCorner: Math.min(trackHeight / 2, trackCornerRadius * cornerScale)
     readonly property real insideCorner: Math.min(trackHeight / 2, Style.sliderTrackInsideCornerRadius * cornerScale)
-    readonly property real visualRatio: isMirrored ? 1 - ratio : ratio
+    readonly property real visualRatio: mirrored ? 1 - ratio : ratio
     readonly property int tickCount: {
         if (step <= 1)
             return 0;
@@ -123,7 +123,6 @@ Controls.Control {
     readonly property int pageSteps: Math.max(1, Math.min(10, Math.round((maximum - minimum) / keyStep / 10)))
 
     height: handleHeight + Style.spacingXS
-    activeFocusOnTab: enabled
     readonly property int minimumValue: minimum
     readonly property int maximumValue: maximum
     readonly property int stepSize: keyStep
@@ -158,7 +157,7 @@ Controls.Control {
         if (sliderTrack.width <= sliderHandle.width)
             return;
         let ratio = Math.max(0, Math.min(1, (x - sliderHandle.width / 2) / (sliderTrack.width - sliderHandle.width)));
-        if (isMirrored)
+        if (mirrored)
             ratio = 1 - ratio;
         if (centerMinimum)
             ratio = Math.max(0, (ratio - 0.5) * 2);
@@ -170,8 +169,8 @@ Controls.Control {
     Keys.onPressed: event => {
         if (!enabled)
             return;
-        const upKey = isMirrored ? Qt.Key_Left : Qt.Key_Right;
-        const downKey = isMirrored ? Qt.Key_Right : Qt.Key_Left;
+        const upKey = mirrored ? Qt.Key_Left : Qt.Key_Right;
+        const downKey = mirrored ? Qt.Key_Right : Qt.Key_Left;
         switch (event.key) {
         case upKey:
         case Qt.Key_Up:
@@ -208,7 +207,7 @@ Controls.Control {
         anchors.centerIn: parent
         width: parent.width
         spacing: Style.spacingM
-        LayoutMirroring.enabled: slider.isMirrored
+        LayoutMirroring.enabled: slider.mirrored
 
         Base.DankIcon {
             name: slider.leftIcon
@@ -226,12 +225,12 @@ Controls.Control {
             readonly property real travel: width - sliderHandle.width
             readonly property real handleLeft: Math.max(0, Math.min(travel, travel * slider.visualRatio))
             readonly property real gap: Style.sliderHandleGap
-            readonly property real filledStart: slider.isMirrored ? sliderHandle.x + sliderHandle.width + gap : 0
-            readonly property real filledEnd: slider.isMirrored ? width : sliderHandle.x - gap
-            readonly property real emptyStart: slider.isMirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
-            readonly property real emptyEnd: slider.isMirrored ? sliderHandle.x - gap : width
+            readonly property real filledStart: slider.mirrored ? sliderHandle.x + sliderHandle.width + gap : 0
+            readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
+            readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
+            readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
             readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
-            readonly property bool insetIconLeftAligned: (!slider.isMirrored && slider.insetIconPosition === "start") || (slider.isMirrored && slider.insetIconPosition === "end")
+            readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
             readonly property bool insetIconBehindHandle: {
                 if (insetIconLeftAligned) {
                     return sliderHandle.x <= (Style.iconSizeLarge + Style.spacingS);
@@ -250,9 +249,9 @@ Controls.Control {
                 width: Math.max(0, sliderTrack.filledEnd - sliderTrack.filledStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.isMirrored ? slider.insideCorner : slider.outsideCorner
+                topLeftRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.isMirrored ? slider.outsideCorner : slider.insideCorner
+                topRightRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 visible: width > 0
@@ -264,9 +263,9 @@ Controls.Control {
                 width: Math.max(0, sliderTrack.emptyEnd - sliderTrack.emptyStart)
                 height: slider.trackHeight
                 anchors.verticalCenter: parent.verticalCenter
-                topLeftRadius: slider.isMirrored ? slider.outsideCorner : slider.insideCorner
+                topLeftRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
                 bottomLeftRadius: topLeftRadius
-                topRightRadius: slider.isMirrored ? slider.insideCorner : slider.outsideCorner
+                topRightRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomRightRadius: topRightRadius
                 color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
                 visible: width > 0
@@ -275,7 +274,7 @@ Controls.Control {
                     width: Style.sliderStopSize
                     height: Style.sliderStopSize
                     radius: Math.min(1, slider.cornerScale) * width / 2
-                    x: slider.isMirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
+                    x: slider.mirrored ? Style.sliderHandleGap : parent.width - Style.sliderHandleGap - width
                     anchors.verticalCenter: parent.verticalCenter
                     color: slider.enabled ? slider.fillColor : Style.onSurface_38
                     visible: (sliderTrack.insetIconVisible && slider.insetIconPosition === "end") ? false : parent.width > Style.sliderHandleGap * 2 + width
@@ -288,8 +287,8 @@ Controls.Control {
                 Base.StyledRect {
                     required property int index
                     readonly property real tickRatio: slider.ratioForValue(slider.minimum + index * slider.step)
-                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.isMirrored ? 1 - tickRatio : tickRatio)
-                    readonly property bool onFilled: slider.isMirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
+                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.mirrored ? 1 - tickRatio : tickRatio)
+                    readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
                     radius: Math.min(1, slider.cornerScale) * width / 2
@@ -362,10 +361,10 @@ Controls.Control {
                 }
             }
 
-            Item {
+            StyledButton {
                 id: insetAction
 
-                readonly property bool hovered: sliderMouseArea.containsMouse && containsPosition(sliderMouseArea.mouseX, sliderMouseArea.mouseY)
+                readonly property bool containsPointer: sliderMouseArea.containsMouse && containsPosition(sliderMouseArea.mouseX, sliderMouseArea.mouseY)
                 readonly property real iconX: sliderTrack.insetIconBehindHandle ? movingInsetIcon.x : (sliderTrack.insetIconLeftAligned ? Style.spacingXS : sliderTrack.width - movingInsetIcon.width - Style.spacingXS)
                 x: Math.max(0, Math.min(sliderTrack.width - width, iconX + (movingInsetIcon.width - width) / 2))
                 width: Math.min(sliderTrack.width, Style.iconButtonSize)
@@ -373,10 +372,8 @@ Controls.Control {
                 anchors.verticalCenter: parent.verticalCenter
                 visible: sliderTrack.insetIconVisible && slider.insetIconClickable
                 enabled: slider.enabled && visible
-                activeFocusOnTab: enabled
-                Accessible.role: Accessible.Button
                 Accessible.name: slider.insetIconTooltip
-                Accessible.onPressAction: activate()
+                onClicked: activate()
 
                 function activate() {
                     if (enabled)
@@ -390,28 +387,19 @@ Controls.Control {
                 }
 
                 function syncTooltip() {
-                    if (!hovered || !visible || !slider.visible || slider.isDragging || slider.insetIconTooltip.length === 0) {
+                    if (!containsPointer || !visible || !slider.visible || slider.isDragging || slider.insetIconTooltip.length === 0) {
                         actionTooltip.hide();
                         return;
                     }
                     actionTooltip.show(slider.insetIconTooltip, insetAction, 0, 0, "top");
                 }
 
-                onHoveredChanged: syncTooltip()
+                onContainsPointerChanged: syncTooltip()
                 onVisibleChanged: syncTooltip()
                 Component.onDestruction: actionTooltip.hide()
 
-                Keys.onPressed: event => {
-                    switch (event.key) {
-                    case Qt.Key_Space:
-                    case Qt.Key_Return:
-                    case Qt.Key_Enter:
-                        activate();
-                        event.accepted = true;
-                    }
-                }
-
                 Base.FocusRing {
+                    visible: insetAction.visualFocus
                     radius: Style.cornerRadiusFull
                 }
                 DankTooltipV2 {
@@ -459,7 +447,7 @@ Controls.Control {
                     pressedInsetIcon = insetAction.containsPosition(mouse.x, mouse.y);
                     if (pressedInsetIcon)
                         return;
-                    slider.forceActiveFocus();
+                    slider.forceActiveFocus(Qt.MouseFocusReason);
                     slider.isDragging = true;
                     updateValueFromPosition(mouse.x);
                 }
@@ -480,7 +468,7 @@ Controls.Control {
                         return;
                     if (pressedInsetIcon && !slider.isDragging && Math.hypot(mouse.x - pressX, mouse.y - pressY) < Qt.styleHints.startDragDistance)
                         return;
-                    slider.forceActiveFocus();
+                    slider.forceActiveFocus(Qt.MouseFocusReason);
                     slider.isDragging = true;
                     updateValueFromPosition(mouse.x);
                 }
@@ -496,7 +484,7 @@ Controls.Control {
                 margins: Style.spacingXS
                 x: Math.max(0, Math.min(sliderTrack.width - width, sliderHandle.x + sliderHandle.width / 2 - width / 2))
                 y: -height - Style.spacingXS
-                visible: slider.visible && slider.enabled && slider.showValue && (slider.alwaysShowValue || (sliderMouseArea.containsMouse && !insetAction.hovered) || slider.isDragging)
+                visible: slider.visible && slider.enabled && slider.showValue && (slider.alwaysShowValue || (sliderMouseArea.containsMouse && !insetAction.containsPointer) || slider.isDragging)
                 closePolicy: Controls.Popup.NoAutoClose
                 modal: false
                 dim: false

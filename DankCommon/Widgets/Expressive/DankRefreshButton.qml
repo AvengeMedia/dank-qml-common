@@ -8,6 +8,7 @@ DankActionButton {
     property bool busy: false
 
     iconName: busy ? "" : "refresh"
+    Accessible.name: tooltipText || I18n.tr("Refresh")
     enabled: !busy
 
     Base.DankSpinner {

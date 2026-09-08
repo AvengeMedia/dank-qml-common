@@ -6,9 +6,9 @@ import qs.DankCommon.Widgets.Expressive as Expressive
 Expressive.DankActionButton {
     id: root
 
-    property string text: ""
     property bool isShift: false
 
+    focusPolicy: Qt.TabFocus
     buttonSize: LockMetrics.keyboardKeySize
     backgroundColor: isShift ? Style.primaryContainer : Style.secondaryContainer
     iconColor: isShift ? Style.onPrimaryContainer : Style.onSecondaryContainer

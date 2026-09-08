@@ -1,15 +1,16 @@
 import QtQuick
+import QtQuick.Templates as T
 import QtQuick.Shapes
 import "../../Common/TabNavigation.js" as TabNavigation
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-FocusScope {
+T.Control {
     id: tabBar
 
     property alias model: tabRepeater.model
     property int currentIndex: 0
-    property int spacing: Style.spacingL
+    spacing: Style.spacingL
     property int tabHeight: Style.buttonHeightM
     property bool showIcons: true
     property bool showDivider: true
@@ -23,13 +24,22 @@ FocusScope {
     signal actionTriggered(int index)
 
     focus: false
-    activeFocusOnTab: true
+    focusPolicy: Qt.TabFocus
     implicitHeight: Math.max(tabHeight, tabRow.implicitHeight + Style.tabIndicatorHeight)
     height: implicitHeight
 
     Keys.onPressed: event => {
         if (!enabled)
             return;
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+            if (!event.isAutoRepeat)
+                tabRepeater.itemAt(currentIndex)?.click();
+            event.accepted = true;
+            return;
+        }
         event.accepted = TabNavigation.handleKeyEvent(event, tabBar, tabRepeater, I18n.isRtl);
     }
 
@@ -49,8 +59,9 @@ FocusScope {
             onItemAdded: indicatorUpdate.restart()
             onItemRemoved: indicatorUpdate.restart()
 
-            Item {
+            StyledButton {
                 id: tabItem
+                focusPolicy: isAction ? Qt.TabFocus : Qt.NoFocus
                 property bool isAction: modelData && modelData.isAction === true
                 onIsActionChanged: indicatorUpdate.restart()
                 property bool isActive: !isAction && tabBar.currentIndex === index
@@ -59,7 +70,7 @@ FocusScope {
                 Accessible.role: isAction ? Accessible.Button : Accessible.PageTab
                 Accessible.name: modelData?.text ?? ""
                 Accessible.selected: isActive
-                Accessible.onPressAction: {
+                onClicked: {
                     if (!tabBar.enabled)
                         return;
                     if (isAction) {
@@ -116,23 +127,17 @@ FocusScope {
                 }
 
                 Base.StateLayer {
+                    control: tabItem
                     disabled: !tabBar.enabled
                     stateColor: Style.primary
                     cornerRadius: Style.cornerRadiusM
                     transitionDuration: Style.expressiveDurations.expressiveEffects
                     transitionCurve: Style.expressiveCurves.expressiveEffects
-                    onClicked: {
-                        if (tabItem.isAction) {
-                            tabBar.actionTriggered(index);
-                            return;
-                        }
-                        tabBar.tabClicked(index);
-                    }
                 }
 
                 Base.FocusRing {
                     radius: Math.min(Style.cornerRadiusFull, Style.cornerRadiusM + Style.focusRingOffset)
-                    visible: tabBar.activeFocus && tabItem.isActive
+                    visible: tabItem.visualFocus || (tabBar.visualFocus && tabItem.isActive)
                 }
             }
         }

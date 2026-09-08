@@ -7,8 +7,6 @@ DankActionButton {
     property string size: "s"
     property string widthMode: "default"
     property string variant: "standard"
-    property bool checkable: false
-    property bool checked: false
     property bool round: true
     property color containerColor: variant === "filled" ? Style.primary : Style.secondaryContainer
     property color contentColor: variant === "filled" ? Style.onPrimary : Style.onSecondaryContainer
@@ -41,8 +39,4 @@ DankActionButton {
     border.color: enabled ? Style.outlineVariant : Style.onSurface_12
     Accessible.checkable: checkable
     Accessible.checked: checked
-    Accessible.onToggleAction: {
-        if (enabled && checkable)
-            clicked();
-    }
 }

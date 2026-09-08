@@ -24,26 +24,17 @@ ColumnLayout {
     spacing: Style.groupedListGap
     Layout.fillWidth: true
 
-    Rectangle {
+    StyledButton {
         id: headerRect
-        activeFocusOnTab: root.enabled
         Accessible.role: Accessible.Button
         Accessible.name: root.title
         Accessible.description: root.description
-        Accessible.onPressAction: root.toggle()
-
-        Keys.onPressed: event => {
-            switch (event.key) {
-            case Qt.Key_Space:
-            case Qt.Key_Return:
-            case Qt.Key_Enter:
-                root.toggle();
-                event.accepted = true;
-                break;
-            }
-        }
+        checkable: true
+        checked: root.expanded
+        onClicked: root.toggle()
 
         Base.FocusRing {
+            visible: headerRect.visualFocus
             radius: Style.groupedListOuterRadius + Style.focusRingOffset
         }
         Layout.fillWidth: true
@@ -102,13 +93,13 @@ ColumnLayout {
         }
 
         Base.StateLayer {
+            control: headerRect
             anchors.fill: parent
             topLeftRadius: Style.groupedListOuterRadius
             topRightRadius: Style.groupedListOuterRadius
             bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
             bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
             disabled: !root.enabled
-            onClicked: root.toggle()
 
             Behavior on bottomLeftRadius {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

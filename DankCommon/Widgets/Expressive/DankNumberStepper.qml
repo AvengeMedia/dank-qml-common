@@ -32,6 +32,7 @@ Column {
 
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
+        Accessible.name: root.incrementTooltipText || I18n.tr("Increase", "Accessible name for a button that increases a numeric value")
         enabled: root.effectiveIncrementEnabled
         iconColor: root.iconColor
         iconSize: root.iconSize
@@ -52,6 +53,7 @@ Column {
 
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
+        Accessible.name: root.decrementTooltipText || I18n.tr("Decrease", "Accessible name for a button that decreases a numeric value")
         enabled: root.effectiveDecrementEnabled
         iconColor: root.iconColor
         iconSize: root.iconSize

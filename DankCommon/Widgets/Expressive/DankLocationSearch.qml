@@ -130,7 +130,7 @@ Item {
         running: false
         repeat: false
         onTriggered: {
-            if (!locationInput.getActiveFocus() && !searchDropdown.hovered)
+            if (!locationInput.getActiveFocus() && !searchResultsList.activeFocus && !searchDropdown.hovered)
                 root.resetSearchState();
         }
     }
@@ -150,7 +150,12 @@ Item {
             placeholderText: root.placeholderText
             text: ""
             cornerRadius: Style.cornerRadiusFull
-            keyNavigationTab: root.keyNavigationTab
+            keyNavigationTab: searchResultsList.count > 0 ? searchResultsList.itemAtIndex(0) : root.keyNavigationTab
+            Keys.onDownPressed: {
+                const first = searchResultsList.itemAtIndex(0);
+                if (first)
+                    first.forceActiveFocus(Qt.TabFocusReason);
+            }
             keyNavigationBacktab: root.keyNavigationBacktab
             onTextEdited: {
                 if (root._internalChange)
@@ -207,7 +212,7 @@ Item {
         color: Style.withAlpha(Style.surfaceContainer, Style.popupTransparency)
         border.color: Style.outlineVariant
         border.width: Style.outlineWidth
-        visible: locationInput.getActiveFocus() && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
+        visible: (locationInput.getActiveFocus() || searchResultsList.activeFocus) && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
 
         MouseArea {
             anchors.fill: parent
@@ -236,11 +241,39 @@ Item {
                 model: searchResultsModel
                 spacing: Style.spacingXXS
 
-                delegate: Base.StyledRect {
+                onActiveFocusChanged: {
+                    if (!activeFocus)
+                        dropdownHideTimer.restart();
+                }
+
+                delegate: StyledButton {
+                    id: resultButton
+                    Accessible.name: model.name || I18n.tr("Unknown")
+                    onClicked: {
+                        root._internalChange = true;
+                        root._hasSelection = true;
+                        const selectedName = model.name;
+                        const selectedQuery = model.query;
+                        locationInput.text = selectedName;
+                        root.locationSelected(selectedName, selectedQuery);
+                        root.resetSearchState();
+                        locationInput.setFocus(false);
+                        root._internalChange = false;
+                    }
                     width: searchResultsList.width
                     height: root.resultRowHeight
                     radius: Style.cornerRadiusS
-                    color: resultMouseArea.containsMouse ? Style.withAlpha(Style.onSurface, Style.stateLayerHover) : Style.withAlpha(Style.onSurface, 0)
+                    color: hovered || visualFocus ? Style.withAlpha(Style.onSurface, Style.stateLayerHover) : Style.withAlpha(Style.onSurface, 0)
+
+                    Base.FocusRing {
+                        visible: resultButton.visualFocus
+                    }
+
+                    Base.StateLayer {
+                        control: resultButton
+                        stateColor: "transparent"
+                        enableRipple: false
+                    }
 
                     Row {
                         anchors.fill: parent
@@ -261,25 +294,6 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             elide: Text.ElideRight
                             width: parent.width - Style.iconSizeLarge
-                        }
-                    }
-
-                    MouseArea {
-                        id: resultMouseArea
-
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            root._internalChange = true;
-                            root._hasSelection = true;
-                            const selectedName = model.name;
-                            const selectedQuery = model.query;
-                            locationInput.text = selectedName;
-                            root.locationSelected(selectedName, selectedQuery);
-                            root.resetSearchState();
-                            locationInput.setFocus(false);
-                            root._internalChange = false;
                         }
                     }
                 }

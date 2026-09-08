@@ -148,7 +148,7 @@ FocusScope {
         onTriggered: {
             root._minuteMode = true;
             if (hourDigit.activeFocus)
-                minuteDigit.forceActiveFocus();
+                minuteDigit.forceActiveFocus(Qt.TabFocusReason);
         }
     }
 
@@ -218,14 +218,18 @@ FocusScope {
                 Layout.topMargin: Style.spacingL + Style.spacingXS
                 spacing: 0
 
-                Rectangle {
+                StyledButton {
                     id: hourDigit
+
+                    Keys.forwardTo: [root]
+                    Accessible.name: I18n.tr("Hour")
+                    Accessible.description: root.pad(root.displayHour)
+                    onClicked: root._minuteMode = false
 
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.surfaceContainerHighest : Style.primaryContainer
-                    activeFocusOnTab: true
                     KeyNavigation.backtab: okButton
                     onActiveFocusChanged: {
                         if (!activeFocus)
@@ -252,12 +256,14 @@ FocusScope {
                     }
 
                     Base.StateLayer {
+                        control: hourDigit
                         stateColor: Style.primary
                         cornerRadius: parent.radius
-                        onClicked: root._minuteMode = false
                     }
 
-                    Base.FocusRing {}
+                    Base.FocusRing {
+                        visible: hourDigit.visualFocus
+                    }
                 }
 
                 Base.StyledText {
@@ -270,14 +276,18 @@ FocusScope {
                     color: Style.surfaceText
                 }
 
-                Rectangle {
+                StyledButton {
                     id: minuteDigit
+
+                    Keys.forwardTo: [root]
+                    Accessible.name: I18n.tr("Minute")
+                    Accessible.description: root.pad(root._minute)
+                    onClicked: root._minuteMode = true
 
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusM
                     color: root._minuteMode ? Style.primaryContainer : Style.surfaceContainerHighest
-                    activeFocusOnTab: true
                     onActiveFocusChanged: {
                         if (!activeFocus)
                             return;
@@ -303,12 +313,14 @@ FocusScope {
                     }
 
                     Base.StateLayer {
+                        control: minuteDigit
                         stateColor: Style.primary
                         cornerRadius: parent.radius
-                        onClicked: root._minuteMode = true
                     }
 
-                    Base.FocusRing {}
+                    Base.FocusRing {
+                        visible: minuteDigit.visualFocus
+                    }
                 }
 
                 Rectangle {
@@ -329,26 +341,20 @@ FocusScope {
                         anchors.fill: parent
                         anchors.margins: periodColumn.border.width
 
-                        Rectangle {
+                        StyledButton {
                             id: amItem
+
+                            checkable: true
+                            checked: !root.isPm
+                            Accessible.role: Accessible.RadioButton
+                            Accessible.name: I18n.tr("AM")
+                            onClicked: root.setPeriod(false)
 
                             width: parent.width
                             height: Math.floor((parent.height - periodDivider.height) / 2)
                             topLeftRadius: periodColumn.innerRadius
                             topRightRadius: periodColumn.innerRadius
                             color: root.isPm ? "transparent" : Style.tertiaryContainer
-                            activeFocusOnTab: true
-                            Keys.onPressed: event => {
-                                switch (event.key) {
-                                case Qt.Key_Space:
-                                case Qt.Key_Return:
-                                case Qt.Key_Enter:
-                                    root.setPeriod(false);
-                                    event.accepted = true;
-                                    break;
-                                }
-                            }
-
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("AM")
@@ -358,12 +364,13 @@ FocusScope {
                             }
 
                             Base.StateLayer {
+                                control: amItem
                                 topLeftRadius: parent.topLeftRadius
                                 topRightRadius: parent.topRightRadius
-                                onClicked: root.setPeriod(false)
                             }
 
                             Base.FocusRing {
+                                visible: amItem.visualFocus
                                 topLeftRadius: parent.topLeftRadius + Style.focusRingWidth
                                 topRightRadius: parent.topRightRadius + Style.focusRingWidth
                                 bottomLeftRadius: 0
@@ -379,26 +386,20 @@ FocusScope {
                             color: periodColumn.border.color
                         }
 
-                        Rectangle {
+                        StyledButton {
                             id: pmItem
+
+                            checkable: true
+                            checked: root.isPm
+                            Accessible.role: Accessible.RadioButton
+                            Accessible.name: I18n.tr("PM")
+                            onClicked: root.setPeriod(true)
 
                             width: parent.width
                             height: parent.height - amItem.height - periodDivider.height
                             bottomLeftRadius: periodColumn.innerRadius
                             bottomRightRadius: periodColumn.innerRadius
                             color: root.isPm ? Style.tertiaryContainer : "transparent"
-                            activeFocusOnTab: true
-                            Keys.onPressed: event => {
-                                switch (event.key) {
-                                case Qt.Key_Space:
-                                case Qt.Key_Return:
-                                case Qt.Key_Enter:
-                                    root.setPeriod(true);
-                                    event.accepted = true;
-                                    break;
-                                }
-                            }
-
                             Base.StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("PM")
@@ -408,12 +409,13 @@ FocusScope {
                             }
 
                             Base.StateLayer {
+                                control: pmItem
                                 bottomLeftRadius: parent.bottomLeftRadius
                                 bottomRightRadius: parent.bottomRightRadius
-                                onClicked: root.setPeriod(true)
                             }
 
                             Base.FocusRing {
+                                visible: pmItem.visualFocus
                                 topLeftRadius: 0
                                 topRightRadius: 0
                                 bottomLeftRadius: parent.bottomLeftRadius + Style.focusRingWidth

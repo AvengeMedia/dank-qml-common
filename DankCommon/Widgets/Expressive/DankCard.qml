@@ -3,7 +3,7 @@ import Quickshell.Widgets
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Rectangle {
+FocusScope {
     id: card
 
     LayoutMirroring.enabled: I18n.isRtl
@@ -14,9 +14,19 @@ Rectangle {
     property bool interactive: true
     property string title: ""
     property string tone: ""
+    property alias color: surface.color
+    property alias radius: surface.radius
+    property alias border: surface.border
+    property alias topLeftRadius: surface.topLeftRadius
+    property alias topRightRadius: surface.topRightRadius
+    property alias bottomLeftRadius: surface.bottomLeftRadius
+    property alias bottomRightRadius: surface.bottomRightRadius
     default property alias content: contentItem.data
 
     signal clicked
+
+    readonly property Item focusTarget: input
+    readonly property var focusTargets: acceptsInput ? [input] : []
 
     readonly property bool acceptsInput: clickable && interactive && enabled
     readonly property bool tinted: tone === "primary" || tone === "secondary" || tone === "tertiary"
@@ -50,31 +60,18 @@ Rectangle {
     property bool showFocusRing: true
     property bool clipContent: false
     property real restRadius: Style.cornerRadiusXL
-    property real bodyRadius: stateLayer.pressed ? Style.cornerRadiusM : restRadius
+    property real bodyRadius: input.pressed ? Style.cornerRadiusM : restRadius
 
     radius: bodyRadius
     color: surfaceColor
     activeFocusOnTab: acceptsInput
-    Accessible.role: clickable ? Accessible.Button : Accessible.Pane
+    Accessible.role: Accessible.Pane
     Accessible.name: title
 
     Binding {
         target: card
         property: "onAccentColor"
         value: card.tinted ? card.containerColor : Style.onPrimary
-    }
-
-    Keys.onPressed: event => {
-        if (!acceptsInput)
-            return;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            card.clicked();
-            event.accepted = true;
-            break;
-        }
     }
 
     Behavior on bodyRadius {
@@ -85,17 +82,34 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id: surface
+        anchors.fill: parent
+    }
+
+    StyledButton {
+        id: input
+        focus: true
+        focusPolicy: Qt.ClickFocus
+        anchors.fill: parent
+        enabled: card.acceptsInput
+        visible: card.clickable
+        Accessible.name: card.Accessible.name
+        Accessible.description: card.Accessible.description
+        Accessible.ignored: card.Accessible.ignored
+        onClicked: card.clicked()
+    }
+
     Base.StateLayer {
-        id: stateLayer
+        control: input
         visible: card.acceptsInput
         disabled: !card.acceptsInput
         stateColor: card.accentColor
         cornerRadius: card.bodyRadius
-        onClicked: card.clicked()
     }
 
     Base.FocusRing {
-        visible: card.showFocusRing && card.activeFocus
+        visible: card.showFocusRing && input.visualFocus
     }
 
     Base.StyledText {

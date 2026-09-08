@@ -13,13 +13,19 @@ Flow {
     property int chipPadding: Style.spacingL
     property bool showCheck: true
     property bool showCounts: true
+    readonly property int focusIndex: Math.max(0, Math.min(currentIndex, (model?.length ?? 0) - 1))
 
     signal selectionChanged(int index)
     signal selectionToggled(int index, bool selected)
 
     spacing: Style.spacingS
     width: parent ? parent.width : Style.smallBreakpoint
-    activeFocusOnTab: enabled && !multiSelect
+    LayoutMirroring.enabled: I18n.isRtl
+    LayoutMirroring.childrenInherit: true
+
+    function requestFocus(backwards) {
+        chipRepeater.itemAt(focusIndex)?.forceActiveFocus(backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason);
+    }
 
     Keys.onPressed: event => {
         const count = model?.length ?? 0;
@@ -36,25 +42,26 @@ Flow {
             return;
         currentIndex = next;
         selectionChanged(next);
+        chipRepeater.itemAt(next)?.forceActiveFocus(Qt.TabFocusReason);
         event.accepted = true;
     }
 
     Repeater {
+        id: chipRepeater
         model: root.model
 
-        Rectangle {
+        StyledButton {
             id: chip
             required property var modelData
             required property int index
 
             property var value: typeof modelData === "string" ? modelData : (modelData.value !== undefined ? modelData.value : (modelData.label || ""))
-            activeFocusOnTab: root.enabled && root.multiSelect
-            Accessible.role: Accessible.CheckBox
+            focusPolicy: activeFocus || root.multiSelect || index === root.focusIndex ? Qt.StrongFocus : Qt.ClickFocus
+            Accessible.role: root.multiSelect ? Accessible.CheckBox : Accessible.RadioButton
             Accessible.name: label
-            Accessible.checkable: true
-            Accessible.checked: selected
-            Accessible.onPressAction: activate()
-            Accessible.onToggleAction: activate()
+            checkable: true
+            checked: selected
+            onClicked: activate()
 
             function activate() {
                 if (!root.enabled)
@@ -67,20 +74,7 @@ Flow {
                 root.selectionChanged(index);
             }
 
-            Keys.onPressed: event => {
-                switch (event.key) {
-                case Qt.Key_Space:
-                case Qt.Key_Return:
-                case Qt.Key_Enter:
-                    activate();
-                    event.accepted = true;
-                    break;
-                }
-            }
-
             property bool selected: root.multiSelect ? root.selectedValues.includes(value) : (index === root.currentIndex)
-            property bool hovered: stateLayer.containsMouse
-            property bool pressed: stateLayer.pressed
             property string label: typeof modelData === "string" ? modelData : (modelData.label || "")
             property int count: typeof modelData === "object" ? (modelData.count || 0) : 0
             property bool showCount: root.showCounts && count > 0
@@ -106,7 +100,7 @@ Flow {
             border.color: Style.outlineVariant
 
             Base.FocusRing {
-                visible: chip.activeFocus || (root.activeFocus && chip.selected) && !root.multiSelect
+                visible: chip.visualFocus
             }
 
             Behavior on color {
@@ -119,11 +113,11 @@ Flow {
 
             Base.StateLayer {
                 id: stateLayer
+                control: chip
                 disabled: !root.enabled
                 stateColor: chip.contentColor
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
-                onClicked: chip.activate()
             }
 
             Row {

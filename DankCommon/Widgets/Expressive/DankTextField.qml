@@ -231,6 +231,10 @@ Base.StyledRect {
             active: root.showPasswordToggle
             visible: active
             sourceComponent: DankActionButton {
+                focusPolicy: Qt.TabFocus
+                checkable: true
+                checked: root.passwordVisible
+                Accessible.name: root.passwordVisible ? I18n.tr("Hide password", "Accessible name for the password visibility button") : I18n.tr("Show password", "Accessible name for the password visibility button")
                 buttonSize: root.accessorySize
                 iconName: root.passwordVisible ? "visibility_off" : "visibility"
                 iconSize: Style.iconSizeSmall
@@ -243,6 +247,8 @@ Base.StyledRect {
             active: root.showClearButton
             visible: active && root.text.length > 0
             sourceComponent: DankActionButton {
+                focusPolicy: Qt.TabFocus
+                Accessible.name: I18n.tr("Clear")
                 buttonSize: root.accessorySize
                 iconName: "close"
                 iconSize: Style.iconSizeSmall

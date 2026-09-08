@@ -1,10 +1,12 @@
 import QtQuick
+import QtQuick.Templates as T
 import qs.DankCommon.Common
 
 MouseArea {
     id: root
 
     property bool disabled: false
+    property T.AbstractButton control: null
     property color stateColor: Style.surfaceText
     property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
     property real topLeftRadius: cornerRadius
@@ -17,11 +19,12 @@ MouseArea {
     property int transitionDuration: Style.shorterDuration
     property var transitionCurve: Style.expressiveCurves.standardDecel
 
-    readonly property real stateOpacity: disabled ? 0 : pressed ? Style.stateLayerPressed : containsMouse ? Style.stateLayerHover : 0
+    readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : (control ? control.hovered : containsMouse) ? Style.stateLayerHover : 0
 
     anchors.fill: parent
     cursorShape: disabled ? Qt.ArrowCursor : Qt.PointingHandCursor
     hoverEnabled: true
+    acceptedButtons: control ? Qt.NoButton : Qt.LeftButton
 
     function showTooltip() {
         tooltipLoader.item?.showNow();
@@ -30,6 +33,16 @@ MouseArea {
     onPressed: mouse => {
         if (!disabled && enableRipple) {
             rippleLayer.trigger(mouse.x, mouse.y);
+        }
+    }
+
+    Connections {
+        target: root.control
+        function onPressedChanged() {
+            if (!root.control.pressed || root.disabled || !root.enableRipple)
+                return;
+            const point = root.mapFromItem(root.control, root.control.pressX, root.control.pressY);
+            rippleLayer.trigger(point.x, point.y);
         }
     }
 

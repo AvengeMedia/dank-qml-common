@@ -117,6 +117,10 @@ Base.StyledRect {
         TextEdit {
             id: textEdit
 
+            activeFocusOnTab: root.enabled
+            Accessible.name: root.Accessible.name || root.placeholderText
+            Accessible.description: root.Accessible.description
+
             width: scroll.width
             height: Math.max(scroll.height, contentHeight)
             font.pixelSize: Style.fontSizeMedium

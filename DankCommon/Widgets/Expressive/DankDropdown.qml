@@ -6,7 +6,7 @@ import Quickshell.Wayland
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Item {
+FocusScope {
     id: root
 
     LayoutMirroring.enabled: I18n.isRtl
@@ -232,27 +232,8 @@ Item {
     width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
     implicitHeight: !showTrigger ? 0 : (compactMode ? triggerHeight : Math.max(Style.listItemHeight + Style.spacingXS, labelColumn.implicitHeight + Style.spacingM))
     activeFocusOnTab: showTrigger && enabled
-    Accessible.role: Accessible.ComboBox
-    Accessible.name: text || currentValue
-    Accessible.description: description
-    Accessible.onPressAction: {
-        if (enabled)
-            openDropdownMenu();
-    }
-
-    Keys.onPressed: event => {
-        if (!root.enabled)
-            return;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-        case Qt.Key_Down:
-            root.showDropdownMenu();
-            event.accepted = true;
-            break;
-        }
-    }
+    readonly property Item focusTarget: dropdown
+    readonly property var focusTargets: showTrigger ? [dropdown] : []
 
     Component.onDestruction: {
         transientSurfaceTracker?.unregister(root);
@@ -313,10 +294,19 @@ Item {
         }
     }
 
-    Rectangle {
+    StyledButton {
         id: dropdown
+        focus: true
+        focusPolicy: Qt.ClickFocus
+        Accessible.ignored: root.Accessible.ignored
 
-        readonly property bool active: root.menuVisible || root.activeFocus
+        Accessible.role: Accessible.ComboBox
+        Accessible.name: root.Accessible.name || root.text || root.currentValue
+        Accessible.description: root.Accessible.description || root.description
+        onClicked: root.openDropdownMenu()
+        Keys.onDownPressed: root.showDropdownMenu()
+
+        readonly property bool active: root.menuVisible || visualFocus
 
         visible: root.showTrigger
         width: root.compactMode ? parent.width : (root.popupWidth === -1 ? undefined : (root.popupWidth > 0 ? root.popupWidth : root.dropdownWidth))
@@ -325,8 +315,8 @@ Item {
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
         radius: Style.cornerRadiusM
-        color: !root.enabled ? Style.onSurface_12 : (dropdownArea.containsMouse || root.menuVisible ? root.hoverBackgroundColor : root.backgroundColor)
-        border.color: !root.enabled ? "transparent" : (active || dropdownArea.containsMouse ? root.focusedBorderColor : root.normalBorderColor)
+        color: !root.enabled ? Style.onSurface_12 : (dropdown.hovered || root.menuVisible ? root.hoverBackgroundColor : root.backgroundColor)
+        border.color: !root.enabled ? "transparent" : (active || dropdown.hovered ? root.focusedBorderColor : root.normalBorderColor)
         border.width: active ? Style.outlineWidthFocused : Style.outlineWidth
 
         Behavior on color {
@@ -345,14 +335,11 @@ Item {
             }
         }
 
-        MouseArea {
-            id: dropdownArea
-
-            anchors.fill: parent
-            enabled: root.enabled
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            onClicked: root.openDropdownMenu()
+        Base.StateLayer {
+            control: dropdown
+            disabled: !root.enabled
+            stateColor: "transparent"
+            enableRipple: false
         }
 
         Row {
@@ -458,8 +445,8 @@ Item {
             onVisibleChanged: {
                 if (!visible && root.menuOpen)
                     root.closeDropdownMenu();
-                if (!visible && root.activeFocusOnTab)
-                    root.forceActiveFocus();
+                if (!visible && root.showTrigger && root.enabled)
+                    dropdown.forceActiveFocus(Qt.PopupFocusReason);
                 if (visible)
                     Qt.callLater(focusInput);
             }
@@ -687,11 +674,26 @@ Item {
                             pressDelay: 0
                             flickableDirection: Flickable.VerticalFlick
 
-                            delegate: Rectangle {
+                            delegate: StyledButton {
                                 id: delegateRoot
+
+                                focusPolicy: Qt.NoFocus
+                                Accessible.role: Accessible.ListItem
+                                Accessible.name: modelData
+                                Accessible.selected: isCurrentValue
+                                onClicked: {
+                                    root.currentValue = modelData;
+                                    root.valueChanged(modelData);
+                                    root.closeDropdownMenu();
+                                }
 
                                 required property var modelData
                                 required property int index
+
+                                HoverHandler {
+                                    cursorShape: Qt.PointingHandCursor
+                                }
+
                                 property bool isSelected: root.selectedIndex === index
                                 property bool isCurrentValue: root.currentValue === modelData
                                 property string iconName: root.optionIconMap[modelData] ?? ""
@@ -706,7 +708,7 @@ Item {
                                         return Style.primaryContainer;
                                     if (isSelected)
                                         return Style.withAlpha(Style.onSurface, Style.stateLayerFocus);
-                                    if (optionArea.containsMouse)
+                                    if (delegateRoot.hovered || delegateRoot.visualFocus)
                                         return Style.withAlpha(Style.onSurface, Style.stateLayerHover);
                                     return Style.withAlpha(Style.onSurface, 0);
                                 }
@@ -755,19 +757,6 @@ Item {
                                         elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
                                         wrapMode: Text.NoWrap
                                         horizontalAlignment: Text.AlignLeft
-                                    }
-                                }
-
-                                MouseArea {
-                                    id: optionArea
-
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        root.currentValue = delegateRoot.modelData;
-                                        root.valueChanged(delegateRoot.modelData);
-                                        root.closeDropdownMenu();
                                     }
                                 }
                             }

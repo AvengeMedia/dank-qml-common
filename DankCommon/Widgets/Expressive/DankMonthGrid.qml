@@ -29,6 +29,13 @@ Item {
 
     readonly property int columns: 7
     readonly property int rows: 6
+    readonly property int firstFocusIndex: {
+        for (let i = 0; i < columns * rows; i++) {
+            if (sameDay(dateAt(i), selectedDate))
+                return i;
+        }
+        return 0;
+    }
     readonly property date firstDay: {
         const first = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1, 12);
         const diff = (first.getDay() - firstDayOfWeek + columns) % columns;
@@ -70,7 +77,7 @@ Item {
         Base.StyledText {
             required property int index
 
-            x: 0
+            x: I18n.isRtl ? root.width - width : 0
             y: root.weekdayRowHeight + root.cellGap + index * (root.cellHeight + root.cellGap)
             width: root.weekColumnWidth
             height: root.cellHeight
@@ -89,7 +96,7 @@ Item {
         Base.StyledText {
             required property int index
 
-            x: root.gridLeft + index * (root.cellWidth + root.cellGap)
+            x: I18n.isRtl ? root.width - root.gridLeft - index * (root.cellWidth + root.cellGap) - width : root.gridLeft + index * (root.cellWidth + root.cellGap)
             y: 0
             width: root.cellWidth
             height: root.weekdayRowHeight
@@ -103,9 +110,10 @@ Item {
     }
 
     Repeater {
+        id: dayRepeater
         model: root.columns * root.rows
 
-        Rectangle {
+        StyledButton {
             id: cell
 
             required property int index
@@ -114,10 +122,36 @@ Item {
             Accessible.role: Accessible.Button
             Accessible.name: dayDate.toLocaleDateString(Qt.locale(), Locale.LongFormat)
             Accessible.selected: isSelected
-            Accessible.focusable: root.interactive
-            Accessible.onPressAction: {
-                if (root.interactive && root.enabled)
-                    root.dayClicked(dayDate);
+            enabled: root.interactive
+            focusPolicy: activeFocus || index === root.firstFocusIndex ? Qt.StrongFocus : Qt.ClickFocus
+            onClicked: root.dayClicked(dayDate)
+
+            Keys.onPressed: event => {
+                let offset = 0;
+                switch (event.key) {
+                case Qt.Key_Left:
+                    offset = mirrored ? 1 : -1;
+                    break;
+                case Qt.Key_Right:
+                    offset = mirrored ? -1 : 1;
+                    break;
+                case Qt.Key_Up:
+                    offset = -root.columns;
+                    break;
+                case Qt.Key_Down:
+                    offset = root.columns;
+                    break;
+                default:
+                    return;
+                }
+                const next = dayRepeater.itemAt(index + offset);
+                if (next)
+                    next.forceActiveFocus(Qt.TabFocusReason);
+                event.accepted = true;
+            }
+
+            Base.FocusRing {
+                visible: cell.visualFocus
             }
             readonly property bool inMonth: dayDate.getMonth() === root.displayDate.getMonth()
             readonly property bool isToday: root.sameDay(dayDate, root.today)
@@ -129,11 +163,11 @@ Item {
             }
             readonly property int extraCount: Math.max(0, dotColors.length - root.maxDots)
 
-            x: root.gridLeft + (index % root.columns) * (root.cellWidth + root.cellGap)
+            x: mirrored ? root.width - root.gridLeft - (index % root.columns) * (root.cellWidth + root.cellGap) - width : root.gridLeft + (index % root.columns) * (root.cellWidth + root.cellGap)
             y: root.weekdayRowHeight + root.cellGap + Math.floor(index / root.columns) * (root.cellHeight + root.cellGap)
             width: root.cellWidth
             height: root.cellHeight
-            radius: Math.min(cellLayer.pressed ? Style.cornerRadiusS : root.cellRadius, height / 2)
+            radius: Math.min(cell.pressed ? Style.cornerRadiusS : root.cellRadius, height / 2)
 
             Behavior on radius {
                 enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -197,11 +231,11 @@ Item {
 
             Base.StateLayer {
                 id: cellLayer
+                control: cell
                 stateColor: cell.isSelected ? Style.onPrimary : Style.primary
                 cornerRadius: cell.radius
                 disabled: !root.interactive
                 enabled: root.interactive
-                onClicked: root.dayClicked(cell.dayDate)
             }
         }
     }

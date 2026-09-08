@@ -2,7 +2,7 @@ import QtQuick
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
-Base.StyledRect {
+StyledButton {
     id: root
 
     property string iconName: ""
@@ -18,9 +18,7 @@ Base.StyledRect {
     property var shapeCurve: Style.expressiveCurves.standard
     property int stateDuration: Style.shorterDuration
     property var stateCurve: Style.expressiveCurves.standardDecel
-    readonly property alias pressed: stateLayer.pressed
 
-    signal clicked
     signal entered
     signal exited
 
@@ -28,17 +26,12 @@ Base.StyledRect {
         stateLayer.showTooltip();
     }
 
-    width: buttonSize
-    height: buttonSize
+    implicitWidth: buttonSize
+    implicitHeight: buttonSize
     radius: pressed ? Math.min(Style.cornerRadiusS, height / 2) : (circular ? Math.min(Style.cornerRadiusFull, height / 2) : Style.cornerRadiusM)
     color: backgroundColor
-    activeFocusOnTab: enabled
     Accessible.role: Accessible.Button
     Accessible.name: tooltipText || iconName
-    Accessible.onPressAction: {
-        if (enabled)
-            clicked();
-    }
 
     Behavior on radius {
         enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -48,20 +41,8 @@ Base.StyledRect {
         }
     }
 
-    Keys.onPressed: event => {
-        if (!root.enabled)
-            return;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            root.clicked();
-            event.accepted = true;
-            break;
-        }
-    }
-
     Base.FocusRing {
+        visible: root.visualFocus
         anchors.margins: Style.focusRingWidth / 2
         radius: Math.max(0, parent.radius - Style.focusRingWidth / 2)
     }
@@ -75,12 +56,12 @@ Base.StyledRect {
 
     Base.StateLayer {
         id: stateLayer
+        control: root
         disabled: !root.enabled
         stateColor: root.stateColor
         cornerRadius: root.radius
         transitionDuration: root.stateDuration
         transitionCurve: root.stateCurve
-        onClicked: root.clicked()
         onEntered: root.entered()
         onExited: root.exited()
         tooltipText: root.tooltipText

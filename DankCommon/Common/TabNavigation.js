@@ -27,7 +27,7 @@ function selectNext(tabBar, repeater, step) {
 }
 
 function handleKeyEvent(event, tabBar, repeater, rtl) {
-    if (!tabBar.activeFocus || repeater.count === 0)
+    if (!FocusNavigation.containsFocus(tabBar) || repeater.count === 0)
         return false;
     if (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))
         return false;

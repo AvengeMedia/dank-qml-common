@@ -238,8 +238,8 @@ Base.StyledRect {
         anchors.left: parent.left
         anchors.leftMargin: root.outlined ? root.contentPadding + (root.leftPadding - root.contentPadding) * (1 - root.labelProgress) : root.leftPadding
         y: root.outlined ? root.containerTop + (root.containerHeight / 2) * (1 - root.labelProgress) - height / 2 : Style.spacingXS
-        implicitWidth: labelGlyph.implicitWidth * textScale
-        width: Math.min(implicitWidth, Math.max(0, textInput.width + (root.width - root.contentPadding * 2 - textInput.width) * root.labelProgress))
+        implicitWidth: labelGlyph.width * textScale
+        width: implicitWidth
         height: root.outlined ? root.font.pixelSize + Style.spacingS + (Style.outlinedFieldLabelLineHeight - root.font.pixelSize - Style.spacingS) * root.labelProgress : Style.outlinedFieldLabelLineHeight
         visible: root.labelText !== ""
 
@@ -249,7 +249,7 @@ Base.StyledRect {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.alignWhenCentered: false
-            width: parent.width / parent.textScale
+            width: implicitWidth
             text: root.labelText
             font.pixelSize: root.outlined ? root.font.pixelSize : Style.fontSizeSmall
             scale: fieldLabel.textScale
@@ -257,7 +257,7 @@ Base.StyledRect {
             color: root.outlined ? root.labelColor : textInput.activeFocus ? Style.primary : Style.onSurfaceVariant
             wrapMode: Text.NoWrap
             maximumLineCount: 1
-            elide: Text.ElideRight
+            elide: Text.ElideNone
         }
     }
 

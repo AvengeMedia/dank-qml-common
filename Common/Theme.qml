@@ -190,6 +190,7 @@ Singleton {
     readonly property real groupedListInnerRadius: cornerRadiusXS
     readonly property real groupedListOuterRadius: cornerRadiusL
     readonly property real iconButtonSize: 40
+    readonly property real minimumTouchTargetSize: 48
     readonly property real listItemHeight: 56
     readonly property real listItemTwoLineHeight: 72
     readonly property real avatarSize: 36

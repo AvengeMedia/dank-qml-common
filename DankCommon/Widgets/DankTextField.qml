@@ -28,6 +28,7 @@ StyledRect {
     property int leftIconSize: Style.iconSize
     property color leftIconColor: Style.onSurfaceVariant
     property color leftIconFocusedColor: Style.primary
+    property Component leadingContent: null
     property bool showClearButton: false
     property bool showPasswordToggle: false
     property real rightAccessoryWidth: 0
@@ -45,7 +46,13 @@ StyledRect {
 
     readonly property real accessorySize: outlined ? Math.min(controlHeight, Style.fieldHeightLarge) : Style.buttonHeightXS
     readonly property real contentPadding: outlined ? Style.spacingL : Style.spacingM
-    readonly property real leftPadding: outlined && leftIconName ? accessorySize + Style.spacingXS : contentPadding + (leftIconName ? leftIconSize + contentPadding : 0)
+    readonly property real leftPadding: {
+        if (leadingLoader.item)
+            return contentPadding + leadingLoader.width + Style.spacingS;
+        if (outlined && leftIconName)
+            return accessorySize + Style.spacingXS;
+        return contentPadding + (leftIconName ? leftIconSize + contentPadding : 0);
+    }
     readonly property real rightPadding: {
         let p = Style.spacingS + rightAccessoryWidth;
         if (showPasswordToggle)
@@ -226,7 +233,17 @@ StyledRect {
         name: leftIconName
         size: leftIconSize
         color: root.outlined ? (root.enabled ? root.leftIconColor : Style.onSurface_38) : textInput.activeFocus ? leftIconFocusedColor : leftIconColor
-        visible: leftIconName !== ""
+        visible: leftIconName !== "" && !leadingLoader.item
+    }
+
+    Loader {
+        id: leadingLoader
+
+        anchors.left: parent.left
+        anchors.leftMargin: root.contentPadding
+        anchors.verticalCenter: textInput.verticalCenter
+        active: root.leadingContent !== null
+        sourceComponent: root.leadingContent
     }
 
     Item {

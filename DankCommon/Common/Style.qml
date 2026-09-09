@@ -220,6 +220,7 @@ Singleton {
     readonly property real iconSizeMedium: theme?.iconSizeMedium ?? 20
     readonly property real iconSizeLarge: theme?.iconSizeLarge ?? 32
     readonly property real iconButtonSize: theme?.iconButtonSize ?? 40
+    readonly property real minimumTouchTargetSize: theme?.minimumTouchTargetSize ?? 48
     readonly property real listItemHeight: theme?.listItemHeight ?? 56
     readonly property real listItemTwoLineHeight: theme?.listItemTwoLineHeight ?? 72
     readonly property real avatarSize: theme?.avatarSize ?? 36

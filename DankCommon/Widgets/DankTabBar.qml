@@ -1,16 +1,18 @@
 import QtQuick
+import QtQuick.Templates as T
+import QtQuick.Shapes
 import "../Common/TabNavigation.js" as TabNavigation
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
-FocusScope {
+T.Control {
     id: tabBar
 
     property alias model: tabRepeater.model
     property int currentIndex: 0
-    property int spacing: Style.spacingL
-    property int tabHeight: 56
+    spacing: Style.spacingL
+    property int tabHeight: Style.buttonHeightM
     property bool showIcons: true
+    property bool showDivider: true
     property bool equalWidthTabs: true
     property bool enableArrowNavigation: true
     property bool cycleOnTab: false
@@ -21,37 +23,70 @@ FocusScope {
     signal actionTriggered(int index)
 
     focus: false
-    activeFocusOnTab: true
-    height: tabHeight
+    focusPolicy: Qt.TabFocus
+    implicitHeight: Math.max(tabHeight, tabRow.implicitHeight + Style.tabIndicatorHeight)
+    height: implicitHeight
 
     Keys.onPressed: event => {
+        if (!enabled)
+            return;
+        switch (event.key) {
+        case Qt.Key_Space:
+        case Qt.Key_Return:
+        case Qt.Key_Enter:
+            if (!event.isAutoRepeat)
+                tabRepeater.itemAt(currentIndex)?.click();
+            event.accepted = true;
+            return;
+        }
         event.accepted = TabNavigation.handleKeyEvent(event, tabBar, tabRepeater, I18n.isRtl);
     }
 
     Row {
         id: tabRow
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         spacing: tabBar.spacing
+        LayoutMirroring.enabled: false
+        layoutDirection: I18n.isRtl ? Qt.RightToLeft : Qt.LeftToRight
+        onLayoutDirectionChanged: indicatorUpdate.restart()
 
         Repeater {
             id: tabRepeater
 
-            onItemAdded: Qt.callLater(tabBar.updateIndicator)
-            onItemRemoved: Qt.callLater(tabBar.updateIndicator)
+            onItemAdded: indicatorUpdate.restart()
+            onItemRemoved: indicatorUpdate.restart()
 
-            Item {
+            StyledButton {
                 id: tabItem
+                focusPolicy: isAction ? Qt.TabFocus : Qt.NoFocus
                 property bool isAction: modelData && modelData.isAction === true
+                onIsActionChanged: indicatorUpdate.restart()
                 property bool isActive: !isAction && tabBar.currentIndex === index
-                property bool hasIcon: tabBar.showIcons && modelData && modelData.icon && modelData.icon.length > 0
-                property bool hasText: modelData && modelData.text && modelData.text.length > 0
+                property bool hasIcon: tabBar.showIcons && !!modelData?.icon?.length
+                property bool hasText: !!modelData?.text?.length
+                Accessible.role: isAction ? Accessible.Button : Accessible.PageTab
+                Accessible.name: modelData?.text ?? ""
+                Accessible.selected: isActive
+                onClicked: {
+                    if (!tabBar.enabled)
+                        return;
+                    if (isAction) {
+                        tabBar.actionTriggered(index);
+                        return;
+                    }
+                    tabBar.tabClicked(index);
+                }
+                readonly property real contentWidth: contentCol.implicitWidth
 
-                width: tabBar.equalWidthTabs ? (tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, 64)
-                height: tabBar.tabHeight
+                width: tabBar.equalWidthTabs ? Math.max(0, tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, Style.tabMinWidth)
+                height: Math.max(tabBar.tabHeight - Style.tabIndicatorHeight, contentCol.implicitHeight + Style.spacingXS * 2)
+                anchors.verticalCenter: parent.verticalCenter
 
                 Column {
                     id: contentCol
-                    onImplicitWidthChanged: Qt.callLater(tabBar.updateIndicator)
+                    onImplicitWidthChanged: indicatorUpdate.restart()
                     anchors.centerIn: parent
                     spacing: Style.spacingXS
 
@@ -59,95 +94,136 @@ FocusScope {
                         name: modelData.icon || ""
                         anchors.horizontalCenter: parent.horizontalCenter
                         size: Style.iconSize
-                        color: tabItem.isActive ? Style.primary : Style.surfaceText
+                        color: tabItem.isActive ? Style.primary : Style.onSurfaceVariant
+                        filled: tabItem.isActive
                         visible: hasIcon
+
+                        Behavior on color {
+                            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            DankColorAnim {
+                                duration: Style.expressiveDurations.expressiveEffects
+                                easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+                            }
+                        }
                     }
 
                     StyledText {
                         text: modelData.text || ""
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Style.fontSizeMedium
-                        color: tabItem.isActive ? Style.primary : Style.surfaceText
+                        color: tabItem.isActive ? Style.primary : Style.onSurfaceVariant
                         font.weight: Font.Medium
                         visible: hasText
-                    }
-                }
 
-                Rectangle {
-                    id: stateLayer
-                    anchors.fill: parent
-                    color: Style.surfaceTint
-                    opacity: tabArea.pressed ? 0.12 : (tabArea.containsMouse ? 0.08 : 0)
-                    visible: opacity > 0
-                    radius: Style.cornerRadius
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Style.shortDuration
-                            easing.type: Style.standardEasing
+                        Behavior on color {
+                            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                            DankColorAnim {
+                                duration: Style.expressiveDurations.expressiveEffects
+                                easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+                            }
                         }
                     }
                 }
 
-                DankRipple {
-                    id: tabRipple
-                    cornerRadius: Style.cornerRadius
+                StateLayer {
+                    control: tabItem
+                    disabled: !tabBar.enabled
+                    stateColor: Style.primary
+                    cornerRadius: Style.cornerRadiusM
+                    transitionDuration: Style.expressiveDurations.expressiveEffects
+                    transitionCurve: Style.expressiveCurves.expressiveEffects
                 }
 
-                MouseArea {
-                    id: tabArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onPressed: mouse => tabRipple.trigger(mouse.x, mouse.y)
-                    onClicked: {
-                        if (tabItem.isAction) {
-                            tabBar.actionTriggered(index);
-                        } else {
-                            tabBar.tabClicked(index);
-                        }
-                    }
+                FocusRing {
+                    radius: Math.min(Style.fullRadius(width, height), Style.cornerRadiusM + Style.focusRingOffset)
+                    visible: tabItem.visualFocus || (tabBar.visualFocus && tabItem.isActive)
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        id: indicator
-        y: parent.height + 7
-        height: 3
-        width: 60
-        topLeftRadius: Style.cornerRadius
-        topRightRadius: Style.cornerRadius
-        bottomLeftRadius: 0
-        bottomRightRadius: 0
-        color: Style.primary
-        visible: false
-
-        property bool animationEnabled: false
-        property bool initialSetupComplete: false
-
-        Behavior on x {
-            enabled: indicator.animationEnabled
-            NumberAnimation {
-                duration: Style.mediumDuration
-                easing.type: Style.standardEasing
-            }
-        }
-
-        Behavior on width {
-            enabled: indicator.animationEnabled
-            NumberAnimation {
-                duration: Style.mediumDuration
-                easing.type: Style.standardEasing
             }
         }
     }
 
     Rectangle {
         width: parent.width
-        height: 1
-        y: parent.height + 10
-        color: Style.outlineStrong
+        height: Style.dividerWidth
+        anchors.bottom: parent.bottom
+        color: Style.outlineVariant
+        visible: tabBar.showDivider
+    }
+
+    Shape {
+        id: indicator
+
+        property bool animationEnabled: false
+        property bool initialSetupComplete: false
+        property bool movingRight: true
+        property real leftX: 0
+        property real rightX: 0
+        readonly property real cornerRadius: Math.min(width / 2, height, Style.cornerRadiusS)
+
+        anchors.bottom: parent.bottom
+        height: Style.tabIndicatorHeight
+        x: leftX
+        width: Math.max(0, rightX - leftX)
+        visible: false
+        preferredRendererType: Shape.CurveRenderer
+
+        ShapePath {
+            strokeWidth: 0
+            fillColor: Style.primary
+            startX: 0
+            startY: indicator.height
+
+            PathLine {
+                x: 0
+                y: indicator.cornerRadius
+            }
+            PathArc {
+                x: indicator.cornerRadius
+                y: 0
+                radiusX: indicator.cornerRadius
+                radiusY: indicator.cornerRadius
+            }
+            PathLine {
+                x: indicator.width - indicator.cornerRadius
+                y: 0
+            }
+            PathArc {
+                x: indicator.width
+                y: indicator.cornerRadius
+                radiusX: indicator.cornerRadius
+                radiusY: indicator.cornerRadius
+            }
+            PathLine {
+                x: indicator.width
+                y: indicator.height
+            }
+            PathLine {
+                x: 0
+                y: indicator.height
+            }
+        }
+
+        Behavior on leftX {
+            enabled: indicator.animationEnabled && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            DankAnim {
+                duration: indicator.movingRight ? Style.expressiveDurations.expressiveDefaultSpatial : Style.expressiveDurations.expressiveFastSpatial
+                easing.bezierCurve: Style.expressiveCurves.emphasized
+            }
+        }
+
+        Behavior on rightX {
+            enabled: indicator.animationEnabled && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            DankAnim {
+                duration: indicator.movingRight ? Style.expressiveDurations.expressiveFastSpatial : Style.expressiveDurations.expressiveDefaultSpatial
+                easing.bezierCurve: Style.expressiveCurves.emphasized
+            }
+        }
+    }
+
+    Timer {
+        id: indicatorUpdate
+        interval: 0
+        onTriggered: tabBar.updateIndicator()
     }
 
     function updateIndicator() {
@@ -159,26 +235,31 @@ FocusScope {
 
         const item = tabRepeater.itemAt(currentIndex);
         if (!item || item.isAction) {
+            indicator.visible = false;
+            indicator.initialSetupComplete = false;
             return;
         }
 
         tabRow.forceLayout();
         const tabPos = item.mapToItem(tabBar, 0, 0);
         const tabCenterX = tabPos.x + item.width / 2;
-        const indicatorWidth = 60;
+        const indicatorWidth = Math.max(0, Math.min(item.width, Math.max(Style.tabIndicatorMinWidth, item.contentWidth - Style.tabIndicatorInset * 2)));
+        const targetLeft = tabCenterX - indicatorWidth / 2;
+        const targetRight = tabCenterX + indicatorWidth / 2;
 
+        indicator.movingRight = targetLeft >= indicator.leftX;
         if (!indicator.initialSetupComplete) {
             indicator.animationEnabled = false;
-            indicator.width = indicatorWidth;
-            indicator.x = tabCenterX - indicatorWidth / 2;
+            indicator.leftX = targetLeft;
+            indicator.rightX = targetRight;
             indicator.visible = true;
             indicator.initialSetupComplete = true;
             indicator.animationEnabled = true;
-        } else {
-            indicator.width = indicatorWidth;
-            indicator.x = tabCenterX - indicatorWidth / 2;
-            indicator.visible = true;
+            return;
         }
+        indicator.leftX = targetLeft;
+        indicator.rightX = targetRight;
+        indicator.visible = true;
     }
 
     function snapIndicator() {
@@ -187,10 +268,10 @@ FocusScope {
     }
 
     onCurrentIndexChanged: {
-        Qt.callLater(updateIndicator);
+        indicatorUpdate.restart();
     }
-    onWidthChanged: Qt.callLater(updateIndicator)
-    onSpacingChanged: Qt.callLater(updateIndicator)
-    onEqualWidthTabsChanged: Qt.callLater(updateIndicator)
-    Component.onCompleted: Qt.callLater(updateIndicator)
+    onWidthChanged: indicatorUpdate.restart()
+    onSpacingChanged: indicatorUpdate.restart()
+    onEqualWidthTabsChanged: indicatorUpdate.restart()
+    Component.onCompleted: indicatorUpdate.restart()
 }

@@ -1,6 +1,6 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets.Expressive as E
 
 Item {
     id: root
@@ -26,7 +26,7 @@ Item {
 
     Component {
         id: factory
-        E.DankButtonGroup {
+        DankButtonGroup {
             model: ["Power save", "Balanced", "Performance"]
             currentIndex: 1
             anchors.horizontalCenter: parent.horizontalCenter

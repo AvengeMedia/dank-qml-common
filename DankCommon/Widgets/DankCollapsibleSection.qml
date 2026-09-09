@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
 ColumnLayout {
     id: root
@@ -12,53 +11,109 @@ ColumnLayout {
     property bool showBackground: false
     property alias headerColor: headerRect.color
 
+    function toggle() {
+        if (!enabled)
+            return;
+        toggleRequested();
+        expanded = !expanded;
+    }
+
     signal toggleRequested
 
-    spacing: Style.spacingS
+    spacing: Style.groupedListGap
     Layout.fillWidth: true
 
-    Rectangle {
+    StyledButton {
         id: headerRect
+        Accessible.role: Accessible.Button
+        Accessible.name: root.title
+        Accessible.description: root.description
+        checkable: true
+        checked: root.expanded
+        onClicked: root.toggle()
+
+        FocusRing {
+            visible: headerRect.visualFocus
+            radius: Style.groupedListOuterRadius + Style.focusRingOffset
+        }
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(titleRow.implicitHeight + Style.spacingM * 2, 48)
-        radius: Style.cornerRadius
-        color: "transparent"
+        Layout.preferredHeight: Math.max(titleRow.implicitHeight + Style.spacingM * 2, Style.listItemHeight)
+        topLeftRadius: Style.groupedListOuterRadius
+        topRightRadius: Style.groupedListOuterRadius
+        bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
+        bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
+        color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
+
+        Behavior on bottomLeftRadius {
+            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            DankAnim {
+                duration: Style.expressiveDurations.expressiveFastSpatial
+                easing.bezierCurve: Style.expressiveCurves.standard
+            }
+        }
+
+        Behavior on bottomRightRadius {
+            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            DankAnim {
+                duration: Style.expressiveDurations.expressiveFastSpatial
+                easing.bezierCurve: Style.expressiveCurves.standard
+            }
+        }
 
         RowLayout {
             id: titleRow
             anchors.fill: parent
-            anchors.leftMargin: Style.spacingM
-            anchors.rightMargin: Style.spacingM
+            anchors.leftMargin: Style.spacingL
+            anchors.rightMargin: Style.spacingL
             spacing: Style.spacingM
 
             StyledText {
                 text: root.title
-                font.pixelSize: Style.fontSizeLarge
+                font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
                 Layout.fillWidth: true
+                wrapMode: Text.WordWrap
             }
 
             DankIcon {
                 name: "expand_more"
-                size: Style.iconSizeSmall
+                size: Style.iconSize
+                color: Style.onSurfaceVariant
                 rotation: root.expanded ? 180 : 0
 
                 Behavior on rotation {
                     enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                    NumberAnimation {
-                        easing.type: Easing.BezierSpline
-                        duration: Style.shortDuration
-                        easing.bezierCurve: Style.expressiveCurves.standard
+                    DankAnim {
+                        duration: Style.expressiveDurations.expressiveFastSpatial
+                        easing.bezierCurve: Style.expressiveCurves.expressiveDefaultSpatial
                     }
                 }
             }
         }
 
         StateLayer {
+            control: headerRect
             anchors.fill: parent
-            onClicked: {
-                root.toggleRequested();
-                root.expanded = !root.expanded;
+            topLeftRadius: Style.groupedListOuterRadius
+            topRightRadius: Style.groupedListOuterRadius
+            bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
+            bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
+            disabled: !root.enabled
+
+            Behavior on bottomLeftRadius {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveFastSpatial
+                    easing.bezierCurve: Style.expressiveCurves.standard
+                }
+            }
+
+            Behavior on bottomRightRadius {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveFastSpatial
+                    easing.bezierCurve: Style.expressiveCurves.standard
+                }
             }
         }
     }
@@ -67,8 +122,10 @@ ColumnLayout {
 
     Item {
         id: contentWrapper
+        visible: root.expanded || height > 0
+        enabled: root.expanded
         Layout.fillWidth: true
-        Layout.preferredHeight: root.expanded ? (contentColumn.implicitHeight + Style.spacingS * 2) : 0
+        Layout.preferredHeight: root.expanded ? (contentColumn.implicitHeight + Style.spacingM * 2) : 0
         clip: true
 
         Behavior on Layout.preferredHeight {
@@ -82,17 +139,19 @@ ColumnLayout {
         Rectangle {
             id: backgroundRect
             anchors.fill: parent
-            radius: Style.cornerRadius
-            color: Style.surfaceContainer
+            topLeftRadius: Style.groupedListInnerRadius
+            topRightRadius: Style.groupedListInnerRadius
+            bottomLeftRadius: Style.groupedListOuterRadius
+            bottomRightRadius: Style.groupedListOuterRadius
+            color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
             opacity: root.showBackground && root.expanded ? 1.0 : 0.0
             visible: root.showBackground
 
             Behavior on opacity {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                NumberAnimation {
-                    easing.type: Easing.BezierSpline
-                    duration: Style.shortDuration
-                    easing.bezierCurve: Style.expressiveCurves.standard
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
         }
@@ -101,19 +160,17 @@ ColumnLayout {
             id: contentColumn
             anchors.left: parent.left
             anchors.right: parent.right
-            y: Style.spacingS
-            anchors.leftMargin: Style.spacingM
-            anchors.rightMargin: Style.spacingM
-            anchors.bottomMargin: Style.spacingS
+            y: Style.spacingM
+            anchors.leftMargin: Style.spacingL
+            anchors.rightMargin: Style.spacingL
             spacing: Style.spacingS
             opacity: root.expanded ? 1.0 : 0.0
 
             Behavior on opacity {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                NumberAnimation {
-                    easing.type: Easing.BezierSpline
-                    duration: Style.shortDuration
-                    easing.bezierCurve: Style.expressiveCurves.standard
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
 
@@ -124,7 +181,7 @@ ColumnLayout {
                 Layout.bottomMargin: root.description !== "" ? Style.spacingS : 0
                 visible: root.description !== ""
                 text: root.description
-                color: Style.surfaceTextSecondary
+                color: Style.onSurfaceVariant
                 font.pixelSize: Style.fontSizeSmall
                 wrapMode: Text.Wrap
             }

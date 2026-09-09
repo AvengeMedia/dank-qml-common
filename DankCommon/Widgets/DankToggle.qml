@@ -1,66 +1,82 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
-Item {
+FocusScope {
     id: toggle
 
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    // API
     property bool checked: false
     property bool toggling: false
     property string text: ""
     property string description: ""
     property color descriptionColor: Style.surfaceVariantText
     property bool hideText: false
+    property string checkedIcon: "check"
+    property string uncheckedIcon: ""
+    readonly property string thumbIcon: checked ? checkedIcon : uncheckedIcon
 
     signal clicked
     signal toggled(bool checked)
     signal toggleCompleted(bool checked)
 
     readonly property bool showText: text && !hideText
+    property bool _ready: false
+    property bool _settling: false
 
-    readonly property int trackWidth: 52
-    readonly property int trackHeight: 30
-    readonly property int insetCircle: 24
+    Component.onCompleted: {
+        _ready = true;
+        thumbSpring.snapTo(toggleTrack.thumbTarget);
+        sizeSpring.snapTo(toggleTrack.thumbSize);
+    }
+
+    readonly property int trackWidth: Style.switchTrackWidth
+    readonly property int trackHeight: Style.switchTrackHeight
+    readonly property int insetCircle: Style.switchThumbSelected
 
     width: showText ? parent.width : trackWidth
     height: showText ? Math.max(trackHeight, textColumn.implicitHeight + Style.spacingM * 2) : trackHeight
     activeFocusOnTab: enabled
+    readonly property Item focusTarget: input
+    readonly property var focusTargets: [input]
 
-    Keys.onPressed: event => {
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            toggle.handleClick();
-            event.accepted = true;
-            break;
-        }
+    StyledButton {
+        id: input
+        focus: true
+        focusPolicy: Qt.ClickFocus
+        Accessible.ignored: toggle.Accessible.ignored
+        anchors.fill: parent
+        enabled: toggle.enabled && !toggle.toggling
+        checkable: true
+        checked: toggle.checked
+        Accessible.role: Accessible.CheckBox
+        Accessible.name: toggle.Accessible.name || toggle.text
+        Accessible.description: toggle.Accessible.description || toggle.description
+        onClicked: toggle.handleClick()
     }
 
     function handleClick() {
-        if (!enabled)
+        if (!enabled || toggling)
             return;
         clicked();
         toggled(!checked);
     }
 
-    StyledRect {
-        id: background
+    Loader {
+        id: rowLoader
         anchors.fill: parent
-        radius: showText ? Style.cornerRadius : 0
-        color: "transparent"
-        visible: showText
+        active: toggle.showText
+        sourceComponent: StyledRect {
+            radius: Style.cornerRadiusM
+            color: "transparent"
 
-        StateLayer {
-            visible: showText
-            disabled: !toggle.enabled
-            stateColor: Style.primary
-            cornerRadius: parent.radius
-            onClicked: toggle.handleClick()
+            StateLayer {
+                control: input
+                disabled: !toggle.enabled || toggle.toggling
+                stateColor: Style.primary
+                cornerRadius: parent.radius
+            }
         }
     }
 
@@ -83,15 +99,16 @@ Item {
                 text: toggle.text
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
-                opacity: toggle.enabled ? 1 : 0.4
+                color: toggle.enabled ? Style.surfaceText : Style.onSurface_38
                 width: parent.width
+                wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignLeft
             }
 
             StyledText {
                 text: toggle.description
                 font.pixelSize: Style.fontSizeSmall
-                color: toggle.descriptionColor
+                color: toggle.enabled ? toggle.descriptionColor : Style.onSurface_38
                 wrapMode: Text.WordWrap
                 width: parent.width
                 visible: toggle.description.length > 0
@@ -103,108 +120,151 @@ Item {
     StyledRect {
         id: toggleTrack
 
-        width: showText ? trackWidth : Math.max(parent.width, trackWidth)
-        height: showText ? trackHeight : Math.max(parent.height, trackHeight)
+        readonly property bool pressed: input.pressed
+        readonly property real thumbSize: pressed ? Style.switchThumbPressed : (toggle.checked || toggle.thumbIcon ? Style.switchThumbSelected : Style.switchThumbUnselected)
+        readonly property real edgeLeft: (trackHeight - Style.switchThumbSelected) / 2
+        readonly property real edgeRight: width - Style.switchThumbSelected - edgeLeft
+        readonly property real thumbTarget: toggle.checked ? edgeRight : edgeLeft
+
+        width: trackWidth
+        height: trackHeight
         anchors.right: parent.right
         anchors.rightMargin: showText ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: Style.cornerRadius
+        radius: Style.fullRadius(width, height)
 
-        // Distinguish disabled checked vs unchecked so unchecked disabled switches don't look enabled
-        color: !toggle.enabled ? (toggle.checked ? Qt.alpha(Style.surfaceText, 0.12) : Style.withAlpha(Qt.alpha(Style.surfaceText, 0.12), 0)) : (toggle.checked ? Style.primary : Style.surfaceVariantAlpha)
-        opacity: toggle.toggling ? 0.6 : 1
+        color: {
+            if (!toggle.enabled)
+                return toggle.checked ? Style.onSurface_12 : Style.withAlpha(Style.surfaceContainerHighest, 0.12);
+            return toggle.checked ? Style.primary : Style.surfaceContainerHighest;
+        }
+        border.width: toggle.checked ? 0 : Style.switchOutlineWidth
+        border.color: toggle.enabled ? Style.outline : Style.onSurface_12
+        opacity: toggle.toggling ? Style.pendingOpacity : 1
 
-        // M3 disabled unchecked border: on surface 12% opacity
-        border.color: toggle.checked ? Style.withAlpha(Style.outline, 0) : (!toggle.enabled ? Qt.alpha(Style.surfaceText, 0.12) : Style.outline)
+        Behavior on color {
+            enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+            DankColorAnim {
+                duration: Style.expressiveDurations.expressiveEffects
+                easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+            }
+        }
 
-        readonly property int pad: Math.round((height - thumb.width) / 2)
-        readonly property int edgeLeft: pad
-        readonly property int edgeRight: width - thumb.width - pad
+        onThumbTargetChanged: {
+            if (!toggle._ready)
+                return;
+            thumbSpring.retarget(thumbTarget);
+            if (thumbSpring.running) {
+                toggle._settling = true;
+                return;
+            }
+            toggle.toggleCompleted(toggle.checked);
+        }
+        onWidthChanged: {
+            if (!toggle._ready)
+                return;
+            thumbSpring.snapTo(thumbTarget);
+        }
 
-        StyledRect {
+        SpringMotion {
+            id: thumbSpring
+            enabled: !Style.springMotionDisabled
+            stiffness: Style.springPreset("fast", Style.expressiveDurations.expressiveFastSpatial).stiffness
+            damping: Style.springPreset("fast", Style.expressiveDurations.expressiveFastSpatial).damping
+            onRunningChanged: {
+                if (running || !toggle._settling)
+                    return;
+                toggle._settling = false;
+                toggle.toggleCompleted(toggle.checked);
+            }
+        }
+
+        onThumbSizeChanged: {
+            if (!toggle._ready)
+                return;
+            if (pressed) {
+                sizeSpring.snapTo(thumbSize);
+                return;
+            }
+            sizeSpring.retarget(thumbSize);
+        }
+
+        SpringMotion {
+            id: sizeSpring
+            enabled: !Style.springMotionDisabled
+            stiffness: thumbSpring.stiffness
+            damping: thumbSpring.damping
+        }
+
+        Rectangle {
             id: thumb
 
-            width: toggle.checked ? insetCircle : insetCircle - 4
-            height: toggle.checked ? insetCircle : insetCircle - 4
-            radius: Style.cornerRadius
+            readonly property real centerX: thumbSpring.value + Style.switchThumbSelected / 2
+
+            width: sizeSpring.value
+            height: width
+            radius: Style.fullRadius(width, height)
+            x: input.mirrored ? toggleTrack.width - centerX - width / 2 : centerX - width / 2
             anchors.verticalCenter: parent.verticalCenter
 
-            // M3 disabled thumb:
-            // checked = solid surface | unchecked = outlined off-state thumb
-            color: !toggle.enabled ? (toggle.checked ? Style.surface : Style.withAlpha(Style.surface, 0)) : (toggle.checked ? Style.surface : Style.outline)
-            border.color: !toggle.enabled ? (toggle.checked ? Style.withAlpha(Qt.alpha(Style.surfaceText, 0.38), 0) : Qt.alpha(Style.surfaceText, 0.38)) : Style.outline
-            border.width: (toggle.checked && toggle.enabled) ? 1 : 2
+            color: {
+                if (!toggle.enabled)
+                    return toggle.checked ? Style.surface : Style.onSurface_38;
+                if (toggle.checked)
+                    return toggleTrack.pressed ? Style.primaryContainer : Style.onPrimary;
+                return toggleTrack.pressed ? Style.onSurfaceVariant : Style.outline;
+            }
 
-            x: toggle.checked ? toggleTrack.edgeRight : toggleTrack.edgeLeft
-
-            Behavior on x {
-                SequentialAnimation {
-                    NumberAnimation {
-                        duration: Appearance.anim.durations.normal
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Appearance.anim.curves.emphasizedDecel
-                    }
-                    ScriptAction {
-                        script: {
-                            toggle.toggleCompleted(toggle.checked);
-                        }
-                    }
+            DankIcon {
+                anchors.centerIn: parent
+                name: toggle.thumbIcon
+                size: Style.iconSizeSmall
+                visible: name !== ""
+                color: {
+                    if (!toggle.enabled)
+                        return toggle.checked ? Style.onSurface_38 : Style.surfaceContainerHighest;
+                    return toggle.checked ? Style.onPrimaryContainer : Style.surfaceContainerHighest;
                 }
             }
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.emphasized
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankColorAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
+        }
 
-            Behavior on border.width {
-                NumberAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.emphasized
-                }
-            }
+        Rectangle {
+            width: Style.iconButtonSize
+            height: Style.iconButtonSize
+            radius: Style.fullRadius(width, height)
+            anchors.verticalCenter: parent.verticalCenter
+            x: thumb.x + thumb.width / 2 - width / 2
+            color: toggle.checked ? Style.primary : Style.onSurface
+            opacity: !toggle.enabled ? 0 : (input.down ? Style.stateLayerPressed : (trackStateLayer.containsMouse ? Style.stateLayerHover : 0))
 
-            DankIcon {
-                id: checkIcon
-                anchors.centerIn: parent
-                name: "check"
-                size: 20
-                // M3 disabled icon: on surface 38%
-                color: toggle.enabled ? Style.surfaceText : Qt.alpha(Style.surfaceText, 0.38)
-                filled: true
-                opacity: (toggle.checked && toggle.enabled) ? 1 : 0
-                scale: (toggle.checked && toggle.enabled) ? 1 : 0.6
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Anims.durShort
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Anims.emphasized
-                    }
-                }
-                Behavior on scale {
-                    NumberAnimation {
-                        duration: Anims.durShort
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Anims.emphasized
-                    }
+            Behavior on opacity {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
         }
 
         StateLayer {
-            disabled: !toggle.enabled
-            stateColor: Style.primary
+            id: trackStateLayer
+            control: input
+            disabled: !toggle.enabled || toggle.toggling
+            stateColor: "transparent"
+            enableRipple: false
             cornerRadius: parent.radius
-            onClicked: toggle.handleClick()
         }
 
         FocusRing {
-            visible: toggle.activeFocus
+            visible: input.visualFocus
         }
     }
 }

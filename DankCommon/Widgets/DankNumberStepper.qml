@@ -15,12 +15,12 @@ Column {
     property bool decrementEnabled: true
 
     property color textColor: Style.surfaceText
-    property color iconColor: Style.withAlpha(Style.surfaceText, 0.5)
+    property color iconColor: Style.onSurfaceVariant
     property color backgroundColor: Style.primary
 
     property int textSize: Style.fontSizeSmall
-    property var iconSize: 12
-    property int buttonSize: 20
+    property var iconSize: Style.iconSizeSmall
+    property int buttonSize: Style.iconSizeMedium
     property int horizontalPadding: Style.spacingL
 
     readonly property bool effectiveIncrementEnabled: root.onIncrement ? root.incrementEnabled : false
@@ -31,8 +31,9 @@ Column {
 
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
+        Accessible.name: root.incrementTooltipText || I18n.tr("Increase", "Accessible name for a button that increases a numeric value")
         enabled: root.effectiveIncrementEnabled
-        iconColor: root.effectiveIncrementEnabled ? root.iconColor : Style.blendAlpha(root.iconColor, 0.5)
+        iconColor: root.iconColor
         iconSize: root.iconSize
         buttonSize: root.buttonSize
         iconName: root.incrementIconName
@@ -41,28 +42,19 @@ Column {
         tooltipText: root.incrementTooltipText
     }
 
-    Row {
+    StyledText {
         anchors.horizontalCenter: parent.horizontalCenter
-        Item {
-            width: 5
-            height: 1
-        }
-        StyledText {
-            isMonospace: true
-            text: root.text
-            font.pixelSize: root.textSize
-            color: root.textColor
-        }
-        Item {
-            width: 5
-            height: 1
-        }
+        isMonospace: true
+        text: root.text
+        font.pixelSize: root.textSize
+        color: root.textColor
     }
 
     DankActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
+        Accessible.name: root.decrementTooltipText || I18n.tr("Decrease", "Accessible name for a button that decreases a numeric value")
         enabled: root.effectiveDecrementEnabled
-        iconColor: root.effectiveDecrementEnabled ? root.iconColor : Style.blendAlpha(root.iconColor, 0.5)
+        iconColor: root.iconColor
         iconSize: root.iconSize
         buttonSize: root.buttonSize
         iconName: root.decrementIconName

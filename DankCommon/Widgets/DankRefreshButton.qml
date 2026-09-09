@@ -1,5 +1,5 @@
 import QtQuick
-import qs.DankCommon.Widgets
+import qs.DankCommon.Common
 
 DankActionButton {
     id: root
@@ -7,14 +7,15 @@ DankActionButton {
     property bool busy: false
 
     iconName: busy ? "" : "refresh"
+    Accessible.name: tooltipText || I18n.tr("Refresh")
     enabled: !busy
 
     DankSpinner {
         anchors.centerIn: parent
         size: root.iconSize
-        strokeWidth: 2
+        strokeWidth: Style.spinnerStrokeWidth
         color: root.iconColor
-        running: root.busy
+        running: root.busy && root.visible
         visible: root.busy
     }
 }

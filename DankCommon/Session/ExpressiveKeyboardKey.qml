@@ -1,9 +1,8 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
-import qs.DankCommon.Widgets.Expressive as Expressive
 
-Expressive.DankActionButton {
+DankActionButton {
     id: root
 
     property bool isShift: false
@@ -46,7 +45,7 @@ Expressive.DankActionButton {
         }
     }
 
-    Base.StyledText {
+    StyledText {
         anchors.centerIn: parent
         text: root.text
         color: root.iconColor

@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 Item {
     id: root
@@ -74,7 +73,7 @@ Item {
     Repeater {
         model: root.showWeekNumbers ? root.rows : 0
 
-        Base.StyledText {
+        StyledText {
             required property int index
 
             x: I18n.isRtl ? root.width - width : 0
@@ -93,7 +92,7 @@ Item {
     Repeater {
         model: root.columns
 
-        Base.StyledText {
+        StyledText {
             required property int index
 
             x: I18n.isRtl ? root.width - root.gridLeft - index * (root.cellWidth + root.cellGap) - width : root.gridLeft + index * (root.cellWidth + root.cellGap)
@@ -150,7 +149,7 @@ Item {
                 event.accepted = true;
             }
 
-            Base.FocusRing {
+            FocusRing {
                 visible: cell.visualFocus
             }
             readonly property bool inMonth: dayDate.getMonth() === root.displayDate.getMonth()
@@ -180,7 +179,7 @@ Item {
             border.width: isToday && !isSelected ? Style.outlineWidthFocused : 0
             border.color: Style.primary
 
-            Base.StyledText {
+            StyledText {
                 anchors.top: parent.top
                 anchors.topMargin: Style.spacingXS
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -219,7 +218,7 @@ Item {
                     }
                 }
 
-                Base.StyledText {
+                StyledText {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "+" + cell.extraCount
                     font.pixelSize: Style.fontSizeSmall
@@ -229,7 +228,7 @@ Item {
                 }
             }
 
-            Base.StateLayer {
+            StateLayer {
                 id: cellLayer
                 control: cell
                 stateColor: cell.isSelected ? Style.onPrimary : Style.primary

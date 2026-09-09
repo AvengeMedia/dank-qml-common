@@ -1,8 +1,8 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets.Expressive as Expressive
 
-Expressive.DankActionButton {
+DankActionButton {
     radius: Style.buttonRadius(width, height, buttonSize, pressed, circular)
     shapeDuration: LockMetrics.effectsDuration
     shapeCurve: Style.expressiveCurves.expressiveEffects

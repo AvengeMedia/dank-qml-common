@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 FocusScope {
     id: card
@@ -101,7 +100,7 @@ FocusScope {
         onClicked: card.clicked()
     }
 
-    Base.StateLayer {
+    StateLayer {
         control: input
         visible: card.acceptsInput
         disabled: !card.acceptsInput
@@ -113,11 +112,11 @@ FocusScope {
         bottomRightRadius: card.bottomRightRadius
     }
 
-    Base.FocusRing {
+    FocusRing {
         visible: card.showFocusRing && input.visualFocus
     }
 
-    Base.StyledText {
+    StyledText {
         id: titleLabel
         anchors.left: parent.left
         anchors.right: parent.right

@@ -1,6 +1,5 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
 Item {
     id: root
@@ -28,6 +27,9 @@ Item {
 
     signal locationSelected(string displayName, string coordinates)
 
+    readonly property real fieldHeight: Style.fieldHeightLarge
+    readonly property real resultRowHeight: Style.menuItemHeight
+
     function applyCurrentLocation() {
         if (locationInput.getActiveFocus()) {
             root._pendingLocationUpdate = true;
@@ -53,7 +55,7 @@ Item {
         searchResultsModel.clear();
     }
 
-    // CJK city names are commonly two code points (北京, 東京, 서울).
+    // CJK city names are commonly two code points.
     function canSearch(t) {
         return t.length > 2 || (t.length >= 2 && /[぀-ヿ㐀-䶿一-鿿豈-﫿가-힯]/.test(t));
     }
@@ -127,7 +129,7 @@ Item {
         running: false
         repeat: false
         onTriggered: {
-            if (!locationInput.getActiveFocus() && !searchDropdown.hovered)
+            if (!locationInput.getActiveFocus() && !searchResultsList.activeFocus && !searchDropdown.hovered)
                 root.resetSearchState();
         }
     }
@@ -136,7 +138,7 @@ Item {
         id: searchInputField
 
         width: parent.width
-        height: 48
+        height: root.fieldHeight
 
         DankTextField {
             id: locationInput
@@ -146,10 +148,13 @@ Item {
             leftIconName: "search"
             placeholderText: root.placeholderText
             text: ""
-            backgroundColor: Style.surfaceVariant
-            normalBorderColor: Style.primarySelected
-            focusedBorderColor: Style.primary
-            keyNavigationTab: root.keyNavigationTab
+            cornerRadius: Style.fullRadius(width, height)
+            keyNavigationTab: searchResultsList.count > 0 ? searchResultsList.itemAtIndex(0) : root.keyNavigationTab
+            Keys.onDownPressed: {
+                const first = searchResultsList.itemAtIndex(0);
+                if (first)
+                    first.forceActiveFocus(Qt.TabFocusReason);
+            }
             keyNavigationBacktab: root.keyNavigationBacktab
             onTextEdited: {
                 if (root._internalChange)
@@ -177,17 +182,18 @@ Item {
 
         DankIcon {
             name: root.isLoading ? "hourglass_empty" : ((searchResultsModel.count > 0 || root._hasSelection) ? "check_circle" : "error")
-            size: Style.iconSize - 4
-            color: root.isLoading ? Style.surfaceVariantText : ((searchResultsModel.count > 0 || root._hasSelection) ? Style.primary : Style.error)
+            size: Style.iconSizeMedium
+            color: root.isLoading ? Style.onSurfaceVariant : ((searchResultsModel.count > 0 || root._hasSelection) ? Style.primary : Style.error)
             anchors.right: parent.right
             anchors.rightMargin: Style.spacingM
             anchors.verticalCenter: parent.verticalCenter
             opacity: (locationInput.getActiveFocus() && root.canSearch(locationInput.text)) ? 1 : 0
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: Style.shortDuration
-                    easing.type: Style.standardEasing
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DankAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
         }
@@ -199,13 +205,13 @@ Item {
         property bool hovered: false
 
         width: parent.width
-        height: Math.min(Math.max(searchResultsModel.count * 38 + Style.spacingS * 2, 50), 200)
+        height: Math.min(Math.max(searchResultsModel.count * (root.resultRowHeight + Style.spacingXXS) + Style.spacingS * 2, root.resultRowHeight + Style.spacingS * 2), Style.menuMaxHeight / 2)
         y: searchInputField.height
-        radius: Style.cornerRadius
+        radius: Style.cornerRadiusM
         color: Style.withAlpha(Style.surfaceContainer, Style.popupTransparency)
-        border.color: Style.primarySelected
-        border.width: 1
-        visible: locationInput.getActiveFocus() && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
+        border.color: Style.outlineVariant
+        border.width: Style.outlineWidth
+        visible: (locationInput.getActiveFocus() || searchResultsList.activeFocus) && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
 
         MouseArea {
             anchors.fill: parent
@@ -234,11 +240,39 @@ Item {
                 model: searchResultsModel
                 spacing: Style.spacingXXS
 
-                delegate: StyledRect {
+                onActiveFocusChanged: {
+                    if (!activeFocus)
+                        dropdownHideTimer.restart();
+                }
+
+                delegate: StyledButton {
+                    id: resultButton
+                    Accessible.name: model.name || I18n.tr("Unknown")
+                    onClicked: {
+                        root._internalChange = true;
+                        root._hasSelection = true;
+                        const selectedName = model.name;
+                        const selectedQuery = model.query;
+                        locationInput.text = selectedName;
+                        root.locationSelected(selectedName, selectedQuery);
+                        root.resetSearchState();
+                        locationInput.setFocus(false);
+                        root._internalChange = false;
+                    }
                     width: searchResultsList.width
-                    height: 36
-                    radius: Style.cornerRadius
-                    color: resultMouseArea.containsMouse ? Style.surfaceLight : Style.withAlpha(Style.surfaceLight, 0)
+                    height: root.resultRowHeight
+                    radius: Style.cornerRadiusS
+                    color: hovered || visualFocus ? Style.withAlpha(Style.onSurface, Style.stateLayerHover) : Style.withAlpha(Style.onSurface, 0)
+
+                    FocusRing {
+                        visible: resultButton.visualFocus
+                    }
+
+                    StateLayer {
+                        control: resultButton
+                        stateColor: "transparent"
+                        enableRipple: false
+                    }
 
                     Row {
                         anchors.fill: parent
@@ -247,37 +281,18 @@ Item {
 
                         DankIcon {
                             name: "place"
-                            size: Style.iconSize - 6
-                            color: Style.surfaceVariantText
+                            size: Style.iconSizeMedium
+                            color: Style.onSurfaceVariant
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         StyledText {
-                            text: model.name || "Unknown"
+                            text: model.name || I18n.tr("Unknown")
                             font.pixelSize: Style.fontSizeMedium
                             color: Style.surfaceText
                             anchors.verticalCenter: parent.verticalCenter
                             elide: Text.ElideRight
-                            width: parent.width - 30
-                        }
-                    }
-
-                    MouseArea {
-                        id: resultMouseArea
-
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            root._internalChange = true;
-                            root._hasSelection = true;
-                            const selectedName = model.name;
-                            const selectedQuery = model.query;
-                            locationInput.text = selectedName;
-                            root.locationSelected(selectedName, selectedQuery);
-                            root.resetSearchState();
-                            locationInput.setFocus(false);
-                            root._internalChange = false;
+                            width: parent.width - Style.iconSizeLarge
                         }
                     }
                 }
@@ -285,9 +300,9 @@ Item {
 
             StyledText {
                 anchors.centerIn: parent
-                text: root.isLoading ? "Searching..." : "No locations found"
+                text: root.isLoading ? I18n.tr("Searching...") : I18n.tr("No locations found")
                 font.pixelSize: Style.fontSizeMedium
-                color: Style.surfaceVariantText
+                color: Style.onSurfaceVariant
                 visible: searchResultsList.count === 0 && root.canSearch(locationInput.text)
             }
         }

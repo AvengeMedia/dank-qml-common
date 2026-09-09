@@ -1,6 +1,5 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 Column {
     id: root
@@ -62,7 +61,7 @@ Column {
         event.accepted = true;
     }
 
-    Base.StyledText {
+    StyledText {
         width: parent.width
         text: root.confirmTitle
         textFormat: Text.PlainText
@@ -72,7 +71,7 @@ Column {
         wrapMode: Text.Wrap
     }
 
-    Base.StyledText {
+    StyledText {
         width: parent.width
         text: root.confirmMessage
         textFormat: Text.PlainText

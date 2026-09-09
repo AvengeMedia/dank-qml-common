@@ -1,7 +1,6 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as B
-import qs.DankCommon.Widgets.Expressive as E
 
 Item {
     id: root
@@ -11,20 +10,20 @@ Item {
     }
     Component {
         id: rowFactory
-        E.DankListItem {
+        DankListItem {
             width: 300
         }
     }
     Component {
         id: chipFactory
-        E.DankFilterChips {
+        DankFilterChips {
             model: ["One", "Two"]
             width: 400
         }
     }
     Component {
         id: highlightFactory
-        B.DankListHighlight {
+        DankListHighlight {
             width: 300
             height: 56
         }

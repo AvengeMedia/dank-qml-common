@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import qs.DankCommon.Widgets
 import Quickshell.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
 Rectangle {
     id: root

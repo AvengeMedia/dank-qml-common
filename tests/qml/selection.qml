@@ -1,7 +1,6 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as B
-import qs.DankCommon.Widgets.Expressive as E
 
 Item {
     id: root
@@ -15,13 +14,13 @@ Item {
     property int scenarioIndex: 0
     property int rowHeight: 56
 
-    B.DankListView {
+    DankListView {
         id: list
         anchors.fill: parent
         animateSelection: false
         spacing: Style.groupedListGap
         reuseItems: true
-        delegate: E.DankListItem {
+        delegate: DankListItem {
             required property int index
             width: list.width
             height: root.rowHeight
@@ -31,7 +30,7 @@ Item {
         }
     }
 
-    B.DankListHighlight {
+    DankListHighlight {
         id: detachedHighlight
         width: list.width
         height: root.rowHeight

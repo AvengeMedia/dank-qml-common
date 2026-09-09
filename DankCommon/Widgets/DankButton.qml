@@ -1,115 +1,127 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
 
-Rectangle {
+StyledButton {
     id: root
 
-    property string text: ""
+    property bool busy: false
+    property string reserveText: ""
+    property string shape: "round"
+    property real maximumWidth: Infinity
+    property bool wrapText: false
     property string iconName: ""
-    property int iconSize: Style.iconSizeSmall
-    property bool hovered: mouseArea.containsMouse
-    property bool pressed: mouseArea.pressed
+    property int iconSize: root.buttonHeight <= Style.buttonHeightS ? Style.iconSizeMedium : Style.iconSize
     property color backgroundColor: Style.buttonBg
     property color textColor: Style.buttonText
-    property int buttonHeight: 40
-    property int horizontalPadding: Style.spacingL
+    property int buttonHeight: Style.buttonHeightS
+    horizontalPadding: {
+        if (buttonHeight <= Style.buttonHeightXS)
+            return Style.spacingM;
+        if (buttonHeight <= Style.buttonHeightS)
+            return Style.spacingL;
+        return Style.spacingXL;
+    }
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
+    property real minimumWidth: Style.buttonMinWidth
 
-    signal clicked
+    implicitWidth: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
+    implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
+    readonly property color contentColor: enabled ? textColor : Style.onSurface_38
 
-    width: Math.max(contentRow.implicitWidth + horizontalPadding * 2, 64)
-    height: buttonHeight
-    radius: Style.cornerRadius
-    color: backgroundColor
-    opacity: enabled ? 1 : 0.4
-    scale: (enableScaleAnimation && pressed) ? 0.98 : 1.0
-    activeFocusOnTab: enabled
+    radius: Style.buttonRadius(width, height, buttonHeight, pressed, shape === "round")
+    color: enabled ? backgroundColor : Style.onSurface_12
+    scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
+    Accessible.role: Accessible.Button
+    Accessible.name: text
 
-    Keys.onPressed: event => {
-        if (!root.enabled)
-            return;
-        switch (event.key) {
-        case Qt.Key_Space:
-        case Qt.Key_Return:
-        case Qt.Key_Enter:
-            root.clicked();
-            event.accepted = true;
-            break;
-        }
+    FocusRing {
+        visible: root.visualFocus
+        radius: Math.max(0, parent.radius + 2 * Style.focusRingWidth)
     }
 
-    FocusRing {}
-
-    Behavior on scale {
-        enabled: enableScaleAnimation && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-        NumberAnimation {
-            easing.type: Easing.BezierSpline
-            duration: 100
+    Behavior on radius {
+        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+        DankAnim {
+            duration: Style.expressiveDurations.expressiveEffects
             easing.bezierCurve: Style.expressiveCurves.standard
         }
     }
 
-    Rectangle {
-        id: stateLayer
-        anchors.fill: parent
-        radius: parent.radius
-        color: {
-            if (pressed)
-                return Style.withAlpha(root.textColor, 0.20);
-            if (hovered)
-                return Style.withAlpha(root.textColor, 0.12);
-            return Style.withAlpha(root.textColor, 0);
-        }
-
-        Behavior on color {
-            ColorAnimation {
-                duration: Style.shorterDuration
-                easing.type: Style.standardEasing
-            }
+    Behavior on scale {
+        enabled: enableScaleAnimation && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+        DankAnim {
+            duration: Style.expressiveDurations.expressiveFastSpatial
+            easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
         }
     }
 
-    DankRipple {
-        id: rippleLayer
-        rippleColor: root.textColor
-        cornerRadius: root.radius
+    StateLayer {
+        id: stateLayer
+        control: root
+        enabled: root.enabled
+        disabled: !root.enabled
+        stateColor: root.textColor
         enableRipple: root.enableRipple
+        transitionDuration: Style.expressiveDurations.expressiveEffects
+        transitionCurve: Style.expressiveCurves.expressiveEffects
+    }
+
+    TextMetrics {
+        id: reservedLabel
+        text: root.reserveText
+        font.pixelSize: Style.fontSizeMedium
+        font.weight: Font.Medium
+        font.family: Style.fontFamily
     }
 
     Row {
         id: contentRow
         anchors.centerIn: parent
-        spacing: Style.spacingS
+        spacing: {
+            if (buttonHeight <= Style.buttonHeightXS) {
+                return Style.spacingXS;
+            } else if (buttonHeight <= Style.buttonHeightM) {
+                return Style.spacingS;
+            } else {
+                return Style.spacingM;
+            }
+        }
 
-        DankIcon {
-            name: root.iconName
-            size: root.iconSize
-            color: root.textColor
-            visible: root.iconName !== ""
+        Item {
+            width: root.iconSize
+            height: root.iconSize
+            visible: root.busy || root.iconName !== ""
             anchors.verticalCenter: parent.verticalCenter
+
+            DankIcon {
+                name: root.iconName
+                size: root.iconSize
+                color: root.contentColor
+                visible: !root.busy
+            }
+            Loader {
+                anchors.fill: parent
+                active: root.busy
+                sourceComponent: DankSpinner {
+                    size: root.iconSize
+                    strokeWidth: Style.outlineWidthFocused
+                    color: root.contentColor
+                    running: root.busy && root.visible
+                    Accessible.ignored: true
+                }
+            }
         }
 
         StyledText {
+            width: Math.min(Math.max(implicitWidth, reservedLabel.advanceWidth), Math.max(0, root.maximumWidth - root.horizontalPadding * 2 - (root.busy || root.iconName ? root.iconSize + contentRow.spacing : 0)))
+            wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
+            elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text
             font.pixelSize: Style.fontSizeMedium
             font.weight: Font.Medium
-            color: root.textColor
+            color: root.contentColor
             anchors.verticalCenter: parent.verticalCenter
         }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-        enabled: root.enabled
-        onPressed: mouse => {
-            if (root.enableRipple)
-                rippleLayer.trigger(mouse.x, mouse.y);
-        }
-        onClicked: root.clicked()
     }
 }

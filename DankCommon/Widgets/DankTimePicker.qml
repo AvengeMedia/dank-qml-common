@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 FocusScope {
     id: root
@@ -206,7 +205,7 @@ FocusScope {
             anchors.margins: Style.spacingXL
             spacing: 0
 
-            Base.StyledText {
+            StyledText {
                 text: root.title
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: Font.Medium
@@ -245,7 +244,7 @@ FocusScope {
                         }
                     }
 
-                    Base.NumericText {
+                    NumericText {
                         anchors.centerIn: parent
                         text: root.pad(root.displayHour)
                         reserveText: "00"
@@ -255,18 +254,18 @@ FocusScope {
                         color: root._minuteMode ? Style.surfaceText : Style.onPrimaryContainer
                     }
 
-                    Base.StateLayer {
+                    StateLayer {
                         control: hourDigit
                         stateColor: Style.primary
                         cornerRadius: parent.radius
                     }
 
-                    Base.FocusRing {
+                    FocusRing {
                         visible: hourDigit.visualFocus
                     }
                 }
 
-                Base.StyledText {
+                StyledText {
                     Layout.preferredWidth: Style.spacingXL
                     Layout.fillHeight: true
                     text: ":"
@@ -302,7 +301,7 @@ FocusScope {
                         }
                     }
 
-                    Base.NumericText {
+                    NumericText {
                         anchors.centerIn: parent
                         text: root.pad(root._minute)
                         reserveText: "00"
@@ -312,13 +311,13 @@ FocusScope {
                         color: root._minuteMode ? Style.onPrimaryContainer : Style.surfaceText
                     }
 
-                    Base.StateLayer {
+                    StateLayer {
                         control: minuteDigit
                         stateColor: Style.primary
                         cornerRadius: parent.radius
                     }
 
-                    Base.FocusRing {
+                    FocusRing {
                         visible: minuteDigit.visualFocus
                     }
                 }
@@ -355,7 +354,7 @@ FocusScope {
                             topLeftRadius: periodColumn.innerRadius
                             topRightRadius: periodColumn.innerRadius
                             color: root.isPm ? "transparent" : Style.tertiaryContainer
-                            Base.StyledText {
+                            StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("AM")
                                 font.pixelSize: Style.fontSizeSmall
@@ -363,13 +362,13 @@ FocusScope {
                                 color: root.isPm ? Style.onSurfaceVariant : Style.onTertiaryContainer
                             }
 
-                            Base.StateLayer {
+                            StateLayer {
                                 control: amItem
                                 topLeftRadius: parent.topLeftRadius
                                 topRightRadius: parent.topRightRadius
                             }
 
-                            Base.FocusRing {
+                            FocusRing {
                                 visible: amItem.visualFocus
                                 topLeftRadius: parent.topLeftRadius + Style.focusRingWidth
                                 topRightRadius: parent.topRightRadius + Style.focusRingWidth
@@ -400,7 +399,7 @@ FocusScope {
                             bottomLeftRadius: periodColumn.innerRadius
                             bottomRightRadius: periodColumn.innerRadius
                             color: root.isPm ? Style.tertiaryContainer : "transparent"
-                            Base.StyledText {
+                            StyledText {
                                 anchors.centerIn: parent
                                 text: I18n.tr("PM")
                                 font.pixelSize: Style.fontSizeSmall
@@ -408,13 +407,13 @@ FocusScope {
                                 color: root.isPm ? Style.onTertiaryContainer : Style.onSurfaceVariant
                             }
 
-                            Base.StateLayer {
+                            StateLayer {
                                 control: pmItem
                                 bottomLeftRadius: parent.bottomLeftRadius
                                 bottomRightRadius: parent.bottomRightRadius
                             }
 
-                            Base.FocusRing {
+                            FocusRing {
                                 visible: pmItem.visualFocus
                                 topLeftRadius: 0
                                 topRightRadius: 0
@@ -512,7 +511,7 @@ FocusScope {
                         x: root.faceSize / 2 + ringRadius * Math.cos(angle) - width / 2
                         y: root.faceSize / 2 + ringRadius * Math.sin(angle) - height / 2
 
-                        Base.NumericText {
+                        NumericText {
                             anchors.centerIn: parent
                             text: root._minuteMode || parent.innerRing ? root.pad(parent.value) : parent.value
                             reserveText: "00"

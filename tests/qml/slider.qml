@@ -1,6 +1,6 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets.Expressive
 
 Item {
     id: root

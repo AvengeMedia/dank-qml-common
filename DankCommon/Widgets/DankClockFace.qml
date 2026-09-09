@@ -1,6 +1,5 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 Item {
     id: root
@@ -27,7 +26,7 @@ Item {
         width: parent.width
         spacing: root.tall ? Style.spacingS : 0
 
-        Base.StyledText {
+        StyledText {
             width: parent.width
             text: root.dateText
             color: root.supportingColor
@@ -51,7 +50,7 @@ Item {
             }
         }
 
-        Base.StyledText {
+        StyledText {
             width: parent.width
             text: root.dayText + (root.vertical && root.seconds !== "" ? " · " + root.seconds : "")
             color: root.supportingColor
@@ -62,7 +61,7 @@ Item {
         }
     }
 
-    component Digits: Base.StyledText {
+    component Digits: StyledText {
         width: parent.width
         height: font.pixelSize * 1.05
         color: root.color

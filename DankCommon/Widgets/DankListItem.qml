@@ -1,6 +1,5 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 StyledButton {
     id: root
@@ -61,7 +60,7 @@ StyledButton {
         }
     }
 
-    Base.StateLayer {
+    StateLayer {
         control: root
         disabled: !root.enabled
         hovered: root.isHovered

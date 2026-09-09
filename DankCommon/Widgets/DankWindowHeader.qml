@@ -1,6 +1,5 @@
 import QtQuick
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets as Base
 
 Item {
     id: root
@@ -32,7 +31,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingM
 
-        Base.DankIcon {
+        DankIcon {
             id: icon
             name: root.iconName
             size: Style.iconSize
@@ -41,7 +40,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        Base.StyledText {
+        StyledText {
             width: Math.max(0, titleRow.width - (icon.visible ? icon.width + titleRow.spacing : 0))
             text: root.title
             font.pixelSize: Style.fontSizeLarge

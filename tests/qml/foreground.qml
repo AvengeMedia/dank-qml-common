@@ -1,6 +1,6 @@
 import QtQuick
+import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets.Expressive as E
 
 Item {
     id: root
@@ -28,26 +28,26 @@ Item {
     }
     Component {
         id: fieldFactory
-        E.DankTextField {
+        DankTextField {
             width: 200
         }
     }
     Component {
         id: cardFactory
-        E.DankCard {
+        DankCard {
             width: 200
             height: 100
         }
     }
     Component {
         id: rowFactory
-        E.DankListItem {
+        DankListItem {
             width: 200
         }
     }
     Component {
         id: groupFactory
-        E.DankCollapsibleSection {
+        DankCollapsibleSection {
             width: 200
             title: "Group"
         }

@@ -1,11 +1,10 @@
 import Qt.labs.folderlistmodel
+import qs.DankCommon.Widgets
 import QtCore
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
 import qs.DankCommon.Common
-import qs.DankCommon.Widgets
-import qs.DankCommon.Widgets.Expressive as Expressive
 
 FocusScope {
     id: root
@@ -631,7 +630,7 @@ FocusScope {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: root.compactLayout ? Style.spacingXXS : Style.spacingS
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     circular: false
                     iconName: showHiddenFiles ? "visibility_off" : "visibility"
                     iconSize: Style.iconSize - 4
@@ -639,7 +638,7 @@ FocusScope {
                     onClicked: showHiddenFiles = !showHiddenFiles
                 }
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     circular: false
                     iconName: viewMode === "grid" ? "view_list" : "grid_view"
                     iconSize: Style.iconSize - 4
@@ -647,7 +646,7 @@ FocusScope {
                     onClicked: viewMode = viewMode === "grid" ? "list" : "grid"
                 }
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     circular: false
                     iconName: iconSizeIndex === 0 ? "photo_size_select_small" : iconSizeIndex === 1 ? "photo_size_select_large" : iconSizeIndex === 2 ? "photo_size_select_actual" : "zoom_in"
                     iconSize: Style.iconSize - 4
@@ -656,7 +655,7 @@ FocusScope {
                     onClicked: iconSizeIndex = (iconSizeIndex + 1) % iconSizes.length
                 }
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     circular: false
                     iconName: "info"
                     iconSize: Style.iconSize - 4
@@ -665,7 +664,7 @@ FocusScope {
                     onClicked: root.showKeyboardHints = !root.showKeyboardHints
                 }
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     visible: (windowControls?.supported ?? false) && !root.compactLayout
                     circular: false
                     iconName: windowControls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
@@ -675,7 +674,7 @@ FocusScope {
                         windowControls.tryToggleMaximize()
                 }
 
-                Expressive.DankActionButton {
+                DankActionButton {
                     circular: false
                     iconName: "close"
                     iconSize: Style.iconSize - 4

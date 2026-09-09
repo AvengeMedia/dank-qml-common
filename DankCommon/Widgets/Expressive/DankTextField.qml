@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Templates as T
 import qs.DankCommon.Common
 import qs.DankCommon.Widgets as Base
 
@@ -15,6 +16,10 @@ Base.StyledRect {
     property alias cursorPosition: textInput.cursorPosition
     property string placeholderText: ""
     property string labelText: ""
+    property bool outlined: false
+    property bool isError: false
+    property string supportingText: ""
+    property alias readOnly: textInput.readOnly
     property alias font: textInput.font
     property alias textColor: textInput.color
     property int echoMode: TextInput.Normal
@@ -31,15 +36,17 @@ Base.StyledRect {
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
     property color backgroundColor: Style.surfaceContainerHigh
     property color focusedBorderColor: Style.primary
-    property color normalBorderColor: Style.outlineVariant
+    property color normalBorderColor: outlined ? Style.outline : Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant
     property bool hidePlaceholderOnFocus: true
     property real borderWidth: Style.outlineWidth
     property real focusedBorderWidth: Style.outlineWidthFocused
     property real cornerRadius: Style.cornerRadiusXS
+    property real controlHeight: Style.iconButtonSize
 
-    readonly property real accessorySize: Style.buttonHeightXS
-    readonly property real leftPadding: Style.spacingM + (leftIconName ? leftIconSize + Style.spacingM : 0)
+    readonly property real accessorySize: outlined ? Math.min(controlHeight, Style.fieldHeightLarge) : Style.buttonHeightXS
+    readonly property real contentPadding: outlined ? Style.spacingL : Style.spacingM
+    readonly property real leftPadding: outlined && leftIconName ? accessorySize + Style.spacingXS : contentPadding + (leftIconName ? leftIconSize + contentPadding : 0)
     readonly property real rightPadding: {
         let p = Style.spacingS + rightAccessoryWidth;
         if (showPasswordToggle)
@@ -82,55 +89,195 @@ Base.StyledRect {
     }
 
     readonly property real labelBandHeight: Math.round(Style.fontSizeSmall * 1.4) + Style.spacingXS * 2
-    readonly property bool placeholderVisible: textInput.text.length === 0 && !textInput.inputMethodComposing && (!hidePlaceholderOnFocus || !textInput.activeFocus)
+    readonly property bool labelFloated: textInput.activeFocus || text.length > 0 || textInput.inputMethodComposing
+    readonly property real labelProgress: Math.max(0, Math.min(1, labelMotion.value))
+    readonly property real containerTop: outlined && labelText ? Style.outlinedFieldLabelLineHeight / 2 : 0
+    readonly property real supportingHeight: supportingText ? supportingLabel.implicitHeight + Style.spacingXS : 0
+    readonly property real containerHeight: height - containerTop - supportingHeight
+    readonly property bool placeholderVisible: textInput.text.length === 0 && !textInput.inputMethodComposing && (outlined ? (!labelText || labelFloated) : (!hidePlaceholderOnFocus || !textInput.activeFocus))
+    readonly property color outlineTargetColor: !enabled ? Style.onSurface_12 : isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : textInput.activeFocus ? focusedBorderColor : fieldHover.hovered ? Style.onSurface : normalBorderColor
+    readonly property real outlineStrokeWidth: !enabled ? borderWidth : borderWidth + (focusedBorderWidth - borderWidth) * Math.max(0, Math.min(1, strokeMotion.value))
+    readonly property color labelTargetColor: !enabled ? Style.onSurface_38 : isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : textInput.activeFocus ? Style.primary : fieldHover.hovered ? Style.onSurface : Style.onSurfaceVariant
 
     width: Style.fieldDefaultWidth
-    height: labelText !== "" ? Style.fieldHeight + labelBandHeight : Style.fieldHeight
+    implicitHeight: outlined ? Math.max(controlHeight, textInput.contentHeight + topPadding + bottomPadding) + containerTop + supportingHeight : Style.fieldHeight + (labelText ? labelBandHeight : 0)
+    height: implicitHeight
     radius: cornerRadius
-    color: Style.foregroundColor(backgroundColor, !usePopupTransparency)
+    color: outlined ? "transparent" : Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
-    border.width: textInput.activeFocus ? focusedBorderWidth : borderWidth
+    border.width: outlined ? 0 : textInput.activeFocus ? focusedBorderWidth : borderWidth
+
+    Component.onCompleted: {
+        labelMotion.snapTo(labelFloated ? 1 : 0);
+        strokeMotion.snapTo(textInput.activeFocus ? 1 : 0);
+        placeholderMotion.snapTo(placeholderVisible ? 1 : 0);
+    }
+    onLabelFloatedChanged: labelMotion.retarget(labelFloated ? 1 : 0)
+    onEnabledChanged: {
+        if (!enabled)
+            strokeMotion.snapTo(0);
+    }
+
+    SpringMotion {
+        id: labelMotion
+        enabled: root.outlined && !Style.springMotionDisabled
+        stiffness: Style.textFieldSpatialStiffness
+        damping: 2 * Style.textFieldSpatialDampingRatio * Math.sqrt(stiffness)
+    }
+
+    SpringMotion {
+        id: strokeMotion
+        enabled: root.outlined && root.enabled && !Style.springMotionDisabled
+        stiffness: labelMotion.stiffness
+        damping: labelMotion.damping
+    }
+
+    HoverHandler {
+        id: fieldHover
+        enabled: root.enabled
+        cursorShape: Qt.IBeamCursor
+    }
+
+    component FieldColor: QtObject {
+        id: colorMotion
+        property color target
+        property color startColor: target
+        property color endColor: target
+        readonly property color value: Style._blend(startColor, endColor, Math.max(0, Math.min(1, progress.value)))
+        onTargetChanged: {
+            startColor = value;
+            endColor = target;
+            progress.snapTo(0);
+            progress.retarget(1);
+        }
+        property SpringMotion progress: SpringMotion {
+            value: 1
+            enabled: root.outlined && root.enabled && !Style.springMotionDisabled
+            stiffness: Style.textFieldFastEffectsStiffness
+            damping: 2 * Math.sqrt(stiffness)
+        }
+    }
+
+    FieldColor {
+        id: outlinePaint
+        target: root.outlineTargetColor
+    }
+    FieldColor {
+        id: labelPaint
+        target: root.labelTargetColor
+    }
+    readonly property color outlineColor: outlinePaint.value
+    readonly property color labelColor: labelPaint.value
+    readonly property real cutoutCenter: fieldLabel.x + fieldLabel.width / 2
+    readonly property real cutoutHalfWidth: labelText ? (fieldLabel.width / 2 + Style.spacingXS) * labelProgress : 0
+    readonly property real cutoutStart: Math.max(0, cutoutCenter - cutoutHalfWidth)
+    readonly property real cutoutEnd: Math.min(width, cutoutCenter + cutoutHalfWidth)
+    readonly property real cutoutBottom: containerTop + (labelText ? fieldLabel.height / 2 * labelProgress : 0)
+
+    component FieldOutline: Rectangle {
+        x: -parent.x
+        y: root.containerTop - parent.y
+        width: root.width
+        height: root.containerHeight
+        color: "transparent"
+        radius: root.cornerRadius
+        border.color: root.outlineColor
+        border.width: root.outlineStrokeWidth
+        antialiasing: true
+    }
+
+    Item {
+        width: root.cutoutStart
+        height: root.cutoutBottom
+        clip: true
+        visible: root.outlined
+        FieldOutline {}
+    }
+
+    Item {
+        x: root.cutoutEnd
+        width: root.width - x
+        height: root.cutoutBottom
+        clip: true
+        visible: root.outlined
+        FieldOutline {}
+    }
+
+    Item {
+        y: root.cutoutBottom
+        width: root.width
+        height: Math.max(0, root.containerTop + root.containerHeight - y)
+        clip: true
+        visible: root.outlined
+        FieldOutline {}
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: root.outlined && root.enabled
+        onPressed: root.forceActiveFocus()
+    }
 
     Base.DankIcon {
         id: leftIcon
 
         anchors.left: parent.left
-        anchors.leftMargin: Style.spacingM
+        anchors.leftMargin: root.outlined ? (root.accessorySize - root.leftIconSize) / 2 : root.contentPadding
         anchors.verticalCenter: textInput.verticalCenter
         name: leftIconName
         size: leftIconSize
-        color: textInput.activeFocus ? leftIconFocusedColor : leftIconColor
+        color: root.outlined ? (root.enabled ? root.leftIconColor : Style.onSurface_38) : textInput.activeFocus ? leftIconFocusedColor : leftIconColor
         visible: leftIconName !== ""
     }
 
-    Base.StyledText {
+    Item {
         id: fieldLabel
 
-        anchors.left: textInput.left
-        anchors.right: textInput.right
-        anchors.top: parent.top
-        anchors.topMargin: Style.spacingXS
-        text: root.labelText
+        readonly property real textScale: root.outlined ? 1 + (Style.fontSizeSmall / labelGlyph.font.pixelSize - 1) * root.labelProgress : 1
+
+        anchors.left: parent.left
+        anchors.leftMargin: root.outlined ? root.contentPadding + (root.leftPadding - root.contentPadding) * (1 - root.labelProgress) : root.leftPadding
+        y: root.outlined ? root.containerTop + (root.containerHeight / 2) * (1 - root.labelProgress) - height / 2 : Style.spacingXS
+        implicitWidth: labelGlyph.implicitWidth * textScale
+        width: Math.min(implicitWidth, Math.max(0, textInput.width + (root.width - root.contentPadding * 2 - textInput.width) * root.labelProgress))
+        height: root.outlined ? root.font.pixelSize + Style.spacingS + (Style.outlinedFieldLabelLineHeight - root.font.pixelSize - Style.spacingS) * root.labelProgress : Style.outlinedFieldLabelLineHeight
         visible: root.labelText !== ""
-        font.pixelSize: Style.fontSizeSmall
-        color: textInput.activeFocus ? Style.primary : Style.onSurfaceVariant
-        elide: Text.ElideRight
+
+        Base.StyledText {
+            id: labelGlyph
+
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.alignWhenCentered: false
+            width: parent.width / parent.textScale
+            text: root.labelText
+            font.pixelSize: root.outlined ? root.font.pixelSize : Style.fontSizeSmall
+            scale: fieldLabel.textScale
+            transformOrigin: I18n.isRtl ? Item.Right : Item.Left
+            color: root.outlined ? root.labelColor : textInput.activeFocus ? Style.primary : Style.onSurfaceVariant
+            wrapMode: Text.NoWrap
+            maximumLineCount: 1
+            elide: Text.ElideRight
+        }
     }
 
-    TextInput {
+    T.TextField {
         id: textInput
 
-        anchors.left: leftIcon.visible ? leftIcon.right : parent.left
-        anchors.leftMargin: Style.spacingM
-        anchors.right: rightButtonsRow.left
-        anchors.rightMargin: rightButtonsRow.visible ? Style.spacingS : Style.spacingM
+        background: null
+        padding: 0
+
+        anchors.left: parent.left
+        anchors.leftMargin: root.leftPadding
+        anchors.right: rightButtonsRow.visible ? rightButtonsRow.left : parent.right
+        anchors.rightMargin: rightButtonsRow.visible ? Style.spacingS : root.contentPadding + root.rightAccessoryWidth
         anchors.top: parent.top
-        anchors.topMargin: root.labelText !== "" ? root.labelBandHeight : root.topPadding
+        anchors.topMargin: root.outlined ? root.containerTop + root.topPadding : root.labelText !== "" ? root.labelBandHeight : root.topPadding
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: root.bottomPadding
+        anchors.bottomMargin: root.bottomPadding + (root.outlined ? root.supportingHeight : 0)
         font.pixelSize: Style.fontSizeMedium
         font.family: Style.fontFamily
-        color: Style.surfaceText
+        color: root.outlined && !root.enabled ? Style.onSurface_38 : Style.surfaceText
         selectionColor: Style.primaryContainer
         selectedTextColor: Style.onPrimaryContainer
         horizontalAlignment: TextInput.AlignLeft
@@ -140,11 +287,11 @@ Base.StyledRect {
         clip: true
         activeFocusOnTab: root.enabled
         Accessible.name: root.Accessible.name || root.labelText || root.placeholderText
-        Accessible.description: root.Accessible.description
+        Accessible.description: root.supportingText || root.Accessible.description
         cursorDelegate: Base.DankTextCursor {
             id: fieldCursor
 
-            color: textInput.color
+            color: root.outlined ? (root.isError ? Style.error : Style.primary) : textInput.color
             x: textInput.cursorRectangle.x
             y: textInput.cursorRectangle.y
             height: textInput.cursorRectangle.height
@@ -167,7 +314,10 @@ Base.StyledRect {
         onTextChanged: root.textEdited()
         onEditingFinished: root.editingFinished()
         onAccepted: root.accepted()
-        onActiveFocusChanged: root.focusStateChanged(activeFocus)
+        onActiveFocusChanged: {
+            strokeMotion.retarget(activeFocus ? 1 : 0);
+            root.focusStateChanged(activeFocus);
+        }
         Keys.forwardTo: root.keyForwardTargets
         Keys.onLeftPressed: event => {
             event.accepted = root.ignoreLeftRightKeys;
@@ -212,10 +362,10 @@ Base.StyledRect {
         id: rightButtonsRow
 
         anchors.right: parent.right
-        anchors.rightMargin: Style.spacingS + root.rightAccessoryWidth
+        anchors.rightMargin: (root.outlined ? Style.spacingXS : Style.spacingS) + root.rightAccessoryWidth
         anchors.verticalCenter: textInput.verticalCenter
-        spacing: Style.spacingXS
-        visible: showPasswordToggle || (showClearButton && text.length > 0)
+        spacing: root.outlined ? 0 : Style.spacingXS
+        visible: showPasswordToggle || (showClearButton && !readOnly && text.length > 0)
 
         Loader {
             active: root.showPasswordToggle
@@ -227,39 +377,69 @@ Base.StyledRect {
                 Accessible.name: root.passwordVisible ? I18n.tr("Hide password", "Accessible name for the password visibility button") : I18n.tr("Show password", "Accessible name for the password visibility button")
                 buttonSize: root.accessorySize
                 iconName: root.passwordVisible ? "visibility_off" : "visibility"
-                iconSize: Style.iconSizeSmall
-                iconColor: Style.onSurfaceVariant
+                iconSize: root.outlined ? Style.iconSize : Style.iconSizeSmall
+                iconColor: root.outlined && root.isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : Style.onSurfaceVariant
                 onClicked: root.passwordVisible = !root.passwordVisible
             }
         }
 
         Loader {
-            active: root.showClearButton
+            active: root.showClearButton && !root.readOnly
             visible: active && root.text.length > 0
             sourceComponent: DankActionButton {
                 focusPolicy: Qt.TabFocus
                 Accessible.name: I18n.tr("Clear")
                 buttonSize: root.accessorySize
                 iconName: "close"
-                iconSize: Style.iconSizeSmall
-                iconColor: Style.onSurfaceVariant
+                iconSize: root.outlined ? Style.iconSize : Style.iconSizeSmall
+                iconColor: root.outlined && root.isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : Style.onSurfaceVariant
                 onClicked: textInput.text = ""
             }
         }
     }
 
-    Base.StyledText {
-        id: placeholderLabel
-
+    Item {
         anchors.fill: textInput
-        text: root.placeholderText
-        font: textInput.font
-        color: placeholderColor
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: textInput.verticalAlignment
-        visible: root.placeholderVisible
-        elide: I18n.isRtl ? Text.ElideLeft : Text.ElideRight
+        visible: textInput.text.length === 0 && !textInput.inputMethodComposing && opacity > 0
+        opacity: root.outlined ? Math.max(0, Math.min(1, placeholderMotion.value)) : root.placeholderVisible ? 1 : 0
+
+        Base.StyledText {
+            anchors.fill: parent
+            text: root.placeholderText
+            font: textInput.font
+            color: root.outlined && !root.enabled ? Style.onSurface_38 : placeholderColor
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: textInput.verticalAlignment
+            wrapMode: Text.NoWrap
+            maximumLineCount: 1
+            elide: I18n.isRtl ? Text.ElideLeft : Text.ElideRight
+        }
     }
+
+    Base.StyledText {
+        id: supportingLabel
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: root.contentPadding
+        anchors.rightMargin: root.contentPadding
+        visible: root.outlined && root.supportingText !== ""
+        text: root.supportingText
+        font.pixelSize: Style.fontSizeSmall
+        lineHeightMode: Text.FixedHeight
+        lineHeight: Style.outlinedFieldLabelLineHeight
+        color: !root.enabled ? Style.onSurface_38 : root.isError ? Style.error : Style.onSurfaceVariant
+        wrapMode: Text.WordWrap
+    }
+
+    SpringMotion {
+        id: placeholderMotion
+        enabled: root.outlined && !Style.springMotionDisabled
+        stiffness: root.placeholderVisible ? Style.textFieldSlowEffectsStiffness : Style.textFieldFastEffectsStiffness
+        damping: 2 * Math.sqrt(stiffness)
+    }
+
+    onPlaceholderVisibleChanged: placeholderMotion.retarget(placeholderVisible ? 1 : 0)
 
     Behavior on border.color {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

@@ -41,9 +41,15 @@ Singleton {
     property color onSurfaceVariant
     property color onPrimaryContainer
     property color onSecondaryContainer
+    property color onErrorContainer
     property color onTertiaryContainer
     property color onSurfaceVariant_30: withAlpha(onSurfaceVariant, 0.3)
     readonly property list<QtObject> roleBindings: [
+        Binding {
+            target: root
+            property: "onErrorContainer"
+            value: "#F9DEDC"
+        },
         Binding {
             target: root
             property: "onSurface"
@@ -247,6 +253,11 @@ Singleton {
     readonly property real fieldDefaultWidth: 200
     readonly property real fieldHeight: Math.round(fontSizeMedium * 3)
     readonly property real fieldHeightLarge: 48
+    readonly property real outlinedFieldLabelLineHeight: 16
+    readonly property real textFieldSpatialStiffness: 800
+    readonly property real textFieldSpatialDampingRatio: 1
+    readonly property real textFieldFastEffectsStiffness: 3800
+    readonly property real textFieldSlowEffectsStiffness: 800
     readonly property real textEditHeight: Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: 500
     readonly property real menuMaxHeight: 400

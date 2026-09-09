@@ -79,6 +79,31 @@ ShellRoot {
                     anchors.margins: Theme.spacingM
                     spacing: Theme.spacingM
 
+                    X.DankButton {
+                        text: I18n.tr("Text fields")
+                        onClicked: galleryFlickable.contentY = expressiveExamples.y
+                    }
+
+                    Column {
+                        width: Theme.fieldDefaultWidth
+                        spacing: Theme.spacingXS
+
+                        StyledText {
+                            text: I18n.tr("Radius scale")
+                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.surfaceVariantText
+                        }
+
+                        X.DankSlider {
+                            width: parent.width
+                            Accessible.name: I18n.tr("Radius scale")
+                            value: Theme.radiusStrength
+                            minimum: 0
+                            maximum: 100
+                            onSliderValueChanged: value => Theme.radiusStrength = value
+                        }
+                    }
+
                     Column {
                         spacing: Theme.spacingXS
 
@@ -128,6 +153,7 @@ ShellRoot {
                 clip: true
 
                 DankFlickable {
+                    id: galleryFlickable
                     anchors.fill: parent
                     anchors.margins: Theme.spacingM
                     contentHeight: gallery.height
@@ -320,11 +346,18 @@ ShellRoot {
                             X.DankTextField {
                                 width: Math.min(300, gallery.width)
                                 labelText: "Password"
+                                outlined: true
                                 leftIconName: "lock"
                                 placeholderText: "Reveal with the eye"
                                 echoMode: TextInput.Password
                                 showPasswordToggle: true
                             }
+                        }
+
+                        ExpressiveGallery {
+                            id: expressiveExamples
+                            width: parent.width
+                            flickable: galleryFlickable
                         }
 
                         X.DankTextEdit {

@@ -69,11 +69,17 @@ Singleton {
     property color onSurfaceVariant
     property color onPrimaryContainer
     property color onSecondaryContainer
+    property color onErrorContainer
     property color onTertiaryContainer
     readonly property color onSurface_12: theme?.onSurface_12 ?? withAlpha(onSurface, 0.12)
     readonly property color onSurface_38: theme?.onSurface_38 ?? withAlpha(onSurface, 0.38)
     readonly property color onSurfaceVariant_30: theme?.onSurfaceVariant_30 ?? withAlpha(onSurfaceVariant, 0.3)
     readonly property list<QtObject> roleBindings: [
+        Binding {
+            target: root
+            property: "onErrorContainer"
+            value: root.theme?.onErrorContainer ?? "#F9DEDC"
+        },
         Binding {
             target: root
             property: "onSurface"
@@ -283,6 +289,11 @@ Singleton {
     readonly property real fieldDefaultWidth: theme?.fieldDefaultWidth ?? 200
     readonly property real fieldHeight: theme?.fieldHeight ?? Math.round(fontSizeMedium * 3)
     readonly property real fieldHeightLarge: theme?.fieldHeightLarge ?? 48
+    readonly property real outlinedFieldLabelLineHeight: theme?.outlinedFieldLabelLineHeight ?? 16
+    readonly property real textFieldSpatialStiffness: theme?.textFieldSpatialStiffness ?? 800
+    readonly property real textFieldSpatialDampingRatio: theme?.textFieldSpatialDampingRatio ?? 1
+    readonly property real textFieldFastEffectsStiffness: theme?.textFieldFastEffectsStiffness ?? 3800
+    readonly property real textFieldSlowEffectsStiffness: theme?.textFieldSlowEffectsStiffness ?? 800
     readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
     readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400

@@ -106,7 +106,11 @@ FocusScope {
         visible: card.acceptsInput
         disabled: !card.acceptsInput
         stateColor: card.accentColor
-        cornerRadius: card.bodyRadius
+        cornerRadius: card.radius
+        topLeftRadius: card.topLeftRadius
+        topRightRadius: card.topRightRadius
+        bottomLeftRadius: card.bottomLeftRadius
+        bottomRightRadius: card.bottomRightRadius
     }
 
     Base.FocusRing {

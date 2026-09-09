@@ -188,7 +188,10 @@ Row {
 
             DankRipple {
                 id: segmentRipple
-                cornerRadius: Style.cornerRadius
+                topLeftRadius: segment.topLeftRadius
+                topRightRadius: segment.topRightRadius
+                bottomLeftRadius: segment.bottomLeftRadius
+                bottomRightRadius: segment.bottomRightRadius
                 rippleColor: segment.selected ? Style.buttonText : Style.surfaceVariantText
             }
 

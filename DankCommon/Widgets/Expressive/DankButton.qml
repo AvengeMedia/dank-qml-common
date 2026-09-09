@@ -5,6 +5,8 @@ import qs.DankCommon.Widgets as Base
 StyledButton {
     id: root
 
+    property bool busy: false
+    property string reserveText: ""
     property string shape: "round"
     property real maximumWidth: Infinity
     property bool wrapText: false
@@ -66,6 +68,14 @@ StyledButton {
         transitionCurve: Style.expressiveCurves.expressiveEffects
     }
 
+    TextMetrics {
+        id: reservedLabel
+        text: root.reserveText
+        font.pixelSize: Style.fontSizeMedium
+        font.weight: Font.Medium
+        font.family: Style.fontFamily
+    }
+
     Row {
         id: contentRow
         anchors.centerIn: parent
@@ -79,16 +89,33 @@ StyledButton {
             }
         }
 
-        Base.DankIcon {
-            name: root.iconName
-            size: root.iconSize
-            color: root.contentColor
-            visible: root.iconName !== ""
+        Item {
+            width: root.iconSize
+            height: root.iconSize
+            visible: root.busy || root.iconName !== ""
             anchors.verticalCenter: parent.verticalCenter
+
+            Base.DankIcon {
+                name: root.iconName
+                size: root.iconSize
+                color: root.contentColor
+                visible: !root.busy
+            }
+            Loader {
+                anchors.fill: parent
+                active: root.busy
+                sourceComponent: Base.DankSpinner {
+                    size: root.iconSize
+                    strokeWidth: Style.outlineWidthFocused
+                    color: root.contentColor
+                    running: root.busy && root.visible
+                    Accessible.ignored: true
+                }
+            }
         }
 
         Base.StyledText {
-            width: Math.min(implicitWidth, Math.max(0, root.maximumWidth - root.horizontalPadding * 2 - (root.iconName ? root.iconSize + contentRow.spacing : 0)))
+            width: Math.min(Math.max(implicitWidth, reservedLabel.advanceWidth), Math.max(0, root.maximumWidth - root.horizontalPadding * 2 - (root.busy || root.iconName ? root.iconSize + contentRow.spacing : 0)))
             wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
             elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text

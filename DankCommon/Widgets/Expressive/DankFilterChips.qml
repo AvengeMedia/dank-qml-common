@@ -98,7 +98,7 @@ Flow {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
                     duration: Style.expressiveDurations.expressiveFastSpatial
-                    easing.bezierCurve: Style.expressiveCurves.standard
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
                 }
             }
 

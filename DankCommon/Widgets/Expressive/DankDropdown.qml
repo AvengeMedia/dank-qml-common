@@ -149,8 +149,8 @@ FocusScope {
         menu.anchor.margins.top = 0;
         menu.anchor.margins.bottom = 0;
         menu.anchor.adjustment = PopupAdjustment.None;
-        menu.width = qsWin.width;
-        menu.height = qsWin.height;
+        menu.implicitWidth = qsWin.width;
+        menu.implicitHeight = qsWin.height;
 
         const pos = root.QsWindow.itemPosition(anchorItem);
         const menuW = root.menuWidth;

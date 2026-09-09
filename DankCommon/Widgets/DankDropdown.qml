@@ -88,8 +88,8 @@ Item {
         dropdownMenu.anchor.margins.top = 0;
         dropdownMenu.anchor.margins.bottom = 0;
         dropdownMenu.anchor.adjustment = PopupAdjustment.None;
-        dropdownMenu.width = qsWin.width;
-        dropdownMenu.height = qsWin.height;
+        dropdownMenu.implicitWidth = qsWin.width;
+        dropdownMenu.implicitHeight = qsWin.height;
 
         const pos = root.QsWindow.itemPosition(anchorItem);
         const menuW = root.menuWidth;

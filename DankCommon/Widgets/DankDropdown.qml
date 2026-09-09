@@ -41,6 +41,8 @@ FocusScope {
     property bool compactMode: text === "" && description === ""
     property bool showTrigger: true
     property Item popupAnchorItem: null
+    property Item focusReturnTarget: null
+    property int focusPolicy: Qt.ClickFocus
     property bool addHorizontalPadding: false
     property string emptyText: ""
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
@@ -220,7 +222,7 @@ FocusScope {
 
     width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
     implicitHeight: !showTrigger ? 0 : (compactMode ? triggerHeight : Math.max(Style.listItemHeight + Style.spacingXS, labelColumn.implicitHeight + Style.spacingM))
-    activeFocusOnTab: showTrigger && enabled
+    activeFocusOnTab: showTrigger && enabled && focusPolicy !== Qt.NoFocus
     readonly property Item focusTarget: dropdown
     readonly property var focusTargets: showTrigger ? [dropdown] : []
 
@@ -286,7 +288,7 @@ FocusScope {
     StyledButton {
         id: dropdown
         focus: true
-        focusPolicy: Qt.ClickFocus
+        focusPolicy: root.focusPolicy
         Accessible.ignored: root.Accessible.ignored
 
         Accessible.role: Accessible.ComboBox
@@ -435,7 +437,7 @@ FocusScope {
                 if (!visible && root.menuOpen)
                     root.closeDropdownMenu();
                 if (!visible && root.showTrigger && root.enabled)
-                    dropdown.forceActiveFocus(Qt.PopupFocusReason);
+                    (root.focusReturnTarget ?? dropdown).forceActiveFocus(Qt.PopupFocusReason);
                 if (visible)
                     Qt.callLater(focusInput);
             }

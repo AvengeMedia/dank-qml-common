@@ -146,8 +146,8 @@ Row {
             property bool visualLast: index === repeater.count - 1
             property bool prevSelected: index > 0 ? root.isSelected(index - 1) : false
             property bool nextSelected: index < repeater.count - 1 ? root.isSelected(index + 1) : false
-            readonly property real leftRadius: (visualFirst || selected) ? root.outerRadius : (pressed ? root.pressedInnerRadius : root.innerRadius)
-            readonly property real rightRadius: (visualLast || selected) ? root.outerRadius : (pressed ? root.pressedInnerRadius : root.innerRadius)
+            readonly property real leftRadius: visualFirst ? root.outerRadius : (pressed ? root.pressedInnerRadius : (selected ? root.outerRadius : root.innerRadius))
+            readonly property real rightRadius: visualLast ? root.outerRadius : (pressed ? root.pressedInnerRadius : (selected ? root.outerRadius : root.innerRadius))
             readonly property color contentColor: !root.enabled ? Style.onSurface_38 : (selected ? Style.buttonText : Style.onSecondaryContainer)
 
             readonly property real contentNaturalWidth: (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) + buttonText.implicitWidth
@@ -158,21 +158,8 @@ Row {
                 const natural = Math.max(contentNaturalWidth + root.buttonPadding * 2, root.minButtonWidth);
                 return root._segmentCap > 0 ? Math.min(natural, Math.max(root._segmentCap, root.minButtonWidth)) : natural;
             }
-            readonly property real expansion: baseWidth * Style.buttonGroupExpandRatio
-            readonly property bool prevPressed: index > 0 ? (repeater.itemAt(index - 1)?.pressed ?? false) : false
-            readonly property bool nextPressed: index < repeater.count - 1 ? (repeater.itemAt(index + 1)?.pressed ?? false) : false
-            readonly property int pressedNeighbours: (prevPressed ? 1 : 0) + (nextPressed ? 1 : 0)
-            readonly property int neighbourCount: (index > 0 ? 1 : 0) + (index < repeater.count - 1 ? 1 : 0)
 
-            width: {
-                if (pressed)
-                    return baseWidth + expansion;
-                if (pressedNeighbours === 0)
-                    return baseWidth;
-                const neighbour = prevPressed ? repeater.itemAt(index - 1) : repeater.itemAt(index + 1);
-                const share = neighbour?.neighbourCount > 0 ? neighbour.expansion / neighbour.neighbourCount : 0;
-                return Math.max(root.minButtonWidth * Style.buttonGroupExpandRatio, baseWidth - share * pressedNeighbours);
-            }
+            width: baseWidth
             height: root.buttonHeight
 
             color: !root.enabled ? Style.onSurface_12 : (selected ? Style.buttonBg : Style.foregroundColor(Style.secondaryContainer, !root.usePopupTransparency))
@@ -183,14 +170,6 @@ Row {
             bottomLeftRadius: mirrored ? rightRadius : leftRadius
             topRightRadius: mirrored ? leftRadius : rightRadius
             bottomRightRadius: mirrored ? leftRadius : rightRadius
-
-            Behavior on width {
-                enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-                DankAnim {
-                    duration: Style.expressiveDurations.expressiveFastSpatial
-                    easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
-                }
-            }
 
             Behavior on topLeftRadius {
                 enabled: root.interactionStarted && !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None

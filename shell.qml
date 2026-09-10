@@ -389,6 +389,7 @@ ShellRoot {
                             width: Math.min(340, gallery.width)
                             value: 50
                             step: 25
+                            showStops: true
                             unit: ""
                             onSliderValueChanged: newValue => value = newValue
                         }

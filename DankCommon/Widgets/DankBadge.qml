@@ -10,6 +10,7 @@ Rectangle {
 
     implicitWidth: text ? Math.min(maximumWidth, Math.max(implicitHeight, Math.ceil(label.implicitWidth) + Style.spacingXS * 2)) : implicitHeight
     implicitHeight: text ? Math.max(Style.spacingL, Math.ceil(labelMetrics.tightBoundingRect.height) + Style.spacingXXS * 2) : Style.spacingXS + Style.spacingXXS
+    baselineOffset: label.y + label.baselineOffset
     radius: height / 2
     color: Style.primary
     Accessible.role: Accessible.StaticText

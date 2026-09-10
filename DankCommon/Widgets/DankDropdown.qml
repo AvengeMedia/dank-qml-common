@@ -174,8 +174,8 @@ FocusScope {
     function closeDropdownMenu() {
         if (!root.menuOpen && !root.menuVisible)
             return;
-        root.menuOpen = false;
         root.menuClosing = true;
+        root.menuOpen = false;
         closeTimer.restart();
     }
 
@@ -436,7 +436,7 @@ FocusScope {
             onVisibleChanged: {
                 if (!visible && root.menuOpen)
                     root.closeDropdownMenu();
-                if (!visible && root.showTrigger && root.enabled)
+                if (!visible && root.enabled && (root.showTrigger || root.focusReturnTarget))
                     (root.focusReturnTarget ?? dropdown).forceActiveFocus(Qt.PopupFocusReason);
                 if (visible)
                     Qt.callLater(focusInput);

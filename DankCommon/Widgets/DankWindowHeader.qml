@@ -6,6 +6,10 @@ Item {
 
     required property var controls
     property string title: ""
+    property real titleFontSize: Style.fontSizeLarge
+    property bool wrapTitle: false
+    property real horizontalPadding: -1
+    property bool showDivider: true
     property string subtitle: ""
     property string iconName: ""
     property bool closeEnabled: true
@@ -40,9 +44,9 @@ Item {
     Row {
         id: titleRow
         anchors.left: parent.left
-        anchors.leftMargin: Style.spacingL
+        anchors.leftMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingL
         anchors.right: buttons.left
-        anchors.rightMargin: Style.spacingM
+        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingM
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingM
 
@@ -64,11 +68,11 @@ Item {
             StyledText {
                 width: parent.width
                 text: root.title
-                font.pixelSize: Style.fontSizeLarge
+                font.pixelSize: root.titleFontSize
                 font.weight: Font.Medium
                 color: Style.surfaceText
-                elide: Text.ElideRight
-                wrapMode: Text.NoWrap
+                elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight
+                wrapMode: root.wrapTitle ? Text.Wrap : Text.NoWrap
             }
 
             StyledText {
@@ -86,7 +90,7 @@ Item {
     Row {
         id: buttons
         anchors.right: parent.right
-        anchors.rightMargin: Style.spacingM
+        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingM
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingS
 
@@ -105,14 +109,13 @@ Item {
 
         WindowButton {
             visible: root.controls?.canMaximize ?? false
-            iconName: root.controls?.targetWindow.maximized ? "fullscreen_exit" : "fullscreen"
-            tooltipText: root.controls?.targetWindow.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
+            iconName: root.controls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
+            tooltipText: root.controls?.targetWindow?.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
             onClicked: root.controls.tryToggleMaximize()
         }
 
         WindowButton {
             enabled: root.closeEnabled
-            opacity: enabled ? 1 : Style.pendingOpacity
             iconName: "close"
             tooltipText: root.closeTooltipText
             onClicked: root.closeRequested()
@@ -123,6 +126,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        visible: root.showDivider
         height: Style.dividerWidth
         color: Style.outlineVariant
     }

@@ -225,6 +225,8 @@ Singleton {
     readonly property real listItemHeight: theme?.listItemHeight ?? 56
     readonly property real listItemTwoLineHeight: theme?.listItemTwoLineHeight ?? 72
     readonly property real avatarSize: theme?.avatarSize ?? 36
+    readonly property real osdHeight: theme?.osdHeight ?? sliderHandleHeight + spacingS * 2
+    readonly property real dialogMaxWidth: theme?.dialogMaxWidth ?? 560
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
     readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44

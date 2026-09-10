@@ -4,7 +4,7 @@ import qs.DankCommon.Common
 Item {
     id: root
 
-    readonly property real edgeSize: 8
+    readonly property real edgeSize: Style.spacingS
     required property var targetWindow
     readonly property bool supported: typeof targetWindow.startSystemMove === "function"
     readonly property bool canMaximize: targetWindow.minimumSize.width !== targetWindow.maximumSize.width || targetWindow.minimumSize.height !== targetWindow.maximumSize.height
@@ -40,8 +40,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.leftMargin: 6
-        anchors.rightMargin: 6
+        anchors.leftMargin: root.edgeSize - Style.spacingXXS
+        anchors.rightMargin: root.edgeSize - Style.spacingXXS
         cursorShape: Qt.SizeVerCursor
         onPressed: root.tryStartResize(Qt.TopEdge)
     }
@@ -52,8 +52,8 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.topMargin: 6
-        anchors.bottomMargin: 6
+        anchors.topMargin: root.edgeSize - Style.spacingXXS
+        anchors.bottomMargin: root.edgeSize - Style.spacingXXS
         cursorShape: Qt.SizeHorCursor
         onPressed: root.tryStartResize(Qt.LeftEdge)
     }
@@ -64,8 +64,8 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.topMargin: 6
-        anchors.bottomMargin: 6
+        anchors.topMargin: root.edgeSize - Style.spacingXXS
+        anchors.bottomMargin: root.edgeSize - Style.spacingXXS
         cursorShape: Qt.SizeHorCursor
         onPressed: root.tryStartResize(Qt.RightEdge)
     }
@@ -96,8 +96,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.leftMargin: 6
-        anchors.rightMargin: 6
+        anchors.leftMargin: root.edgeSize - Style.spacingXXS
+        anchors.rightMargin: root.edgeSize - Style.spacingXXS
         cursorShape: Qt.SizeVerCursor
         onPressed: root.tryStartResize(Qt.BottomEdge)
     }

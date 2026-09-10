@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import qs.DankCommon.Widgets
 import "ScrollConstants.js" as Scroll
 
@@ -31,6 +32,8 @@ Flickable {
         property bool sessionUsedMouseWheel: false
 
         function startMomentum() {
+            if (!flickable.visible || !flickable.Window.window?.visible)
+                return;
             flickable.isMomentumActive = true;
             momentumAnim.running = true;
         }
@@ -144,6 +147,28 @@ Flickable {
         vbar.hideTimer.stop();
     }
     onMovementEnded: vbar.hideTimer.restart()
+
+    function stopMomentum() {
+        cancelFlick();
+        momentumAnim.running = false;
+        isMomentumActive = false;
+        momentumVelocity = 0;
+        wheelHandler.momentum = 0;
+        wheelHandler.velocitySamples = [];
+    }
+
+    onVisibleChanged: {
+        if (!visible)
+            stopMomentum();
+    }
+
+    Connections {
+        target: flickable.Window.window
+        function onVisibleChanged() {
+            if (!flickable.Window.window?.visible)
+                flickable.stopMomentum();
+        }
+    }
 
     FrameAnimation {
         id: momentumAnim

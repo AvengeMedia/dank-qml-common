@@ -1,15 +1,25 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import qs.DankCommon.Common
 
 Item {
     id: root
 
     property string text: ""
+    property Item sourceItem: null
+    readonly property var sourceWindow: sourceItem?.Window.window ?? null
+
+    onSourceItemChanged: {
+        if (!sourceItem)
+            tooltip.close();
+    }
 
     function show(text, item, offsetX, offsetY, preferredSide) {
-        if (!item)
+        if (!item || !item.visible) {
+            hide();
             return;
+        }
 
         let windowContentItem = item.Window?.window?.contentItem;
         if (!windowContentItem) {
@@ -25,6 +35,7 @@ Item {
         if (!windowContentItem)
             return;
 
+        root.sourceItem = item;
         tooltip.parent = windowContentItem;
         tooltip.text = text;
 
@@ -90,6 +101,29 @@ Item {
 
     function hide() {
         tooltip.close();
+        sourceItem = null;
+    }
+
+    onVisibleChanged: {
+        if (!visible)
+            hide();
+    }
+    Component.onDestruction: tooltip.close()
+
+    Connections {
+        target: root.sourceItem
+        function onVisibleChanged() {
+            if (!root.sourceItem?.visible)
+                root.hide();
+        }
+    }
+
+    Connections {
+        target: root.sourceWindow
+        function onVisibleChanged() {
+            if (!root.sourceWindow?.visible)
+                root.hide();
+        }
     }
 
     ToolTip {
@@ -135,6 +169,7 @@ Item {
         }
 
         enter: Transition {
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 property: "opacity"
                 from: 0
@@ -145,6 +180,7 @@ Item {
         }
 
         exit: Transition {
+            enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
             DankAnim {
                 property: "opacity"
                 from: 1

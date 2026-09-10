@@ -6,18 +6,33 @@ Item {
 
     required property var controls
     property string title: ""
+    property string subtitle: ""
     property string iconName: ""
+    property bool closeEnabled: true
+    property string closeTooltipText: I18n.tr("Close")
     default property alias actions: extraActions.data
 
     signal closeRequested
 
-    implicitHeight: Style.buttonHeightXS + Style.spacingS * 2
+    implicitHeight: Math.max(Style.buttonHeightXS, titleColumn.implicitHeight) + Style.spacingS * 2
     height: implicitHeight
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
+    component WindowButton: DankActionButton {
+        buttonSize: Style.buttonHeightXS
+        backgroundColor: Style.foregroundColor(Style.surfaceContainerHigh, Style.isFloatingWindow(root))
+        iconSize: Style.iconSizeSmall
+        iconColor: Style.surfaceText
+    }
+
     MouseArea {
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: buttons.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: Style.spacingM
+        enabled: root.controls !== null
         onPressed: root.controls.tryStartMove()
         onDoubleClicked: root.controls.tryToggleMaximize()
     }
@@ -40,14 +55,31 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        StyledText {
+        Column {
+            id: titleColumn
             width: Math.max(0, titleRow.width - (icon.visible ? icon.width + titleRow.spacing : 0))
-            text: root.title
-            font.pixelSize: Style.fontSizeLarge
-            font.weight: Font.Medium
-            color: Style.surfaceText
-            elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter
+            spacing: Style.spacingXS
+
+            StyledText {
+                width: parent.width
+                text: root.title
+                font.pixelSize: Style.fontSizeLarge
+                font.weight: Font.Medium
+                color: Style.surfaceText
+                elide: Text.ElideRight
+                wrapMode: Text.NoWrap
+            }
+
+            StyledText {
+                width: parent.width
+                text: root.subtitle
+                font.pixelSize: Style.fontSizeSmall
+                color: Style.surfaceTextMedium
+                elide: Text.ElideRight
+                wrapMode: Text.NoWrap
+                visible: text !== ""
+            }
         }
     }
 
@@ -62,27 +94,27 @@ Item {
             id: extraActions
             anchors.verticalCenter: parent.verticalCenter
             spacing: Style.spacingS
-            visible: children.length > 0
         }
 
-        DankActionButton {
-            visible: root.controls.canMaximize
-            buttonSize: Style.buttonHeightXS
-            backgroundColor: Style.foregroundColor(Style.surfaceContainerHigh, Style.isFloatingWindow(root))
-            iconName: root.controls.targetWindow.maximized ? "fullscreen_exit" : "fullscreen"
-            tooltipText: root.controls.targetWindow.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
-            iconSize: Style.iconSizeSmall
-            iconColor: Style.surfaceText
+        WindowButton {
+            visible: root.controls?.canMinimize ?? false
+            iconName: "minimize"
+            tooltipText: I18n.tr("Minimize")
+            onClicked: root.controls.tryMinimize()
+        }
+
+        WindowButton {
+            visible: root.controls?.canMaximize ?? false
+            iconName: root.controls?.targetWindow.maximized ? "fullscreen_exit" : "fullscreen"
+            tooltipText: root.controls?.targetWindow.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
             onClicked: root.controls.tryToggleMaximize()
         }
 
-        DankActionButton {
-            buttonSize: Style.buttonHeightXS
-            backgroundColor: Style.foregroundColor(Style.surfaceContainerHigh, Style.isFloatingWindow(root))
+        WindowButton {
+            enabled: root.closeEnabled
+            opacity: enabled ? 1 : Style.pendingOpacity
             iconName: "close"
-            tooltipText: I18n.tr("Close")
-            iconSize: Style.iconSizeSmall
-            iconColor: Style.surfaceText
+            tooltipText: root.closeTooltipText
             onClicked: root.closeRequested()
         }
     }

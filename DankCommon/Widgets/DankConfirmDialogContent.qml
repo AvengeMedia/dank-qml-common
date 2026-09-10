@@ -30,6 +30,8 @@ Column {
 
     function focusSelection() {
         const button = selectedButton === 1 ? confirmButton : cancelButton;
+        if (button.activeFocus && !button.visualFocus)
+            button.focus = false;
         button.forceActiveFocus(Qt.TabFocusReason);
     }
 

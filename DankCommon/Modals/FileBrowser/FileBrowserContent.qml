@@ -572,129 +572,52 @@ FocusScope {
         anchors.fill: parent
         spacing: 0
 
-        Item {
+        DankWindowHeader {
             id: header
-
             width: parent.width
-            height: 48
+            controls: root.windowControls
+            title: root.browserTitle
+            iconName: root.browserIcon
+            onCloseRequested: root.closeRequested()
 
-            MouseArea {
-                anchors.fill: parent
-                onPressed: if (windowControls)
-                    windowControls.tryStartMove()
-                onDoubleClicked: if (windowControls)
-                    windowControls.tryToggleMaximize()
+            DankActionButton {
+                circular: false
+                iconName: showHiddenFiles ? "visibility_off" : "visibility"
+                iconSize: Style.iconSize - 4
+                iconColor: showHiddenFiles ? Style.primary : Style.surfaceText
+                onClicked: showHiddenFiles = !showHiddenFiles
             }
 
-            Item {
-                id: headerTitle
-
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: root.compactLayout ? Style.spacingM : Style.spacingL
-                anchors.right: headerActions.left
-                anchors.rightMargin: Style.spacingS
-                height: Style.iconSizeLarge
-                clip: true
-
-                DankIcon {
-                    id: headerIcon
-
-                    name: browserIcon
-                    size: Style.iconSizeLarge
-                    color: Style.primary
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                StyledText {
-                    text: browserTitle
-                    font.pixelSize: Style.fontSizeXLarge
-                    color: Style.surfaceText
-                    font.weight: Font.Medium
-                    anchors.left: headerIcon.right
-                    anchors.leftMargin: Style.spacingM
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
-                    wrapMode: Text.NoWrap
-                }
+            DankActionButton {
+                circular: false
+                iconName: viewMode === "grid" ? "view_list" : "grid_view"
+                iconSize: Style.iconSize - 4
+                iconColor: Style.surfaceText
+                onClicked: viewMode = viewMode === "grid" ? "list" : "grid"
             }
 
-            Row {
-                id: headerActions
-
-                anchors.right: parent.right
-                anchors.rightMargin: Style.spacingM
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: root.compactLayout ? Style.spacingXXS : Style.spacingS
-
-                DankActionButton {
-                    circular: false
-                    iconName: showHiddenFiles ? "visibility_off" : "visibility"
-                    iconSize: Style.iconSize - 4
-                    iconColor: showHiddenFiles ? Style.primary : Style.surfaceText
-                    onClicked: showHiddenFiles = !showHiddenFiles
-                }
-
-                DankActionButton {
-                    circular: false
-                    iconName: viewMode === "grid" ? "view_list" : "grid_view"
-                    iconSize: Style.iconSize - 4
-                    iconColor: Style.surfaceText
-                    onClicked: viewMode = viewMode === "grid" ? "list" : "grid"
-                }
-
-                DankActionButton {
-                    circular: false
-                    iconName: iconSizeIndex === 0 ? "photo_size_select_small" : iconSizeIndex === 1 ? "photo_size_select_large" : iconSizeIndex === 2 ? "photo_size_select_actual" : "zoom_in"
-                    iconSize: Style.iconSize - 4
-                    iconColor: Style.surfaceText
-                    visible: viewMode === "grid"
-                    onClicked: iconSizeIndex = (iconSizeIndex + 1) % iconSizes.length
-                }
-
-                DankActionButton {
-                    circular: false
-                    iconName: "info"
-                    iconSize: Style.iconSize - 4
-                    iconColor: Style.surfaceText
-                    visible: !root.compactLayout
-                    onClicked: root.showKeyboardHints = !root.showKeyboardHints
-                }
-
-                DankActionButton {
-                    visible: (windowControls?.supported ?? false) && !root.compactLayout
-                    circular: false
-                    iconName: windowControls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
-                    iconSize: Style.iconSize - 4
-                    iconColor: Style.surfaceText
-                    onClicked: if (windowControls)
-                        windowControls.tryToggleMaximize()
-                }
-
-                DankActionButton {
-                    circular: false
-                    iconName: "close"
-                    iconSize: Style.iconSize - 4
-                    iconColor: Style.surfaceText
-                    onClicked: root.closeRequested()
-                }
+            DankActionButton {
+                circular: false
+                iconName: iconSizeIndex === 0 ? "photo_size_select_small" : iconSizeIndex === 1 ? "photo_size_select_large" : iconSizeIndex === 2 ? "photo_size_select_actual" : "zoom_in"
+                iconSize: Style.iconSize - 4
+                iconColor: Style.surfaceText
+                visible: viewMode === "grid"
+                onClicked: iconSizeIndex = (iconSizeIndex + 1) % iconSizes.length
             }
-        }
 
-        StyledRect {
-            id: headerSeparator
-
-            width: parent.width
-            height: 1
-            color: Style.outline
+            DankActionButton {
+                circular: false
+                iconName: "info"
+                iconSize: Style.iconSize - 4
+                iconColor: Style.surfaceText
+                visible: !root.compactLayout
+                onClicked: root.showKeyboardHints = !root.showKeyboardHints
+            }
         }
 
         Item {
             width: parent.width
-            height: parent.height - header.height - headerSeparator.height
+            height: parent.height - header.height
 
             Row {
                 anchors.fill: parent

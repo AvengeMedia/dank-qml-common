@@ -223,6 +223,112 @@ ShellRoot {
                             }
                         }
 
+                        Section {
+                            text: "DankSplitButton"
+                        }
+
+                        Column {
+                            id: splitButtonExamples
+                            width: parent.width
+                            spacing: Theme.spacingM
+
+                            DankSplitButton {
+                                id: splitSortButton
+                                property bool descending: false
+                                property string sortBy: I18n.tr("Name")
+                                text: I18n.tr("Sort by") + ": " + sortBy
+                                iconName: descending ? "arrow_downward" : "arrow_upward"
+                                variant: "tonal"
+                                maximumWidth: parent.width
+                                expanded: splitSortMenu.menuVisible
+                                tooltipText: descending ? I18n.tr("Ascending") : I18n.tr("Descending")
+                                menuTooltipText: I18n.tr("Sort by")
+                                onClicked: descending = !descending
+                                onMenuClicked: {
+                                    splitSortMenu.currentValue = sortBy;
+                                    splitSortMenu.openDropdownMenu();
+                                }
+
+                                DankDropdown {
+                                    id: splitSortMenu
+                                    showTrigger: false
+                                    popupAnchorItem: splitSortButton.trailingButton
+                                    focusReturnTarget: splitSortButton.trailingButton
+                                    popupWidth: Math.min(splitButtonExamples.width, Theme.fieldDefaultWidth)
+                                    options: [I18n.tr("Name"), I18n.tr("Author"), I18n.tr("Last modified")]
+                                    onValueChanged: value => splitSortButton.sortBy = value
+                                }
+                            }
+
+                            DankSplitButton {
+                                id: splitFilterButton
+                                property string filter: I18n.tr("Enabled")
+                                text: I18n.tr("Filter") + ": " + filter
+                                iconName: "filter_list"
+                                menuOnly: true
+                                variant: "tonal"
+                                maximumWidth: parent.width
+                                expanded: splitFilterMenu.menuVisible
+                                menuTooltipText: I18n.tr("Filter")
+                                onMenuClicked: {
+                                    splitFilterMenu.currentValue = filter;
+                                    splitFilterMenu.openDropdownMenu();
+                                }
+
+                                DankDropdown {
+                                    id: splitFilterMenu
+                                    showTrigger: false
+                                    popupAnchorItem: splitFilterButton.trailingButton
+                                    focusReturnTarget: splitFilterButton.trailingButton
+                                    popupWidth: Math.min(splitButtonExamples.width, Theme.fieldDefaultWidth)
+                                    options: [I18n.tr("All"), I18n.tr("Enabled"), I18n.tr("Disabled")]
+                                    onValueChanged: value => splitFilterButton.filter = value
+                                }
+                            }
+
+                            Flow {
+                                width: parent.width
+                                spacing: Theme.spacingM
+
+                                Repeater {
+                                    model: ["filled", "tonal", "outlined", "elevated"]
+
+                                    DankSplitButton {
+                                        required property string modelData
+                                        property int clicks: 0
+                                        text: modelData + (clicks ? " · " + clicks : "")
+                                        variant: modelData
+                                        iconName: "add"
+                                        maximumWidth: splitButtonExamples.width
+                                        onClicked: clicks++
+                                        onMenuClicked: expanded = !expanded
+                                    }
+                                }
+
+                                DankSplitButton {
+                                    text: I18n.tr("Disabled")
+                                    iconName: "add"
+                                    enabled: false
+                                    maximumWidth: splitButtonExamples.width
+                                }
+                            }
+
+                            Repeater {
+                                model: ["xs", "s", "m", "l", "xl"]
+
+                                DankSplitButton {
+                                    required property string modelData
+                                    property int clicks: 0
+                                    text: modelData.toUpperCase() + (clicks ? " · " + clicks : "")
+                                    size: modelData
+                                    iconName: size === "l" || size === "xl" ? "" : "add"
+                                    maximumWidth: splitButtonExamples.width
+                                    onClicked: clicks++
+                                    onMenuClicked: expanded = !expanded
+                                }
+                            }
+                        }
+
                         DankButtonGroup {
                             model: ["Mon", "Tue", "Wed", "Thu", "Fri"]
                             selectionMode: "multi"

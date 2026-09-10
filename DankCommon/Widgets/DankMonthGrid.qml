@@ -20,7 +20,7 @@ Item {
     property real cellGap: Style.spacingXS
     property real weekdayRowHeight: Style.iconSizeMedium
     property real weekColumnWidth: Style.iconSizeLarge
-    property real cellRadius: Style.fullRadius(cellWidth, cellHeight)
+    property real cellRadius: Style.buttonRadius(cellWidth, cellHeight, cellHeight, false, false)
     property bool highlightWeekends: false
     property color weekendColor: Style.tertiary
 
@@ -166,12 +166,15 @@ Item {
             y: root.weekdayRowHeight + root.cellGap + Math.floor(index / root.columns) * (root.cellHeight + root.cellGap)
             width: root.cellWidth
             height: root.cellHeight
-            radius: Math.min(root.cellRadius, height / 2)
+            radius: {
+                const shapeRadius = pressed || isSelected ? Style.buttonRadius(width, height, height, pressed, isSelected) : root.cellRadius;
+                return Math.min(shapeRadius, Math.min(width, height) / 2);
+            }
 
             Behavior on radius {
                 enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
                 DankAnim {
-                    duration: Style.expressiveDurations.expressiveFastSpatial
+                    duration: Style.expressiveDurations.expressiveEffects
                     easing.bezierCurve: Style.expressiveCurves.standard
                 }
             }
@@ -235,6 +238,8 @@ Item {
                 cornerRadius: cell.radius
                 disabled: !root.interactive
                 enabled: root.interactive
+                transitionDuration: Style.expressiveDurations.expressiveEffects
+                transitionCurve: Style.expressiveCurves.expressiveEffects
             }
         }
     }

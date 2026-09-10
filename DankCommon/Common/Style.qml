@@ -50,6 +50,7 @@ Singleton {
     readonly property color surfaceContainer: theme?.surfaceContainer ?? "#211f24"
     readonly property color surfaceContainerHigh: theme?.surfaceContainerHigh ?? "#2b292f"
     readonly property color error: theme?.error ?? "#F2B8B5"
+    readonly property color errorContainer: theme?.errorContainer ?? surfaceContainerHigh
     readonly property color warning: theme?.warning ?? "#FF9800"
     readonly property color tertiary: theme?.tertiary ?? "#EFB8C8"
     readonly property color surfaceContainerLowest: theme?.surfaceContainerLowest ?? "#0f0d13"
@@ -78,7 +79,7 @@ Singleton {
         Binding {
             target: root
             property: "onErrorContainer"
-            value: root.theme?.onErrorContainer ?? "#F9DEDC"
+            value: root.theme?.onErrorContainer ?? root.onSurface
         },
         Binding {
             target: root

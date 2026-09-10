@@ -11,6 +11,12 @@ StyledRect {
     KeyNavigation.tab: keyNavigationTab
     KeyNavigation.backtab: keyNavigationBacktab
 
+    onActiveFocusChanged: {
+        if (!activeFocus)
+            return;
+        textInput.forceActiveFocus();
+    }
+
     property alias text: textInput.text
     property alias cursorPosition: textInput.cursorPosition
     property string placeholderText: ""

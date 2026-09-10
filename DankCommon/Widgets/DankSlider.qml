@@ -12,8 +12,11 @@ Controls.Control {
     property int minimum: 0
     property int maximum: 100
     property int step: 1
-    property string leftIcon: ""
-    property string rightIcon: ""
+    property string startIcon: ""
+    property string endIcon: ""
+    property alias leftIcon: slider.startIcon // ! TODO deprecate me after 1.7 release
+    property alias rightIcon: slider.endIcon // ! TODO deprecate me after 1.7 release
+    property bool iconsClickable: false
     property string insetIcon: ""
     property string insetIconPosition: "start"
     property bool insetIconClickable: false
@@ -28,7 +31,7 @@ Controls.Control {
     property bool alwaysShowValue: false
     property string size: "xs"
     readonly property bool containsMouse: sliderMouseArea.containsMouse
-    readonly property var focusTargets: insetAction.enabled ? [insetAction, slider] : [slider]
+    readonly property var focusTargets: [startIconLoader.action, insetAction.enabled ? insetAction : null, slider, endIconLoader.action].filter(item => item && item.enabled)
 
     property color thumbOutlineColor: Style.surfaceContainer
     property color fillColor: Style.primary
@@ -192,25 +195,59 @@ Controls.Control {
         }
     }
 
+    component SideIcon: Loader {
+        id: iconLoader
+
+        required property string iconName
+        required property int direction
+        readonly property Item action: slider.iconsClickable ? item : null
+
+        width: slider.iconsClickable ? Style.iconButtonSize : Style.iconSize
+        height: width
+        anchors.verticalCenter: parent.verticalCenter
+        visible: iconName.length > 0
+        active: visible
+        sourceComponent: slider.iconsClickable ? actionComponent : iconComponent
+
+        Component {
+            id: iconComponent
+
+            DankIcon {
+                name: iconLoader.iconName
+                size: Style.iconSize
+                color: slider.enabled ? Style.surfaceText : Style.onSurface_38
+            }
+        }
+
+        Component {
+            id: actionComponent
+
+            DankActionButton {
+                iconName: iconLoader.iconName
+                iconSize: Style.iconSize
+                iconColor: Style.surfaceText
+                enabled: slider.enabled && (iconLoader.direction < 0 ? slider.value > slider.minimum : slider.value < slider.maximum)
+                Accessible.name: iconLoader.direction < 0 ? I18n.tr("Decrease", "Accessible name for a button that decreases a numeric value") : I18n.tr("Increase", "Accessible name for a button that increases a numeric value")
+                onClicked: slider.stepBy(iconLoader.direction)
+            }
+        }
+    }
+
     contentItem: Row {
         anchors.centerIn: parent
         width: parent.width
         spacing: Style.spacingM
         LayoutMirroring.enabled: slider.mirrored
 
-        DankIcon {
-            name: slider.leftIcon
-            size: Style.iconSize
-            color: slider.enabled ? Style.surfaceText : Style.onSurface_38
-            anchors.verticalCenter: parent.verticalCenter
-            visible: slider.leftIcon.length > 0
+        SideIcon {
+            id: startIconLoader
+            iconName: slider.startIcon
+            direction: -1
         }
 
         Item {
             id: sliderTrack
 
-            property int leftIconWidth: slider.leftIcon.length > 0 ? Style.iconSize : 0
-            property int rightIconWidth: slider.rightIcon.length > 0 ? Style.iconSize : 0
             readonly property real travel: width - sliderHandle.width
             readonly property real handleLeft: Math.max(0, Math.min(travel, travel * slider.visualRatio))
             readonly property real gap: Style.sliderHandleGap
@@ -230,7 +267,7 @@ Controls.Control {
                 }
             }
 
-            width: parent.width - (leftIconWidth + rightIconWidth + (slider.leftIcon.length > 0 ? Style.spacingM : 0) + (slider.rightIcon.length > 0 ? Style.spacingM : 0))
+            width: parent.width - (slider.startIcon.length > 0 ? startIconLoader.width + Style.spacingM : 0) - (slider.endIcon.length > 0 ? endIconLoader.width + Style.spacingM : 0)
             height: slider.handleHeight
             anchors.verticalCenter: parent.verticalCenter
 
@@ -551,12 +588,10 @@ Controls.Control {
             }
         }
 
-        DankIcon {
-            name: slider.rightIcon
-            size: Style.iconSize
-            color: slider.enabled ? Style.surfaceText : Style.onSurface_38
-            anchors.verticalCenter: parent.verticalCenter
-            visible: slider.rightIcon.length > 0
+        SideIcon {
+            id: endIconLoader
+            iconName: slider.endIcon
+            direction: 1
         }
     }
 }

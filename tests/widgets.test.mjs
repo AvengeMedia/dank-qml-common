@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
-for (const fixture of ["slider", "foreground", "states", "selection", "button-group"]) {
+for (const fixture of ["slider", "slider-input", "toggle", "foreground", "states", "selection", "button-group"]) {
     test(`${fixture} component behavior`, () => {
         const directory = mkdtempSync(join(tmpdir(), "dank-widgets-"));
         try {

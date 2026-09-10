@@ -73,6 +73,7 @@ FocusScope {
 
             StateLayer {
                 control: input
+                hovered: containsMouse || trackStateLayer.containsMouse
                 disabled: !toggle.enabled || toggle.toggling
                 stateColor: Style.primary
                 cornerRadius: parent.radius

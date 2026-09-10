@@ -313,8 +313,9 @@ ShellRoot {
                             width: Math.min(340, gallery.width)
                             value: 45
                             size: "xl"
-                            leftIcon: "brightness_low"
-                            rightIcon: "brightness_high"
+                            startIcon: "brightness_low"
+                            endIcon: "brightness_high"
+                            iconsClickable: true
                             onSliderValueChanged: newValue => value = newValue
                         }
 
@@ -579,8 +580,9 @@ ShellRoot {
                         DankSlider {
                             width: Math.min(340, gallery.width)
                             value: 40
-                            leftIcon: "volume_down"
-                            rightIcon: "volume_up"
+                            startIcon: "volume_down"
+                            endIcon: "volume_up"
+                            iconsClickable: true
                             onSliderValueChanged: newValue => log.info("slider:", newValue)
                         }
 

@@ -72,6 +72,7 @@ Item {
                 font.pixelSize: root.titleFontSize
                 font.weight: Font.Medium
                 color: Style.surfaceText
+                horizontalAlignment: Text.AlignLeft
                 elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight
                 wrapMode: root.wrapTitle ? Text.Wrap : Text.NoWrap
             }
@@ -81,6 +82,7 @@ Item {
                 text: root.subtitle
                 font.pixelSize: Style.fontSizeSmall
                 color: Style.surfaceTextMedium
+                horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
                 visible: text !== ""

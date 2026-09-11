@@ -62,7 +62,8 @@ Item {
                                 equal(active.bottomRightRadius, active.topRightRadius, "active bottom right");
                                 equal(inactive.bottomLeftRadius, inactive.topLeftRadius, "inactive bottom left");
                                 equal(inactive.bottomRightRadius, inactive.topRightRadius, "inactive bottom right");
-                                equal(inactive.children[0].radius, Math.min(1, scale) * 2, "stop radius");
+                                const stop = inactive.children.find(item => item.border !== undefined);
+                                equal(stop.radius, Math.min(1, scale) * 2, "stop radius");
                                 if (active.width < 0 || inactive.width < 0)
                                     throw new Error("negative track width");
                                 slider.destroy();

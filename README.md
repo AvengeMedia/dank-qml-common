@@ -59,13 +59,21 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSparkline.edgeExtension` extends the strokes past the end samples using their neighbouring slopes, bounded by the vertical insets. It does not add sample dots.
 
+`DankDialog.popout` uses the compact popout header and spacing. `headerActions` adds buttons before the shared window controls.
+
+`DankSlider.trackGradient` paints a continuous gradient across both track segments and follows RTL. The normal handle, gap, input and disabled behavior are preserved.
+
+`DankSaturationValuePicker` edits saturation and value for a given hue. Bind its three values and handle `colorChanged(saturation, value)`. Arrow keys adjust by 1%, Shift adjusts by 10%, Home/End set saturation, and PageUp/PageDown adjust value.
+
+`DankColorButton` displays `swatchColor` with a selection check and emits `clicked`. Set `selected` to reflect the current color. `DankColorSwatch.minPreviewAlpha: 0` displays the exact alpha over a checkerboard.
+
 ## The contract
 
 Shared code never imports app singletons. The app injects them once at startup (`DC.Style.theme = Theme`, `DC.Style.settings = SettingsData`, `DC.I18n.backend = I18n`, `DC.Paths.backend = Paths`, `DC.Log.backend = Log`, `DC.Host.session = SessionService`, `DC.Host.cache = CacheData`, with `import qs.DankCommon.Common as DC`), and `Style` reads every token through `theme?.x ?? fallback`. The gallery's `shell.qml` does the same with the stubs in `Common/` and `Services/`. Every consuming app must provide these singletons with at least the properties the library reads:
 
 ### `qs.Common` → Theme
 
-Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `primaryPressed`, `primarySelected`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceTextSecondary`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfaceHover`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceTint`, `surfaceLight`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `errorSelected`, `warning`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `floatingWindowSurface`, `floatingWindowNestedSurface`, `floatingWindowFieldColor`, `floatingWindowFieldBorderColor`, `floatingWindowFieldFocusedBorderColor`, `popupFieldColor`, `popupFieldBorderColor`, `popupFieldFocusedBorderColor`, `widgetBaseHoverColor`, `onPrimary`, `onSurface`, `onSurface_12`, `onSurface_38`.
+Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `primaryPressed`, `primarySelected`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceTextSecondary`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfaceHover`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceTint`, `surfaceLight`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `errorSelected`, `warning`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `floatingWindowSurface`, `floatingWindowNestedSurface`, `floatingWindowFieldColor`, `floatingWindowFieldBorderColor`, `floatingWindowFieldFocusedBorderColor`, `popupFieldColor`, `popupFieldBorderColor`, `popupFieldFocusedBorderColor`, `widgetBaseHoverColor`, `onPrimary`, `onSurface`, `onSurface_12`, `onSurface_38`, `contrastDark`, `contrastLight`.
  Widgets also read `tertiary`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainerHighest`, `surfaceBright`, `surfaceDim`, `outlineVariant`, `secondaryContainer`, `tertiaryContainer`, `onSurfaceVariant`, `onSurfaceVariant_30`, `onPrimaryContainer`, `onSecondaryContainer`, `onTertiaryContainer`, `onErrorContainer`, `inverseSurface`, `inverseOnSurface`, `tonalTintAlpha`.
 
 Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.

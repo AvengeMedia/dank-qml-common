@@ -12,15 +12,17 @@ FocusScope {
     property bool closeEnabled: true
     property bool acceptEnabled: true
     property bool embedded: true
+    property bool popout: false
     property bool opened: true
     readonly property bool nativeWindow: windowControls !== null
-    readonly property real contentSpacing: nativeWindow ? Style.spacingM : Style.spacingL
-    property real padding: nativeWindow ? Style.spacingL : Style.spacingXL
+    property real contentSpacing: nativeWindow || popout ? Style.spacingM : Style.spacingL
+    property real padding: nativeWindow || popout ? Style.spacingL : Style.spacingXL
     property real maximumWidth: Style.dialogMaxWidth
     property real maximumHeight: Infinity
     property color surfaceColor: Style.surfaceContainerHigh
     default property alias content: body.data
     property alias actions: actionFlow.data
+    property alias headerActions: header.actions
     readonly property alias contentItem: body
     readonly property real actionWidth: surface.width - padding * 2
     readonly property real contentHeight: scrollBody.implicitHeight
@@ -160,9 +162,10 @@ FocusScope {
                 controls: root.windowControls
                 title: root.title
                 iconName: root.iconName
-                titleFontSize: root.nativeWindow ? Style.fontSizeLarge : Style.fontSizeXLarge
-                wrapTitle: !root.nativeWindow
+                titleFontSize: root.nativeWindow || root.popout ? Style.fontSizeLarge : Style.fontSizeXLarge
+                wrapTitle: !root.nativeWindow && !root.popout
                 horizontalPadding: root.nativeWindow ? -1 : 0
+                verticalPadding: root.popout ? 0 : Style.spacingS
                 showDivider: root.nativeWindow
                 closeEnabled: root.closeEnabled
                 onCloseRequested: root.rejected()
@@ -178,6 +181,11 @@ FocusScope {
                 contentWidth: width
                 contentHeight: scrollBody.implicitHeight + root.focusPadding * 2
                 clip: true
+                verticalScrollBar.parent: surface
+                verticalScrollBar.targetFlickable: scroll
+                verticalScrollBar.x: I18n.isRtl ? Math.max(0, scroll.x - verticalScrollBar.width) : Math.min(surface.width - verticalScrollBar.width, scroll.x + scroll.width)
+                verticalScrollBar.y: scroll.y
+                verticalScrollBar.height: scroll.height
 
                 Column {
                     id: scrollBody
@@ -198,7 +206,7 @@ FocusScope {
                     Column {
                         id: body
                         width: parent.width
-                        spacing: Style.spacingM
+                        spacing: root.contentSpacing
                     }
                 }
             }

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls as Controls
+import Quickshell.Widgets
 import qs.DankCommon.Common
 
 Controls.Control {
@@ -41,6 +42,7 @@ Controls.Control {
     property color fillColor: Style.primary
     property color fillTextColor: Style.onPrimary
     property color trackColor: Style.secondaryContainer
+    property Gradient trackGradient: null
     property color trackTextColor: Style.onSecondaryContainer
     property bool usePopupTransparency: !Style.isFloatingWindow(slider)
     property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
@@ -199,6 +201,32 @@ Controls.Control {
         }
     }
 
+    component GradientTrack: ClippingRectangle {
+        id: gradientTrack
+
+        required property Item track
+
+        anchors.fill: parent
+        color: "transparent"
+        topLeftRadius: track.topLeftRadius
+        topRightRadius: track.topRightRadius
+        bottomLeftRadius: track.bottomLeftRadius
+        bottomRightRadius: track.bottomRightRadius
+
+        Rectangle {
+            id: gradientSurface
+
+            x: -gradientTrack.track.x
+            width: sliderTrack.width
+            height: gradientTrack.height
+            gradient: slider.trackGradient
+            transform: Scale {
+                origin.x: gradientSurface.width / 2
+                xScale: slider.mirrored ? -1 : 1
+            }
+        }
+    }
+
     component SideIcon: Loader {
         id: iconLoader
 
@@ -285,8 +313,16 @@ Controls.Control {
                 bottomLeftRadius: topLeftRadius
                 topRightRadius: slider.mirrored ? slider.outsideCorner : slider.insideCorner
                 bottomRightRadius: topRightRadius
-                color: slider.enabled ? slider.fillColor : Style.onSurface_38
+                color: !slider.enabled ? Style.onSurface_38 : slider.trackGradient ? "transparent" : slider.fillColor
                 visible: width > 0
+
+                Loader {
+                    anchors.fill: parent
+                    active: slider.enabled && slider.trackGradient !== null
+                    sourceComponent: GradientTrack {
+                        track: activeTrack
+                    }
+                }
             }
 
             StyledRect {
@@ -299,8 +335,16 @@ Controls.Control {
                 bottomLeftRadius: topLeftRadius
                 topRightRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomRightRadius: topRightRadius
-                color: slider.enabled ? Style.withAlpha(slider.trackColor, slider.trackOpacity) : Style.onSurface_12
+                color: !slider.enabled ? Style.onSurface_12 : slider.trackGradient ? "transparent" : Style.withAlpha(slider.trackColor, slider.trackOpacity)
                 visible: width > 0
+
+                Loader {
+                    anchors.fill: parent
+                    active: slider.enabled && slider.trackGradient !== null
+                    sourceComponent: GradientTrack {
+                        track: inactiveTrack
+                    }
+                }
 
                 StyledRect {
                     width: Style.sliderStopSize

@@ -13,6 +13,8 @@ Singleton {
     readonly property bool isLightMode: false
 
     property color primary: "#D0BCFF"
+    readonly property color contrastDark: "#000000"
+    readonly property color contrastLight: "#ffffff"
     property color primaryText: "#381E72"
     property color primaryContainer: "#4F378B"
     property color secondary: "#CCC2DC"

@@ -37,6 +37,8 @@ Singleton {
     readonly property bool isLightMode: theme?.isLightMode ?? false
 
     readonly property color primary: theme?.primary ?? "#D0BCFF"
+    readonly property color contrastDark: theme?.contrastDark ?? "#000000"
+    readonly property color contrastLight: theme?.contrastLight ?? "#ffffff"
     readonly property color primaryText: theme?.primaryText ?? "#381E72"
     readonly property color primaryContainer: theme?.primaryContainer ?? "#4F378B"
     readonly property color secondary: theme?.secondary ?? "#CCC2DC"

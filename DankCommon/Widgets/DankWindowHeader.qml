@@ -9,6 +9,7 @@ Item {
     property real titleFontSize: Style.fontSizeLarge
     property bool wrapTitle: false
     property real horizontalPadding: -1
+    property real verticalPadding: Style.spacingS
     property bool showDivider: true
     property string subtitle: ""
     property string iconName: ""
@@ -18,7 +19,7 @@ Item {
 
     signal closeRequested
 
-    implicitHeight: Math.max(Style.buttonHeightXS, titleColumn.implicitHeight) + Style.spacingS * 2
+    implicitHeight: Math.max(Style.buttonHeightXS, titleColumn.implicitHeight) + verticalPadding * 2
     height: implicitHeight
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
@@ -44,7 +45,7 @@ Item {
     Row {
         id: titleRow
         anchors.left: parent.left
-        anchors.leftMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingL
+        anchors.leftMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : root.verticalPadding
         anchors.right: buttons.left
         anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingM
         anchors.verticalCenter: parent.verticalCenter
@@ -90,7 +91,7 @@ Item {
     Row {
         id: buttons
         anchors.right: parent.right
-        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingM
+        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : root.verticalPadding
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingS
 

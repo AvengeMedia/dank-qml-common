@@ -18,6 +18,7 @@ Controls.Control {
     property alias rightIcon: slider.endIcon // ! TODO deprecate me after 1.7 release
     property bool iconsClickable: false
     property string insetIcon: ""
+    property real insetIconRotation: 0
     property string insetIconPosition: "start"
     property bool insetIconClickable: false
     property string insetIconTooltip: ""
@@ -358,6 +359,7 @@ Controls.Control {
             DankIcon {
                 id: movingInsetIcon
                 name: slider.insetIcon
+                rotation: slider.insetIconRotation
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.trackTextColor : slider.fillTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
@@ -376,6 +378,7 @@ Controls.Control {
 
             DankIcon {
                 name: slider.insetIcon
+                rotation: slider.insetIconRotation
                 size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.fillTextColor : slider.trackTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter

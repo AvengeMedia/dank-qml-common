@@ -119,7 +119,8 @@ ShellRoot {
             const position = button.mapToItem(item, 0, 0);
             equal(button.width, Style.buttonHeightXS, "button width");
             equal(button.height, Style.buttonHeightXS, "button height");
-            equal(position.y, (item.height - button.height) / 2, "button vertical center");
+            equal(position.y, Style.spacingS, "button top margin");
+            equal(item.height - position.y - button.height, Style.spacingS, "button bottom margin");
             if (i === 0)
                 continue;
             const previous = visibleButtons[i - 1];
@@ -134,7 +135,10 @@ ShellRoot {
         const firstX = first.mapToItem(item, 0, 0).x;
         const lastRight = last.mapToItem(item, last.width, 0).x;
         equal(locale.isRtl ? titleX >= lastRight : titleX + title.width <= firstX, true, "title does not overlap buttons");
-        equal(locale.isRtl ? firstX : item.width - lastRight, Style.spacingM, "outer button margin");
+        equal(locale.isRtl ? firstX : item.width - lastRight, Style.spacingS, "outer button margin");
+        const icon = descendants(item).find(child => child.name === item.iconName && child.size !== undefined);
+        const iconX = icon.mapToItem(item, 0, 0).x;
+        equal(locale.isRtl ? item.width - iconX - icon.width : iconX, Style.spacingS, "outer title margin");
     }
 
     function click(iconName) {

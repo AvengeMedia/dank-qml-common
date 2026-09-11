@@ -33,7 +33,7 @@ Item {
         const sizes = ["xs", "s", "m", "l", "xl"];
         const radii = [8, 8, 12, 16, 28];
         const tracks = [16, 24, 40, 56, 96];
-        const handles = [44, 44, 44, 68, 108];
+        const handles = [32, 32, 44, 68, 108];
         try {
             for (const [strength, scale] of [[0, 0], [25, 0.5], [50, 1], [60, 4 / 3], [100, 8 / 3]]) {
                 theme.radiusStrength = strength;

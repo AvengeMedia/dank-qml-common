@@ -50,6 +50,8 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSlider.startIcon` and `endIcon` follow RTL. Set `iconsClickable: true` to decrease and increase the value using the slider's keyboard step. Both actions use `sliderValueChanged` and `sliderDragFinished`. The old `leftIcon` and `rightIcon` names remain aliases.
 
+`DankSlider.handleVariant` accepts `"desktop"` (default, 6 px handle, 4 px pressed) or `"standard"` (4 px, 2 px pressed). Desktop handles are 32 px tall on xs and s sliders; larger sizes retain their handle height. Both keep the selected size's track. Desktop metrics use `sliderHandleWidthDesktop`, `sliderHandleWidthDesktopPressed` and `sliderHandleHeightDesktop` theme tokens.
+
 `DankSlider.centerMinimum` places `minimum` halfway along the track and fills the track up to the handle. The remaining half covers `minimum` through `maximum`; positions before the midpoint select `minimum`. For a 100–200 range, 100 is at the centre, 150 at three-quarters, and 200 at the end. RTL reverses the direction.
 
 `DankSlider.insetIcon` places an icon inside medium and larger standard sliders. `insetIconPosition` accepts `"start"` or `"end"` and follows RTL. Set `insetIconClickable` and `insetIconTooltip` for an action, and handle `insetIconClicked`. Clicking activates the icon; dragging from it adjusts the slider. `focusTargets` exposes the icon action and slider for explicit keyboard traversal. `fillTextColor` and `trackTextColor` control icon contrast on their respective track segments. Value bubbles render above clipped content.

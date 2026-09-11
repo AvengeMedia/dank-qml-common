@@ -30,6 +30,9 @@ Controls.Control {
     property int decimals: 0
     property bool alwaysShowValue: false
     property string size: "xs"
+    property string handleVariant: "desktop"
+    readonly property real handleWidth: handleVariant === "desktop" ? Style.sliderHandleWidthDesktop : Style.sliderHandleWidth
+    readonly property real pressedHandleWidth: handleVariant === "desktop" ? Style.sliderHandleWidthDesktopPressed : Style.sliderHandleWidth / 2
     readonly property bool containsMouse: sliderMouseArea.containsMouse
     readonly property var focusTargets: [startIconLoader.action, insetAction.enabled ? insetAction : null, slider, endIconLoader.action].filter(item => item && item.enabled)
 
@@ -77,7 +80,7 @@ Controls.Control {
     readonly property real handleHeight: {
         switch (size) {
         case "s":
-            return Style.sliderHandleHeightS;
+            return handleVariant === "desktop" ? Style.sliderHandleHeightDesktop : Style.sliderHandleHeightS;
         case "m":
             return Style.sliderHandleHeightM;
         case "l":
@@ -85,7 +88,7 @@ Controls.Control {
         case "xl":
             return Style.sliderHandleHeightXL;
         default:
-            return Style.sliderHandleHeight;
+            return handleVariant === "desktop" ? Style.sliderHandleHeightDesktop : Style.sliderHandleHeight;
         }
     }
     readonly property real trackCornerRadius: {
@@ -114,7 +117,7 @@ Controls.Control {
     readonly property int keyStep: step > 1 ? step : Math.max(1, Math.round((maximum - minimum) / 100))
     readonly property int pageSteps: Math.max(1, Math.min(10, Math.round((maximum - minimum) / keyStep / 10)))
 
-    height: handleHeight + Style.spacingXS
+    height: Math.max(handleHeight, Style.sliderHandleHeight) + Style.spacingXS
     readonly property int minimumValue: minimum
     readonly property int maximumValue: maximum
     readonly property int stepSize: keyStep
@@ -146,9 +149,9 @@ Controls.Control {
     }
 
     function updateValueFromPosition(x) {
-        if (sliderTrack.width <= sliderHandle.width)
+        if (sliderTrack.width <= handleWidth)
             return;
-        let ratio = Math.max(0, Math.min(1, (x - sliderHandle.width / 2) / (sliderTrack.width - sliderHandle.width)));
+        let ratio = Math.max(0, Math.min(1, (x - handleWidth / 2) / (sliderTrack.width - handleWidth)));
         if (mirrored)
             ratio = 1 - ratio;
         if (centerMinimum)
@@ -248,14 +251,14 @@ Controls.Control {
         Item {
             id: sliderTrack
 
-            readonly property real travel: width - sliderHandle.width
-            readonly property real handleLeft: Math.max(0, Math.min(travel, travel * slider.visualRatio))
+            readonly property real travel: Math.max(0, width - slider.handleWidth)
+            readonly property real handleLeft: slider.handleWidth / 2 + travel * slider.visualRatio - sliderHandle.width / 2
             readonly property real gap: Style.sliderHandleGap
             readonly property real filledStart: slider.mirrored ? sliderHandle.x + sliderHandle.width + gap : 0
             readonly property real filledEnd: slider.mirrored ? width : sliderHandle.x - gap
             readonly property real emptyStart: slider.mirrored ? 0 : sliderHandle.x + sliderHandle.width + gap
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
-            readonly property real tickSpacing: slider.tickCount > 1 ? (width - Style.sliderHandleWidth) / (slider.tickCount - 1) : 0
+            readonly property real tickSpacing: slider.tickCount > 1 ? travel / (slider.tickCount - 1) : 0
             readonly property bool ticksVisible: slider.showStops && slider.tickCount > 0 && tickSpacing >= Style.sliderTickSize + Style.sliderHandleGap
             readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
             readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
@@ -268,7 +271,7 @@ Controls.Control {
             }
 
             width: parent.width - (slider.startIcon.length > 0 ? startIconLoader.width + Style.spacingM : 0) - (slider.endIcon.length > 0 ? endIconLoader.width + Style.spacingM : 0)
-            height: slider.handleHeight
+            height: Math.max(slider.handleHeight, Style.sliderHandleHeight)
             anchors.verticalCenter: parent.verticalCenter
 
             StyledRect {
@@ -315,7 +318,7 @@ Controls.Control {
                 StyledRect {
                     required property int index
                     readonly property real tickRatio: slider.ratioForValue(slider.minimum + index * slider.step)
-                    readonly property real tickX: sliderHandle.width / 2 + sliderTrack.travel * (slider.mirrored ? 1 - tickRatio : tickRatio)
+                    readonly property real tickX: slider.handleWidth / 2 + sliderTrack.travel * (slider.mirrored ? 1 - tickRatio : tickRatio)
                     readonly property bool onFilled: slider.mirrored ? tickX > sliderHandle.x + sliderHandle.width : tickX < sliderHandle.x
                     width: Style.sliderTickSize
                     height: width
@@ -330,7 +333,7 @@ Controls.Control {
             StyledRect {
                 id: sliderHandle
 
-                width: sliderMouseArea.pressed ? Style.sliderHandleWidth / 2 : Style.sliderHandleWidth
+                width: sliderMouseArea.pressed ? slider.pressedHandleWidth : slider.handleWidth
                 height: slider.handleHeight
                 radius: Style.fullRadius(width, height)
                 x: sliderTrack.handleLeft

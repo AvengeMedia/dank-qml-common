@@ -119,6 +119,42 @@ ShellRoot {
             slider.iconsClickable = false;
             input.wait(20);
             equal(slider.focusTargets.length, 1, "disabling icon actions restores focus targets");
+            slider.endIcon = "";
+            slider.width = 180;
+            slider.x = 200;
+            slider.y = 100;
+            slider.minimum = 0;
+            slider.maximum = 100;
+            slider.step = 1;
+            for (const variant of ["standard", "desktop"]) {
+                slider.handleVariant = variant;
+                for (const rtl of [false, true]) {
+                    locale.isRtl = rtl;
+                    for (const rotation of [0, -90]) {
+                        slider.rotation = rotation;
+                        const track = slider.contentItem.children[1];
+                        const handle = track.children.find(item => item.height === slider.handleHeight && item.border !== undefined && item.color === slider.fillColor);
+                        if (!handle)
+                            throw new Error("slider handle missing");
+                        for (const value of [0, 50, 100]) {
+                            slider.value = value;
+                            input.wait(250);
+                            equal(handle.width, variant === "desktop" ? 6 : 4, "resting handle width");
+                            const center = handle.x + handle.width / 2;
+                            input.mousePress(track, center, track.height / 2);
+                            input.wait(250);
+                            equal(handle.width, variant === "desktop" ? 4 : 2, "pressed handle width");
+                            equal(handle.x + handle.width / 2, center, "press keeps the handle centered");
+                            equal(slider.value, value, "press does not change the indicated value");
+                            input.mouseMove(track, rtl ? 0 : track.width, track.height / 2);
+                            equal(slider.value, 100, "drag reaches maximum");
+                            input.mouseMove(track, rtl ? track.width : 0, track.height / 2);
+                            equal(slider.value, 0, "drag reaches minimum");
+                            input.mouseRelease(track, center, track.height / 2);
+                        }
+                    }
+                }
+            }
             const track = slider.contentItem.children[1];
             const trackWidth = track.width;
             slider.visible = false;

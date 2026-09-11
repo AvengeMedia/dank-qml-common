@@ -229,6 +229,9 @@ Singleton {
     readonly property real dialogMaxWidth: theme?.dialogMaxWidth ?? 560
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
+    readonly property real sliderHandleWidthDesktop: theme?.sliderHandleWidthDesktop ?? 6
+    readonly property real sliderHandleWidthDesktopPressed: theme?.sliderHandleWidthDesktopPressed ?? 4
+    readonly property real sliderHandleHeightDesktop: theme?.sliderHandleHeightDesktop ?? 32
     readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44
     readonly property real sliderHandleGap: theme?.sliderHandleGap ?? 6
     readonly property real sliderTrackHeightS: theme?.sliderTrackHeightS ?? 24

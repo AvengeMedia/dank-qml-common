@@ -27,6 +27,7 @@ StyledButton {
     ListView.onReused: {
         _pooled = false;
         visible = true;
+        opacity = 1;
     }
     z: 1
 

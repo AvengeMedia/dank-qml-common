@@ -59,6 +59,8 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSparkline.edgeExtension` extends the strokes past the end samples using their neighbouring slopes, bounded by the vertical insets. It does not add sample dots.
 
+`WindowCaptureGuard.prepare()` sets `active` and waits for a rendered frame before emitting `ready`. Bind the transparent window's content and blur visibility to `!active`; hide the window and start capture on `ready`. Call `cancel()` when restoring or abandoning the capture.
+
 `DankDialog.popout` uses the compact popout header and spacing. `headerActions` adds buttons before the shared window controls.
 
 `DankSlider.trackGradient` paints a continuous gradient across both track segments and follows RTL. The normal handle, gap, input and disabled behavior are preserved.

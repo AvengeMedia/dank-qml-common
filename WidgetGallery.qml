@@ -298,6 +298,17 @@ Column {
             minutes: "08"
             dateText: Qt.formatDate(new Date(), Qt.DefaultLocaleShortDate)
         }
+
+        DankAnalogClock {
+            width: Math.min(Theme.clockFaceSize, root.width)
+            height: width
+            hours: 10
+            minutes: 8
+            seconds: 20
+            showNumbers: true
+            dateText: Qt.formatDate(new Date(), Qt.DefaultLocaleShortDate)
+            backgroundColor: Theme.surfaceContainerHigh
+        }
     }
 
     Section {

@@ -141,7 +141,7 @@ Rectangle {
         contentItem: Rectangle {
             id: contentSurface
             color: Style.surface
-            radius: Style.cornerRadius
+            radius: Style.windowRadius
 
             ElevationShadow {
                 id: shadowLayer

@@ -186,6 +186,7 @@ Singleton {
     readonly property real cornerRadiusFull: shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
+    readonly property real windowRadius: theme?.windowRadius ?? cornerRadiusL
 
     function scaledRadius(radius, limit) {
         return Shape.scaledRadius(radius, limit, shapeScale);

@@ -72,7 +72,7 @@ FloatingWindow {
 
     Rectangle {
         anchors.fill: parent
-        radius: Style.cornerRadius
+        radius: Style.windowRadius
         color: Style.floatingWindowSurface
     }
 
@@ -80,7 +80,7 @@ FloatingWindow {
         targetWindow: fileBrowserModal
         blurWidth: fileBrowserModal.visible ? fileBrowserModal.width : 0
         blurHeight: fileBrowserModal.visible ? fileBrowserModal.height : 0
-        blurRadius: Style.cornerRadius
+        blurRadius: Style.windowRadius
     }
 
     Loader {
@@ -118,7 +118,7 @@ FloatingWindow {
 
     Rectangle {
         anchors.fill: parent
-        radius: Style.cornerRadius
+        radius: Style.windowRadius
         color: "transparent"
         border.color: Style.blurBorderColor
         border.width: Style.blurBorderWidth

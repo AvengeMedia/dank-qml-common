@@ -450,7 +450,7 @@ FocusScope {
                 y: menuContainer.y
                 width: menuContainer.width
                 height: menuContainer.height
-                radius: Style.cornerRadiusM
+                radius: Style.windowRadius
             }
 
             MouseArea {
@@ -509,7 +509,7 @@ FocusScope {
                     color: "transparent"
                     border.color: "transparent"
                     border.width: 0
-                    radius: Style.cornerRadiusM
+                    radius: Style.windowRadius
                     opacity: shown ? 1 : 0
                     scale: shown ? 1 : Style.popupEnterScale
                     transformOrigin: dropdownMenu.opensUpwards ? Item.Bottom : Item.Top

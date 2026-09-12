@@ -40,7 +40,7 @@ Item {
         width: 400
         height: 160
         color: Style.surfaceContainer
-        radius: Style.cornerRadiusXL
+        radius: Style.windowRadius
         border.color: Style.outlineMedium
         border.width: 1
 

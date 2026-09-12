@@ -15,7 +15,7 @@ StyledRect {
     width: 200
     height: sortColumn.height + Style.spacingM * 2
     color: surfaceColor
-    radius: Style.cornerRadius
+    radius: Style.windowRadius
     border.color: Style.outlineMedium
     border.width: 1
     visible: false

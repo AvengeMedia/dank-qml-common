@@ -143,7 +143,7 @@ FocusScope {
                 anchors.fill: parent
                 visible: !root.embedded
                 level: Style.elevationLevel3
-                targetRadius: Style.cornerRadiusXL
+                targetRadius: Style.windowRadius
                 targetColor: root.surfaceColor
                 shadowEnabled: Style.elevationEnabled
             }

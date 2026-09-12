@@ -170,7 +170,7 @@ FocusScope {
         width: root.faceSize + Style.spacingXL * 3
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent
-        radius: Style.cornerRadiusXL
+        radius: Style.windowRadius
         color: Style.surfaceContainerHigh
         scale: root._opened ? 1 : Style.popupEnterScale
 

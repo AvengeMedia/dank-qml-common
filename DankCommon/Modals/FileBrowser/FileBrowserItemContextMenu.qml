@@ -86,7 +86,7 @@ Popup {
 
     contentItem: Rectangle {
         color: Style.floatingSurface
-        radius: Style.cornerRadius
+        radius: Style.windowRadius
         border.color: Qt.rgba(Style.outline.r, Style.outline.g, Style.outline.b, 0.08)
         border.width: 1
 

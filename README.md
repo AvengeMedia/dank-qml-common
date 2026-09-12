@@ -130,7 +130,7 @@ Consuming apps keep their own POEditor projects app-only (their extractors must 
 
 ## Making changes
 
-Run `node tests/run.mjs` for the shape, foreground and QML widget regressions. Requires Node.js and Quickshell with its Qt QML modules. The widget tests run offscreen with temporary settings. `prek run common-tests --all-files` runs the same suite through the repository hook; GitHub Actions runs it on pushes and pull requests.
+Run `node tests/run.mjs` for the shape, foreground and QML widget regressions. Requires Node.js and Quickshell with its Qt QML modules. The widget tests run offscreen, two at a time, with separate Quickshell processes and temporary settings. `prek run common-tests --all-files` runs the same suite through the repository hook; GitHub Actions runs it on pushes and pull requests.
 
 The submodule is a real worktree; edit it in place inside whichever app you are working on and the running app picks changes up live. Land the library PR first, then bump the pointer in the app (`make update-common` keeps the submodule and nix flake input in lockstep; app CI re-syncs flake.lock automatically if they drift). If a change reads a new app-singleton property, add it to the root stubs and the contract above in the same PR; the gallery won't run without it. Other consumers upgrade whenever they bump the pointer - no lockstep.
 

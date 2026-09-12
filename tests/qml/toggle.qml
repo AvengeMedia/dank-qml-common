@@ -11,7 +11,7 @@ ShellRoot {
         property bool isRtl: false
     }
     property QtObject settings: QtObject {
-        property bool reduceMotion: false
+        property bool reduceMotion: true
     }
 
     Component.onCompleted: {
@@ -51,7 +51,8 @@ ShellRoot {
 
     function checkCleared(layer) {
         input.mouseMove(window.contentItem, 10, 200);
-        input.wait(1000);
+        input.tryCompare(layer, "stateOpacity", 0, 1000);
+        input.tryCompare(layer.children[1], "animating", false, 1500);
         equal(toggle.focusTarget.pressed, false, "released button");
         equal(layer.stateOpacity, 0, "row highlight after pointer exit");
         equal(layer.children[0].color.a, 0, "row background after pointer exit");
@@ -60,12 +61,13 @@ ShellRoot {
 
     function run() {
         try {
+            input.waitForPolish(toggle);
             const layer = toggle.children[1].item.children[0];
             for (const rtl of [false, true]) {
                 locale.isRtl = rtl;
                 const rowX = rtl ? 480 : 80;
                 const trackX = rtl ? 40 : 520;
-                input.wait(20);
+                input.waitForPolish(toggle);
                 input.mouseMove(toggle, rowX, 20);
                 equal(layer.stateOpacity, Style.stateLayerHover, "row hover");
                 input.mouseMove(toggle, trackX, 20);
@@ -82,7 +84,6 @@ ShellRoot {
                 input.mouseMove(toggle, rowX, 20);
                 input.mousePress(toggle, rowX, 20);
                 input.mouseMove(toggle, rowX + 4, 20);
-                input.wait(1000);
                 equal(layer.stateOpacity, Style.stateLayerPressed, "held row");
                 input.mouseRelease(toggle, rowX + 4, 20);
                 checkCleared(layer);
@@ -93,6 +94,10 @@ ShellRoot {
                 equal(toggle.checked, checked, "canceled press");
                 checkCleared(layer);
             }
+            settings.reduceMotion = false;
+            input.mouseClick(toggle, 100, 20);
+            equal(layer.children[1].animating, true, "ripple starts after click");
+            checkCleared(layer);
             settings.reduceMotion = true;
             toggle.toggling = true;
             input.mouseMove(toggle, 100, 20);
@@ -111,13 +116,13 @@ ShellRoot {
             console.log("PASS toggle hover, repeated clicks, holds, cancellation, RTL and disabled input");
             Qt.quit();
         } catch (error) {
-            console.error(error);
+            console.error(error, error.stack);
             Qt.exit(1);
         }
     }
 
     Timer {
-        interval: 300
+        interval: 0
         running: true
         onTriggered: root.run()
     }

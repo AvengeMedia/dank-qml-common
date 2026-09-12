@@ -1,131 +1,97 @@
 import QtQuick
+import QtTest
+import Quickshell
 import qs.DankCommon.Widgets
 import qs.DankCommon.Common
 
-Item {
+ShellRoot {
     id: root
-    width: 640
-    height: 200
 
-    property QtObject theme: QtObject {
-        property int radiusStrength: 50
-        property int currentAnimationSpeed: Style.AnimationSpeed.Short
-    }
+    property var events: []
     property QtObject locale: QtObject {
         property bool isRtl: false
     }
     property QtObject settings: QtObject {
-        property bool reduceMotion: false
+        property bool reduceMotion: true
     }
-    property var group: null
-    property var segments: []
-    property var before: []
-    property int scenario: 0
-    property int samples: 0
-    property bool shapeChanged: false
 
-    Component {
-        id: factory
+    TestCase {
+        id: input
+        when: false
+        name: "button-group"
+    }
+
+    FloatingWindow {
+        visible: true
+        implicitWidth: 640
+        implicitHeight: 200
+
         DankButtonGroup {
+            id: group
+            x: 20
+            y: 20
             model: ["Power save", "Balanced", "Performance"]
             currentIndex: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            scale: Math.min(1, 360 / implicitWidth)
-        }
-    }
-
-    function equal(actual, expected, label) {
-        if (Math.abs(actual - expected) < 0.001)
-            return;
-        throw new Error(label + ": " + actual + " != " + expected);
-    }
-
-    function geometry(item) {
-        const point = item.mapToItem(root, 0, 0);
-        return [point.x, point.y, item.width, item.height, item.scale];
-    }
-
-    function content(item) {
-        const result = [];
-        for (const child of item.children ?? []) {
-            if (child.name === "check" || child.text === "Balanced")
-                result.push(child);
-            result.push(...content(child));
-        }
-        return result;
-    }
-
-    function advance() {
-        if (scenario === 8) {
-            console.log("PASS 8 button group press and release scenarios");
-            Qt.quit();
-            return;
-        }
-        locale.isRtl = (scenario & 1) !== 0;
-        settings.reduceMotion = (scenario & 2) !== 0;
-        const fill = (scenario & 4) !== 0;
-        group = factory.createObject(root, fill ? {
-            fillWidth: true,
-            width: 600
-        } : {});
-        Qt.callLater(start);
-    }
-
-    function start() {
-        try {
-            segments = [...group.children].filter(item => item.selected !== undefined);
-            equal(segments.length, 3, "segment count");
-            const items = [group, ...segments, ...content(segments[1])];
-            before = items.map(item => ({
-                        item: item,
-                        geometry: geometry(item)
-                    }));
-            samples = 0;
-            shapeChanged = false;
-            segments[1].animateClick();
-            sampler.start();
-        } catch (error) {
-            console.error(error);
-            Qt.exit(1);
-        }
-    }
-
-    Timer {
-        id: sampler
-        interval: 16
-        repeat: true
-        onTriggered: {
-            try {
-                for (const entry of root.before) {
-                    const actual = root.geometry(entry.item);
-                    for (let i = 0; i < actual.length; i++)
-                        root.equal(actual[i], entry.geometry[i], "stable content geometry " + i);
-                }
-                const selected = root.segments[1];
-                if (selected.topLeftRadius < root.group.outerRadius - 0.01)
-                    root.shapeChanged = true;
-                if (++root.samples < 36)
-                    return;
-                stop();
-                if (!root.shapeChanged)
-                    throw new Error("Selected button did not change shape when pressed");
-                root.equal(selected.topLeftRadius, root.group.outerRadius, "released shape");
-                root.equal(root.group.currentIndex, 1, "selection after repeated click");
-                root.group.destroy();
-                root.scenario++;
-                Qt.callLater(root.advance);
-            } catch (error) {
-                stop();
-                console.error("Scenario " + root.scenario + ": " + error);
-                Qt.exit(1);
+            onSelectionChanged: (index, selected) => {
+                root.events.push([index, selected]);
+                if (selected && !multiSelect)
+                    currentIndex = index;
             }
         }
     }
 
+    function equal(actual, expected, label) {
+        if (JSON.stringify(actual) === JSON.stringify(expected))
+            return;
+        throw new Error(label + ": " + JSON.stringify(actual) + " != " + JSON.stringify(expected));
+    }
+
     Component.onCompleted: {
-        Style.theme = theme;
+        Quickshell.watchFiles = false;
         Style.settings = settings;
         I18n.backend = locale;
-        Qt.callLater(advance);
+    }
+
+    Timer {
+        interval: 0
+        running: true
+        onTriggered: {
+            try {
+                if (!input.waitForRendering(group, 2000))
+                    throw new Error("window did not render before input");
+                for (const rtl of [false, true]) {
+                    locale.isRtl = rtl;
+                    group.enabled = true;
+                    group.multiSelect = false;
+                    group.currentIndex = 1;
+                    input.waitForPolish(group);
+                    const segments = [...group.children].filter(item => item.selected !== undefined);
+                    root.events = [];
+                    input.mouseClick(segments[0], segments[0].width / 2, segments[0].height / 2);
+                    equal(group.currentIndex, 0, "click changes selection");
+                    equal(root.events, [[0, true], [1, false]], "single-selection signals");
+                    input.keyClick(rtl ? Qt.Key_Left : Qt.Key_Right);
+                    equal(group.currentIndex, 1, "logical keyboard navigation");
+                    group.multiSelect = true;
+                    group.currentSelection = ["Balanced"];
+                    root.events = [];
+                    input.mouseClick(segments[0], segments[0].width / 2, segments[0].height / 2);
+                    equal(group.currentSelection, ["Balanced", "Power save"], "multiple selections coexist");
+                    input.mouseClick(segments[0], segments[0].width / 2, segments[0].height / 2);
+                    equal(group.currentSelection, ["Balanced"], "click removes only that selection");
+                    equal(root.events, [[0, true], [0, false]], "multi-selection signals");
+                    group.enabled = false;
+                    root.events = [];
+                    input.mouseClick(segments[2], segments[2].width / 2, segments[2].height / 2);
+                    input.keyClick(Qt.Key_Space);
+                    equal(root.events, [], "disabled group rejects input");
+                }
+                console.log("PASS button group selection, signals, RTL keyboard navigation and disabled input");
+                Qt.quit();
+            } catch (error) {
+                console.error(error, error.stack);
+                Qt.exit(1);
+            }
+        }
     }
 }

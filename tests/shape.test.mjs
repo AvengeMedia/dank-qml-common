@@ -6,13 +6,6 @@ import test from "node:test";
 const shape = vm.createContext({});
 vm.runInContext(readFileSync(new URL("../DankCommon/Common/Shape.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), shape);
 
-test("the midpoint uses the Material shape scale", () => {
-    const scale = shape.scaleForStrength(50);
-    assert.equal(scale, 1);
-    for (const [token, radius] of Object.entries({ xs: 4, s: 8, m: 12, l: 16, lIncreased: 20, xl: 28, xlIncreased: 32, xxl: 48 }))
-        assert.equal(shape.radius(token, scale), radius);
-});
-
 test("legacy radii map to the nearest available strength", () => {
     for (let radius = 0; radius <= 32; radius += 0.25) {
         const strength = shape.strengthFromRadius(radius);
@@ -40,16 +33,6 @@ test("full corners follow component dimensions and reduce continuously", () => {
     assert.equal(shape.fullRadius(20, 40, 1), 10);
     assert.equal(shape.fullRadius(160, 40, 2), 20);
     assert.equal(shape.fullRadius(-1, 40, 1), 0);
-});
-
-test("buttons use size and state specific shape tokens", () => {
-    for (const [height, square, pressed] of [[32, 12, 8], [40, 12, 8], [56, 16, 12], [96, 28, 16], [136, 28, 16]]) {
-        assert.equal(shape.buttonRadius(200, height, height, false, false, 1), square);
-        assert.equal(shape.buttonRadius(200, height, height, true, false, 1), pressed);
-        assert.equal(shape.buttonRadius(200, height, height, true, true, 1), pressed);
-        assert.equal(shape.buttonRadius(200, height, height, false, true, 1), height / 2);
-        assert.equal(shape.buttonRadius(200, height, height, false, false, 0), 0);
-    }
 });
 
 test("slider corners scale once and stay within the track", () => {

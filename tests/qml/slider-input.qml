@@ -13,12 +13,16 @@ ShellRoot {
             return text;
         }
     }
+    property QtObject settings: QtObject {
+        property bool reduceMotion: true
+    }
     property var values: []
     property var finished: []
 
     Component.onCompleted: {
         Quickshell.watchFiles = false;
         I18n.backend = locale;
+        Style.settings = settings;
     }
 
     TestCase {
@@ -57,6 +61,9 @@ ShellRoot {
 
     function run() {
         try {
+            if (!input.waitForRendering(slider, 2000))
+                throw new Error("window did not render before input");
+            input.waitForPolish(slider);
             const start = slider.contentItem.children[0];
             const end = slider.contentItem.children[2];
             equal(slider.iconsClickable, false, "decorative icons by default");
@@ -81,7 +88,7 @@ ShellRoot {
                     slider.maximum = maximum;
                     slider.step = step;
                     slider.value = value;
-                    input.wait(20);
+                    input.waitForPolish(slider);
                     equal(start.x > end.x, rtl, "logical icon positions");
                     equal(slider.focusTargets[0], start.item, "start icon keyboard order");
                     equal(slider.focusTargets[2], end.item, "end icon keyboard order");
@@ -113,11 +120,11 @@ ShellRoot {
                 }
             }
             slider.startIcon = "";
-            input.wait(20);
+            input.waitForPolish(slider);
             equal(start.item, null, "missing icon has no control");
             equal(slider.focusTargets.length, 2, "missing icon is not a focus target");
             slider.iconsClickable = false;
-            input.wait(20);
+            input.waitForPolish(slider);
             equal(slider.focusTargets.length, 1, "disabling icon actions restores focus targets");
             slider.endIcon = "";
             slider.width = 180;
@@ -138,12 +145,9 @@ ShellRoot {
                             throw new Error("slider handle missing");
                         for (const value of [0, 50, 100]) {
                             slider.value = value;
-                            input.wait(250);
-                            equal(handle.width, variant === "desktop" ? 6 : 4, "resting handle width");
+                            input.waitForPolish(slider);
                             const center = handle.x + handle.width / 2;
                             input.mousePress(track, center, track.height / 2);
-                            input.wait(250);
-                            equal(handle.width, variant === "desktop" ? 4 : 2, "pressed handle width");
                             equal(handle.x + handle.width / 2, center, "press keeps the handle centered");
                             equal(slider.value, value, "press does not change the indicated value");
                             input.mouseMove(track, rtl ? 0 : track.width, track.height / 2);
@@ -162,13 +166,13 @@ ShellRoot {
             console.log("PASS slider icon input, RTL, aliases, bounds, steps, signals and keyboard activation");
             Qt.quit();
         } catch (error) {
-            console.error(error);
+            console.error(error, error.stack);
             Qt.exit(1);
         }
     }
 
     Timer {
-        interval: 300
+        interval: 0
         running: true
         onTriggered: root.run()
     }

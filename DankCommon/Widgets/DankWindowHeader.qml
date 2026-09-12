@@ -70,7 +70,7 @@ Item {
                 width: parent.width
                 text: root.title
                 font.pixelSize: root.titleFontSize
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 color: Style.surfaceText
                 horizontalAlignment: Text.AlignLeft
                 elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight

@@ -33,7 +33,7 @@ StyledRect {
             text: I18n.tr("Sort By", "file browser sort menu section header")
             font.pixelSize: Style.fontSizeSmall
             color: Style.surfaceTextMedium
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
         }
 
         Repeater {
@@ -106,7 +106,7 @@ StyledRect {
             text: I18n.tr("Order", "file browser sort menu section header")
             font.pixelSize: Style.fontSizeSmall
             color: Style.surfaceTextMedium
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             topPadding: Style.spacingXS
         }
 

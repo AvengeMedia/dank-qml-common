@@ -68,7 +68,8 @@ Item {
         height: root.rowHeight
         color: root.color
         font.pixelSize: root.displaySize
-        font.weight: Font.Bold
+        // only Normal resolves to the variable face, other weights pick axis-less static instances
+        font.weight: Font.Normal
         font.features: ({
                 "tnum": 1
             })
@@ -91,7 +92,7 @@ Item {
         height: root.supportLine
         color: root.supportingColor
         font.pixelSize: Style.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Style.fontWeightMedium
         horizontalAlignment: root.sideSupport ? Text.AlignLeft : Text.AlignHCenter
         elide: Text.ElideRight
         visible: text !== ""

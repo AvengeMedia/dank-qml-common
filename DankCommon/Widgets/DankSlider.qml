@@ -601,7 +601,7 @@ Controls.Control {
                     }
                     font.pixelSize: Style.fontSizeSmall
                     color: slider.fillTextColor
-                    font.weight: Font.Medium
+                    font.weight: Style.fontWeightMedium
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     font.hintingPreference: Font.PreferFullHinting

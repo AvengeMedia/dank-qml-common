@@ -15,6 +15,14 @@ Singleton {
         source: Qt.resolvedUrl("../assets/fonts/google-sans-flex/GoogleSansFlex.ttf")
     }
 
+    Instantiator {
+        model: [100, 200, 300, 500, 600, 700, 800, 900]
+        delegate: FontLoader {
+            required property int modelData
+            source: Qt.resolvedUrl(`../assets/fonts/google-sans-flex/GoogleSansFlex-${modelData}.ttf`)
+        }
+    }
+
     FontLoader {
         id: firaCodeFont
         source: Qt.resolvedUrl("../assets/fonts/nerd-fonts/FiraCodeNerdFont-Regular.ttf")

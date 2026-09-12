@@ -70,7 +70,7 @@ ColumnLayout {
             StyledText {
                 text: root.title
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
             }

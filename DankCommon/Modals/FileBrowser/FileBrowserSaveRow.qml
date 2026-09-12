@@ -103,7 +103,7 @@ Row {
                 text: I18n.tr("Use this folder", "file browser folder selection confirm button")
                 color: Style.primaryText
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 anchors.verticalCenter: parent.verticalCenter
             }
         }

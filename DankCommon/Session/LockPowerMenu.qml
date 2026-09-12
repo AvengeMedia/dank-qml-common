@@ -570,7 +570,7 @@ Rectangle {
                             text: I18n.tr("Power Options")
                             font.pixelSize: Style.fontSizeLarge
                             color: Style.surfaceText
-                            font.weight: Font.Medium
+                            font.weight: Style.fontWeightMedium
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
@@ -670,7 +670,7 @@ Rectangle {
                                             }
                                             return Style.surfaceText;
                                         }
-                                        font.weight: Font.Medium
+                                        font.weight: Style.fontWeightMedium
                                         anchors.horizontalCenter: parent.horizontalCenter
                                     }
 
@@ -685,7 +685,7 @@ Rectangle {
                                             text: gridButtonRect.actionData.key
                                             font.pixelSize: Style.fontSizeSmall - 1
                                             color: Style.surfaceTextSecondary
-                                            font.weight: Font.Medium
+                                            font.weight: Style.fontWeightMedium
                                             anchors.centerIn: parent
                                         }
                                     }
@@ -794,7 +794,7 @@ Rectangle {
                                             }
                                             return Style.surfaceText;
                                         }
-                                        font.weight: Font.Medium
+                                        font.weight: Style.fontWeightMedium
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
                                 }
@@ -812,7 +812,7 @@ Rectangle {
                                         text: listButtonRect.actionData.key
                                         font.pixelSize: Style.fontSizeSmall
                                         color: Style.surfaceTextSecondary
-                                        font.weight: Font.Medium
+                                        font.weight: Style.fontWeightMedium
                                         anchors.centerIn: parent
                                     }
                                 }

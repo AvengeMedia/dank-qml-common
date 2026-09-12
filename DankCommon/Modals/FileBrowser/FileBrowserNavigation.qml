@@ -69,7 +69,7 @@ Row {
                 text: currentPath.replace("file://", "")
                 font.pixelSize: Style.fontSizeMedium
                 color: Style.surfaceText
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 anchors.fill: parent
                 anchors.leftMargin: Style.spacingS
                 anchors.rightMargin: Style.spacingS

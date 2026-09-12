@@ -99,7 +99,7 @@ FocusScope {
             StyledText {
                 text: toggle.text
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 color: toggle.enabled ? Style.surfaceText : Style.onSurface_38
                 width: parent.width
                 wrapMode: Text.WordWrap

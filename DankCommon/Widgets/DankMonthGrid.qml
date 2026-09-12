@@ -82,7 +82,7 @@ Item {
             height: root.cellHeight
             text: root.weekNumberFor ? root.weekNumberFor(root.dateAt(index * root.columns)) : ""
             font.pixelSize: Style.fontSizeSmall
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             color: Style.onSurfaceVariant
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -101,7 +101,7 @@ Item {
             height: root.weekdayRowHeight
             text: root.weekdayLabels[index] ?? ""
             font.pixelSize: Style.fontSizeSmall
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             color: root.highlightWeekends && root.isWeekend(root.dateAt(index)) ? root.weekendColor : Style.onSurfaceVariant
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -188,7 +188,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: cell.dayDate.getDate()
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: cell.inMonth ? Font.Bold : Font.Medium
+                font.weight: cell.inMonth ? Style.fontWeightMedium : Style.fontWeight
                 color: {
                     if (cell.isSelected)
                         return Style.onPrimary;
@@ -225,7 +225,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "+" + cell.extraCount
                     font.pixelSize: Style.fontSizeSmall
-                    font.weight: Font.Bold
+                    font.weight: Style.fontWeightMedium
                     color: cell.isSelected ? Style.onPrimary : Style.primary
                     visible: cell.extraCount > 0
                 }

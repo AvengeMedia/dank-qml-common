@@ -114,6 +114,7 @@ StyledRect {
             height: Math.max(scroll.height, contentHeight)
             font.pixelSize: Style.fontSizeMedium
             font.family: Style.fontFamily
+            font.weight: Style.fontWeight
             color: Style.surfaceText
             selectionColor: Style.primaryContainer
             selectedTextColor: Style.onPrimaryContainer

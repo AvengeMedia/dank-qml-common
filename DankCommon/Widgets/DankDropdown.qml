@@ -269,7 +269,7 @@ FocusScope {
             text: root.text
             font.pixelSize: Style.fontSizeMedium
             color: Style.surfaceText
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             width: parent.width
             horizontalAlignment: Text.AlignLeft
         }
@@ -743,7 +743,7 @@ FocusScope {
                                         text: delegateRoot.modelData
                                         font.pixelSize: Style.fontSizeMedium
                                         color: delegateRoot.contentColor
-                                        font.weight: delegateRoot.isCurrentValue ? Font.Medium : Font.Normal
+                                        font.weight: delegateRoot.isCurrentValue ? Style.fontWeightMedium : Style.fontWeight
                                         width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingM * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
                                         elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
                                         wrapMode: Text.NoWrap

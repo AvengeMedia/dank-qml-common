@@ -30,7 +30,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: Style.fontSizeSmall
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             color: Style.secondary
         }
     }

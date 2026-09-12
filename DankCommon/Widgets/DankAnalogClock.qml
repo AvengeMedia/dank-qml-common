@@ -74,7 +74,7 @@ Item {
             y: root.centerY - numRadius * Math.cos(angle) - height / 2
             text: index + 1
             font.pixelSize: Style.fontSizeSmall
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             color: root.numberColor
         }
     }

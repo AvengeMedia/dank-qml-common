@@ -256,7 +256,7 @@ Item {
                 color: leading.labelColor
                 font.family: Style.fontFamily
                 font.pixelSize: root.labelSize
-                font.weight: root.size === "l" || root.size === "xl" ? Font.Normal : Font.Medium
+                font.weight: root.size === "l" || root.size === "xl" ? Style.fontWeight : Style.fontWeightMedium
                 wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
                 elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             }

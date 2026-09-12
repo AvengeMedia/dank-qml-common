@@ -29,7 +29,7 @@ Rectangle {
         y: Math.round((root.height - labelMetrics.tightBoundingRect.height) / 2 - baselineOffset - labelMetrics.tightBoundingRect.y)
         width: Math.max(0, root.width - Style.spacingXS * 2)
         font.pixelSize: Style.fontSizeSmall
-        font.weight: Font.Medium
+        font.weight: Style.fontWeightMedium
         color: Style.onPrimary
         wrapMode: Text.NoWrap
         horizontalAlignment: Text.AlignHCenter

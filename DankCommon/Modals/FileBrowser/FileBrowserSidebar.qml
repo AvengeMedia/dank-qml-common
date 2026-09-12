@@ -22,7 +22,7 @@ StyledRect {
             text: I18n.tr("Quick Access", "file browser sidebar section header")
             font.pixelSize: Style.fontSizeSmall
             color: Style.surfaceTextMedium
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             leftPadding: Style.spacingS
             bottomPadding: Style.spacingXS
         }
@@ -52,7 +52,7 @@ StyledRect {
                         text: modelData?.name ?? ""
                         font.pixelSize: Style.fontSizeMedium
                         color: currentPath === modelData?.path ? Style.primary : Style.surfaceText
-                        font.weight: currentPath === modelData?.path ? Font.Medium : Font.Normal
+                        font.weight: currentPath === modelData?.path ? Style.fontWeightMedium : Style.fontWeight
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }

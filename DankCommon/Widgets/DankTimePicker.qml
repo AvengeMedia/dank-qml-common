@@ -208,7 +208,7 @@ FocusScope {
             StyledText {
                 text: root.title
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 color: Style.onSurfaceVariant
             }
 
@@ -250,7 +250,7 @@ FocusScope {
                         reserveText: "00"
                         isMonospace: false
                         font.pixelSize: Style.fontSizeDisplayLarge
-                        font.weight: Font.Medium
+                        font.weight: Style.fontWeightMedium
                         color: root._minuteMode ? Style.surfaceText : Style.onPrimaryContainer
                     }
 
@@ -271,7 +271,7 @@ FocusScope {
                     text: ":"
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: Style.fontSizeDisplayLarge
-                    font.weight: Font.Medium
+                    font.weight: Style.fontWeightMedium
                     color: Style.surfaceText
                 }
 
@@ -307,7 +307,7 @@ FocusScope {
                         reserveText: "00"
                         isMonospace: false
                         font.pixelSize: Style.fontSizeDisplayLarge
-                        font.weight: Font.Medium
+                        font.weight: Style.fontWeightMedium
                         color: root._minuteMode ? Style.onPrimaryContainer : Style.surfaceText
                     }
 
@@ -358,7 +358,7 @@ FocusScope {
                                 anchors.centerIn: parent
                                 text: I18n.tr("AM")
                                 font.pixelSize: Style.fontSizeSmall
-                                font.weight: Font.DemiBold
+                                font.weight: Style.fontWeightMedium
                                 color: root.isPm ? Style.onSurfaceVariant : Style.onTertiaryContainer
                             }
 
@@ -403,7 +403,7 @@ FocusScope {
                                 anchors.centerIn: parent
                                 text: I18n.tr("PM")
                                 font.pixelSize: Style.fontSizeSmall
-                                font.weight: Font.DemiBold
+                                font.weight: Style.fontWeightMedium
                                 color: root.isPm ? Style.onTertiaryContainer : Style.onSurfaceVariant
                             }
 
@@ -517,7 +517,7 @@ FocusScope {
                             reserveText: "00"
                             isMonospace: false
                             font.pixelSize: parent.innerRing ? Style.fontSizeSmall : Style.fontSizeMedium
-                            font.weight: parent.selected ? Font.DemiBold : Font.Medium
+                            font.weight: parent.selected ? Style.fontWeightMedium : Style.fontWeight
                             color: parent.selected ? Style.onPrimary : Style.surfaceText
                         }
                     }

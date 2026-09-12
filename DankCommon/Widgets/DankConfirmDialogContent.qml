@@ -68,7 +68,7 @@ Column {
         text: root.confirmTitle
         textFormat: Text.PlainText
         font.pixelSize: Style.fontSizeLarge
-        font.weight: Font.Medium
+        font.weight: Style.fontWeightMedium
         color: Style.onSurface
         wrapMode: Text.Wrap
     }

@@ -67,12 +67,11 @@ StyledButton {
         transitionCurve: Style.expressiveCurves.expressiveEffects
     }
 
-    TextMetrics {
+    StyledTextMetrics {
         id: reservedLabel
         text: root.reserveText
         font.pixelSize: Style.fontSizeMedium
-        font.weight: Font.Medium
-        font.family: Style.fontFamily
+        font.weight: Style.fontWeightMedium
     }
 
     Row {
@@ -119,7 +118,7 @@ StyledButton {
             elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text
             font.pixelSize: Style.fontSizeMedium
-            font.weight: Font.Medium
+            font.weight: Style.fontWeightMedium
             color: root.contentColor
             anchors.verticalCenter: parent.verticalCenter
         }

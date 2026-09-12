@@ -136,7 +136,7 @@ Rectangle {
                 text: I18n.tr("File Information", "file browser info panel header")
                 font.pixelSize: Style.fontSizeMedium
                 color: Style.surfaceText
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -152,7 +152,7 @@ Rectangle {
                 width: parent.width
                 elide: Text.ElideMiddle
                 wrapMode: Text.NoWrap
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
             }
 
             StyledText {

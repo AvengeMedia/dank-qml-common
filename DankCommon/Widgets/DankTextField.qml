@@ -299,6 +299,7 @@ StyledRect {
         anchors.bottomMargin: root.bottomPadding + (root.outlined ? root.supportingHeight : 0)
         font.pixelSize: Style.fontSizeMedium
         font.family: Style.fontFamily
+        font.weight: Style.fontWeight
         color: root.outlined && !root.enabled ? Style.onSurface_38 : Style.surfaceText
         selectionColor: Style.primaryContainer
         selectedTextColor: Style.onPrimaryContainer

@@ -125,7 +125,7 @@ Item {
             text: root.fallbackText
             font.pixelSize: root.iconSize * root.fallbackTextScale
             color: root.fallbackTextColor
-            font.weight: Font.Bold
+            font.weight: Style.fontWeightMedium
         }
     }
 }

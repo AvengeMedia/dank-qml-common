@@ -101,7 +101,7 @@ Rectangle {
                     text: button.actionData.label || ""
                     textFormat: Text.PlainText
                     font.pixelSize: Style.fontSizeMedium
-                    font.weight: Font.Medium
+                    font.weight: Style.fontWeightMedium
                     color: button.contentColor
                     horizontalAlignment: root.gridLayout ? Text.AlignHCenter : I18n.isRtl ? Text.AlignRight : Text.AlignLeft
                     wrapMode: Text.WordWrap

@@ -52,7 +52,7 @@ Item {
             StyledText {
                 text: I18n.tr("File Already Exists", "file browser overwrite dialog title")
                 font.pixelSize: Style.fontSizeLarge
-                font.weight: Font.Medium
+                font.weight: Style.fontWeightMedium
                 color: Style.surfaceText
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -83,7 +83,7 @@ Item {
                         text: I18n.tr("Cancel", "file browser overwrite dialog cancel button")
                         font.pixelSize: Style.fontSizeMedium
                         color: Style.surfaceText
-                        font.weight: Font.Medium
+                        font.weight: Style.fontWeightMedium
                     }
 
                     MouseArea {
@@ -108,7 +108,7 @@ Item {
                         text: I18n.tr("Overwrite", "file browser overwrite dialog confirm button")
                         font.pixelSize: Style.fontSizeMedium
                         color: Style.background
-                        font.weight: Font.Medium
+                        font.weight: Style.fontWeightMedium
                     }
 
                     MouseArea {

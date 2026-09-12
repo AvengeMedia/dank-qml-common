@@ -205,7 +205,7 @@ Rectangle {
                             StyledText {
                                 text: modelData.name
                                 font.pixelSize: Style.fontSizeSmall
-                                font.weight: Font.Medium
+                                font.weight: Style.fontWeightMedium
                                 color: Style.surfaceText
                             }
 

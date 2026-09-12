@@ -112,7 +112,7 @@ T.Control {
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Style.fontSizeMedium
                         color: tabItem.isActive ? Style.primary : Style.onSurfaceVariant
-                        font.weight: Font.Medium
+                        font.weight: Style.fontWeightMedium
                         visible: hasText
 
                         Behavior on color {

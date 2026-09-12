@@ -37,7 +37,7 @@ DankActionButton {
         text: parent.text
         color: Style.surfaceText
         font.pixelSize: Style.fontSizeXLarge
-        font.weight: Font.Normal
+        font.weight: Style.fontWeight
         visible: !parent.isIcon
     }
 }

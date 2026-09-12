@@ -783,7 +783,7 @@ ShellRoot {
 
     component Section: StyledText {
         font.pixelSize: Theme.fontSizeLarge
-        font.weight: Font.Medium
+        font.weight: Style.fontWeightMedium
         color: Theme.primary
     }
 

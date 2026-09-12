@@ -124,7 +124,7 @@ FocusScope {
         anchors.margins: card.pad
         text: card.title
         font.pixelSize: Style.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Style.fontWeightMedium
         color: card.accentColor
         elide: Text.ElideRight
         visible: text !== ""

@@ -319,7 +319,13 @@ Singleton {
     readonly property string fontFamily: theme?.fontFamily ?? Fonts.sans
     readonly property string monoFontFamily: theme?.monoFontFamily ?? Fonts.mono
     readonly property int fontWeight: theme?.fontWeight ?? Font.Normal
+    readonly property int fontWeightMedium: shiftedFontWeight(Font.Medium)
+    readonly property int fontWeightBold: shiftedFontWeight(Font.Bold)
     readonly property real popupTransparency: theme?.popupTransparency ?? 1.0
+
+    function shiftedFontWeight(weight) {
+        return Math.max(Font.Thin, Math.min(Font.Black, weight + fontWeight - Font.Normal));
+    }
 
     readonly property int currentAnimationSpeed: theme?.currentAnimationSpeed ?? Style.AnimationSpeed.Short
     readonly property int currentAnimationBaseDuration: theme?.currentAnimationBaseDuration ?? 500

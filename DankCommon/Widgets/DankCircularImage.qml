@@ -140,7 +140,7 @@ Rectangle {
         visible: root.imageSource === "" && root.fallbackIcon === "" && root.fallbackText !== ""
         text: root.fallbackText
         font.pixelSize: Math.max(12, parent.width * 0.5)
-        font.weight: Font.Bold
+        font.weight: Style.fontWeightMedium
         color: Style.surfaceVariantText
     }
 }

@@ -13,8 +13,8 @@ Rectangle {
     property bool cacheImages: true
     property bool hasImage: imageSource !== ""
     readonly property bool shouldProbe: imageSource !== "" && !imageSource.startsWith("image://")
-    readonly property bool isAnimated: shouldProbe && probe.status === Image.Ready && probe.frameCount > 1
-    readonly property bool probeSettled: probe.status === Image.Ready || probe.status === Image.Error
+    property bool isAnimated: false
+    property bool probeSettled: false
     readonly property var activeImage: {
         if (isAnimated)
             return probe;
@@ -27,6 +27,11 @@ Rectangle {
     property int imageStatus: activeImage.status
 
     signal imageSaved(string filePath)
+
+    onImageSourceChanged: {
+        isAnimated = false;
+        probeSettled = false;
+    }
 
     property string _pendingSavePath: ""
     property var _attachedWindow: root.Window.window
@@ -82,6 +87,16 @@ Rectangle {
             cache: root.cacheImages
             visible: root.activeImage === probe && probe.status === Image.Ready && root.imageSource !== ""
             source: root.shouldProbe && (root.isAnimated || staticImage.status !== Image.Ready) ? root.imageSource : ""
+            onStatusChanged: {
+                if (status === Image.Error) {
+                    root.probeSettled = true;
+                    return;
+                }
+                if (status !== Image.Ready)
+                    return;
+                root.isAnimated = root.shouldProbe && frameCount > 1;
+                root.probeSettled = true;
+            }
         }
 
         // Takes over once the probe settles on a non-animated image, then latches.

@@ -61,7 +61,7 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `WindowCaptureGuard.prepare()` sets `active` and waits for a rendered frame before emitting `ready`. Bind the transparent window's content and blur visibility to `!active`; hide the window and start capture on `ready`. Call `cancel()` when restoring or abandoning the capture.
 
-`DankDialog.popout` uses the compact popout header and spacing. `headerActions` adds buttons before the shared window controls.
+`DankDialog.popout` drops the header and uses compact popout spacing. `headerActions` adds buttons before the shared window controls.
 
 `DankSlider.trackGradient` paints a continuous gradient across both track segments and follows RTL. The normal handle, gap, input and disabled behavior are preserved.
 

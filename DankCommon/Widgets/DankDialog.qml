@@ -28,12 +28,13 @@ FocusScope {
     readonly property real contentHeight: scrollBody.implicitHeight
     readonly property real focusPadding: Style.focusRingOffset + Style.focusRingWidth
     readonly property real availableContentHeight: Math.max(0, scroll.height - focusPadding * 2)
+    readonly property real bodyTop: popout ? padding : header.y + header.height + contentSpacing
 
     signal accepted
     signal rejected
 
     implicitWidth: maximumWidth
-    implicitHeight: header.implicitHeight + scrollBody.implicitHeight + actionFlow.implicitHeight + padding * (nativeWindow ? 1 : 2) + contentSpacing * (actionFlow.implicitHeight > 0 ? 2 : 1)
+    implicitHeight: bodyTop + scrollBody.implicitHeight + actionFlow.implicitHeight + padding + (actionFlow.implicitHeight > 0 ? contentSpacing : 0)
     focus: true
     Accessible.role: Accessible.Dialog
     Accessible.name: title
@@ -159,13 +160,13 @@ FocusScope {
                 x: root.nativeWindow ? 0 : root.padding
                 y: root.nativeWindow ? 0 : root.padding
                 width: parent.width - (root.nativeWindow ? 0 : root.padding * 2)
+                visible: !root.popout
                 controls: root.windowControls
                 title: root.title
                 iconName: root.iconName
-                titleFontSize: root.nativeWindow || root.popout ? Style.fontSizeLarge : Style.fontSizeXLarge
-                wrapTitle: !root.nativeWindow && !root.popout
+                titleFontSize: root.nativeWindow ? Style.fontSizeLarge : Style.fontSizeXLarge
+                wrapTitle: !root.nativeWindow
                 horizontalPadding: root.nativeWindow ? -1 : 0
-                verticalPadding: root.popout ? 0 : Style.spacingS
                 showDivider: root.nativeWindow
                 closeEnabled: root.closeEnabled
                 onCloseRequested: root.rejected()
@@ -175,7 +176,7 @@ FocusScope {
                 id: scroll
 
                 x: root.padding - root.focusPadding
-                y: header.y + header.height + root.contentSpacing - root.focusPadding
+                y: root.bodyTop - root.focusPadding
                 width: parent.width - root.padding * 2 + root.focusPadding * 2
                 height: Math.max(0, actionFlow.y - y - (actionFlow.height > 0 ? root.contentSpacing : 0) + root.focusPadding)
                 contentWidth: width

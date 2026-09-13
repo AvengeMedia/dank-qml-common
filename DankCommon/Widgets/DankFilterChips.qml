@@ -144,7 +144,7 @@ Flow {
                 StyledText {
                     text: chip.label + (chip.showCount ? " (" + chip.count + ")" : "")
                     font.pixelSize: Style.fontSizeSmall
-                    font.weight: chip.selected ? Style.fontWeightMedium : Style.fontWeight
+                    font.weight: Style.fontWeightMedium
                     color: chip.contentColor
                     anchors.verticalCenter: parent.verticalCenter
                 }

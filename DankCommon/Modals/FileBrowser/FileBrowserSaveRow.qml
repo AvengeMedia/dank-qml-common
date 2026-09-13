@@ -62,6 +62,7 @@ Row {
             text: I18n.tr("Save", "file browser save button")
             color: fileNameInput.text.trim() !== "" ? Style.primaryText : Style.surfaceVariantText
             font.pixelSize: Style.fontSizeMedium
+            font.weight: Style.fontWeightMedium
         }
 
         StateLayer {

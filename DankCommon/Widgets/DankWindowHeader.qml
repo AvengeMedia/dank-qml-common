@@ -7,6 +7,7 @@ Item {
     required property var controls
     property string title: ""
     property real titleFontSize: Style.fontSizeLarge
+    property int titleWeight: Style.fontWeightMedium
     property bool wrapTitle: false
     property real horizontalPadding: -1
     property real verticalPadding: Style.spacingS
@@ -70,7 +71,7 @@ Item {
                 width: parent.width
                 text: root.title
                 font.pixelSize: root.titleFontSize
-                font.weight: Style.fontWeightMedium
+                font.weight: root.titleWeight
                 color: Style.surfaceText
                 horizontalAlignment: Text.AlignLeft
                 elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight

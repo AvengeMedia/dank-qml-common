@@ -517,7 +517,7 @@ FocusScope {
                             reserveText: "00"
                             isMonospace: false
                             font.pixelSize: parent.innerRing ? Style.fontSizeSmall : Style.fontSizeMedium
-                            font.weight: parent.selected ? Style.fontWeightMedium : Style.fontWeight
+                            font.weight: parent.selected ? Style.fontWeightBold : Style.fontWeightMedium
                             color: parent.selected ? Style.onPrimary : Style.surfaceText
                         }
                     }

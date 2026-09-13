@@ -162,6 +162,7 @@ FocusScope {
                 title: root.title
                 iconName: root.iconName
                 titleFontSize: root.nativeWindow ? Style.fontSizeLarge : Style.fontSizeXLarge
+                titleWeight: root.nativeWindow ? Style.fontWeightMedium : Style.fontWeight
                 wrapTitle: !root.nativeWindow
                 horizontalPadding: root.nativeWindow ? -1 : 0
                 showDivider: root.nativeWindow

@@ -188,7 +188,6 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: cell.dayDate.getDate()
                 font.pixelSize: Style.fontSizeMedium
-                font.weight: cell.inMonth ? Style.fontWeightMedium : Style.fontWeight
                 color: {
                     if (cell.isSelected)
                         return Style.onPrimary;

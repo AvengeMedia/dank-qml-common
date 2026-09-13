@@ -291,7 +291,7 @@ Row {
 
                         text: typeof modelData === "string" ? modelData : modelData.text || ""
                         font.pixelSize: root.textSize
-                        font.weight: segment.selected ? Style.fontWeightMedium : Style.fontWeight
+                        font.weight: Style.fontWeightMedium
                         color: segment.contentColor
                         anchors.verticalCenter: parent.verticalCenter
                         width: capAvailable < 0 ? implicitWidth : Math.min(implicitWidth, capAvailable)

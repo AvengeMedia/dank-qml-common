@@ -52,7 +52,7 @@ StyledRect {
                         text: modelData?.name ?? ""
                         font.pixelSize: Style.fontSizeMedium
                         color: currentPath === modelData?.path ? Style.primary : Style.surfaceText
-                        font.weight: currentPath === modelData?.path ? Style.fontWeightMedium : Style.fontWeight
+                        font.weight: Style.fontWeightMedium
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }

@@ -78,6 +78,7 @@ StyledRect {
                     StyledText {
                         text: modelData?.name ?? ""
                         font.pixelSize: Style.fontSizeMedium
+                        font.weight: sortBy === modelData?.value ? Style.fontWeightMedium : Style.fontWeight
                         color: sortBy === modelData?.value ? Style.primary : Style.surfaceText
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -131,6 +132,7 @@ StyledRect {
                 StyledText {
                     text: I18n.tr("Ascending", "file browser sort order option")
                     font.pixelSize: Style.fontSizeMedium
+                    font.weight: sortAscending ? Style.fontWeightMedium : Style.fontWeight
                     color: sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -169,6 +171,7 @@ StyledRect {
                 StyledText {
                     text: I18n.tr("Descending", "file browser sort order option")
                     font.pixelSize: Style.fontSizeMedium
+                    font.weight: !sortAscending ? Style.fontWeightMedium : Style.fontWeight
                     color: !sortAscending ? Style.primary : Style.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }

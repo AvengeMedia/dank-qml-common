@@ -21,6 +21,7 @@ MouseArea {
     property var transitionCurve: Style.expressiveCurves.standardDecel
 
     readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : hovered ? Style.stateLayerHover : 0
+    readonly property bool controlPressed: control ? control.pressed : false
 
     anchors.fill: parent
     cursorShape: disabled ? Qt.ArrowCursor : Qt.PointingHandCursor
@@ -37,14 +38,11 @@ MouseArea {
         }
     }
 
-    Connections {
-        target: root.control
-        function onPressedChanged() {
-            if (!root.control.pressed || root.disabled || !root.enableRipple)
-                return;
-            const point = root.mapFromItem(root.control, root.control.pressX, root.control.pressY);
-            rippleLayer.trigger(point.x, point.y);
-        }
+    onControlPressedChanged: {
+        if (!controlPressed || disabled || !enableRipple)
+            return;
+        const point = mapFromItem(control, control.pressX, control.pressY);
+        rippleLayer.trigger(point.x, point.y);
     }
 
     Rectangle {

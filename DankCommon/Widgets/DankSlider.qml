@@ -51,6 +51,10 @@ Controls.Control {
     signal sliderValueChanged(int newValue)
     signal sliderDragFinished(int finalValue)
 
+    onInsetIconTooltipChanged: insetAction.syncTooltip()
+    onIsDraggingChanged: insetAction.syncTooltip()
+    onVisibleChanged: insetAction.syncTooltip()
+
     function formatValue(v) {
         if (decimals <= 0)
             return Math.round(v) + unit;
@@ -482,19 +486,6 @@ Controls.Control {
                 }
                 DankTooltipV2 {
                     id: actionTooltip
-                }
-            }
-
-            Connections {
-                target: slider
-                function onInsetIconTooltipChanged() {
-                    insetAction.syncTooltip();
-                }
-                function onIsDraggingChanged() {
-                    insetAction.syncTooltip();
-                }
-                function onVisibleChanged() {
-                    insetAction.syncTooltip();
                 }
             }
 

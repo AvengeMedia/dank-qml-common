@@ -84,7 +84,7 @@ FocusScope {
             scroll.contentY = Math.max(0, Math.min(scroll.contentHeight - scroll.height, bottom - scroll.height));
     }
 
-    readonly property var windowActiveFocusItem: root.Window.window?.activeFocusItem ?? null
+    readonly property Item windowActiveFocusItem: root.Window.window?.activeFocusItem ?? null
     onWindowActiveFocusItemChanged: revealFocus()
 
     data: [

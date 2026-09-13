@@ -13,6 +13,7 @@ Row {
     property var initialSelection: []
     property var currentSelection: initialSelection
     property bool checkEnabled: true
+    property bool iconOnly: false
     property string size: "medium"
     property int buttonHeight: size === "small" ? Style.buttonHeightXS : Style.buttonHeightS
     property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
@@ -149,7 +150,7 @@ Row {
             readonly property real rightRadius: visualLast ? root.outerRadius : (pressed ? root.pressedInnerRadius : (selected ? root.outerRadius : root.innerRadius))
             readonly property color contentColor: !root.enabled ? Style.onSurface_38 : (selected ? Style.buttonText : Style.onSecondaryContainer)
 
-            readonly property real contentNaturalWidth: (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) + buttonText.implicitWidth
+            readonly property real contentNaturalWidth: (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) + (optionIcon.visible ? optionIcon.width + (buttonText.visible ? contentRow.spacing : 0) : 0) + (buttonText.visible ? buttonText.implicitWidth : 0)
 
             readonly property real baseWidth: {
                 if (root.fillWidth)
@@ -223,6 +224,7 @@ Row {
                 bottomRightRadius: segment.bottomRightRadius
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
+                tooltipText: root.iconOnly ? buttonText.text : ""
             }
 
             FocusRing {
@@ -245,7 +247,7 @@ Row {
                         name: "check"
                         size: root.checkIconSize
                         color: segment.contentColor
-                        visible: root.checkEnabled && segment.selected
+                        visible: root.checkEnabled && !root.iconOnly && segment.selected
                         opacity: segment.selected ? 1 : 0
                         scale: segment.selected ? 1 : Style.iconEnterScale
                         anchors.verticalCenter: parent.verticalCenter
@@ -267,14 +269,24 @@ Row {
                         }
                     }
 
+                    DankIcon {
+                        id: optionIcon
+                        name: typeof modelData === "object" ? modelData.icon || "" : ""
+                        size: Style.iconSize
+                        color: segment.contentColor
+                        visible: name !== ""
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
                     StyledText {
                         id: buttonText
+                        visible: !root.iconOnly || !optionIcon.visible
 
                         readonly property real capAvailable: {
                             if (root._segmentCap <= 0)
                                 return -1;
                             const cap = Math.max(root._segmentCap, root.minButtonWidth);
-                            return Math.max(0, cap - root.buttonPadding * 2 - (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0));
+                            return Math.max(0, cap - root.buttonPadding * 2 - (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) - (optionIcon.visible ? optionIcon.width + contentRow.spacing : 0));
                         }
 
                         text: typeof modelData === "string" ? modelData : modelData.text || ""

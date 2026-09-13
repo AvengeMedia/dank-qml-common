@@ -9,6 +9,7 @@ Flickable {
 
     property alias verticalScrollBar: vbar
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
+    property bool wheelEnabled: true
     property real momentumVelocity: 0
     property bool isMomentumActive: false
     readonly property bool windowVisible: flickable.Window.window?.visible ?? false
@@ -24,6 +25,7 @@ Flickable {
 
     WheelHandler {
         id: wheelHandler
+        enabled: flickable.wheelEnabled
 
         property real touchpadSpeed: Scroll.touchpadSpeed
         property real momentumRetention: Scroll.momentumRetention

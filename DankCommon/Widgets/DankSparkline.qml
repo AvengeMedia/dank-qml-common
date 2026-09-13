@@ -9,6 +9,9 @@ Item {
 
     property var values: []
     property var secondaryValues: []
+    property var xValues: []
+    property real minimumX: 0
+    property real maximumX: 1
     property real maximum: 0
     property real minimum: 0
     property bool autoRange: false
@@ -79,9 +82,13 @@ Item {
             const v = list[i];
             if (typeof v !== "number" || !isFinite(v))
                 continue;
+            const explicitX = xValues.length > 0;
+            const x = explicitX ? xValues[i] : i;
+            if (typeof x !== "number" || !isFinite(x))
+                continue;
             const t = Math.max(0, Math.min(1, (v - range.min) / span));
             out.push({
-                "x": startX + i * step,
+                "x": explicitX ? width * Math.max(0, Math.min(1, (x - minimumX) / Math.max(maximumX - minimumX, 0.000001))) : startX + i * step,
                 "y": bottom - t * (bottom - top),
                 "value": v
             });

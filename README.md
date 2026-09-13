@@ -59,6 +59,12 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSparkline.edgeExtension` extends the strokes past the end samples using their neighbouring slopes, bounded by the vertical insets. It does not add sample dots.
 
+`DankSparkline.xValues` positions samples on an explicit axis between `minimumX` and `maximumX`. Omit it for evenly spaced samples.
+
+`DankButtonGroup` accepts `{ text, icon }` options. Set `iconOnly: true` for icons with text tooltips and accessible names.
+
+`DankFlickable.wheelEnabled` disables its vertical wheel handler when a surface supplies horizontal wheel navigation. Touch and mouse dragging remain available.
+
 `WindowCaptureGuard.prepare()` sets `active` and waits for a rendered frame before emitting `ready`. Bind the transparent window's content and blur visibility to `!active`; hide the window and start capture on `ready`. Call `cancel()` when restoring or abandoning the capture.
 
 `DankDialog.popout` drops the header and uses compact popout spacing. `headerActions` adds buttons before the shared window controls.

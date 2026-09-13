@@ -11,6 +11,7 @@ Flickable {
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
     property real momentumVelocity: 0
     property bool isMomentumActive: false
+    readonly property bool windowVisible: flickable.Window.window?.visible ?? false
     property real friction: Scroll.friction
     property bool _scrollBarActive: false
 
@@ -162,12 +163,9 @@ Flickable {
             stopMomentum();
     }
 
-    Connections {
-        target: flickable.Window.window
-        function onVisibleChanged() {
-            if (!flickable.Window.window?.visible)
-                flickable.stopMomentum();
-        }
+    onWindowVisibleChanged: {
+        if (!windowVisible)
+            stopMomentum();
     }
 
     FrameAnimation {

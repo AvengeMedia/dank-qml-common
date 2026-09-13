@@ -129,17 +129,11 @@ StyledRect {
                 height: textEdit.cursorRectangle.height
                 shown: textEdit.cursorVisible
 
-                Connections {
-                    target: textEdit
+                readonly property int editCursorPosition: textEdit.cursorPosition
+                readonly property string editText: textEdit.text
 
-                    function onCursorPositionChanged() {
-                        editCursor.resetBlink();
-                    }
-
-                    function onTextChanged() {
-                        editCursor.resetBlink();
-                    }
-                }
+                onEditCursorPositionChanged: resetBlink()
+                onEditTextChanged: resetBlink()
             }
             onTextChanged: root.textEdited()
             onEditingFinished: root.editingFinished()

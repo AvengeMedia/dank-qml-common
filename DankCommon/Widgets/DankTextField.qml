@@ -320,17 +320,11 @@ StyledRect {
             height: textInput.cursorRectangle.height
             shown: textInput.cursorVisible
 
-            Connections {
-                target: textInput
+            readonly property int inputCursorPosition: textInput.cursorPosition
+            readonly property string inputText: textInput.text
 
-                function onCursorPositionChanged() {
-                    fieldCursor.resetBlink();
-                }
-
-                function onTextChanged() {
-                    fieldCursor.resetBlink();
-                }
-            }
+            onInputCursorPositionChanged: resetBlink()
+            onInputTextChanged: resetBlink()
         }
         KeyNavigation.tab: root.keyNavigationTab
         KeyNavigation.backtab: root.keyNavigationBacktab

@@ -17,6 +17,9 @@ Item {
             Canvas {
                 id: checkerboard
 
+                readonly property color styleSurfaceContainerLowest: Style.surfaceContainerLowest
+                readonly property color styleSurfaceContainerHighest: Style.surfaceContainerHighest
+
                 onPaint: {
                     const ctx = getContext("2d");
                     ctx.reset();
@@ -35,15 +38,8 @@ Item {
                     requestPaint()
                 onWidthChanged: requestPaint()
                 onHeightChanged: requestPaint()
-                Connections {
-                    target: Style
-                    function onSurfaceContainerLowestChanged() {
-                        checkerboard.requestPaint();
-                    }
-                    function onSurfaceContainerHighestChanged() {
-                        checkerboard.requestPaint();
-                    }
-                }
+                onStyleSurfaceContainerLowestChanged: requestPaint()
+                onStyleSurfaceContainerHighestChanged: requestPaint()
             }
         }
     }

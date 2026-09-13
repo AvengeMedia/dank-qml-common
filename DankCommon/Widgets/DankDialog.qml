@@ -84,13 +84,10 @@ FocusScope {
             scroll.contentY = Math.max(0, Math.min(scroll.contentHeight - scroll.height, bottom - scroll.height));
     }
 
+    readonly property var windowActiveFocusItem: root.Window.window?.activeFocusItem ?? null
+    onWindowActiveFocusItemChanged: revealFocus()
+
     data: [
-        Connections {
-            target: root.Window.window
-            function onActiveFocusItemChanged() {
-                root.revealFocus();
-            }
-        },
         Rectangle {
             anchors.fill: parent
             visible: !root.embedded && (root.opened || opacity > 0)

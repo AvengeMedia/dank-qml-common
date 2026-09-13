@@ -227,15 +227,13 @@ Item {
 
     Instantiator {
         model: root.count
-        Connections {
+        QtObject {
             required property int index
-            target: {
+            readonly property real itemHeight: {
                 root.delegateRevision;
-                return root.itemAt(index);
+                return root.itemAt(index)?.height ?? 0;
             }
-            function onHeightChanged() {
-                layoutTimer.restart();
-            }
+            onItemHeightChanged: layoutTimer.restart()
         }
     }
 

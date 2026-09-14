@@ -75,6 +75,7 @@ ShellRoot {
 
             DankActionButton {
                 id: action
+                buttonSize: Style.buttonHeightXXS
                 iconName: "refresh"
                 onClicked: root.actionRequests++
             }

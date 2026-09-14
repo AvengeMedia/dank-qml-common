@@ -581,6 +581,7 @@ FocusScope {
 
             DankActionButton {
                 circular: false
+                buttonSize: Style.buttonHeightXXS
                 iconName: showHiddenFiles ? "visibility_off" : "visibility"
                 iconSize: Style.iconSize - 4
                 iconColor: showHiddenFiles ? Style.primary : Style.surfaceText
@@ -589,6 +590,7 @@ FocusScope {
 
             DankActionButton {
                 circular: false
+                buttonSize: Style.buttonHeightXXS
                 iconName: viewMode === "grid" ? "view_list" : "grid_view"
                 iconSize: Style.iconSize - 4
                 iconColor: Style.surfaceText
@@ -597,6 +599,7 @@ FocusScope {
 
             DankActionButton {
                 circular: false
+                buttonSize: Style.buttonHeightXXS
                 iconName: iconSizeIndex === 0 ? "photo_size_select_small" : iconSizeIndex === 1 ? "photo_size_select_large" : iconSizeIndex === 2 ? "photo_size_select_actual" : "zoom_in"
                 iconSize: Style.iconSize - 4
                 iconColor: Style.surfaceText
@@ -606,6 +609,7 @@ FocusScope {
 
             DankActionButton {
                 circular: false
+                buttonSize: Style.buttonHeightXXS
                 iconName: "info"
                 iconSize: Style.iconSize - 4
                 iconColor: Style.surfaceText

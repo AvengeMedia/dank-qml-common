@@ -273,6 +273,7 @@ Singleton {
     readonly property color screenOffColor: theme?.screenOffColor ?? "#000000"
     readonly property real scrimAlpha: theme?.scrimAlpha ?? 0.55
     readonly property color scrimColor: theme?.scrimColor ?? "#000000"
+    readonly property real buttonHeightXXS: theme?.buttonHeightXXS ?? 28
     readonly property real buttonHeightXS: theme?.buttonHeightXS ?? 32
     readonly property real buttonHeightS: theme?.buttonHeightS ?? 40
     readonly property real buttonHeightM: theme?.buttonHeightM ?? 56

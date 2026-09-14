@@ -161,7 +161,7 @@ FocusScope {
                 controls: root.windowControls
                 title: root.title
                 titleAlignment: root.nativeWindow ? Text.AlignHCenter : Text.AlignLeft
-                titleFontSize: root.nativeWindow ? Style.fontSizeLarge : Style.fontSizeXLarge
+                titleFontSize: root.nativeWindow ? Style.fontSizeMedium : Style.fontSizeXLarge
                 titleWeight: root.nativeWindow ? Style.fontWeightMedium : Style.fontWeight
                 wrapTitle: !root.nativeWindow
                 horizontalPadding: root.nativeWindow ? -1 : 0

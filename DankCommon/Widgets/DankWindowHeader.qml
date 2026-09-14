@@ -6,12 +6,12 @@ Item {
 
     required property var controls
     property string title: ""
-    property real titleFontSize: Style.fontSizeLarge
+    property real titleFontSize: Style.fontSizeMedium
     property int titleWeight: Style.fontWeightMedium
     property int titleAlignment: Text.AlignHCenter
     property bool wrapTitle: false
     property real horizontalPadding: -1
-    property real verticalPadding: Style.spacingS
+    property real verticalPadding: Style.spacingXS
     property bool showDivider: true
     property string subtitle: ""
     property string iconName: "" // !TODO: plugin compat, the header no longer draws an icon
@@ -20,19 +20,21 @@ Item {
     default property alias actions: extraActions.data
 
     readonly property bool centered: titleAlignment === Text.AlignHCenter
-    readonly property real edgeInset: horizontalPadding >= 0 ? horizontalPadding : verticalPadding
+    readonly property bool decorated: controls !== null
+    readonly property real controlInset: (height - buttons.implicitHeight) / 2
+    readonly property real edgeInset: horizontalPadding >= 0 ? horizontalPadding : controlInset
     readonly property real titleGap: horizontalPadding >= 0 ? horizontalPadding : Style.spacingM
     readonly property real buttonsReserve: buttons.width + edgeInset + titleGap
 
     signal closeRequested
 
-    implicitHeight: Math.max(Style.buttonHeightXS, titleColumn.implicitHeight) + verticalPadding * 2
+    implicitHeight: Math.max(decorated ? Style.buttonHeightS : 0, Math.max(buttons.implicitHeight, titleColumn.implicitHeight) + verticalPadding * 2)
     height: implicitHeight
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
     component WindowButton: DankActionButton {
-        buttonSize: Style.buttonHeightXS
+        buttonSize: Style.buttonHeightXXS
         backgroundColor: Style.foregroundColor(Style.surfaceContainerHigh, Style.isFloatingWindow(root))
         iconSize: Style.iconSizeSmall
         iconColor: Style.surfaceText

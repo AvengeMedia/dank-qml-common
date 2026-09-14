@@ -353,6 +353,8 @@ FocusScope {
                             height: Math.floor((parent.height - periodDivider.height) / 2)
                             topLeftRadius: periodColumn.innerRadius
                             topRightRadius: periodColumn.innerRadius
+                            bottomLeftRadius: 0
+                            bottomRightRadius: 0
                             color: root.isPm ? "transparent" : Style.tertiaryContainer
                             StyledText {
                                 anchors.centerIn: parent
@@ -370,10 +372,6 @@ FocusScope {
 
                             FocusRing {
                                 visible: amItem.visualFocus
-                                topLeftRadius: parent.topLeftRadius + Style.focusRingWidth
-                                topRightRadius: parent.topRightRadius + Style.focusRingWidth
-                                bottomLeftRadius: 0
-                                bottomRightRadius: 0
                             }
                         }
 
@@ -396,6 +394,8 @@ FocusScope {
 
                             width: parent.width
                             height: parent.height - amItem.height - periodDivider.height
+                            topLeftRadius: 0
+                            topRightRadius: 0
                             bottomLeftRadius: periodColumn.innerRadius
                             bottomRightRadius: periodColumn.innerRadius
                             color: root.isPm ? Style.tertiaryContainer : "transparent"
@@ -409,8 +409,6 @@ FocusScope {
 
                             StateLayer {
                                 control: pmItem
-                                bottomLeftRadius: parent.bottomLeftRadius
-                                bottomRightRadius: parent.bottomRightRadius
                             }
 
                             FocusRing {

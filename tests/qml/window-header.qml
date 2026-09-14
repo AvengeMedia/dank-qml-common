@@ -70,7 +70,6 @@ ShellRoot {
             y: 20
             width: 600
             title: "A long window title that must leave room for every window action"
-            iconName: "settings"
             controls: root.controls
             onCloseRequested: root.closeRequests++
 
@@ -87,7 +86,6 @@ ShellRoot {
             y: 150
             width: header.width
             title: header.title
-            iconName: header.iconName
             controls: header.controls
         }
     }
@@ -122,6 +120,8 @@ ShellRoot {
         const firstX = first.mapToItem(item, 0, 0).x;
         const lastRight = last.mapToItem(item, last.width, 0).x;
         equal(locale.isRtl ? titleX >= lastRight : titleX + title.width <= firstX, true, "title does not overlap buttons");
+        const titleCenter = title.mapToItem(item, title.width / 2, 0).x;
+        equal(Math.abs(titleCenter - item.width / 2) <= 1, true, "title centered in the header");
     }
 
     function click(iconName) {

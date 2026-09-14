@@ -23,7 +23,7 @@ FocusScope {
     property var fileExtensions: ["*.*"]
     property alias filterExtensions: root.fileExtensions
     property string browserTitle: "Select File"
-    property string browserIcon: "folder_open"
+    property string browserIcon: "folder_open" // !TODO: plugin compat, the window header no longer draws an icon
     property string browserType: "generic"
     property bool showHiddenFiles: false
     property int selectedIndex: -1
@@ -577,7 +577,6 @@ FocusScope {
             width: parent.width
             controls: root.windowControls
             title: root.browserTitle
-            iconName: root.browserIcon
             onCloseRequested: root.closeRequested()
 
             DankActionButton {

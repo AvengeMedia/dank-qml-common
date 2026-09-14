@@ -6,7 +6,7 @@ FocusScope {
     id: root
 
     property string title: ""
-    property string iconName: ""
+    property string iconName: "" // !TODO: plugin compat, the window header no longer draws an icon
     property string supportingText: ""
     property var windowControls: null
     property bool closeEnabled: true
@@ -160,7 +160,7 @@ FocusScope {
                 visible: !root.popout
                 controls: root.windowControls
                 title: root.title
-                iconName: root.iconName
+                titleAlignment: root.nativeWindow ? Text.AlignHCenter : Text.AlignLeft
                 titleFontSize: root.nativeWindow ? Style.fontSizeLarge : Style.fontSizeXLarge
                 titleWeight: root.nativeWindow ? Style.fontWeightMedium : Style.fontWeight
                 wrapTitle: !root.nativeWindow

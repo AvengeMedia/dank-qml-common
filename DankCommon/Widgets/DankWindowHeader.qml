@@ -8,15 +8,21 @@ Item {
     property string title: ""
     property real titleFontSize: Style.fontSizeLarge
     property int titleWeight: Style.fontWeightMedium
+    property int titleAlignment: Text.AlignHCenter
     property bool wrapTitle: false
     property real horizontalPadding: -1
     property real verticalPadding: Style.spacingS
     property bool showDivider: true
     property string subtitle: ""
-    property string iconName: ""
+    property string iconName: "" // !TODO: plugin compat, the header no longer draws an icon
     property bool closeEnabled: true
     property string closeTooltipText: ""
     default property alias actions: extraActions.data
+
+    readonly property bool centered: titleAlignment === Text.AlignHCenter
+    readonly property real edgeInset: horizontalPadding >= 0 ? horizontalPadding : verticalPadding
+    readonly property real titleGap: horizontalPadding >= 0 ? horizontalPadding : Style.spacingM
+    readonly property real buttonsReserve: buttons.width + edgeInset + titleGap
 
     signal closeRequested
 
@@ -43,58 +49,40 @@ Item {
         onDoubleClicked: root.controls.tryToggleMaximize()
     }
 
-    Row {
-        id: titleRow
-        anchors.left: parent.left
-        anchors.leftMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : root.verticalPadding
-        anchors.right: buttons.left
-        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : Style.spacingM
+    Column {
+        id: titleColumn
+        width: root.centered ? Math.max(0, root.width - 2 * Math.max(root.edgeInset, root.buttonsReserve)) : Math.max(0, root.width - root.edgeInset - root.buttonsReserve)
+        x: root.centered ? (root.width - width) / 2 : (LayoutMirroring.enabled ? root.buttonsReserve : root.edgeInset)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: Style.spacingM
+        spacing: Style.spacingXS
 
-        DankIcon {
-            id: icon
-            name: root.iconName
-            size: Style.iconSize
-            color: Style.primary
-            visible: root.iconName !== ""
-            anchors.verticalCenter: parent.verticalCenter
+        StyledText {
+            width: parent.width
+            text: root.title
+            font.pixelSize: root.titleFontSize
+            font.weight: root.titleWeight
+            color: Style.surfaceText
+            horizontalAlignment: root.titleAlignment
+            elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight
+            wrapMode: root.wrapTitle ? Text.Wrap : Text.NoWrap
         }
 
-        Column {
-            id: titleColumn
-            width: Math.max(0, titleRow.width - (icon.visible ? icon.width + titleRow.spacing : 0))
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: Style.spacingXS
-
-            StyledText {
-                width: parent.width
-                text: root.title
-                font.pixelSize: root.titleFontSize
-                font.weight: root.titleWeight
-                color: Style.surfaceText
-                horizontalAlignment: Text.AlignLeft
-                elide: root.wrapTitle ? Text.ElideNone : Text.ElideRight
-                wrapMode: root.wrapTitle ? Text.Wrap : Text.NoWrap
-            }
-
-            StyledText {
-                width: parent.width
-                text: root.subtitle
-                font.pixelSize: Style.fontSizeSmall
-                color: Style.surfaceTextMedium
-                horizontalAlignment: Text.AlignLeft
-                elide: Text.ElideRight
-                wrapMode: Text.NoWrap
-                visible: text !== ""
-            }
+        StyledText {
+            width: parent.width
+            text: root.subtitle
+            font.pixelSize: Style.fontSizeSmall
+            color: Style.surfaceTextMedium
+            horizontalAlignment: root.titleAlignment
+            elide: Text.ElideRight
+            wrapMode: Text.NoWrap
+            visible: text !== ""
         }
     }
 
     Row {
         id: buttons
         anchors.right: parent.right
-        anchors.rightMargin: root.horizontalPadding >= 0 ? root.horizontalPadding : root.verticalPadding
+        anchors.rightMargin: root.edgeInset
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingS
 

@@ -66,10 +66,6 @@ StyledButton {
         disabled: !root.enabled
         hovered: root.isHovered
         stateColor: root.contentColor
-        topLeftRadius: root.topLeftRadius
-        topRightRadius: root.topRightRadius
-        bottomLeftRadius: root.bottomLeftRadius
-        bottomRightRadius: root.bottomRightRadius
         onPositionChanged: root.pointerMoved()
     }
 

@@ -79,6 +79,7 @@ T.Control {
                     tabBar.tabClicked(index);
                 }
                 readonly property real contentWidth: contentCol.implicitWidth
+                radius: Style.cornerRadiusM
 
                 width: tabBar.equalWidthTabs ? Math.max(0, tabBar.width - tabBar.spacing * Math.max(0, tabRepeater.count - 1)) / Math.max(1, tabRepeater.count) : Math.max(contentCol.implicitWidth + Style.spacingXL, Style.tabMinWidth)
                 height: Math.max(tabBar.tabHeight - Style.tabIndicatorHeight, contentCol.implicitHeight + Style.spacingXS * 2)
@@ -129,7 +130,6 @@ T.Control {
                     control: tabItem
                     disabled: !tabBar.enabled
                     stateColor: Style.primary
-                    cornerRadius: Style.cornerRadiusM
                     transitionDuration: Style.expressiveDurations.expressiveEffects
                     transitionCurve: Style.expressiveCurves.expressiveEffects
                 }

@@ -217,11 +217,6 @@ Row {
                 enabled: root.enabled
                 disabled: !root.enabled
                 stateColor: segment.contentColor
-                cornerRadius: root.outerRadius
-                topLeftRadius: segment.topLeftRadius
-                bottomLeftRadius: segment.bottomLeftRadius
-                topRightRadius: segment.topRightRadius
-                bottomRightRadius: segment.bottomRightRadius
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
                 tooltipText: root.iconOnly ? buttonText.text : ""

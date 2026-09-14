@@ -257,7 +257,6 @@ FocusScope {
                     StateLayer {
                         control: hourDigit
                         stateColor: Style.primary
-                        cornerRadius: parent.radius
                     }
 
                     FocusRing {
@@ -314,7 +313,6 @@ FocusScope {
                     StateLayer {
                         control: minuteDigit
                         stateColor: Style.primary
-                        cornerRadius: parent.radius
                     }
 
                     FocusRing {
@@ -366,8 +364,6 @@ FocusScope {
 
                             StateLayer {
                                 control: amItem
-                                topLeftRadius: parent.topLeftRadius
-                                topRightRadius: parent.topRightRadius
                             }
 
                             FocusRing {

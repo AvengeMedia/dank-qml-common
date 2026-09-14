@@ -58,7 +58,6 @@ StyledButton {
         control: root
         disabled: !root.enabled
         stateColor: root.stateColor
-        cornerRadius: root.radius
         transitionDuration: root.stateDuration
         transitionCurve: root.stateCurve
         onEntered: root.entered()

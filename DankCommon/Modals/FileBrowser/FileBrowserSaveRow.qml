@@ -67,7 +67,6 @@ Row {
 
         StateLayer {
             stateColor: Style.primary
-            cornerRadius: Style.cornerRadius
             enabled: fileNameInput.text.trim() !== ""
             onClicked: {
                 if (fileNameInput.text.trim() !== "") {
@@ -111,7 +110,6 @@ Row {
 
         StateLayer {
             stateColor: Style.primaryText
-            cornerRadius: Style.cornerRadius
             onClicked: {
                 var path = (selectedFilePath !== "" && selectedFileIsDir) ? selectedFilePath : currentPath;
                 var basePath = path.replace(/^file:\/\//, '');

@@ -195,10 +195,6 @@ Item {
             control: segment
             disabled: !segment.enabled
             stateColor: root.contentColor
-            topLeftRadius: segment.topLeftRadius
-            topRightRadius: segment.topRightRadius
-            bottomLeftRadius: segment.bottomLeftRadius
-            bottomRightRadius: segment.bottomRightRadius
             tooltipText: segment.isTrailing ? root.menuTooltipText : root.tooltipText
         }
 

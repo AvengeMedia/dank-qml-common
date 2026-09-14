@@ -234,7 +234,6 @@ Item {
                 id: cellLayer
                 control: cell
                 stateColor: cell.isSelected ? Style.onPrimary : Style.primary
-                cornerRadius: cell.radius
                 disabled: !root.interactive
                 enabled: root.interactive
                 transitionDuration: Style.expressiveDurations.expressiveEffects

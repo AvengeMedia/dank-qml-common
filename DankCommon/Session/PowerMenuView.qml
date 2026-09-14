@@ -129,7 +129,6 @@ Rectangle {
                 Base.StateLayer {
                     id: stateLayer
                     stateColor: button.contentColor
-                    cornerRadius: button.radius
                     transitionDuration: LockMetrics.effectsDuration
                     transitionCurve: Style.expressiveCurves.expressiveEffects
                     onPressed: root.actionPressed(button.index)

@@ -76,7 +76,6 @@ FocusScope {
                 hovered: containsMouse || trackStateLayer.containsMouse
                 disabled: !toggle.enabled || toggle.toggling
                 stateColor: Style.primary
-                cornerRadius: parent.radius
             }
         }
     }
@@ -261,7 +260,6 @@ FocusScope {
             disabled: !toggle.enabled || toggle.toggling
             stateColor: "transparent"
             enableRipple: false
-            cornerRadius: parent.radius
         }
 
         FocusRing {

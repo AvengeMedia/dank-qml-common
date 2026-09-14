@@ -4,8 +4,6 @@ import qs.DankCommon.Common
 Item {
     id: root
 
-    activeFocusOnTab: true
-
     KeyNavigation.tab: keyNavigationTab
     KeyNavigation.backtab: keyNavigationBacktab
 

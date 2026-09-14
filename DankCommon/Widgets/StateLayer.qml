@@ -10,10 +10,10 @@ MouseArea {
     property T.AbstractButton control: null
     property color stateColor: Style.surfaceText
     property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
-    property real topLeftRadius: cornerRadius
-    property real topRightRadius: cornerRadius
-    property real bottomLeftRadius: cornerRadius
-    property real bottomRightRadius: cornerRadius
+    property real topLeftRadius: parent && parent.topLeftRadius !== undefined ? parent.topLeftRadius : cornerRadius
+    property real topRightRadius: parent && parent.topRightRadius !== undefined ? parent.topRightRadius : cornerRadius
+    property real bottomLeftRadius: parent && parent.bottomLeftRadius !== undefined ? parent.bottomLeftRadius : cornerRadius
+    property real bottomRightRadius: parent && parent.bottomRightRadius !== undefined ? parent.bottomRightRadius : cornerRadius
     property var tooltipText: null
     property string tooltipSide: "bottom"
     property bool enableRipple: Style.enableRippleEffects

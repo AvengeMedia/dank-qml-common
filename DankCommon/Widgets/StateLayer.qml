@@ -28,8 +28,10 @@ MouseArea {
     hoverEnabled: true
     acceptedButtons: control ? Qt.NoButton : Qt.LeftButton
 
+    readonly property bool controlFocused: control ? control.visualFocus : false
+
     function showTooltip() {
-        tooltipLoader.item?.showNow();
+        tooltipHost.showNow();
     }
 
     onPressed: mouse => {
@@ -76,65 +78,27 @@ MouseArea {
         enableRipple: root.enableRipple
     }
 
-    onEntered: tooltipLoader.item?.schedule()
-    onExited: tooltipLoader.item?.dismiss()
+    onEntered: tooltipHost.schedule()
 
-    onVisibleChanged: {
-        if (!visible)
-            tooltipLoader.item?.dismiss();
+    onExited: {
+        if (!controlFocused)
+            tooltipHost.dismiss();
     }
 
-    onTooltipTextChanged: {
-        if (!tooltipText) {
-            tooltipLoader.item?.dismiss();
+    onControlFocusedChanged: {
+        if (controlFocused) {
+            tooltipHost.showNow();
             return;
         }
-        tooltipLoader.item?.refresh();
+        if (!containsMouse)
+            tooltipHost.dismiss();
     }
 
-    onDisabledChanged: {
-        if (disabled)
-            tooltipLoader.item?.dismiss();
-    }
-
-    Component.onDestruction: tooltipLoader.item?.dismiss()
-
-    Loader {
-        id: tooltipLoader
-        active: !!root.tooltipText
-        sourceComponent: DankTooltipV2 {
-            id: tooltip
-
-            property bool shown: false
-
-            function showNow() {
-                if (root.disabled || !root.visible || !root.tooltipText)
-                    return;
-                hoverDelay.stop();
-                show(root.tooltipText, root, 0, 0, root.tooltipSide);
-                shown = true;
-            }
-
-            function refresh() {
-                if (shown)
-                    showNow();
-            }
-
-            function schedule() {
-                hoverDelay.restart();
-            }
-
-            function dismiss() {
-                hoverDelay.stop();
-                hide();
-                shown = false;
-            }
-
-            Timer {
-                id: hoverDelay
-                interval: 400
-                onTriggered: tooltip.showNow()
-            }
-        }
+    DankTooltipHost {
+        id: tooltipHost
+        text: root.tooltipText
+        target: root
+        side: root.tooltipSide
+        enabled: !root.disabled
     }
 }

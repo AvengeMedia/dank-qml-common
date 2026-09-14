@@ -306,6 +306,7 @@ Singleton {
     readonly property real textFieldSlowEffectsStiffness: theme?.textFieldSlowEffectsStiffness ?? 800
     readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
+    readonly property int tooltipDelay: theme?.tooltipDelay ?? 400
     readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400
     readonly property real clockFaceSize: theme?.clockFaceSize ?? 256
     readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 101 / clockFaceSize

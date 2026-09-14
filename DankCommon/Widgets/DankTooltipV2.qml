@@ -7,6 +7,7 @@ Item {
     id: root
 
     property string text: ""
+    property alias delay: tooltip.delay
     property Item sourceItem: null
     readonly property var sourceWindow: sourceItem?.Window.window ?? null
 

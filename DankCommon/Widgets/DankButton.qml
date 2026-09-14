@@ -24,6 +24,8 @@ StyledButton {
     property bool enableScaleAnimation: false
     property bool enableRipple: Style.enableRippleEffects
     property real minimumWidth: Style.buttonMinWidth
+    property var tooltipText: null
+    property string tooltipSide: "bottom"
 
     implicitWidth: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
     implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
@@ -33,7 +35,7 @@ StyledButton {
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     Accessible.role: Accessible.Button
-    Accessible.name: text
+    Accessible.name: text || tooltipText || iconName
 
     FocusRing {
         visible: root.visualFocus
@@ -65,6 +67,8 @@ StyledButton {
         enableRipple: root.enableRipple
         transitionDuration: Style.expressiveDurations.expressiveEffects
         transitionCurve: Style.expressiveCurves.expressiveEffects
+        tooltipText: root.tooltipText
+        tooltipSide: root.tooltipSide
     }
 
     StyledTextMetrics {

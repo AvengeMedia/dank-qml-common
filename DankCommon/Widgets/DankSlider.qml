@@ -52,9 +52,7 @@ Controls.Control {
     signal sliderValueChanged(int newValue)
     signal sliderDragFinished(int finalValue)
 
-    onInsetIconTooltipChanged: insetAction.syncTooltip()
     onIsDraggingChanged: insetAction.syncTooltip()
-    onVisibleChanged: insetAction.syncTooltip()
 
     function formatValue(v) {
         if (decimals <= 0)
@@ -470,23 +468,25 @@ Controls.Control {
                 }
 
                 function syncTooltip() {
-                    if (!containsPointer || !visible || !slider.visible || slider.isDragging || slider.insetIconTooltip.length === 0) {
-                        actionTooltip.hide();
+                    if (!containsPointer || slider.isDragging) {
+                        actionTooltip.dismiss();
                         return;
                     }
-                    actionTooltip.show(slider.insetIconTooltip, insetAction, 0, 0, "top");
+                    actionTooltip.schedule();
                 }
 
                 onContainsPointerChanged: syncTooltip()
-                onVisibleChanged: syncTooltip()
-                Component.onDestruction: actionTooltip.hide()
 
                 FocusRing {
                     visible: insetAction.visualFocus
                     radius: Style.fullRadius(width, height)
                 }
-                DankTooltipV2 {
+
+                DankTooltipHost {
                     id: actionTooltip
+                    text: slider.insetIconTooltip
+                    target: insetAction
+                    side: "top"
                 }
             }
 

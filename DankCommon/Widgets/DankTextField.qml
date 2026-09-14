@@ -184,7 +184,8 @@ StyledRect {
     readonly property real cutoutHalfWidth: labelText ? (fieldLabel.width / 2 + Style.spacingXS) * labelProgress : 0
     readonly property real cutoutStart: Math.max(0, cutoutCenter - cutoutHalfWidth)
     readonly property real cutoutEnd: Math.min(width, cutoutCenter + cutoutHalfWidth)
-    readonly property real cutoutBottom: containerTop + (labelText ? fieldLabel.height / 2 * labelProgress : 0)
+    readonly property real labelTop: fieldLabel.y + (fieldLabel.height - labelGlyph.height * fieldLabel.textScale) / 2
+    readonly property real cutoutBottom: containerTop + (labelText ? Math.max(0, containerTop + outlineStrokeWidth - labelTop) : 0)
 
     component FieldOutline: Rectangle {
         x: -parent.x

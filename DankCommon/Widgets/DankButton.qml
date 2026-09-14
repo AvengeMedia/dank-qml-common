@@ -37,7 +37,7 @@ StyledButton {
 
     FocusRing {
         visible: root.visualFocus
-        radius: Math.max(0, parent.radius + 2 * Style.focusRingWidth)
+        radius: Math.max(0, parent.radius + Style.focusRingOffset)
     }
 
     Behavior on radius {

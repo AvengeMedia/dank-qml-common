@@ -29,6 +29,11 @@ Column {
             placeholderText: I18n.tr("Full name")
         }
 
+        DankSearchField {
+            width: Math.min(Theme.fieldDefaultWidth, root.width)
+            placeholderText: I18n.tr("Search")
+        }
+
         DankTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true

@@ -223,8 +223,8 @@ Singleton {
     readonly property real outlineWidth: 1
     readonly property real outlineWidthFocused: 2
     readonly property real dividerWidth: 1
-    readonly property real focusRingWidth: 2
-    readonly property real focusRingOffset: 4
+    readonly property real focusRingWidth: 1.5
+    readonly property real focusRingOffset: 3
     readonly property color focusRingColor: primary
     readonly property color lockScreenContentColor: "#ffffff"
     readonly property real lockScreenScrimAlpha: 0.4

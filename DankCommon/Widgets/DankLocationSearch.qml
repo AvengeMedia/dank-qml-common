@@ -140,15 +140,13 @@ Item {
         width: parent.width
         height: root.fieldHeight
 
-        DankTextField {
+        DankSearchField {
             id: locationInput
 
             width: parent.width
             height: parent.height
-            leftIconName: "search"
             placeholderText: root.placeholderText
             text: ""
-            cornerRadius: Style.fullRadius(width, height)
             keyNavigationTab: searchResultsList.count > 0 ? searchResultsList.itemAtIndex(0) : root.keyNavigationTab
             Keys.onDownPressed: {
                 const first = searchResultsList.itemAtIndex(0);

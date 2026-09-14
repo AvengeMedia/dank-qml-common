@@ -434,12 +434,9 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankTextField {
+                            DankSearchField {
                                 width: Math.min(300, gallery.width)
-                                leftIconName: "search"
                                 placeholderText: "Search settings"
-                                cornerRadius: Theme.fullRadius(width, height)
-                                showClearButton: true
                             }
 
                             DankTextField {

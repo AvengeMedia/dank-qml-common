@@ -15,6 +15,7 @@ Item {
     property real blurWidth: 0
     property real blurHeight: 0
     property real blurRadius: 0
+    property real blurBottomRadius: blurRadius
     property bool clipEnabled: false
     property real clipX: blurX
     property real clipY: blurY
@@ -30,6 +31,15 @@ Item {
         width: root.blurWidth
         height: root.blurHeight
         radius: root.blurRadius
+
+        Region {
+            readonly property bool needed: root.blurBottomRadius < root.blurRadius
+            x: root.blurX
+            y: root.blurY + root.blurRadius
+            width: needed ? root.blurWidth : 0
+            height: needed ? Math.max(0, root.blurHeight - root.blurRadius) : 0
+            radius: root.blurBottomRadius
+        }
 
         Region {
             intersection: Intersection.Intersect
@@ -65,6 +75,7 @@ Item {
     onBlurWidthChanged: settleTimer.restart()
     onBlurHeightChanged: settleTimer.restart()
     onBlurRadiusChanged: settleTimer.restart()
+    onBlurBottomRadiusChanged: settleTimer.restart()
     onClipEnabledChanged: settleTimer.restart()
     onClipXChanged: settleTimer.restart()
     onClipYChanged: settleTimer.restart()

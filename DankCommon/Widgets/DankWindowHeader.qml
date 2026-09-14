@@ -15,7 +15,7 @@ Item {
     property string subtitle: ""
     property string iconName: ""
     property bool closeEnabled: true
-    property string closeTooltipText: I18n.tr("Close")
+    property string closeTooltipText: ""
     default property alias actions: extraActions.data
 
     signal closeRequested
@@ -107,21 +107,22 @@ Item {
         WindowButton {
             visible: root.controls?.canMinimize ?? false
             iconName: "minimize"
-            tooltipText: I18n.tr("Minimize")
+            Accessible.name: I18n.tr("Minimize")
             onClicked: root.controls.tryMinimize()
         }
 
         WindowButton {
             visible: root.controls?.canMaximize ?? false
             iconName: root.controls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
-            tooltipText: root.controls?.targetWindow?.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
+            Accessible.name: root.controls?.targetWindow?.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
             onClicked: root.controls.tryToggleMaximize()
         }
 
         WindowButton {
             enabled: root.closeEnabled
             iconName: "close"
-            tooltipText: root.closeTooltipText
+            tooltipText: root.closeTooltipText || null
+            Accessible.name: root.closeTooltipText || I18n.tr("Close")
             onClicked: root.closeRequested()
         }
     }

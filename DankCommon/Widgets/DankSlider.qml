@@ -23,6 +23,7 @@ Controls.Control {
     property string insetIconPosition: "start"
     property bool insetIconClickable: false
     property string insetIconTooltip: ""
+    property string insetIconLabel: ""
     property string unit: "%"
     property bool showValue: true
     property bool showStops: false
@@ -454,7 +455,7 @@ Controls.Control {
                 anchors.verticalCenter: parent.verticalCenter
                 visible: sliderTrack.insetIconVisible && slider.insetIconClickable
                 enabled: slider.enabled && visible
-                Accessible.name: slider.insetIconTooltip
+                Accessible.name: slider.insetIconLabel || slider.insetIconTooltip
                 onClicked: activate()
 
                 function activate() {

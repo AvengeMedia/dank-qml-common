@@ -10,6 +10,8 @@ Item {
     property string side: "bottom"
     property bool shown: false
 
+    readonly property bool hoverAreaHovered: hoverArea ? hoverArea.containsMouse : false
+
     function schedule() {
         present(Style.tooltipDelay);
     }
@@ -39,6 +41,7 @@ Item {
 
     onTextChanged: text ? refresh() : dismiss()
     onTargetChanged: target ? refresh() : dismiss()
+    onHoverAreaHoveredChanged: hoverAreaHovered ? schedule() : dismiss()
 
     onEnabledChanged: {
         if (!enabled)
@@ -48,18 +51,6 @@ Item {
     onVisibleChanged: {
         if (!visible)
             dismiss();
-    }
-
-    Connections {
-        target: root.hoverArea
-
-        function onEntered() {
-            root.schedule();
-        }
-
-        function onExited() {
-            root.dismiss();
-        }
     }
 
     Loader {

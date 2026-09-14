@@ -31,7 +31,7 @@ MouseArea {
     readonly property bool controlFocused: control ? control.visualFocus : false
 
     function showTooltip() {
-        tooltipHost.showNow();
+        tooltipLoader.item?.showNow();
     }
 
     onPressed: mouse => {
@@ -78,27 +78,30 @@ MouseArea {
         enableRipple: root.enableRipple
     }
 
-    onEntered: tooltipHost.schedule()
+    onEntered: tooltipLoader.item?.schedule()
 
     onExited: {
         if (!controlFocused)
-            tooltipHost.dismiss();
+            tooltipLoader.item?.dismiss();
     }
 
     onControlFocusedChanged: {
         if (controlFocused) {
-            tooltipHost.showNow();
+            tooltipLoader.item?.showNow();
             return;
         }
         if (!containsMouse)
-            tooltipHost.dismiss();
+            tooltipLoader.item?.dismiss();
     }
 
-    DankTooltipHost {
-        id: tooltipHost
-        text: root.tooltipText
-        target: root
-        side: root.tooltipSide
-        enabled: !root.disabled
+    Loader {
+        id: tooltipLoader
+        active: !!root.tooltipText
+        sourceComponent: DankTooltipHost {
+            text: root.tooltipText
+            target: root
+            side: root.tooltipSide
+            enabled: !root.disabled
+        }
     }
 }

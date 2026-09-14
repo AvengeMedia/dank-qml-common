@@ -35,7 +35,6 @@ Item {
 
     component WindowButton: DankActionButton {
         buttonSize: Style.buttonHeightXXS
-        backgroundColor: Style.foregroundColor(Style.surfaceContainerHigh, Style.isFloatingWindow(root))
         iconSize: Style.iconSizeSmall
         iconColor: Style.surfaceText
     }

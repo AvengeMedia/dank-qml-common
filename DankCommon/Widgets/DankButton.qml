@@ -31,7 +31,10 @@ StyledButton {
     implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
 
-    radius: Style.buttonRadius(width, height, buttonHeight, pressed, shape === "round")
+    readonly property real restRadius: Style.buttonRadius(width, height, buttonHeight, false, shape === "round")
+    readonly property real pressedRadius: Style.buttonRadius(width, height, buttonHeight, true, shape === "round")
+    property real pressProgress: pressed ? 1 : 0
+    radius: restRadius + (pressedRadius - restRadius) * pressProgress
     color: enabled ? backgroundColor : Style.onSurface_12
     scale: (enableScaleAnimation && pressed) ? Style.pressScale : 1.0
     Accessible.role: Accessible.Button
@@ -42,7 +45,7 @@ StyledButton {
         radius: Math.max(0, parent.radius + Style.focusRingOffset)
     }
 
-    Behavior on radius {
+    Behavior on pressProgress {
         enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
         DankAnim {
             duration: Style.expressiveDurations.expressiveEffects

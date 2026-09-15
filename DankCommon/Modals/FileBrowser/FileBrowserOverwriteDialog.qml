@@ -74,6 +74,14 @@ Item {
                     width: 80
                     height: 36
                     radius: Style.buttonRadius(width, height, height, cancelArea.pressed, true)
+
+                    Behavior on radius {
+                        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                        DankAnim {
+                            duration: Style.expressiveDurations.expressiveEffects
+                            easing.bezierCurve: Style.expressiveCurves.standard
+                        }
+                    }
                     color: cancelArea.containsMouse ? Qt.lighter(Style.surfaceVariant, 1.2) : Style.surfaceVariant
                     border.color: Style.outline
                     border.width: 1
@@ -101,6 +109,14 @@ Item {
                     width: 90
                     height: 36
                     radius: Style.buttonRadius(width, height, height, overwriteArea.pressed, true)
+
+                    Behavior on radius {
+                        enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                        DankAnim {
+                            duration: Style.expressiveDurations.expressiveEffects
+                            easing.bezierCurve: Style.expressiveCurves.standard
+                        }
+                    }
                     color: overwriteArea.containsMouse ? Qt.darker(Style.primary, 1.1) : Style.primary
 
                     StyledText {

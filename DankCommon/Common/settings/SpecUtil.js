@@ -1,5 +1,23 @@
 .pragma library
 
+function percentToUnit(v) {
+    if (v === undefined || v === null)
+        return undefined;
+    return v > 1 ? v / 100 : v;
+}
+
+function mergeSpec(shared, local) {
+    var out = {};
+    for (var k in shared)
+        out[k] = shared[k];
+    for (var k in local) {
+        if (k in out)
+            console.warn("spec: local key shadows the shared schema:", k);
+        out[k] = local[k];
+    }
+    return out;
+}
+
 function stableStringify(value) {
     if (value === null || typeof value !== "object")
         return JSON.stringify(value);

@@ -60,13 +60,13 @@ ShellRoot {
 
     function run() {
         try {
-            check(slider.wheelInputEnabled, "standalone slider accepts wheel input");
+            check(slider.wheelEnabled, "standalone slider accepts wheel input");
             input.mouseWheel(slider, slider.width / 2, slider.height / 2, 0, 120);
             check(slider.value > 50, "standalone wheel adjusts value");
             slider.value = 50;
             sliderHost.parent = scrollBody;
             input.wait(30);
-            check(!slider.wheelInputEnabled, "reparenting under scrolling disables wheel adjustment");
+            check(!slider.wheelEnabled, "reparenting under scrolling disables wheel adjustment");
             input.mouseWheel(slider, slider.width / 2, slider.height / 2, 0, -120);
             input.wait(30);
             check(slider.value === 50, "explicit wheelEnabled cannot override scroll-container rule");
@@ -85,7 +85,7 @@ ShellRoot {
             check(slider.value === 50, "nonoverflowing scroll container also blocks wheel adjustment");
             sliderHost.parent = plain;
             input.wait(20);
-            check(slider.wheelInputEnabled, "reparenting back restores standalone wheel adjustment");
+            check(slider.wheelEnabled, "reparenting back restores standalone wheel adjustment");
             console.log("PASS slider scroll containment, reparenting, explicit override, keyboard and dragging");
             Qt.quit();
         } catch (error) {

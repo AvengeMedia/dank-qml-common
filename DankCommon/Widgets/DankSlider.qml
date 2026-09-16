@@ -13,10 +13,9 @@ Controls.Control {
         }
         return null;
     }
-    readonly property bool wheelInputEnabled: wheelEnabled && scrollContainer === null
 
-    focusPolicy: enabled ? wheelInputEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
-    wheelEnabled: scrollContainer === null
+    focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
+    wheelEnabled: true
 
     Binding on wheelEnabled {
         when: slider.scrollContainer !== null
@@ -519,7 +518,7 @@ Controls.Control {
                 preventStealing: true
                 acceptedButtons: Qt.LeftButton
                 onWheel: wheelEvent => {
-                    if (!slider.wheelInputEnabled || wheelEvent.angleDelta.y === 0) {
+                    if (!slider.wheelEnabled || wheelEvent.angleDelta.y === 0) {
                         wheelEvent.accepted = false;
                         return;
                     }

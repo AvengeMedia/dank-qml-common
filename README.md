@@ -38,7 +38,7 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 ## Widgets
 
-`DankSlider` leaves wheel input to any enclosing scrollable container. Outside one, `wheelEnabled` controls wheel adjustment. Dragging and keyboard adjustment work in either case.
+`DankSlider` leaves wheel input to any enclosing scrollable container, which forces `wheelEnabled` false. Outside one, `wheelEnabled` controls wheel adjustment. Dragging and keyboard adjustment work in either case.
 
 `DankDialog` provides a title, supporting text, scrollable content and trailing actions. Use it as content inside a window, or set `embedded: false` for its scrim, elevated surface and entry motion. Handle `accepted` and `rejected`; use `acceptEnabled` and `closeEnabled` for pending actions.
 

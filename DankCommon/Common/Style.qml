@@ -77,7 +77,13 @@ Singleton {
     readonly property color onSurface_12: theme?.onSurface_12 ?? withAlpha(onSurface, 0.12)
     readonly property color onSurface_38: theme?.onSurface_38 ?? withAlpha(onSurface, 0.38)
     readonly property color onSurfaceVariant_30: theme?.onSurfaceVariant_30 ?? withAlpha(onSurfaceVariant, 0.3)
+    property color onSurfaceVariant_40
     readonly property list<QtObject> roleBindings: [
+        Binding {
+            target: root
+            property: "onSurfaceVariant_40"
+            value: root.theme?.onSurfaceVariant_40 ?? "#66cac4cf"
+        },
         Binding {
             target: root
             property: "onErrorContainer"

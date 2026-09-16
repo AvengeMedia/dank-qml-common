@@ -227,7 +227,7 @@ FocusScope {
                     width: Style.bottomSheetHandleWidth
                     height: Style.bottomSheetHandleHeight
                     radius: Style.fullRadius(width, height)
-                    color: Style.onSurfaceVariant
+                    color: Style.onSurfaceVariant_40
                 }
 
                 HoverHandler {

@@ -46,7 +46,13 @@ Singleton {
     property color onErrorContainer
     property color onTertiaryContainer
     property color onSurfaceVariant_30: withAlpha(onSurfaceVariant, 0.3)
+    property color onSurfaceVariant_40
     readonly property list<QtObject> roleBindings: [
+        Binding {
+            target: root
+            property: "onSurfaceVariant_40"
+            value: root.withAlpha(root.onSurfaceVariant, 0.4)
+        },
         Binding {
             target: root
             property: "onErrorContainer"

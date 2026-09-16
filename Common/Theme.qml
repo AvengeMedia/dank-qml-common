@@ -241,6 +241,8 @@ Singleton {
     readonly property real iconEnterScale: 0.6
     readonly property real osdHeight: sliderHandleHeight + spacingS * 2
     readonly property real dialogMaxWidth: 560
+    readonly property real bottomSheetHandleWidth: 36
+    readonly property real bottomSheetHandleHeight: 4
     readonly property real popupEnterScale: 0.92
     readonly property real pendingOpacity: 0.6
     readonly property real spinnerStrokeWidth: 2

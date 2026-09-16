@@ -521,6 +521,74 @@ ShellRoot {
                         }
 
                         Section {
+                            text: "Bottom sheet"
+                        }
+
+                        Flow {
+                            width: parent.width
+                            spacing: Theme.spacingM
+
+                            DankButton {
+                                id: sheetOpener
+
+                                text: I18n.tr("Open bottom sheet")
+                                iconName: "expand_less"
+                                onClicked: {
+                                    bottomSheet.dismissible = true;
+                                    bottomSheet.opened = true;
+                                }
+                            }
+
+                            DankButton {
+                                text: I18n.tr("Open modal sheet")
+                                iconName: "lock"
+                                onClicked: {
+                                    bottomSheet.dismissible = false;
+                                    bottomSheet.opened = true;
+                                }
+                            }
+                        }
+
+                        DankBottomSheet {
+                            id: bottomSheet
+
+                            parent: window.contentItem
+                            title: I18n.tr("Outputs")
+                            initialFocusItem: mirrorToggle
+                            returnFocusItem: sheetOpener
+                            onDismissRequested: opened = false
+
+                            DankToggle {
+                                id: mirrorToggle
+
+                                width: parent.width
+                                text: "Mirror displays"
+                                description: bottomSheet.dismissible ? "Swipe the handle or tap outside to close" : "Modal: use the button below"
+                                checked: true
+                                onToggled: value => mirrorToggle.checked = value
+                            }
+
+                            Repeater {
+                                model: 8
+
+                                DankToggle {
+                                    required property int index
+
+                                    width: parent.width
+                                    text: `Output ${index + 1}`
+                                    description: index % 2 ? "1920x1080 · 60 Hz" : "2560x1440 · 144 Hz"
+                                    onToggled: value => checked = value
+                                }
+                            }
+
+                            DankButton {
+                                width: parent.width
+                                text: I18n.tr("Close")
+                                onClicked: bottomSheet.opened = false
+                            }
+                        }
+
+                        Section {
                             text: "Icons"
                         }
 

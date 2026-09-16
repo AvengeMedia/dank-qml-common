@@ -6,8 +6,23 @@ import qs.DankCommon.Common
 Controls.Control {
     id: slider
 
-    focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
-    wheelEnabled: true
+    readonly property Item scrollContainer: {
+        for (let ancestor = parent; ancestor; ancestor = ancestor.parent) {
+            if ("flickableDirection" in ancestor)
+                return ancestor;
+        }
+        return null;
+    }
+    readonly property bool wheelInputEnabled: wheelEnabled && scrollContainer === null
+
+    focusPolicy: enabled ? wheelInputEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
+    wheelEnabled: scrollContainer === null
+
+    Binding on wheelEnabled {
+        when: slider.scrollContainer !== null
+        value: false
+        restoreMode: Binding.RestoreBindingOrValue
+    }
 
     property int value: 50
     property int minimum: 0
@@ -504,7 +519,7 @@ Controls.Control {
                 preventStealing: true
                 acceptedButtons: Qt.LeftButton
                 onWheel: wheelEvent => {
-                    if (!slider.wheelEnabled) {
+                    if (!slider.wheelInputEnabled || wheelEvent.angleDelta.y === 0) {
                         wheelEvent.accepted = false;
                         return;
                     }

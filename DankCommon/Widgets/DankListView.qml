@@ -145,6 +145,15 @@ ListView {
         justChanged = false;
     }
 
+    function stopMomentum() {
+        cancelFlick();
+        momentumAnim.running = false;
+        isMomentumActive = false;
+        momentumVelocity = 0;
+        wheelHandler.momentum = 0;
+        wheelHandler.velocitySamples = [];
+    }
+
     onModelChanged: {
         _selectionMotionReady = false;
         if (highlightSelection)

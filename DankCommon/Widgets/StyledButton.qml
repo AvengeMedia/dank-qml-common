@@ -23,6 +23,10 @@ T.CheckBox {
         if (checkable)
             click();
     }
+
+    HoverHandler {
+        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+    }
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 

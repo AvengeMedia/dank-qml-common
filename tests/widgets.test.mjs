@@ -8,7 +8,7 @@ import { promisify } from "node:util";
 import test from "node:test";
 
 const execute = promisify(execFile);
-const fixtures = ["slider", "slider-input", "toggle", "foreground", "states", "button-group", "window-header", "split-button", "dialog", "analog-clock"];
+const fixtures = ["slider", "slider-input", "slider-scroll", "toggle", "foreground", "states", "button-group", "window-header", "split-button", "dialog", "bottom-sheet", "analog-clock"];
 
 test("widget behavior", { concurrency: 2 }, async t => {
     await Promise.all(fixtures.map(fixture => t.test(fixture, async () => {

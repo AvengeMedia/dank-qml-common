@@ -230,6 +230,8 @@ Singleton {
     readonly property real avatarSize: theme?.avatarSize ?? 36
     readonly property real osdHeight: theme?.osdHeight ?? sliderHandleHeight + spacingS * 2
     readonly property real dialogMaxWidth: theme?.dialogMaxWidth ?? 560
+    readonly property real bottomSheetHandleWidth: theme?.bottomSheetHandleWidth ?? 36
+    readonly property real bottomSheetHandleHeight: theme?.bottomSheetHandleHeight ?? 4
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
     readonly property real sliderHandleWidthDesktop: theme?.sliderHandleWidthDesktop ?? 6

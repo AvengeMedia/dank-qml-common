@@ -18,7 +18,7 @@ Controls.Control {
     wheelEnabled: true
 
     Binding on wheelEnabled {
-        when: slider.scrollContainer !== null
+        when: slider.scrollContainer !== null && !slider.wheelInsideScrollable
         value: false
         restoreMode: Binding.RestoreBindingOrValue
     }
@@ -27,6 +27,8 @@ Controls.Control {
     property int minimum: 0
     property int maximum: 100
     property int step: 1
+    property int wheelStep: keyStep
+    property bool wheelInsideScrollable: false
     property string startIcon: ""
     property string endIcon: ""
     property alias leftIcon: slider.startIcon // ! TODO deprecate me after 1.7 release
@@ -160,8 +162,8 @@ Controls.Control {
         sliderValueChanged(clamped);
     }
 
-    function stepBy(direction) {
-        let next = value + direction * keyStep;
+    function stepBy(direction, amount) {
+        let next = value + direction * (amount ?? keyStep);
         if (step > 1)
             next = minimum + Math.round((next - minimum) / step) * step;
         commit(Math.round(next));
@@ -308,12 +310,11 @@ Controls.Control {
             readonly property bool ticksVisible: slider.showStops && slider.tickCount > 0 && tickSpacing >= Style.sliderTickSize + Style.sliderHandleGap
             readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
             readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
+            readonly property real insetIconExtent: Style.spacingXS + movingInsetIcon.width
             readonly property bool insetIconBehindHandle: {
-                if (insetIconLeftAligned) {
-                    return sliderHandle.x <= (Style.iconSizeLarge + Style.spacingS);
-                } else {
-                    return (width - sliderHandle.x) <= Style.iconSizeLarge + Style.spacingS;
-                }
+                if (insetIconLeftAligned)
+                    return sliderHandle.x - gap < insetIconExtent;
+                return width - sliderHandle.x - sliderHandle.width - gap < insetIconExtent;
             }
 
             width: parent.width - (slider.startIcon.length > 0 ? startIconLoader.width + Style.spacingM : 0) - (slider.endIcon.length > 0 ? endIconLoader.width + Style.spacingM : 0)
@@ -522,7 +523,7 @@ Controls.Control {
                         wheelEvent.accepted = false;
                         return;
                     }
-                    slider.stepBy(wheelEvent.angleDelta.y > 0 ? 1 : -1);
+                    slider.stepBy(wheelEvent.angleDelta.y > 0 ? 1 : -1, slider.wheelStep);
                     wheelEvent.accepted = true;
                 }
                 onPressed: mouse => {

@@ -344,15 +344,19 @@ Singleton {
         }
     }
 
-    function fontWeightFor(token) {
+    function isUiFontToken(token) {
         switch (token) {
         case "":
         case "ui":
         case "mono":
-            return fontWeight;
+            return true;
         default:
-            return Font.Normal;
+            return false;
         }
+    }
+
+    function fontWeightFor(token) {
+        return isUiFontToken(token) ? fontWeight : Font.Normal;
     }
     readonly property int fontWeight: theme?.fontWeight ?? Font.Normal
     readonly property int fontWeightMedium: shiftedFontWeight(Font.Medium)

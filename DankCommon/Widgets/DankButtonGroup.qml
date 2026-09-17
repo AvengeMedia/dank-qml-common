@@ -18,6 +18,7 @@ Row {
     property color unselectedColor: Style.foregroundColor(Style.secondaryContainer, !root.usePopupTransparency)
     property color unselectedContentColor: Style.onSecondaryContainer
     property bool iconOnly: false
+    property bool labelOnlySelected: false
     property string size: "medium"
     property int buttonHeight: size === "small" ? Style.buttonHeightXS : Style.buttonHeightS
     property bool compactLayout: root.Window.window ? root.Window.window.width < Style.smallBreakpoint : false
@@ -223,7 +224,7 @@ Row {
                 stateColor: segment.contentColor
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
-                tooltipText: (typeof modelData === "object" && modelData.tooltip) ? modelData.tooltip : (root.iconOnly ? buttonText.text : "")
+                tooltipText: (typeof modelData === "object" && modelData.tooltip) ? modelData.tooltip : (buttonText.visible ? "" : buttonText.text)
             }
 
             FocusRing {
@@ -279,7 +280,13 @@ Row {
 
                     StyledText {
                         id: buttonText
-                        visible: !root.iconOnly || !optionIcon.visible
+                        visible: {
+                            if (!optionIcon.visible)
+                                return true;
+                            if (root.labelOnlySelected)
+                                return segment.selected;
+                            return !root.iconOnly;
+                        }
 
                         readonly property real capAvailable: {
                             if (root._segmentCap <= 0)

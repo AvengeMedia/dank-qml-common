@@ -8,6 +8,8 @@ Text {
     readonly property string resolvedFontFamily: Style.fontFor(fontToken)
 
     readonly property int resolvedRenderType: {
+        if (!Style.isUiFontToken(fontToken))
+            return Text.NativeRendering;
         switch (Style.textRenderType) {
         case Style.TextRenderType.Qt:
             return Text.QtRendering;

@@ -295,8 +295,10 @@ Singleton {
 
     readonly property string defaultFontFamily: Fonts.sans
     readonly property string defaultMonoFontFamily: Fonts.mono
+    readonly property string defaultDisplayFontFamily: Fonts.display
     property string fontFamily: defaultFontFamily
     property string monoFontFamily: defaultMonoFontFamily
+    property string displayFontFamily: defaultDisplayFontFamily
     property int fontWeight: Font.Normal
 
     property int shorterDuration: 100

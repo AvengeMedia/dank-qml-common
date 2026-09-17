@@ -328,6 +328,32 @@ Singleton {
     readonly property real buttonGroupExpandRatio: theme?.buttonGroupExpandRatio ?? 0.15
     readonly property string fontFamily: theme?.fontFamily ?? Fonts.sans
     readonly property string monoFontFamily: theme?.monoFontFamily ?? Fonts.mono
+    readonly property string displayFontFamily: theme?.displayFontFamily ?? Fonts.display
+
+    function fontFor(token) {
+        switch (token) {
+        case "":
+        case "ui":
+            return fontFamily;
+        case "mono":
+            return monoFontFamily;
+        case "display":
+            return displayFontFamily;
+        default:
+            return token;
+        }
+    }
+
+    function fontWeightFor(token) {
+        switch (token) {
+        case "":
+        case "ui":
+        case "mono":
+            return fontWeight;
+        default:
+            return Font.Normal;
+        }
+    }
     readonly property int fontWeight: theme?.fontWeight ?? Font.Normal
     readonly property int fontWeightMedium: shiftedFontWeight(Font.Medium)
     readonly property int fontWeightBold: shiftedFontWeight(Font.Bold)

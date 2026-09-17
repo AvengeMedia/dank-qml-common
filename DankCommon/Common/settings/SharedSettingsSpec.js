@@ -95,6 +95,9 @@ var SPEC = {
     monoFontFamily: {
         def: "Fira Code"
     },
+    displayFontFamily: {
+        def: "DM Serif Display"
+    },
     fontWeight: {
         def: 400
     },

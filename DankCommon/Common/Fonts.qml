@@ -9,6 +9,9 @@ Singleton {
     readonly property string mono: firaCodeFont.name || "Fira Code"
     readonly property string icons: materialSymbolsFont.name || "Material Symbols Rounded"
     readonly property string nerd: firaCodeFont.name || "FiraCode Nerd Font"
+    readonly property string display: dmSerifDisplayFont.name || "DM Serif Display"
+    readonly property string notable: notableFont.name || "Notable"
+    readonly property var bundledFamilies: [display, notable]
 
     FontLoader {
         id: googleSansFont
@@ -26,6 +29,16 @@ Singleton {
     FontLoader {
         id: firaCodeFont
         source: Qt.resolvedUrl("../assets/fonts/nerd-fonts/FiraCodeNerdFont-Regular.ttf")
+    }
+
+    FontLoader {
+        id: dmSerifDisplayFont
+        source: Qt.resolvedUrl("../assets/fonts/dm-serif-display/DMSerifDisplay-Regular.ttf")
+    }
+
+    FontLoader {
+        id: notableFont
+        source: Qt.resolvedUrl("../assets/fonts/notable/Notable-Regular.ttf")
     }
 
     FontLoader {

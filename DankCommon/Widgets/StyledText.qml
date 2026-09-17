@@ -3,8 +3,9 @@ import qs.DankCommon.Common
 
 Text {
     property bool isMonospace: false
+    property string fontToken: isMonospace ? "mono" : "ui"
 
-    readonly property string resolvedFontFamily: isMonospace ? Style.monoFontFamily : Style.fontFamily
+    readonly property string resolvedFontFamily: Style.fontFor(fontToken)
 
     readonly property int resolvedRenderType: {
         switch (Style.textRenderType) {
@@ -41,7 +42,7 @@ Text {
     color: Style.surfaceText
     font.pixelSize: Appearance.fontSize.normal
     font.family: resolvedFontFamily
-    font.weight: Style.fontWeight
+    font.weight: Style.fontWeightFor(fontToken)
     textFormat: Text.PlainText
     wrapMode: Text.WordWrap
     elide: Text.ElideRight

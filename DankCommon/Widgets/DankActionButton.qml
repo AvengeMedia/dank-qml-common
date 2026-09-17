@@ -7,6 +7,7 @@ StyledButton {
     property string iconName: ""
     property int iconSize: Style.iconSizeMedium
     property color iconColor: Style.onSurfaceVariant
+    property bool iconFilled: false
     property color backgroundColor: "transparent"
     property color stateColor: iconColor
     property bool circular: true
@@ -50,6 +51,7 @@ StyledButton {
         anchors.centerIn: parent
         name: root.iconName
         size: root.iconSize
+        filled: root.iconFilled
         color: root.enabled ? root.iconColor : Style.onSurface_38
     }
 

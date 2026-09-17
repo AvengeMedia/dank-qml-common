@@ -328,6 +328,38 @@ Column {
         secondaryValues: [42, 40, 46, 48, 48, 54, 50, 46, 42, 40]
     }
 
+    Row {
+        spacing: Theme.spacingL
+
+        DankRingGauge {
+            value: 0.4
+
+            DankIcon {
+                anchors.centerIn: parent
+                name: "memory"
+                size: Theme.iconSizeSmall
+                color: Theme.primary
+            }
+        }
+
+        DankRingGauge {
+            width: Theme.iconButtonSize * 2
+            height: width
+            value: 0.62
+            startAngle: 135
+            spanAngle: 270
+            strokeWidth: Theme.spacingXS + Theme.spacingXXS
+            trackGap: Theme.spacingXXS
+
+            DankIcon {
+                anchors.centerIn: parent
+                name: "smartphone"
+                size: Theme.iconSize
+                color: Theme.primary
+            }
+        }
+    }
+
     Section {
         text: I18n.tr("Location")
     }

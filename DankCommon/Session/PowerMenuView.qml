@@ -19,6 +19,10 @@ Rectangle {
     property bool hintWarning: false
     property string hintText: ""
     property string hintIcon: "touch_app"
+    property color buttonColor: Style.surfaceContainerHighest
+    property color buttonContentColor: Style.onSurface
+    property color selectedButtonColor: Style.primaryContainer
+    property color selectedButtonContentColor: Style.onPrimaryContainer
     readonly property real desiredWidth: gridLayout ? Math.min(LockMetrics.powerGridWidth, Math.max(1, gridColumns) * LockMetrics.powerGridColumnWidth + Style.spacingS * (Math.max(1, gridColumns) - 1) + Style.spacingL * 2) : LockMetrics.powerMenuWidth
 
     signal actionPressed(int index)
@@ -51,11 +55,17 @@ Rectangle {
                 readonly property bool selected: root.selectedIndex === index
                 readonly property bool holding: root.holdActionIndex === index && root.holdProgress > 0
                 readonly property bool warningAction: modelData === "reboot" || modelData === "softreboot" || modelData === "poweroff"
-                readonly property color contentColor: warningAction && (stateLayer.containsMouse || holding) ? (modelData === "poweroff" ? Style.error : Style.warning) : selected ? Style.onPrimaryContainer : Style.onSecondaryContainer
+                readonly property bool engaged: stateLayer.pressed || holding
+                readonly property color contentColor: {
+                    if (warningAction && (stateLayer.containsMouse || holding))
+                        return modelData === "poweroff" ? Style.error : Style.warning;
+                    return selected ? root.selectedButtonContentColor : root.buttonContentColor;
+                }
+                readonly property real restRadius: root.gridLayout ? Style.cornerRadiusXL : Style.fullRadius(width, height)
                 width: (buttons.width - buttons.spacing * (buttons.columns - 1)) / buttons.columns
                 height: root.gridLayout ? Math.max(LockMetrics.powerGridButtonHeight, label.implicitHeight + icon.height + keycap.height + Style.spacingS * 4) : Math.max(LockMetrics.powerButtonHeight, label.implicitHeight + Style.spacingM * 2)
-                radius: stateLayer.pressed || holding ? Style.cornerRadiusM : root.gridLayout ? Style.cornerRadiusXL : Style.fullRadius(width, height)
-                color: selected ? Style.primaryContainer : Style.secondaryContainer
+                radius: engaged ? Style.cornerRadiusM : selected ? Style.cornerRadiusL : restRadius
+                color: selected ? root.selectedButtonColor : root.buttonColor
                 border.width: selected ? Style.focusRingWidth : 0
                 border.color: Style.focusRingColor
                 Accessible.role: Accessible.Button

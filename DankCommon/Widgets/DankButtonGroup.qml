@@ -15,6 +15,8 @@ Row {
     property bool checkEnabled: true
     property color selectedColor: Style.buttonBg
     property color selectedContentColor: Style.buttonText
+    property color unselectedColor: Style.foregroundColor(Style.secondaryContainer, !root.usePopupTransparency)
+    property color unselectedContentColor: Style.onSecondaryContainer
     property bool iconOnly: false
     property string size: "medium"
     property int buttonHeight: size === "small" ? Style.buttonHeightXS : Style.buttonHeightS
@@ -150,7 +152,7 @@ Row {
             property bool nextSelected: index < repeater.count - 1 ? root.isSelected(index + 1) : false
             readonly property real leftRadius: visualFirst ? root.outerRadius : (pressed ? root.pressedInnerRadius : (selected ? root.outerRadius : root.innerRadius))
             readonly property real rightRadius: visualLast ? root.outerRadius : (pressed ? root.pressedInnerRadius : (selected ? root.outerRadius : root.innerRadius))
-            readonly property color contentColor: !root.enabled ? Style.onSurface_38 : (selected ? root.selectedContentColor : Style.onSecondaryContainer)
+            readonly property color contentColor: !root.enabled ? Style.onSurface_38 : (selected ? root.selectedContentColor : root.unselectedContentColor)
 
             readonly property real contentNaturalWidth: (checkIcon.visible ? checkIcon.width + contentRow.spacing : 0) + (optionIcon.visible ? optionIcon.width + (buttonText.visible ? contentRow.spacing : 0) : 0) + (buttonText.visible ? buttonText.implicitWidth : 0)
 
@@ -164,7 +166,7 @@ Row {
             width: baseWidth
             height: root.buttonHeight
 
-            color: !root.enabled ? Style.onSurface_12 : (selected ? root.selectedColor : Style.foregroundColor(Style.secondaryContainer, !root.usePopupTransparency))
+            color: !root.enabled ? Style.onSurface_12 : (selected ? root.selectedColor : root.unselectedColor)
             border.color: "transparent"
             border.width: 0
 

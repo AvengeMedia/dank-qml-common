@@ -30,6 +30,7 @@ StyledButton {
     implicitWidth: Math.min(maximumWidth, Math.max(contentRow.implicitWidth + horizontalPadding * 2, minimumWidth))
     implicitHeight: wrapText ? Math.max(buttonHeight, contentRow.implicitHeight + Style.spacingS * 2) : buttonHeight
     readonly property color contentColor: enabled ? textColor : Style.onSurface_38
+    readonly property real maximumLabelWidth: Math.max(0, maximumWidth - horizontalPadding * 2 - (busy || iconName ? iconSize + contentRow.spacing : 0))
 
     readonly property real restRadius: Style.buttonRadius(width, height, buttonHeight, false, shape === "round")
     readonly property real pressedRadius: Style.buttonRadius(width, height, buttonHeight, true, shape === "round")
@@ -120,7 +121,7 @@ StyledButton {
         }
 
         StyledText {
-            width: Math.min(Math.max(implicitWidth, reservedLabel.advanceWidth), Math.max(0, root.maximumWidth - root.horizontalPadding * 2 - (root.busy || root.iconName ? root.iconSize + contentRow.spacing : 0)))
+            width: Math.min(Math.max(implicitWidth, reservedLabel.advanceWidth), root.maximumLabelWidth)
             wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
             elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text

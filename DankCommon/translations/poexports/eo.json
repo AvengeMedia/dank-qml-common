@@ -1,12 +1,12 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "Dosiero kun tiu nomo jam ekzistas. Ĉu vi volas anstataŭigi ĝin?"
+    "A file with this name already exists. Do you want to overwrite it?": ""
   },
   "Actions": {
     "Actions": "Agoj"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Retropaŝo: Reen • F1/I: Dosierinformoj • F10: Helpo • Esk: Fermi"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": ""
   },
   "Ascending": {
     "Ascending": ""
@@ -15,10 +15,10 @@
     "Cancel": "Nuligi"
   },
   "Choose icon": {
-    "Choose icon": "Elekti piktogramon"
+    "Choose icon": ""
   },
   "Communication": {
-    "Communication": "Komunikado"
+    "Communication": ""
   },
   "Copy path": {
     "Copy path": "Kopii vojon"
@@ -27,7 +27,7 @@
     "Descending": ""
   },
   "Desktop": {
-    "Desktop": "Labortablo"
+    "Desktop": ""
   },
   "Development": {
     "Development": "Evoluigo"
@@ -36,25 +36,25 @@
     "Documents": "Dokumentoj"
   },
   "Downloads": {
-    "Downloads": "Elŝutoj"
+    "Downloads": ""
   },
   "Enter filename...": {
-    "Enter filename...": "Enigu dosiernomon..."
+    "Enter filename...": ""
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Ŝalti • F10: Helpo"
+    "F1/I: Toggle • F10: Help": ""
   },
   "File Already Exists": {
-    "File Already Exists": "Dosiero jam ekzistas"
+    "File Already Exists": ""
   },
   "File Information": {
-    "File Information": "Dosier-informoj"
+    "File Information": ""
   },
   "Files - %1": {
     "Files - %1": ""
   },
   "Fun": {
-    "Fun": "Amuzo"
+    "Fun": ""
   },
   "Hibernate": {
     "Hibernate": "Pasivigi"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "Tenu por konfirmi (%1s)"
   },
   "Home": {
-    "Home": "Hejmo"
+    "Home": ""
   },
   "Log Out": {
     "Log Out": "Seancfino"
@@ -81,37 +81,37 @@
     "Modified": "Modifita"
   },
   "Move to Trash": {
-    "Move to Trash": "movi rubujen"
+    "Move to Trash": ""
   },
   "Music": {
-    "Music": "Muziko"
+    "Music": ""
   },
   "Name": {
     "Name": "Nomo"
   },
   "Navigation": {
-    "Navigation": "Navigado"
+    "Navigation": ""
   },
   "Numbers": {
-    "Numbers": "Numeroj"
+    "Numbers": ""
   },
   "Order": {
     "Order": ""
   },
   "Overwrite": {
-    "Overwrite": "Anstataŭigi"
+    "Overwrite": ""
   },
   "Pictures": {
-    "Pictures": "Bildoj"
+    "Pictures": ""
   },
   "Power Off": {
     "Power Off": "Malŝalti"
   },
   "Power Options": {
-    "Power Options": "Elektraj opcioj"
+    "Power Options": ""
   },
   "Quick Access": {
-    "Quick Access": "Rapida aliro"
+    "Quick Access": ""
   },
   "Reboot": {
     "Reboot": "Restartigi"
@@ -120,7 +120,7 @@
     "Save": "Konservi"
   },
   "Search for a location...": {
-    "Search for a location...": "Serĉi lokon..."
+    "Search for a location...": ""
   },
   "Search...": {
     "Search...": "Serĉi..."
@@ -147,7 +147,7 @@
     "System": "Sistemo"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Navigi • ←→↑↓: Krada navigado • Enigo/Spaco: Elekti"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": ""
   },
   "Type": {
     "Type": "Tipo"
@@ -156,7 +156,7 @@
     "Use this folder": ""
   },
   "Videos": {
-    "Videos": "Videoj"
+    "Videos": ""
   },
   "Workspace": {
     "Workspace": "Laborspaco"

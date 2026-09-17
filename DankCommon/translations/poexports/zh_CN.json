@@ -1,33 +1,33 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "已存在同名文件，是否覆盖？"
+    "A file with this name already exists. Do you want to overwrite it?": ""
   },
   "Actions": {
     "Actions": "操作"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace：返回 • F1/I：文件信息 • F10：帮助 • Esc：关闭"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": ""
   },
   "Ascending": {
-    "Ascending": "升序"
+    "Ascending": ""
   },
   "Cancel": {
     "Cancel": "取消"
   },
   "Choose icon": {
-    "Choose icon": "选择图标"
+    "Choose icon": ""
   },
   "Communication": {
-    "Communication": "通讯"
+    "Communication": ""
   },
   "Copy path": {
     "Copy path": "复制路径"
   },
   "Descending": {
-    "Descending": "降序"
+    "Descending": ""
   },
   "Desktop": {
-    "Desktop": "桌面"
+    "Desktop": ""
   },
   "Development": {
     "Development": "开发"
@@ -36,25 +36,25 @@
     "Documents": "文档"
   },
   "Downloads": {
-    "Downloads": "下载"
+    "Downloads": ""
   },
   "Enter filename...": {
-    "Enter filename...": "输入文件名..."
+    "Enter filename...": ""
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I：切换 • F10：帮助"
+    "F1/I: Toggle • F10: Help": ""
   },
   "File Already Exists": {
-    "File Already Exists": "文件已存在"
+    "File Already Exists": ""
   },
   "File Information": {
-    "File Information": "文件信息"
+    "File Information": ""
   },
   "Files - %1": {
-    "Files - %1": "文件 - %1"
+    "Files - %1": ""
   },
   "Fun": {
-    "Fun": "娱乐"
+    "Fun": ""
   },
   "Hibernate": {
     "Hibernate": "休眠"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "按住以确认（%1s）"
   },
   "Home": {
-    "Home": "主目录"
+    "Home": ""
   },
   "Log Out": {
     "Log Out": "注销"
@@ -81,37 +81,37 @@
     "Modified": "已修改"
   },
   "Move to Trash": {
-    "Move to Trash": "移动至回收站"
+    "Move to Trash": ""
   },
   "Music": {
-    "Music": "音乐"
+    "Music": ""
   },
   "Name": {
     "Name": "名称"
   },
   "Navigation": {
-    "Navigation": "导航"
+    "Navigation": ""
   },
   "Numbers": {
-    "Numbers": "数字"
+    "Numbers": ""
   },
   "Order": {
-    "Order": "排序"
+    "Order": ""
   },
   "Overwrite": {
-    "Overwrite": "覆盖"
+    "Overwrite": ""
   },
   "Pictures": {
-    "Pictures": "图片"
+    "Pictures": ""
   },
   "Power Off": {
     "Power Off": "关机"
   },
   "Power Options": {
-    "Power Options": "电源菜单"
+    "Power Options": ""
   },
   "Quick Access": {
-    "Quick Access": "快速访问"
+    "Quick Access": ""
   },
   "Reboot": {
     "Reboot": "重启"
@@ -120,7 +120,7 @@
     "Save": "保存"
   },
   "Search for a location...": {
-    "Search for a location...": "搜索位置..."
+    "Search for a location...": ""
   },
   "Search...": {
     "Search...": "搜索..."
@@ -147,16 +147,16 @@
     "System": "系统"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab：导航 • ←→↑↓：网格导航 • Enter/Space：选中"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": ""
   },
   "Type": {
     "Type": "类型"
   },
   "Use this folder": {
-    "Use this folder": "使用此文件夹"
+    "Use this folder": ""
   },
   "Videos": {
-    "Videos": "视频"
+    "Videos": ""
   },
   "Workspace": {
     "Workspace": "工作区"

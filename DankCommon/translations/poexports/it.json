@@ -6,7 +6,7 @@
     "Actions": "Azioni"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Indietro • F1/I: Info File • F10: Aiuto • Esc: Chiudi"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Indietro • F1/I: Info file • F10: Aiuto • Esc: Chiudi"
   },
   "Ascending": {
     "Ascending": "Crescente"
@@ -15,7 +15,7 @@
     "Cancel": "Annulla"
   },
   "Choose icon": {
-    "Choose icon": "Scegli icona"
+    "Choose icon": "Scegli l'icona"
   },
   "Communication": {
     "Communication": "Comunicazione"
@@ -36,13 +36,13 @@
     "Documents": "Documenti"
   },
   "Downloads": {
-    "Downloads": "Scaricati"
+    "Downloads": "Download"
   },
   "Enter filename...": {
     "Enter filename...": "Inserisci il nome del file..."
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Attiva/Disattiva • F10: Aiuto"
+    "F1/I: Toggle • F10: Help": "F1/I: Attiva/disattiva • F10: Aiuto"
   },
   "File Already Exists": {
     "File Already Exists": "File già esistente"
@@ -54,7 +54,7 @@
     "Files - %1": "File - %1"
   },
   "Fun": {
-    "Fun": "Svago"
+    "Fun": "Divertimento"
   },
   "Hibernate": {
     "Hibernate": "Iberna"
@@ -108,7 +108,7 @@
     "Power Off": "Spegni"
   },
   "Power Options": {
-    "Power Options": "Opzioni alimentazione"
+    "Power Options": "Opzioni di alimentazione"
   },
   "Quick Access": {
     "Quick Access": "Accesso rapido"
@@ -147,7 +147,7 @@
     "System": "Sistema"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Maiusc+Tab: Nav • ←→↑↓: Nav Griglia • Invio/Spazio: Seleziona"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Nav griglia • Invio/Spazio: Seleziona"
   },
   "Type": {
     "Type": "Tipo"

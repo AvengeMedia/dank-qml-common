@@ -1,33 +1,33 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "Un archivo con este nombre ya existe. ¿Quieres reemplazarlo?"
+    "A file with this name already exists. Do you want to overwrite it?": ""
   },
   "Actions": {
     "Actions": "Acciones"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Atrás • F1/I: Información del archivo • F10: Ayuda • Esc: Cerrar"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": ""
   },
   "Ascending": {
-    "Ascending": "Ascendente"
+    "Ascending": ""
   },
   "Cancel": {
     "Cancel": "Cancelar"
   },
   "Choose icon": {
-    "Choose icon": "Elegir icono"
+    "Choose icon": ""
   },
   "Communication": {
-    "Communication": "Comunicación"
+    "Communication": ""
   },
   "Copy path": {
     "Copy path": "Copiar ubicación"
   },
   "Descending": {
-    "Descending": "Descendente"
+    "Descending": ""
   },
   "Desktop": {
-    "Desktop": "Escritorio"
+    "Desktop": ""
   },
   "Development": {
     "Development": "Desarrollo"
@@ -36,25 +36,25 @@
     "Documents": "Documentos"
   },
   "Downloads": {
-    "Downloads": "Descargas"
+    "Downloads": ""
   },
   "Enter filename...": {
-    "Enter filename...": "Ingrese nombre de archivo..."
+    "Enter filename...": ""
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Alternar • F10: Ayudar"
+    "F1/I: Toggle • F10: Help": ""
   },
   "File Already Exists": {
-    "File Already Exists": "El archivo ya existe"
+    "File Already Exists": ""
   },
   "File Information": {
-    "File Information": "Información del archivo"
+    "File Information": ""
   },
   "Files - %1": {
-    "Files - %1": "Archivos - %1"
+    "Files - %1": ""
   },
   "Fun": {
-    "Fun": "Diversión"
+    "Fun": ""
   },
   "Hibernate": {
     "Hibernate": "Hibernar"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "Mantener pulsado para confirmar (%1s)"
   },
   "Home": {
-    "Home": "Inicio"
+    "Home": ""
   },
   "Log Out": {
     "Log Out": "Cerrar sesión"
@@ -81,37 +81,37 @@
     "Modified": "Modificado"
   },
   "Move to Trash": {
-    "Move to Trash": "Mover a la papelera"
+    "Move to Trash": ""
   },
   "Music": {
-    "Music": "Música"
+    "Music": ""
   },
   "Name": {
     "Name": "Nombre"
   },
   "Navigation": {
-    "Navigation": "Navegación"
+    "Navigation": ""
   },
   "Numbers": {
-    "Numbers": "Números"
+    "Numbers": ""
   },
   "Order": {
-    "Order": "Orden"
+    "Order": ""
   },
   "Overwrite": {
-    "Overwrite": "Sobrescribir"
+    "Overwrite": ""
   },
   "Pictures": {
-    "Pictures": "Imágenes"
+    "Pictures": ""
   },
   "Power Off": {
     "Power Off": "Apagar"
   },
   "Power Options": {
-    "Power Options": "Opciones de Energía"
+    "Power Options": ""
   },
   "Quick Access": {
-    "Quick Access": "Acceso rápido"
+    "Quick Access": ""
   },
   "Reboot": {
     "Reboot": "Reiniciar"
@@ -120,7 +120,7 @@
     "Save": "Guardar"
   },
   "Search for a location...": {
-    "Search for a location...": "Buscar una ubicación..."
+    "Search for a location...": ""
   },
   "Search...": {
     "Search...": "Buscar..."
@@ -147,16 +147,16 @@
     "System": "Sistema"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Seleccionar"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": ""
   },
   "Type": {
     "Type": "Tipo"
   },
   "Use this folder": {
-    "Use this folder": "Usar esta carpeta"
+    "Use this folder": ""
   },
   "Videos": {
-    "Videos": "Videos"
+    "Videos": ""
   },
   "Workspace": {
     "Workspace": "Espacio de trabajo"

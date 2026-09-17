@@ -1,12 +1,12 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "קיים כבר קובץ עם השם זה. האם ברצונך לדרוס אותו?"
+    "A file with this name already exists. Do you want to overwrite it?": "קובץ בשם זה כבר קיים. האם ברצונך להחליף אותו?"
   },
   "Actions": {
     "Actions": "פעולות"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: חזרה • F1/I: מידע על הקובץ • F10: עזרה • Esc: סגירה"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: חזרה • F1/I: פרטי קובץ • F10: עזרה • Esc: סגירה"
   },
   "Ascending": {
     "Ascending": "סדר עולה"
@@ -27,7 +27,7 @@
     "Descending": "סדר יורד"
   },
   "Desktop": {
-    "Desktop": "שולחן העבודה"
+    "Desktop": "שולחן עבודה"
   },
   "Development": {
     "Development": "פיתוח"
@@ -81,10 +81,10 @@
     "Modified": "שונה"
   },
   "Move to Trash": {
-    "Move to Trash": "העבר/י לאשפה"
+    "Move to Trash": "העברה לאשפה"
   },
   "Music": {
-    "Music": "מוסיקה"
+    "Music": "מוזיקה"
   },
   "Name": {
     "Name": "שם"
@@ -99,7 +99,7 @@
     "Order": "סדר"
   },
   "Overwrite": {
-    "Overwrite": "דריסה"
+    "Overwrite": "החלפה"
   },
   "Pictures": {
     "Pictures": "תמונות"
@@ -108,7 +108,7 @@
     "Power Off": "כיבוי"
   },
   "Power Options": {
-    "Power Options": "אפשרויות חשמל"
+    "Power Options": "אפשרויות כיבוי והפעלה"
   },
   "Quick Access": {
     "Quick Access": "גישה מהירה"

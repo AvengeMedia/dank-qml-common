@@ -1,33 +1,33 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "Файл с такова име вече съществува. Искате ли да го презапишете?"
+    "A file with this name already exists. Do you want to overwrite it?": ""
   },
   "Actions": {
     "Actions": "Действия"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Назад • F1/I: Инфо • F10: Помощ • Esc: Затваряне"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": ""
   },
   "Ascending": {
-    "Ascending": "Възходящ"
+    "Ascending": ""
   },
   "Cancel": {
     "Cancel": "Отказ"
   },
   "Choose icon": {
-    "Choose icon": "Избор на икона"
+    "Choose icon": ""
   },
   "Communication": {
-    "Communication": "Комуникация"
+    "Communication": ""
   },
   "Copy path": {
     "Copy path": "Копиране на пътя"
   },
   "Descending": {
-    "Descending": "Низходящ"
+    "Descending": ""
   },
   "Desktop": {
-    "Desktop": "Плот"
+    "Desktop": ""
   },
   "Development": {
     "Development": "Разработка"
@@ -36,25 +36,25 @@
     "Documents": "Документи"
   },
   "Downloads": {
-    "Downloads": "Свалени"
+    "Downloads": ""
   },
   "Enter filename...": {
-    "Enter filename...": "Въведете име на файл..."
+    "Enter filename...": ""
   },
   "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Превключване • F10: Помощ"
+    "F1/I: Toggle • F10: Help": ""
   },
   "File Already Exists": {
-    "File Already Exists": "Файлът вече съществува"
+    "File Already Exists": ""
   },
   "File Information": {
-    "File Information": "Информация за файла"
+    "File Information": ""
   },
   "Files - %1": {
-    "Files - %1": "Файлове – %1"
+    "Files - %1": ""
   },
   "Fun": {
-    "Fun": "Забавление"
+    "Fun": ""
   },
   "Hibernate": {
     "Hibernate": "Хибернация"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "Задръжте за потвърждение (%1s)"
   },
   "Home": {
-    "Home": "Начало"
+    "Home": ""
   },
   "Log Out": {
     "Log Out": "Излизане"
@@ -81,37 +81,37 @@
     "Modified": "Променено"
   },
   "Move to Trash": {
-    "Move to Trash": "Преместване в кошчето"
+    "Move to Trash": ""
   },
   "Music": {
-    "Music": "Музика"
+    "Music": ""
   },
   "Name": {
     "Name": "Име"
   },
   "Navigation": {
-    "Navigation": "Навигация"
+    "Navigation": ""
   },
   "Numbers": {
-    "Numbers": "Числа"
+    "Numbers": ""
   },
   "Order": {
-    "Order": "Ред"
+    "Order": ""
   },
   "Overwrite": {
-    "Overwrite": "Презаписване"
+    "Overwrite": ""
   },
   "Pictures": {
-    "Pictures": "Изображения"
+    "Pictures": ""
   },
   "Power Off": {
     "Power Off": "Изключване"
   },
   "Power Options": {
-    "Power Options": "Опции за захранването"
+    "Power Options": ""
   },
   "Quick Access": {
-    "Quick Access": "Бърз достъп"
+    "Quick Access": ""
   },
   "Reboot": {
     "Reboot": "Рестартиране"
@@ -120,7 +120,7 @@
     "Save": "Запазване"
   },
   "Search for a location...": {
-    "Search for a location...": "Търсене на местоположение..."
+    "Search for a location...": ""
   },
   "Search...": {
     "Search...": "Търсене..."
@@ -147,16 +147,16 @@
     "System": "Система"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Навигация • ←→↑↓: Мрежа • Enter/Интервал: Избор"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": ""
   },
   "Type": {
     "Type": "Тип"
   },
   "Use this folder": {
-    "Use this folder": "Използване на тази папка"
+    "Use this folder": ""
   },
   "Videos": {
-    "Videos": "Видео"
+    "Videos": ""
   },
   "Workspace": {
     "Workspace": "Работно пространство"

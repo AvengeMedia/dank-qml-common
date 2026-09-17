@@ -1,6 +1,6 @@
 {
   "A file with this name already exists. Do you want to overwrite it?": {
-    "A file with this name already exists. Do you want to overwrite it?": "Már létezik ilyen nevű fájl. Felül szeretnéd írni?"
+    "A file with this name already exists. Do you want to overwrite it?": "Egy ilyen nevű fájl már létezik. Felül szeretnéd írni?"
   },
   "Actions": {
     "Actions": "Műveletek"
@@ -39,7 +39,7 @@
     "Downloads": "Letöltések"
   },
   "Enter filename...": {
-    "Enter filename...": "Adj meg egy fájlnevet…"
+    "Enter filename...": "Írd be a fájlnevet..."
   },
   "F1/I: Toggle • F10: Help": {
     "F1/I: Toggle • F10: Help": "F1/I: Váltás • F10: Súgó"
@@ -48,7 +48,7 @@
     "File Already Exists": "A fájl már létezik"
   },
   "File Information": {
-    "File Information": "Fájlinformáció"
+    "File Information": "Fájlinformációk"
   },
   "Files - %1": {
     "Files - %1": "Fájlok - %1"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "Tartsd lenyomva a megerősítéshez (%1 mp)"
   },
   "Home": {
-    "Home": "Saját mappa"
+    "Home": "Kezdőlap"
   },
   "Log Out": {
     "Log Out": "Kijelentkezés"
@@ -81,7 +81,7 @@
     "Modified": "Módosítva"
   },
   "Move to Trash": {
-    "Move to Trash": "Áthelyezés a kukába"
+    "Move to Trash": "Áthelyezés a Kukába"
   },
   "Music": {
     "Music": "Zene"
@@ -108,10 +108,10 @@
     "Power Off": "Leállítás"
   },
   "Power Options": {
-    "Power Options": "Energiabeállítások"
+    "Power Options": "Tápellátási lehetőségek"
   },
   "Quick Access": {
-    "Quick Access": "Gyors elérés"
+    "Quick Access": "Gyorselérés"
   },
   "Reboot": {
     "Reboot": "Újraindítás"
@@ -120,7 +120,7 @@
     "Save": "Mentés"
   },
   "Search for a location...": {
-    "Search for a location...": "Keress rá egy helyre…"
+    "Search for a location...": "Hely keresése..."
   },
   "Search...": {
     "Search...": "Keresés…"
@@ -147,13 +147,13 @@
     "System": "Rendszer"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Rács Nav • Enter/Szóköz: Kiválasztás"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Rácsnavigáció • Enter/Szóköz: Kiválasztás"
   },
   "Type": {
     "Type": "Típus"
   },
   "Use this folder": {
-    "Use this folder": "Ezen mappa használata"
+    "Use this folder": "Mappa használata"
   },
   "Videos": {
     "Videos": "Videók"

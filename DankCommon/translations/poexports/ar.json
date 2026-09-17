@@ -6,7 +6,7 @@
     "Actions": "الإجراءات"
   },
   "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: رجوع • F1/I: معلومات الملف • F10: المساعدة • Esc: اغلاق"
+    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: رجوع • F1/I: معلومات الملف • F10: مساعدة • Esc: إغلاق"
   },
   "Ascending": {
     "Ascending": "تصاعدي"
@@ -15,10 +15,10 @@
     "Cancel": "إلغاء"
   },
   "Choose icon": {
-    "Choose icon": "اختيار ايقونة"
+    "Choose icon": "اختيار أيقونة"
   },
   "Communication": {
-    "Communication": "الاتصالات"
+    "Communication": "اتصال"
   },
   "Copy path": {
     "Copy path": "نسخ المسار"
@@ -54,7 +54,7 @@
     "Files - %1": "الملفات - %1"
   },
   "Fun": {
-    "Fun": "ترفيه"
+    "Fun": "مرح"
   },
   "Hibernate": {
     "Hibernate": "إسبات"
@@ -69,7 +69,7 @@
     "Hold to confirm (%1s)": "اضغط مطولاً للتأكيد (%1 ث)"
   },
   "Home": {
-    "Home": "الصفحة الرئيسية"
+    "Home": "الرئيسية"
   },
   "Log Out": {
     "Log Out": "تسجيل الخروج"
@@ -93,10 +93,10 @@
     "Navigation": "التنقل"
   },
   "Numbers": {
-    "Numbers": "ارقام"
+    "Numbers": "أرقام"
   },
   "Order": {
-    "Order": "الترتيب"
+    "Order": "ترتيب"
   },
   "Overwrite": {
     "Overwrite": "استبدال"
@@ -120,7 +120,7 @@
     "Save": "حفظ"
   },
   "Search for a location...": {
-    "Search for a location...": "ابحث عن موقع..."
+    "Search for a location...": "البحث عن موقع..."
   },
   "Search...": {
     "Search...": "ابحث هنا..."
@@ -147,13 +147,13 @@
     "System": "النظام"
   },
   "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: تنقل • ←→↑↓: التنقل في الشبكة • Enter/Space: اختيار"
+    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: تنقل • ←→↑↓: تنقل الشبكة • Enter/Space: اختيار"
   },
   "Type": {
     "Type": "نوع"
   },
   "Use this folder": {
-    "Use this folder": "استخدم هذا المجلد"
+    "Use this folder": "استخدام هذا المجلد"
   },
   "Videos": {
     "Videos": "الفيديوهات"

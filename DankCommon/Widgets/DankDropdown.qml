@@ -52,6 +52,7 @@ FocusScope {
     property color normalBorderColor: Style.outlineVariant
     property color focusedBorderColor: Style.primary
     property var transientSurfaceTracker: null
+    property bool popupGrabsFocus: true
     property bool menuBlurEnabled: true
 
     signal valueChanged(string value)
@@ -404,7 +405,7 @@ FocusScope {
         sourceComponent: PopupWindow {
             id: dropdownMenu
 
-            grabFocus: true
+            grabFocus: root.popupGrabsFocus
 
             property real menuX: 0
             property real menuY: 0

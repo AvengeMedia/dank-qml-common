@@ -193,7 +193,7 @@ Item {
                         return Style.onPrimary;
                     if (cell.isToday)
                         return Style.primary;
-                    if (cell.weekend && cell.inMonth)
+                    if (cell.weekend)
                         return root.weekendColor;
                     return cell.inMonth ? Style.surfaceText : Style.onSurfaceVariant;
                 }

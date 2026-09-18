@@ -59,7 +59,7 @@ Row {
         StyledRect {
             anchors.fill: parent
             radius: Style.cornerRadius
-            color: pathEditMode ? Style.withAlpha(Style.surfaceContainer, Style.popupTransparency) : Style.withAlpha(Style.surfaceContainer, 0)
+            color: pathEditMode ? Style.withAlpha(Style.cardSurface, Style.popupTransparency) : Style.withAlpha(Style.cardSurface, 0)
             border.color: pathEditMode ? Style.primary : Style.withAlpha(Style.primary, 0)
             border.width: pathEditMode ? 1 : 0
             visible: !pathEditMode

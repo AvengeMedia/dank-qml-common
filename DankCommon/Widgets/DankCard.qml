@@ -39,7 +39,7 @@ FocusScope {
         case "tertiary":
             return Style.tertiaryContainer;
         }
-        return Style.surfaceContainerHigh;
+        return Style.cardSurface;
     }
     readonly property color contentColor: {
         switch (tone) {
@@ -55,7 +55,7 @@ FocusScope {
     readonly property color accentColor: tinted ? contentColor : Style.primary
     property color onAccentColor
     readonly property color mutedColor: tinted ? Style.withAlpha(contentColor, 0.72) : Style.onSurfaceVariant
-    readonly property color chipColor: tinted ? Style.foregroundColor(Style.withAlpha(contentColor, Style.stateLayerFocus), floatingWindow) : Style.foregroundColor(Style.surfaceContainerHighest, floatingWindow)
+    readonly property color chipColor: tinted ? Style.foregroundColor(Style.withAlpha(contentColor, Style.stateLayerFocus), floatingWindow) : Style.foregroundColor(Style.chipSurface, floatingWindow)
     readonly property color surfaceColor: Style.foregroundColor(containerColor, floatingWindow)
     property bool showFocusRing: true
     property bool clipContent: false

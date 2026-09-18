@@ -7,7 +7,7 @@ StyledRect {
 
     property string sortBy: "name"
     property bool sortAscending: true
-    property color surfaceColor: Style.surfaceContainer
+    property color surfaceColor: Style.cardSurface
 
     signal sortBySelected(string value)
     signal sortOrderSelected(bool ascending)

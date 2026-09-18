@@ -66,6 +66,10 @@ Singleton {
     readonly property color surfaceContainerHighest: theme?.surfaceContainerHighest ?? "#36343b"
     readonly property color surfaceBright: theme?.surfaceBright ?? "#3b383e"
     readonly property color surfaceDim: theme?.surfaceDim ?? "#141218"
+    readonly property color hostSurface: theme?.hostSurface ?? surface
+    readonly property color cardSurface: theme?.cardSurface ?? surfaceContainer
+    readonly property color chipSurface: theme?.chipSurface ?? surfaceContainerHigh
+    readonly property color chipSurfaceNested: theme?.chipSurfaceNested ?? surfaceContainerHighest
     readonly property color outlineVariant: theme?.outlineVariant ?? "#49454f"
     readonly property color secondaryContainer: theme?.secondaryContainer ?? "#4a4458"
     readonly property color tertiaryContainer: theme?.tertiaryContainer ?? "#633b48"
@@ -171,15 +175,15 @@ Singleton {
         return blendAlpha(baseColor, floatingWindow ? floatingWindowForegroundAlpha : foregroundAlpha);
     }
 
-    readonly property color floatingSurface: theme?.floatingSurface ?? withAlpha(surfaceContainer, popupTransparency)
-    readonly property color nestedSurface: theme?.nestedSurface ?? foregroundColor(surfaceContainerHigh)
+    readonly property color floatingSurface: theme?.floatingSurface ?? withAlpha(hostSurface, popupTransparency)
+    readonly property color nestedSurface: theme?.nestedSurface ?? foregroundColor(cardSurface)
     readonly property real floatingWindowTransparency: theme?.floatingWindowTransparency ?? popupTransparency
-    readonly property color floatingWindowSurface: theme?.floatingWindowSurface ?? withAlpha(surfaceContainer, floatingWindowTransparency)
-    readonly property color floatingWindowNestedSurface: theme?.floatingWindowNestedSurface ?? foregroundColor(surfaceContainerHigh, true)
-    readonly property color floatingWindowFieldColor: theme?.floatingWindowFieldColor ?? foregroundColor(surfaceContainerHigh, true)
+    readonly property color floatingWindowSurface: theme?.floatingWindowSurface ?? withAlpha(hostSurface, floatingWindowTransparency)
+    readonly property color floatingWindowNestedSurface: theme?.floatingWindowNestedSurface ?? foregroundColor(cardSurface, true)
+    readonly property color floatingWindowFieldColor: theme?.floatingWindowFieldColor ?? foregroundColor(chipSurface, true)
     readonly property color floatingWindowFieldBorderColor: theme?.floatingWindowFieldBorderColor ?? withAlpha(outline, 0.16)
     readonly property color floatingWindowFieldFocusedBorderColor: theme?.floatingWindowFieldFocusedBorderColor ?? primary
-    readonly property color popupFieldColor: theme?.popupFieldColor ?? foregroundColor(surfaceContainerHigh)
+    readonly property color popupFieldColor: theme?.popupFieldColor ?? foregroundColor(chipSurface)
     readonly property color popupFieldBorderColor: theme?.popupFieldBorderColor ?? withAlpha(outline, 0.16)
     readonly property color popupFieldFocusedBorderColor: theme?.popupFieldFocusedBorderColor ?? primary
     readonly property color shadowStrong: theme?.shadowStrong ?? Qt.rgba(0, 0, 0, 0.3)

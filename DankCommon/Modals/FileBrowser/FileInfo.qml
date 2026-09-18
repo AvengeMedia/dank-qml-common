@@ -13,7 +13,7 @@ Rectangle {
 
     height: 200
     radius: Style.cornerRadius
-    color: Style.withAlpha(Style.surfaceContainer, 0.95)
+    color: Style.withAlpha(Style.cardSurface, 0.95)
     border.color: Style.secondary
     border.width: 2
     opacity: showFileInfo ? 1 : 0

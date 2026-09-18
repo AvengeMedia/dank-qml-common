@@ -54,7 +54,7 @@ Row {
         visible: saveRow.saveMode
         width: 80
         height: 40
-        color: fileNameInput.text.trim() !== "" ? Style.primary : Style.surfaceVariant
+        color: fileNameInput.text.trim() !== "" ? Style.primary : Style.chipSurface
         radius: Style.cornerRadius
 
         StyledText {

@@ -551,7 +551,7 @@ Rectangle {
                 width: useGridLayout ? Math.min(550, gridColumns * 180 + Style.spacingS * (gridColumns - 1) + Style.spacingL * 2) : 320
                 height: contentItem.implicitHeight + Style.spacingL * 2
                 radius: Style.cornerRadius
-                color: Style.surfaceContainer
+                color: Style.cardSurface
                 border.color: Style.outlineMedium
                 border.width: 1
 

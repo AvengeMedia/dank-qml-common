@@ -13,7 +13,7 @@ FocusScope {
     property real padding: Style.spacingL
     property real contentSpacing: Style.spacingS
     property real scrimRadius: 0
-    property color surfaceColor: Style.surfaceContainerHigh
+    property color surfaceColor: Style.cardSurface
     property Item initialFocusItem: null
     property Item returnFocusItem: null
     default property alias content: body.data

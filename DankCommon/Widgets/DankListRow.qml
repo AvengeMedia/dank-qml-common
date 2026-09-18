@@ -18,7 +18,7 @@ T.Control {
     LayoutMirroring.childrenInherit: true
 
     background: Rectangle {
-        color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
+        color: Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
         topLeftRadius: root.firstInGroup ? Style.groupedListOuterRadius : Style.groupedListInnerRadius
         topRightRadius: topLeftRadius
         bottomLeftRadius: root.lastInGroup ? Style.groupedListOuterRadius : Style.groupedListInnerRadius

@@ -19,7 +19,7 @@ StyledRect {
     property color leftIconColor: Style.onSurfaceVariant
     property color leftIconFocusedColor: Style.primary
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
-    property color backgroundColor: Style.surfaceContainerHigh
+    property color backgroundColor: Style.chipSurface
     property color focusedBorderColor: Style.primary
     property color normalBorderColor: Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant

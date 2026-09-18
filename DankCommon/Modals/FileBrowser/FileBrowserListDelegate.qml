@@ -142,7 +142,7 @@ StyledRect {
     color: {
         if (keyboardNavigationActive && listDelegateRoot.index === selectedIndex)
             return Style.surfacePressed;
-        return listMouseArea.containsMouse ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : Style.withAlpha(Style.surfaceContainerHigh, 0);
+        return listMouseArea.containsMouse ? Style.withAlpha(Style.cardSurface, Style.popupTransparency) : Style.withAlpha(Style.cardSurface, 0);
     }
     border.color: keyboardNavigationActive && listDelegateRoot.index === selectedIndex ? Style.primary : Style.withAlpha(Style.primary, 0)
     border.width: (keyboardNavigationActive && listDelegateRoot.index === selectedIndex) ? 2 : 0

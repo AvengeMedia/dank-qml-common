@@ -39,7 +39,7 @@ Item {
         anchors.centerIn: parent
         width: 400
         height: 160
-        color: Style.surfaceContainer
+        color: Style.cardSurface
         radius: Style.windowRadius
         border.color: Style.outlineMedium
         border.width: 1
@@ -82,7 +82,7 @@ Item {
                             easing.bezierCurve: Style.expressiveCurves.standard
                         }
                     }
-                    color: cancelArea.containsMouse ? Qt.lighter(Style.surfaceVariant, 1.2) : Style.surfaceVariant
+                    color: cancelArea.containsMouse ? Style._blend(Style.chipSurface, Style.onSurface, Style.stateLayerHover) : Style.chipSurface
                     border.color: Style.outline
                     border.width: 1
 

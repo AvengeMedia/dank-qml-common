@@ -171,7 +171,7 @@ FocusScope {
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent
         radius: Style.windowRadius
-        color: Style.surfaceContainerHigh
+        color: Style.cardSurface
         scale: root._opened ? 1 : Style.popupEnterScale
 
         Behavior on scale {
@@ -228,7 +228,7 @@ FocusScope {
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusS
-                    color: root._minuteMode ? Style.surfaceContainerHighest : Style.primaryContainer
+                    color: root._minuteMode ? Style.chipSurface : Style.primaryContainer
                     KeyNavigation.backtab: okButton
                     onActiveFocusChanged: {
                         if (!activeFocus)
@@ -285,7 +285,7 @@ FocusScope {
                     Layout.preferredWidth: root.digitWidth
                     Layout.preferredHeight: root.digitHeight
                     radius: Style.cornerRadiusS
-                    color: root._minuteMode ? Style.primaryContainer : Style.surfaceContainerHighest
+                    color: root._minuteMode ? Style.primaryContainer : Style.chipSurface
                     onActiveFocusChanged: {
                         if (!activeFocus)
                             return;
@@ -427,7 +427,7 @@ FocusScope {
                 Layout.preferredWidth: root.faceSize
                 Layout.preferredHeight: root.faceSize
                 radius: width / 2
-                color: Style.surfaceContainerHighest
+                color: Style.chipSurface
 
                 Behavior on color {
                     enabled: root.animationsEnabled

@@ -18,7 +18,7 @@ Rectangle {
     width: Math.min(240, windowWidth - Style.spacingL * 2)
     height: 32
     radius: Style.cornerRadius
-    color: Style.surfaceContainer
+    color: Style.chipSurface
     border.color: iconPopup.visible ? Style.primary : Style.outline
     border.width: 1
 
@@ -140,7 +140,7 @@ Rectangle {
 
         contentItem: Rectangle {
             id: contentSurface
-            color: Style.surface
+            color: Style.cardSurface
             radius: Style.windowRadius
 
             ElevationShadow {

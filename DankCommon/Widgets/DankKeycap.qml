@@ -20,7 +20,7 @@ Rectangle {
         anchors.fill: parent
         anchors.bottomMargin: root.bevelDepth
         radius: root.radius
-        color: Style.surfaceContainerHigh
+        color: Style.chipSurface
         border.width: Style.outlineWidth
         border.color: Style.outlineVariant
 

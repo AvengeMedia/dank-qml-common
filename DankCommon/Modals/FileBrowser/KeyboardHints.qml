@@ -9,7 +9,7 @@ Rectangle {
 
     height: 80
     radius: Style.cornerRadius
-    color: Style.withAlpha(Style.surfaceContainer, 0.95)
+    color: Style.withAlpha(Style.cardSurface, 0.95)
     border.color: Style.primary
     border.width: 2
     opacity: showHints ? 1 : 0

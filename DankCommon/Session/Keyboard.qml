@@ -25,7 +25,7 @@ Rectangle {
             easing.bezierCurve: Style.expressiveCurves.expressiveEffects
         }
     }
-    color: Style.surfaceContainerHigh
+    color: Style.cardSurface
 
     signal dismissed
 

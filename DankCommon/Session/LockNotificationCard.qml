@@ -5,7 +5,7 @@ Rectangle {
     property bool firstInGroup: true
     property bool lastInGroup: true
 
-    color: Style.surfaceContainerHigh
+    color: Style.hostSurface
     radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius

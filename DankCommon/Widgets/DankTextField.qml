@@ -40,7 +40,7 @@ StyledRect {
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
-    property color backgroundColor: Style.surfaceContainerHigh
+    property color backgroundColor: Style.chipSurface
     property color focusedBorderColor: Style.primary
     property color normalBorderColor: outlined ? Style.outline : Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant

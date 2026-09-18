@@ -204,7 +204,7 @@ Item {
         height: Math.min(Math.max(searchResultsModel.count * (root.resultRowHeight + Style.spacingXXS) + Style.spacingS * 2, root.resultRowHeight + Style.spacingS * 2), Style.menuMaxHeight / 2)
         y: searchInputField.height
         radius: Style.cornerRadiusM
-        color: Style.withAlpha(Style.surfaceContainer, Style.popupTransparency)
+        color: Style.withAlpha(Style.cardSurface, Style.popupTransparency)
         border.color: Style.outlineVariant
         border.width: Style.outlineWidth
         visible: (locationInput.getActiveFocus() || searchResultsList.activeFocus) && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)

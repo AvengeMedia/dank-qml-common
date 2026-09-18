@@ -11,7 +11,7 @@ DankActionButton {
     focusPolicy: Qt.TabFocus
     Accessible.name: text
     property bool isShift: false
-    color: Style.surface
+    color: Style.chipSurface
 
     property bool isIcon: text === "keyboard_hide" || text === "Backspace" || text === "Enter"
 

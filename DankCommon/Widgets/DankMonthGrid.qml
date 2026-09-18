@@ -178,7 +178,7 @@ Item {
                     easing.bezierCurve: Style.expressiveCurves.standard
                 }
             }
-            color: isSelected ? Style.primary : Style.withAlpha(Style.surfaceContainerHighest, inMonth ? Style.popupTransparency : Style.stateLayerFocus)
+            color: isSelected ? Style.primary : Style.withAlpha(Style.chipSurface, inMonth ? Style.popupTransparency : Style.stateLayerFocus)
             border.width: isToday && !isSelected ? Style.outlineWidthFocused : 0
             border.color: Style.primary
 

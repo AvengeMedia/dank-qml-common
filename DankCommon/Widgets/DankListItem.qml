@@ -35,7 +35,7 @@ StyledButton {
     focusPolicy: activeFocus || isSelected ? Qt.StrongFocus : Qt.ClickFocus
     Accessible.role: Accessible.ListItem
     Accessible.selected: isSelected
-    color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.selectedContainer : Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
+    color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.selectedContainer : Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
     radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius
@@ -53,7 +53,7 @@ StyledButton {
             height: root.height
             visible: root.visible && !root._pooled
             opacity: root.opacity
-            color: Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
+            color: Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
             topLeftRadius: root.topLeftRadius
             topRightRadius: root.topRightRadius
             bottomLeftRadius: root.bottomLeftRadius

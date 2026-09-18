@@ -37,6 +37,10 @@ Singleton {
     property color surfaceContainerHighest: "#36343B"
     property color surfaceBright: "#3B383E"
     property color surfaceDim: "#141218"
+    property color hostSurface: "#141218"
+    property color cardSurface: "#211F26"
+    property color chipSurface: "#2B2930"
+    property color chipSurfaceNested: "#36343B"
     property color outlineVariant: "#49454F"
     property color secondaryContainer: "#4A4458"
     property color tertiaryContainer: "#633B48"
@@ -135,19 +139,19 @@ Singleton {
     property bool foregroundLayers: true
     property real foregroundLayerTransparency: 1.0
     readonly property real foregroundAlpha: Surface.foregroundAlpha(foregroundLayers, foregroundLayerTransparency)
-    readonly property color floatingSurface: withAlpha(surfaceContainer, popupTransparency)
-    readonly property color nestedSurface: withAlpha(surfaceContainerHigh, foregroundAlpha)
+    readonly property color floatingSurface: withAlpha(hostSurface, popupTransparency)
+    readonly property color nestedSurface: withAlpha(cardSurface, foregroundAlpha)
 
     property real floatingWindowTransparency: popupTransparency
     property bool floatingWindowForegroundLayers: foregroundLayers
     property real floatingWindowForegroundTransparency: foregroundLayerTransparency
     readonly property real floatingWindowForegroundAlpha: Surface.foregroundAlpha(floatingWindowForegroundLayers, floatingWindowForegroundTransparency)
-    property color floatingWindowSurface: withAlpha(surfaceContainer, floatingWindowTransparency)
-    property color floatingWindowNestedSurface: withAlpha(surfaceContainerHigh, floatingWindowForegroundAlpha)
-    property color floatingWindowFieldColor: floatingWindowNestedSurface
+    property color floatingWindowSurface: withAlpha(hostSurface, floatingWindowTransparency)
+    property color floatingWindowNestedSurface: withAlpha(cardSurface, floatingWindowForegroundAlpha)
+    property color floatingWindowFieldColor: withAlpha(chipSurface, floatingWindowForegroundAlpha)
     property color floatingWindowFieldBorderColor: withAlpha(outline, 0.16)
     property color floatingWindowFieldFocusedBorderColor: primary
-    property color popupFieldColor: nestedSurface
+    property color popupFieldColor: withAlpha(chipSurface, foregroundAlpha)
     property color popupFieldBorderColor: withAlpha(outline, 0.16)
     property color popupFieldFocusedBorderColor: primary
     property bool blurLayersActive: true

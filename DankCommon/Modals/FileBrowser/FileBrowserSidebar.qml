@@ -34,7 +34,7 @@ StyledRect {
                 width: parent?.width ?? 0
                 height: 38
                 radius: Style.cornerRadius
-                color: quickAccessMouseArea.containsMouse ? Style.withAlpha(Style.surfaceContainerHigh, Style.popupTransparency) : (currentPath === modelData?.path ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
+                color: quickAccessMouseArea.containsMouse ? Style.withAlpha(Style.cardSurface, Style.popupTransparency) : (currentPath === modelData?.path ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
 
                 Row {
                     anchors.fill: parent

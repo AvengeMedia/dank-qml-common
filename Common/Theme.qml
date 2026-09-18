@@ -17,6 +17,8 @@ Singleton {
     readonly property color contrastLight: "#ffffff"
     property color primaryText: "#381E72"
     property color primaryContainer: "#4F378B"
+    property color selectedContainer: primaryContainer
+    property color accentOnPrimaryContainer: primary
     property color secondary: "#CCC2DC"
     property color surface: "#141218"
     property color surfaceText: "#E6E0E9"
@@ -45,6 +47,7 @@ Singleton {
     property color onSecondaryContainer
     property color onErrorContainer
     property color onTertiaryContainer
+    property color onSelectedContainer
     property color onSurfaceVariant_30: withAlpha(onSurfaceVariant, 0.3)
     property color onSurfaceVariant_40
     readonly property list<QtObject> roleBindings: [
@@ -87,6 +90,11 @@ Singleton {
             target: root
             property: "onTertiaryContainer"
             value: "#FFD8E4"
+        },
+        Binding {
+            target: root
+            property: "onSelectedContainer"
+            value: "#EADDFF"
         }
     ]
     readonly property real tonalTintAlpha: 0.16

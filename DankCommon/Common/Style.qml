@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import "Shape.js" as Shape
 import "Surface.js" as Surface
+import "Contrast.js" as Contrast
 import Quickshell
 
 Singleton {
@@ -41,6 +42,9 @@ Singleton {
     readonly property color contrastLight: theme?.contrastLight ?? "#ffffff"
     readonly property color primaryText: theme?.primaryText ?? "#381E72"
     readonly property color primaryContainer: theme?.primaryContainer ?? "#4F378B"
+    readonly property bool tonalPrimaryContainer: theme?.tonalPrimaryContainer ?? Contrast.isTonal(primaryContainer, surfaceText)
+    readonly property color selectedContainer: theme?.selectedContainer ?? (tonalPrimaryContainer ? primaryContainer : Contrast.tintedContainer(surfaceContainerHigh, primary, surfaceText))
+    readonly property color accentOnPrimaryContainer: theme?.accentOnPrimaryContainer ?? (Contrast.ratio(primary, primaryContainer) >= 3 ? primary : onPrimaryContainer)
     readonly property color secondary: theme?.secondary ?? "#CCC2DC"
     readonly property color surface: theme?.surface ?? "#141218"
     readonly property color surfaceText: theme?.surfaceText ?? "#e6e0e9"
@@ -74,6 +78,7 @@ Singleton {
     property color onSecondaryContainer
     property color onErrorContainer
     property color onTertiaryContainer
+    property color onSelectedContainer
     readonly property color onSurface_12: theme?.onSurface_12 ?? withAlpha(onSurface, 0.12)
     readonly property color onSurface_38: theme?.onSurface_38 ?? withAlpha(onSurface, 0.38)
     readonly property color onSurfaceVariant_30: theme?.onSurfaceVariant_30 ?? withAlpha(onSurfaceVariant, 0.3)
@@ -118,6 +123,11 @@ Singleton {
             target: root
             property: "onTertiaryContainer"
             value: root.theme?.onTertiaryContainer ?? "#FFD8E4"
+        },
+        Binding {
+            target: root
+            property: "onSelectedContainer"
+            value: root.theme?.onSelectedContainer ?? (root.tonalPrimaryContainer ? root.onPrimaryContainer : root.surfaceText)
         }
     ]
     readonly property real tonalTintAlpha: theme?.tonalTintAlpha ?? 0.16

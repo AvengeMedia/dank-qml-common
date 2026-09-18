@@ -116,8 +116,8 @@ StyledRect {
             font.family: Style.fontFamily
             font.weight: Style.fontWeight
             color: Style.surfaceText
-            selectionColor: Style.primaryContainer
-            selectedTextColor: Style.onPrimaryContainer
+            selectionColor: Style.selectedContainer
+            selectedTextColor: Style.onSelectedContainer
             wrapMode: TextEdit.Wrap
             selectByMouse: true
             cursorDelegate: DankTextCursor {

@@ -690,14 +690,14 @@ FocusScope {
                                 property bool isCurrentValue: root.currentValue === modelData
                                 property string iconName: root.optionIconMap[modelData] ?? ""
                                 property var swatchColor: root.optionColorMap[modelData]
-                                readonly property color contentColor: isCurrentValue ? Style.onPrimaryContainer : Style.surfaceText
+                                readonly property color contentColor: isCurrentValue ? Style.onSelectedContainer : Style.surfaceText
 
                                 width: ListView.view.width
                                 height: root.menuItemHeight
                                 radius: Style.cornerRadiusS
                                 color: {
                                     if (isCurrentValue)
-                                        return Style.primaryContainer;
+                                        return Style.selectedContainer;
                                     if (isSelected)
                                         return Style.withAlpha(Style.onSurface, Style.stateLayerFocus);
                                     if (delegateRoot.hovered || delegateRoot.visualFocus)

@@ -16,7 +16,7 @@ StyledButton {
     readonly property color supportingContentColor: colorForRole(Style.onSurfaceVariant)
 
     function colorForRole(idleColor) {
-        return !enabled ? Style.onSurface_38 : isSelected || (!externalHighlight && visualFocus) ? Style.onPrimaryContainer : idleColor;
+        return !enabled ? Style.onSurface_38 : isSelected || (!externalHighlight && visualFocus) ? Style.onSelectedContainer : idleColor;
     }
 
     signal contextMenuRequested(real mouseX, real mouseY)
@@ -35,7 +35,7 @@ StyledButton {
     focusPolicy: activeFocus || isSelected ? Qt.StrongFocus : Qt.ClickFocus
     Accessible.role: Accessible.ListItem
     Accessible.selected: isSelected
-    color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.primaryContainer : Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
+    color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.selectedContainer : Style.foregroundColor(Style.surfaceContainerLow, Style.isFloatingWindow(root))
     radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius

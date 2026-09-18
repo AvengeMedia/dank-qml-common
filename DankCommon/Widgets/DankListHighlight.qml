@@ -5,7 +5,7 @@ Rectangle {
     property bool animate: true
     property bool firstInGroup: true
     property bool lastInGroup: true
-    color: Style.primaryContainer
+    color: Style.selectedContainer
     radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius

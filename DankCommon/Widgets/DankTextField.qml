@@ -302,8 +302,8 @@ StyledRect {
         font.family: Style.fontFamily
         font.weight: Style.fontWeight
         color: root.outlined && !root.enabled ? Style.onSurface_38 : Style.surfaceText
-        selectionColor: Style.primaryContainer
-        selectedTextColor: Style.onPrimaryContainer
+        selectionColor: Style.selectedContainer
+        selectedTextColor: Style.onSelectedContainer
         horizontalAlignment: TextInput.AlignLeft
         verticalAlignment: TextInput.AlignVCenter
         selectByMouse: !root.ignoreLeftRightKeys

@@ -81,8 +81,9 @@ ShellRoot {
             check(slider.value > 60, "drag adjustment remains available");
             scroll.contentHeight = scroll.height;
             slider.value = 50;
+            input.wait(30);
             input.mouseWheel(slider, slider.width / 2, slider.height / 2, 0, 120);
-            check(slider.value === 50, "nonoverflowing scroll container also blocks wheel adjustment");
+            check(slider.value > 50, "nonoverflowing scroll container leaves wheel adjustment to the slider");
             sliderHost.parent = plain;
             input.wait(20);
             check(slider.wheelEnabled, "reparenting back restores standalone wheel adjustment");

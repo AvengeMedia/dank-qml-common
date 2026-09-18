@@ -5,6 +5,7 @@ import QtQuick
 import "Shape.js" as Shape
 import "Surface.js" as Surface
 import "Contrast.js" as Contrast
+import "Accents.js" as Accents
 import Quickshell
 
 Singleton {
@@ -45,6 +46,7 @@ Singleton {
     readonly property bool tonalPrimaryContainer: theme?.tonalPrimaryContainer ?? Contrast.isTonal(primaryContainer, surfaceText)
     readonly property color selectedContainer: theme?.selectedContainer ?? (tonalPrimaryContainer ? primaryContainer : Contrast.tintedContainer(surfaceContainerHigh, primary, surfaceText))
     readonly property color accentOnPrimaryContainer: theme?.accentOnPrimaryContainer ?? (Contrast.ratio(primary, primaryContainer) >= 3 ? primary : onPrimaryContainer)
+    readonly property var accents: theme?.accents ?? Accents.derive(primary, isLightMode, null)
     readonly property color secondary: theme?.secondary ?? "#CCC2DC"
     readonly property color surface: theme?.surface ?? "#141218"
     readonly property color surfaceText: theme?.surfaceText ?? "#e6e0e9"
@@ -156,6 +158,10 @@ Singleton {
 
     readonly property real foregroundAlpha: theme?.foregroundAlpha ?? Surface.foregroundAlpha(theme?.foregroundLayers ?? true, theme?.foregroundLayerTransparency ?? 1)
     readonly property real floatingWindowForegroundAlpha: theme?.floatingWindowForegroundAlpha ?? Surface.foregroundAlpha(theme?.floatingWindowForegroundLayers ?? theme?.foregroundLayers ?? true, theme?.floatingWindowForegroundTransparency ?? theme?.foregroundLayerTransparency ?? 1)
+
+    function accent(name) {
+        return accents[name] ?? null;
+    }
 
     function isFloatingWindow(item) {
         return Surface.isFloatingWindow(item);

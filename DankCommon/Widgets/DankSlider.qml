@@ -17,8 +17,10 @@ Controls.Control {
     focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
     wheelEnabled: true
 
+    readonly property bool containerScrolls: scrollContainer !== null && scrollContainer.contentHeight > scrollContainer.height
+
     Binding on wheelEnabled {
-        when: slider.scrollContainer !== null && !slider.wheelInsideScrollable
+        when: slider.containerScrolls && !slider.wheelInsideScrollable
         value: false
         restoreMode: Binding.RestoreBindingOrValue
     }
@@ -562,8 +564,8 @@ Controls.Control {
             Controls.ToolTip {
                 id: valueTooltip
 
-                width: tooltipText.reservedWidth + Style.spacingL * 2
-                height: tooltipText.contentHeight + Style.spacingM * 2
+                width: tooltipText.reservedWidth + Style.spacingM * 2
+                height: tooltipText.contentHeight + Style.spacingS * 2
                 padding: 0
                 horizontalPadding: 0
                 margins: Style.spacingXS
@@ -593,6 +595,7 @@ Controls.Control {
                 contentItem: NumericText {
                     id: tooltipText
 
+                    isMonospace: false
                     text: slider.formatValue(slider.valueOverride >= 0 ? slider.valueOverride : slider.value)
                     reserveText: {
                         let widest = "";

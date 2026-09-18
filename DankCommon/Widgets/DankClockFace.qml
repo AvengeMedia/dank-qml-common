@@ -8,24 +8,25 @@ Item {
     property string minutes: "00"
     property string seconds: ""
     property string dateText: ""
-    property string dayText: ""
     property bool stacked: false
     property color color: Style.primary
     property color supportingColor: Style.onSurfaceVariant
 
     readonly property bool tall: height > Style.buttonHeightM * 2
     readonly property bool vertical: tall && (stacked || height > width * 0.6)
-    readonly property bool inlineSeconds: seconds !== "" && !vertical && width >= Style.fontSizeDisplay * 5
-    readonly property string timeText: hours + ":" + minutes + (inlineSeconds ? ":" + seconds : "")
-    readonly property string dayLine: [dayText, vertical ? seconds : ""].filter(s => s !== "").join(" · ")
-    readonly property bool hasSupport: dateText !== "" || dayLine !== ""
-    readonly property bool sideSupport: vertical && hasSupport && width >= height * 1.1
-    readonly property bool belowSupport: hasSupport && tall && !sideSupport
+    readonly property string supportText: [dateText, vertical ? seconds : ""].filter(s => s !== "").join(" · ")
+    readonly property bool hasSupport: supportText !== ""
     readonly property real supportLine: Style.fontSizeMedium * 1.5
-    readonly property real supportHeight: belowSupport ? (dateText !== "" ? supportLine : 0) + (dayLine !== "" ? supportLine : 0) + Style.spacingS : 0
-    readonly property real sideWidth: sideSupport ? Math.max(Style.fontSizeMedium * 6, width * 0.4) : 0
+    readonly property real supportNatural: hasSupport ? supportMetrics.advanceWidth + Style.spacingS : 0
+    readonly property bool sideFits: hasSupport && width - supportNatural >= Style.fontSizeDisplay * 3
+    readonly property bool sideSupport: sideFits && (vertical ? width >= height * 1.1 : !tall)
+    readonly property bool belowSupport: hasSupport && !sideSupport
+    readonly property real supportHeight: belowSupport ? supportLine + Style.spacingS : 0
+    readonly property real sideWidth: sideSupport ? supportNatural : 0
     readonly property real digitsWidth: width - sideWidth
     readonly property real digitsHeight: height - supportHeight
+    readonly property bool inlineSeconds: seconds !== "" && !vertical && digitsWidth >= Style.fontSizeDisplay * 5
+    readonly property string timeText: hours + ":" + minutes + (inlineSeconds ? ":" + seconds : "")
     readonly property real rowHeight: vertical ? (digitsHeight + Style.spacingS) / 2 : digitsHeight
     readonly property real displaySize: rowHeight / 1.05
 
@@ -47,20 +48,28 @@ Item {
         }
     }
 
-    Column {
-        visible: root.sideSupport || root.belowSupport
+    StyledText {
+        id: support
+        visible: root.hasSupport
         x: root.sideSupport ? root.digitsWidth + Style.spacingS : 0
         y: root.sideSupport ? (root.height - height) / 2 : root.digitsHeight + Style.spacingS
         width: root.sideSupport ? root.sideWidth - Style.spacingS : root.width
-        spacing: 0
+        height: root.supportLine
+        text: root.supportText
+        color: root.supportingColor
+        font.pixelSize: Style.fontSizeMedium
+        font.weight: Style.fontWeightMedium
+        minimumPixelSize: Style.fontSizeSmall
+        fontSizeMode: Text.HorizontalFit
+        horizontalAlignment: root.sideSupport ? Text.AlignLeft : Text.AlignHCenter
+        wrapMode: Text.NoWrap
+        elide: Text.ElideRight
+    }
 
-        Support {
-            text: root.dateText
-        }
-
-        Support {
-            text: root.dayLine
-        }
+    TextMetrics {
+        id: supportMetrics
+        font: support.font
+        text: root.supportText
     }
 
     component Digits: StyledText {
@@ -85,16 +94,5 @@ Item {
         wrapMode: Text.NoWrap
         elide: Text.ElideNone
         LayoutMirroring.enabled: false
-    }
-
-    component Support: StyledText {
-        width: parent.width
-        height: root.supportLine
-        color: root.supportingColor
-        font.pixelSize: Style.fontSizeMedium
-        font.weight: Style.fontWeightMedium
-        horizontalAlignment: root.sideSupport ? Text.AlignLeft : Text.AlignHCenter
-        elide: Text.ElideRight
-        visible: text !== ""
     }
 }

@@ -42,7 +42,7 @@ Controls.Control {
     property bool insetIconClickable: false
     property string insetIconTooltip: ""
     property string insetIconLabel: ""
-    property string unit: "%"
+    property string unit: ""
     property bool showValue: true
     property bool showStops: false
     property bool isDragging: false
@@ -51,9 +51,8 @@ Controls.Control {
     property int decimals: 0
     property bool alwaysShowValue: false
     property string size: "xs"
-    property string handleVariant: "desktop"
-    readonly property real handleWidth: handleVariant === "desktop" ? Style.sliderHandleWidthDesktop : Style.sliderHandleWidth
-    readonly property real pressedHandleWidth: handleVariant === "desktop" ? Style.sliderHandleWidthDesktopPressed : Style.sliderHandleWidth / 2
+    readonly property real handleWidth: Style.sliderHandleWidth
+    readonly property real pressedHandleWidth: Style.sliderHandleWidthPressed
     readonly property bool containsMouse: sliderMouseArea.containsMouse
     readonly property var focusTargets: [startIconLoader.action, insetAction.enabled ? insetAction : null, slider, endIconLoader.action].filter(item => item && item.enabled)
 
@@ -104,7 +103,7 @@ Controls.Control {
     readonly property real handleHeight: {
         switch (size) {
         case "s":
-            return handleVariant === "desktop" ? Style.sliderHandleHeightDesktop : Style.sliderHandleHeightS;
+            return Style.sliderHandleHeightS;
         case "m":
             return Style.sliderHandleHeightM;
         case "l":
@@ -112,7 +111,7 @@ Controls.Control {
         case "xl":
             return Style.sliderHandleHeightXL;
         default:
-            return handleVariant === "desktop" ? Style.sliderHandleHeightDesktop : Style.sliderHandleHeight;
+            return Style.sliderHandleHeight;
         }
     }
     readonly property real trackCornerRadius: {

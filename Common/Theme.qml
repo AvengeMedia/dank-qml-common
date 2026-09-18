@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import "../DankCommon/Common/Shape.js" as Shape
 import "../DankCommon/Common/Surface.js" as Surface
+import "../DankCommon/Common/Accents.js" as Accents
 import Quickshell
 import qs.DankCommon.Common
 
@@ -19,6 +20,7 @@ Singleton {
     property color primaryContainer: "#4F378B"
     property color selectedContainer: primaryContainer
     property color accentOnPrimaryContainer: primary
+    readonly property var accents: Accents.derive(primary, isLightMode, null)
     property color secondary: "#CCC2DC"
     property color surface: "#141218"
     property color surfaceText: "#E6E0E9"
@@ -212,15 +214,13 @@ Singleton {
     readonly property real avatarSize: 36
     readonly property real sliderTrackHeight: 16
     readonly property real sliderHandleWidth: 4
-    readonly property real sliderHandleWidthDesktop: 6
-    readonly property real sliderHandleWidthDesktopPressed: 4
-    readonly property real sliderHandleHeightDesktop: 32
+    readonly property real sliderHandleWidthPressed: 2
     readonly property real sliderHandleHeight: 44
     readonly property real sliderHandleGap: 6
     readonly property real sliderTrackHeightS: 24
     readonly property real sliderHandleHeightS: 44
     readonly property real sliderTrackHeightM: 40
-    readonly property real sliderHandleHeightM: 44
+    readonly property real sliderHandleHeightM: 52
     readonly property real sliderTrackHeightL: 56
     readonly property real sliderHandleHeightL: 68
     readonly property real sliderTrackHeightXL: 96

@@ -256,15 +256,13 @@ Singleton {
     readonly property real bottomSheetHandleHeight: theme?.bottomSheetHandleHeight ?? 4
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
-    readonly property real sliderHandleWidthDesktop: theme?.sliderHandleWidthDesktop ?? 6
-    readonly property real sliderHandleWidthDesktopPressed: theme?.sliderHandleWidthDesktopPressed ?? 4
-    readonly property real sliderHandleHeightDesktop: theme?.sliderHandleHeightDesktop ?? 32
+    readonly property real sliderHandleWidthPressed: theme?.sliderHandleWidthPressed ?? 2
     readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44
     readonly property real sliderHandleGap: theme?.sliderHandleGap ?? 6
     readonly property real sliderTrackHeightS: theme?.sliderTrackHeightS ?? 24
     readonly property real sliderHandleHeightS: theme?.sliderHandleHeightS ?? 44
     readonly property real sliderTrackHeightM: theme?.sliderTrackHeightM ?? 40
-    readonly property real sliderHandleHeightM: theme?.sliderHandleHeightM ?? 44
+    readonly property real sliderHandleHeightM: theme?.sliderHandleHeightM ?? 52
     readonly property real sliderTrackHeightL: theme?.sliderTrackHeightL ?? 56
     readonly property real sliderHandleHeightL: theme?.sliderHandleHeightL ?? 68
     readonly property real sliderTrackHeightXL: theme?.sliderTrackHeightXL ?? 96

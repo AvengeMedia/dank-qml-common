@@ -390,7 +390,6 @@ ShellRoot {
                             value: 50
                             step: 25
                             showStops: true
-                            unit: ""
                             onSliderValueChanged: newValue => value = newValue
                         }
 

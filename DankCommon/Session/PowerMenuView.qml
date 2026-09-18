@@ -19,11 +19,8 @@ Rectangle {
     property bool hintWarning: false
     property string hintText: ""
     property string hintIcon: "touch_app"
-    property color buttonColor: Style.surfaceContainerHighest
-    property color buttonContentColor: Style.onSurface
-    property color selectedButtonColor: Style.primaryContainer
-    property color selectedButtonContentColor: Style.onPrimaryContainer
-    readonly property real desiredWidth: gridLayout ? Math.min(LockMetrics.powerGridWidth, Math.max(1, gridColumns) * LockMetrics.powerGridColumnWidth + Style.spacingS * (Math.max(1, gridColumns) - 1) + Style.spacingL * 2) : LockMetrics.powerMenuWidth
+    readonly property real itemGap: gridLayout ? Style.spacingXS : Style.groupedListGap
+    readonly property real desiredWidth: gridLayout ? Math.min(LockMetrics.powerGridWidth, Math.max(1, gridColumns) * LockMetrics.powerGridColumnWidth + itemGap * (Math.max(1, gridColumns) - 1) + Style.spacingL * 2) : LockMetrics.powerMenuWidth
 
     signal actionPressed(int index)
     signal actionReleased
@@ -42,108 +39,139 @@ Rectangle {
         y: Style.spacingL
         width: parent.width - Style.spacingL * 2
         columns: root.gridLayout ? Math.max(1, root.gridColumns) : 1
-        spacing: Style.spacingS
+        spacing: root.itemGap
 
         Repeater {
             model: root.actions
 
-            Rectangle {
+            Base.DankListItem {
                 id: button
                 required property int index
                 required property string modelData
                 readonly property var actionData: root.actionProvider ? root.actionProvider(modelData) : ({})
-                readonly property bool selected: root.selectedIndex === index
                 readonly property bool holding: root.holdActionIndex === index && root.holdProgress > 0
                 readonly property bool warningAction: modelData === "reboot" || modelData === "softreboot" || modelData === "poweroff"
-                readonly property bool engaged: stateLayer.pressed || holding
-                readonly property color contentColor: {
-                    if (warningAction && (stateLayer.containsMouse || holding))
+                readonly property color tint: {
+                    if (warningAction && (hovered || holding))
                         return modelData === "poweroff" ? Style.error : Style.warning;
-                    return selected ? root.selectedButtonContentColor : root.buttonContentColor;
+                    return contentColor;
                 }
-                readonly property real restRadius: root.gridLayout ? Style.cornerRadiusXL : Style.fullRadius(width, height)
                 width: (buttons.width - buttons.spacing * (buttons.columns - 1)) / buttons.columns
-                height: root.gridLayout ? Math.max(LockMetrics.powerGridButtonHeight, label.implicitHeight + icon.height + keycap.height + Style.spacingS * 4) : Math.max(LockMetrics.powerButtonHeight, label.implicitHeight + Style.spacingM * 2)
-                radius: engaged ? Style.cornerRadiusM : selected ? Style.cornerRadiusL : restRadius
-                color: selected ? root.selectedButtonColor : root.buttonColor
-                border.width: selected ? Style.focusRingWidth : 0
-                border.color: Style.focusRingColor
-                Accessible.role: Accessible.Button
+                height: root.gridLayout ? Math.max(LockMetrics.powerGridButtonHeight, content.implicitHeight + Style.spacingM * 2) : Style.listItemHeight
+                isSelected: root.selectedIndex === index
+                firstInGroup: root.gridLayout || index === 0
+                lastInGroup: root.gridLayout || index === root.actions.length - 1
+                focusPolicy: Qt.NoFocus
                 Accessible.name: actionData.label || ""
-                Accessible.focused: selected && root.visible
-
-                Behavior on radius {
-                    NumberAnimation {
-                        duration: LockMetrics.effectsDuration
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Style.expressiveCurves.expressiveEffects
-                    }
-                }
+                onPressed: root.actionPressed(index)
+                onReleased: root.actionReleased()
+                onCanceled: root.actionCanceled()
 
                 ClippingRectangle {
                     anchors.fill: parent
-                    radius: button.radius
                     color: "transparent"
+                    topLeftRadius: button.topLeftRadius
+                    topRightRadius: button.topRightRadius
+                    bottomLeftRadius: button.bottomLeftRadius
+                    bottomRightRadius: button.bottomRightRadius
                     visible: button.holding
 
                     Rectangle {
                         anchors.left: parent.left
                         height: parent.height
                         width: parent.width * root.holdProgress
-                        color: Style.withAlpha(button.contentColor, Style.stateLayerPressed)
+                        color: Style.withAlpha(button.tint, Style.stateLayerPressed)
                     }
                 }
 
-                Base.DankIcon {
-                    id: icon
-                    x: root.gridLayout ? (parent.width - width) / 2 : I18n.isRtl ? parent.width - width - Style.spacingM : Style.spacingM
-                    y: root.gridLayout ? Style.spacingS : (parent.height - height) / 2
-                    name: button.actionData.icon || ""
-                    size: Style.iconSizeMedium
-                    color: button.contentColor
+                Loader {
+                    id: content
+                    anchors.fill: parent
+                    sourceComponent: root.gridLayout ? tileContent : rowContent
                 }
 
-                Base.StyledText {
-                    id: label
-                    x: root.gridLayout ? Style.spacingS : I18n.isRtl ? keycap.x + keycap.width + Style.spacingM : icon.x + icon.width + Style.spacingM
-                    y: root.gridLayout ? icon.y + icon.height + Style.spacingS : (parent.height - height) / 2
-                    width: root.gridLayout ? parent.width - Style.spacingS * 2 : parent.width - icon.width - keycap.width - Style.spacingM * 4
-                    text: button.actionData.label || ""
-                    textFormat: Text.PlainText
-                    font.pixelSize: Style.fontSizeMedium
-                    font.weight: Style.fontWeightMedium
-                    color: button.contentColor
-                    horizontalAlignment: root.gridLayout ? Text.AlignHCenter : I18n.isRtl ? Text.AlignRight : Text.AlignLeft
-                    wrapMode: Text.WordWrap
-                }
+                Component {
+                    id: rowContent
 
-                Rectangle {
-                    id: keycap
-                    x: root.gridLayout ? (parent.width - width) / 2 : I18n.isRtl ? Style.spacingM : parent.width - width - Style.spacingM
-                    y: root.gridLayout ? label.y + label.height + Style.spacingS : (parent.height - height) / 2
-                    width: keyText.implicitWidth + Style.spacingS * 2
-                    height: visible ? keyText.implicitHeight + Style.spacingXXS * 2 : 0
-                    radius: Style.cornerRadiusXS
-                    color: Style.withAlpha(button.contentColor, Style.stateLayerPressed)
-                    visible: !!button.actionData.key
+                    Item {
+                        Base.DankIcon {
+                            id: icon
+                            anchors.left: parent.left
+                            anchors.leftMargin: Style.spacingL
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: button.actionData.icon || ""
+                            size: Style.iconSizeMedium
+                            color: button.tint
+                        }
 
-                    Base.StyledText {
-                        id: keyText
-                        anchors.centerIn: parent
-                        text: button.actionData.key || ""
-                        font.pixelSize: Style.fontSizeSmall
-                        color: button.contentColor
+                        Base.StyledText {
+                            anchors.left: icon.right
+                            anchors.leftMargin: Style.spacingL
+                            anchors.right: keycap.visible ? keycap.left : parent.right
+                            anchors.rightMargin: Style.spacingL
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: button.actionData.label || ""
+                            textFormat: Text.PlainText
+                            font.pixelSize: Style.fontSizeLarge
+                            font.weight: Style.fontWeightMedium
+                            color: button.tint
+                            elide: Text.ElideRight
+                        }
+
+                        Base.DankKeycap {
+                            id: keycap
+                            anchors.right: parent.right
+                            anchors.rightMargin: Style.spacingL
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: button.actionData.key || ""
+                            textColor: button.tint
+                            visible: text.length > 0
+                        }
                     }
                 }
 
-                Base.StateLayer {
-                    id: stateLayer
-                    stateColor: button.contentColor
-                    transitionDuration: LockMetrics.effectsDuration
-                    transitionCurve: Style.expressiveCurves.expressiveEffects
-                    onPressed: root.actionPressed(button.index)
-                    onReleased: root.actionReleased()
-                    onCanceled: root.actionCanceled()
+                Component {
+                    id: tileContent
+
+                    Item {
+                        implicitHeight: column.implicitHeight
+
+                        Column {
+                            id: column
+                            anchors.centerIn: parent
+                            width: parent.width - Style.spacingM * 2
+                            spacing: Style.spacingS
+
+                            Base.DankIcon {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                name: button.actionData.icon || ""
+                                size: Style.iconSizeLarge
+                                color: button.tint
+                            }
+
+                            Base.StyledText {
+                                width: parent.width
+                                text: button.actionData.label || ""
+                                textFormat: Text.PlainText
+                                font.pixelSize: Style.fontSizeSmall
+                                font.weight: Style.fontWeightMedium
+                                color: button.tint
+                                horizontalAlignment: Text.AlignHCenter
+                                wrapMode: Text.Wrap
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                            }
+                        }
+
+                        Base.DankKeycap {
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.margins: Style.spacingXS
+                            text: button.actionData.key || ""
+                            textColor: button.tint
+                            visible: text.length > 0
+                        }
+                    }
                 }
             }
         }

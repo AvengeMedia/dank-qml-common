@@ -20,7 +20,7 @@ Item {
     property real cellGap: Style.spacingXS
     property real weekdayRowHeight: Style.iconSizeMedium
     property real weekColumnWidth: Style.iconSizeLarge
-    property real cellRadius: Style.buttonRadius(cellWidth, cellHeight, cellHeight, false, false)
+    property real cellRadius: Style.fullRadius(cellWidth, cellHeight)
     property bool highlightWeekends: false
     property color weekendColor: Style.tertiary
 
@@ -166,10 +166,7 @@ Item {
             y: root.weekdayRowHeight + root.cellGap + Math.floor(index / root.columns) * (root.cellHeight + root.cellGap)
             width: root.cellWidth
             height: root.cellHeight
-            radius: {
-                const shapeRadius = pressed || isSelected ? Style.buttonRadius(width, height, height, pressed, isSelected) : root.cellRadius;
-                return Math.min(shapeRadius, Math.min(width, height) / 2);
-            }
+            radius: Math.min(pressed ? Style.buttonRadius(width, height, height, true, true) : root.cellRadius, Math.min(width, height) / 2)
 
             Behavior on radius {
                 enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None

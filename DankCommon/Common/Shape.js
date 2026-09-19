@@ -1,6 +1,17 @@
 .pragma library
 
-var corners = { xxs: 2, xs: 4, s: 8, m: 12, l: 16, lIncreased: 20, xl: 28, xlIncreased: 32, xxl: 48 };
+var corners = {
+    xxs: 2,
+    xs: 4,
+    s: 8,
+    m: 12,
+    l: 16,
+    lIncreased: 20,
+    xl: 28,
+    xlIncreased: 32,
+    xxl: 48
+};
+var maxFixedRadius = 32;
 
 function normalizeStrength(value) {
     if (typeof value !== "number" || !isFinite(value))
@@ -8,37 +19,45 @@ function normalizeStrength(value) {
     return Math.round(Math.max(0, Math.min(100, value)));
 }
 
+function normalizeFixedRadius(value) {
+    if (typeof value !== "number" || !isFinite(value))
+        return corners.m;
+    return Math.round(Math.max(0, Math.min(maxFixedRadius, value)));
+}
+
 function strengthFromRadius(radius) {
     if (typeof radius !== "number" || !isFinite(radius))
         return 50;
-    if (radius <= 12)
-        return normalizeStrength(radius * 50 / 12);
-    return normalizeStrength(50 + (radius - 12) * 2.5);
+    return normalizeStrength(radius * 50 / corners.m);
 }
 
 function scaleForStrength(strength) {
-    const value = normalizeStrength(strength);
-    if (value <= 50)
-        return value / 50;
-    return 1 + (value - 50) / 30;
+    return normalizeStrength(strength) / 50;
 }
 
-function radius(token, scale) {
+function radius(token, scale, fixed) {
+    if (fixed >= 0)
+        return fixed;
     return Math.round(corners[token] * scale);
 }
 
-function scaledRadius(radius, limit, scale) {
+function scaledRadius(radius, limit, scale, fixed) {
+    if (fixed >= 0)
+        return Math.max(0, Math.min(limit, fixed));
     return Math.max(0, Math.min(limit, radius * scale));
 }
 
-function fullRadius(width, height, scale) {
-    return Math.max(0, Math.min(width, height)) / 2 * Math.min(1, scale);
+function fullRadius(width, height, scale, fixed) {
+    const half = Math.max(0, Math.min(width, height)) / 2;
+    if (fixed >= 0)
+        return Math.min(half, fixed);
+    return half * Math.min(1, scale);
 }
 
-function buttonRadius(width, height, sizeHeight, pressed, round, scale) {
+function buttonRadius(width, height, sizeHeight, pressed, round, scale, fixed) {
     if (!pressed && round)
-        return fullRadius(width, height, scale);
-    return radius(buttonCorner(sizeHeight, pressed), scale);
+        return fullRadius(width, height, scale, fixed);
+    return radius(buttonCorner(sizeHeight, pressed), scale, fixed);
 }
 
 function buttonCorner(sizeHeight, pressed) {

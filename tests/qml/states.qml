@@ -36,7 +36,7 @@ Item {
     function run() {
         let cases = 0;
         try {
-            for (const [strength, outer, inner, chipRadius] of [[0, 0, 0, 0], [25, 8, 2, 4], [50, 16, 4, 8], [100, 43, 11, 21]]) {
+            for (const [strength, outer, inner, chipRadius] of [[0, 0, 0, 0], [25, 8, 2, 4], [50, 16, 4, 8], [100, 32, 8, 16]]) {
                 theme.radiusStrength = strength;
                 const highlight = highlightFactory.createObject(root);
                 equal(highlight.topLeftRadius, outer, "standalone highlight top radius");

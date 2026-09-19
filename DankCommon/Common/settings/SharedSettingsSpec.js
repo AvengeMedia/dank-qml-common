@@ -18,6 +18,15 @@ var SPEC = {
         coerce: Shape.normalizeStrength,
         onChange: "updateCompositorLayout"
     },
+    radiusMode: {
+        def: "scale",
+        onChange: "updateCompositorLayout"
+    },
+    fixedRadius: {
+        def: 12,
+        coerce: Shape.normalizeFixedRadius,
+        onChange: "updateCompositorLayout"
+    },
     clockFormat: {
         def: "auto",
         onChange: "markGreeterSyncPending"

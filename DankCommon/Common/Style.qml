@@ -198,28 +198,35 @@ Singleton {
     readonly property int mediumBreakpoint: theme?.mediumBreakpoint ?? 768
 
     readonly property real radiusStrength: theme?.radiusStrength ?? Shape.strengthFromRadius(theme?.cornerRadius ?? 12)
-    readonly property real shapeScale: theme?.radiusStrength !== undefined ? Shape.scaleForStrength(radiusStrength) : (theme?.shapeScale ?? Shape.scaleForStrength(radiusStrength))
+    readonly property real fixedRadius: theme?.fixedRadius ?? -1
+    readonly property real shapeScale: {
+        if (fixedRadius >= 0)
+            return fixedRadius / Shape.corners.m;
+        if (theme?.radiusStrength !== undefined)
+            return Shape.scaleForStrength(radiusStrength);
+        return theme?.shapeScale ?? Shape.scaleForStrength(radiusStrength);
+    }
     readonly property real cornerRadius: cornerRadiusM
-    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Shape.radius("xxs", shapeScale)
-    readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Shape.radius("xs", shapeScale)
-    readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Shape.radius("s", shapeScale)
-    readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Shape.radius("m", shapeScale)
-    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? Shape.radius("l", shapeScale)
-    readonly property real cornerRadiusLIncreased: theme?.cornerRadiusLIncreased ?? Shape.radius("lIncreased", shapeScale)
-    readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Shape.radius("xl", shapeScale)
-    readonly property real cornerRadiusXLIncreased: theme?.cornerRadiusXLIncreased ?? Shape.radius("xlIncreased", shapeScale)
-    readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Shape.radius("xxl", shapeScale)
-    readonly property real cornerRadiusFull: shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0
+    readonly property real cornerRadiusXXS: theme?.cornerRadiusXXS ?? Shape.radius("xxs", shapeScale, fixedRadius)
+    readonly property real cornerRadiusXS: theme?.cornerRadiusXS ?? Shape.radius("xs", shapeScale, fixedRadius)
+    readonly property real cornerRadiusS: theme?.cornerRadiusS ?? Shape.radius("s", shapeScale, fixedRadius)
+    readonly property real cornerRadiusM: theme?.cornerRadiusM ?? Shape.radius("m", shapeScale, fixedRadius)
+    readonly property real cornerRadiusL: theme?.cornerRadiusL ?? Shape.radius("l", shapeScale, fixedRadius)
+    readonly property real cornerRadiusLIncreased: theme?.cornerRadiusLIncreased ?? Shape.radius("lIncreased", shapeScale, fixedRadius)
+    readonly property real cornerRadiusXL: theme?.cornerRadiusXL ?? Shape.radius("xl", shapeScale, fixedRadius)
+    readonly property real cornerRadiusXLIncreased: theme?.cornerRadiusXLIncreased ?? Shape.radius("xlIncreased", shapeScale, fixedRadius)
+    readonly property real cornerRadiusXXL: theme?.cornerRadiusXXL ?? Shape.radius("xxl", shapeScale, fixedRadius)
+    readonly property real cornerRadiusFull: fixedRadius >= 0 ? fixedRadius : (shapeScale > 0 ? (theme?.cornerRadiusFull ?? 9999) : 0)
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
     readonly property real windowRadius: theme?.windowRadius ?? cornerRadiusL
 
     function scaledRadius(radius, limit) {
-        return Shape.scaledRadius(radius, limit, shapeScale);
+        return Shape.scaledRadius(radius, limit, shapeScale, fixedRadius);
     }
 
     function fullRadius(width, height) {
-        return Shape.fullRadius(width, height, shapeScale);
+        return Shape.fullRadius(width, height, shapeScale, fixedRadius);
     }
 
     function buttonRadius(width, height, sizeHeight, pressed, round) {

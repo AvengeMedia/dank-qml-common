@@ -154,6 +154,7 @@ Singleton {
 
     readonly property color outlineButton: theme?.outlineButton ?? withAlpha(outline, 0.5)
     readonly property color outlineMedium: theme?.outlineMedium ?? withAlpha(outline, 0.12)
+    readonly property int layerOutlineWidth: theme?.layerOutlineWidth ?? 1
     readonly property color outlineStrong: theme?.outlineStrong ?? withAlpha(outline, 0.18)
     readonly property color outlineHeavy: theme?.outlineHeavy ?? withAlpha(outline, 0.2)
 

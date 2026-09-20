@@ -63,7 +63,7 @@ Controls.Control {
     property Gradient trackGradient: null
     property color trackTextColor: Style.onSecondaryContainer
     property bool usePopupTransparency: !Style.isFloatingWindow(slider)
-    property real trackOpacity: usePopupTransparency ? Style.popupTransparency : 1.0
+    property real trackOpacity: 1.0
 
     signal insetIconClicked
     signal sliderValueChanged(int newValue)

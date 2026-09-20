@@ -28,6 +28,7 @@ Item {
 
     readonly property int columns: 7
     readonly property int rows: 6
+    readonly property bool floatingWindow: Style.isFloatingWindow(root)
     readonly property int firstFocusIndex: {
         for (let i = 0; i < columns * rows; i++) {
             if (sameDay(dateAt(i), selectedDate))
@@ -175,7 +176,7 @@ Item {
                     easing.bezierCurve: Style.expressiveCurves.standard
                 }
             }
-            color: isSelected ? Style.primary : Style.withAlpha(Style.chipSurface, inMonth ? Style.popupTransparency : Style.stateLayerFocus)
+            color: isSelected ? Style.primary : (inMonth ? Style.foregroundColor(Style.chipSurface, root.floatingWindow) : Style.withAlpha(Style.chipSurface, Style.stateLayerFocus))
             border.width: isToday && !isSelected ? Style.outlineWidthFocused : 0
             border.color: Style.primary
 

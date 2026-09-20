@@ -241,6 +241,7 @@ Singleton {
     readonly property real menuItemHeight: 40
     readonly property real outlineWidth: 1
     readonly property real outlineWidthFocused: 2
+    readonly property int layerOutlineWidth: 1
     readonly property real dividerWidth: 1
     readonly property real focusRingWidth: 1.5
     readonly property real focusRingOffset: 3

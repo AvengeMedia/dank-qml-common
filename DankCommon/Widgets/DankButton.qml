@@ -75,11 +75,17 @@ StyledButton {
         tooltipSide: root.tooltipSide
     }
 
-    StyledTextMetrics {
+    // TextMetrics.advanceWidth can differ from Text.implicitWidth by 1px for the same string, so measure with a Text.
+    Loader {
         id: reservedLabel
-        text: root.reserveText
-        font.pixelSize: Style.fontSizeMedium
-        font.weight: Style.fontWeightMedium
+        active: root.reserveText !== ""
+        visible: false
+        sourceComponent: StyledText {
+            text: root.reserveText
+            font.pixelSize: Style.fontSizeMedium
+            font.weight: Style.fontWeightMedium
+            wrapMode: Text.NoWrap
+        }
     }
 
     Row {
@@ -121,7 +127,7 @@ StyledButton {
         }
 
         StyledText {
-            width: Math.min(Math.max(implicitWidth, reservedLabel.advanceWidth), root.maximumLabelWidth)
+            width: Math.min(Math.max(implicitWidth, reservedLabel.item?.implicitWidth ?? 0), root.maximumLabelWidth)
             wrapMode: root.wrapText ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
             elide: root.wrapText ? Text.ElideNone : Text.ElideRight
             text: root.text

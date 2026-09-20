@@ -318,6 +318,12 @@ Singleton {
     readonly property real spinnerStrokeWidth: theme?.spinnerStrokeWidth ?? 2
     readonly property real tabMinWidth: theme?.tabMinWidth ?? 64
     readonly property real tabIndicatorHeight: theme?.tabIndicatorHeight ?? 3
+    readonly property real navigationHeight: theme?.navigationHeight ?? 64
+    readonly property real navigationRailWidth: theme?.navigationRailWidth ?? 96
+    readonly property real navigationItemMinWidth: theme?.navigationItemMinWidth ?? 80
+    readonly property real navigationIndicatorWidth: theme?.navigationIndicatorWidth ?? 56
+    readonly property real navigationIndicatorHeight: theme?.navigationIndicatorHeight ?? 32
+    readonly property real navigationVerticalPadding: theme?.navigationVerticalPadding ?? 6
     readonly property real tabIndicatorMinWidth: theme?.tabIndicatorMinWidth ?? 24
     readonly property real tabIndicatorInset: theme?.tabIndicatorInset ?? 2
     readonly property real launcherTileSize: theme?.launcherTileSize ?? 120

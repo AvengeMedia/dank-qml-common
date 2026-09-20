@@ -267,6 +267,12 @@ Singleton {
     readonly property real spinnerStrokeWidth: 2
     readonly property real tabMinWidth: 64
     readonly property real tabIndicatorHeight: 3
+    readonly property real navigationHeight: 64
+    readonly property real navigationRailWidth: 96
+    readonly property real navigationItemMinWidth: 80
+    readonly property real navigationIndicatorWidth: 56
+    readonly property real navigationIndicatorHeight: 32
+    readonly property real navigationVerticalPadding: 6
     readonly property real tabIndicatorMinWidth: 24
     readonly property real tabIndicatorInset: 2
     readonly property real launcherTileSize: 120

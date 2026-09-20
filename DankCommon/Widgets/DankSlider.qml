@@ -63,7 +63,7 @@ Controls.Control {
     property Gradient trackGradient: null
     property color trackTextColor: Style.onSecondaryContainer
     property bool usePopupTransparency: !Style.isFloatingWindow(slider)
-    property real trackOpacity: 1.0
+    readonly property real trackAlpha: Math.max(Style.sliderTrackMinAlpha, usePopupTransparency ? Style.foregroundAlpha : Style.floatingWindowForegroundAlpha)
 
     signal insetIconClicked
     signal sliderValueChanged(int newValue)
@@ -354,7 +354,7 @@ Controls.Control {
                 bottomLeftRadius: topLeftRadius
                 topRightRadius: slider.mirrored ? slider.insideCorner : slider.outsideCorner
                 bottomRightRadius: topRightRadius
-                color: !slider.enabled ? Style.onSurface_12 : slider.trackGradient ? "transparent" : Style.withAlpha(slider.trackColor, slider.trackOpacity)
+                color: !slider.enabled ? Style.onSurface_12 : slider.trackGradient ? "transparent" : Style.blendAlpha(slider.trackColor, slider.trackAlpha)
                 visible: width > 0
 
                 Loader {

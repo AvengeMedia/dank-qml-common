@@ -238,6 +238,7 @@ Singleton {
     readonly property real switchThumbPressed: 28
     readonly property real sliderStopSize: 4
     readonly property real sliderTickSize: 3
+    readonly property real sliderTrackMinAlpha: 0.4
     readonly property real menuItemHeight: 40
     readonly property real outlineWidth: 1
     readonly property real outlineWidthFocused: 2

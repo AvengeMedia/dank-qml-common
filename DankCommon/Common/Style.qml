@@ -262,17 +262,17 @@ Singleton {
     readonly property real listItemHeight: theme?.listItemHeight ?? 56
     readonly property real listItemTwoLineHeight: theme?.listItemTwoLineHeight ?? 72
     readonly property real avatarSize: theme?.avatarSize ?? 36
-    readonly property real osdHeight: theme?.osdHeight ?? sliderHandleHeight + spacingS * 2
+    readonly property real osdHeight: theme?.osdHeight ?? 60
     readonly property real dialogMaxWidth: theme?.dialogMaxWidth ?? 560
     readonly property real bottomSheetHandleWidth: theme?.bottomSheetHandleWidth ?? 36
     readonly property real bottomSheetHandleHeight: theme?.bottomSheetHandleHeight ?? 4
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16
     readonly property real sliderHandleWidth: theme?.sliderHandleWidth ?? 4
     readonly property real sliderHandleWidthPressed: theme?.sliderHandleWidthPressed ?? 2
-    readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 44
+    readonly property real sliderHandleHeight: theme?.sliderHandleHeight ?? 28
     readonly property real sliderHandleGap: theme?.sliderHandleGap ?? 6
     readonly property real sliderTrackHeightS: theme?.sliderTrackHeightS ?? 24
-    readonly property real sliderHandleHeightS: theme?.sliderHandleHeightS ?? 44
+    readonly property real sliderHandleHeightS: theme?.sliderHandleHeightS ?? 36
     readonly property real sliderTrackHeightM: theme?.sliderTrackHeightM ?? 40
     readonly property real sliderHandleHeightM: theme?.sliderHandleHeightM ?? 52
     readonly property real sliderTrackHeightL: theme?.sliderTrackHeightL ?? 56

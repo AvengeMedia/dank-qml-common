@@ -50,7 +50,7 @@ Controls.Control {
     property real valueOverride: -1
     property int decimals: 0
     property bool alwaysShowValue: false
-    property string size: "xs"
+    property string size: "s"
     readonly property real handleWidth: Style.sliderHandleWidth
     readonly property real pressedHandleWidth: Style.sliderHandleWidthPressed
     readonly property bool containsMouse: sliderMouseArea.containsMouse
@@ -140,7 +140,7 @@ Controls.Control {
     readonly property int keyStep: step > 1 ? step : Math.max(1, Math.round((maximum - minimum) / 100))
     readonly property int pageSteps: Math.max(1, Math.min(10, Math.round((maximum - minimum) / keyStep / 10)))
 
-    height: Math.max(handleHeight, Style.sliderHandleHeight) + Style.spacingXS
+    height: handleHeight + Style.spacingXS
     readonly property int minimumValue: minimum
     readonly property int maximumValue: maximum
     readonly property int stepSize: keyStep
@@ -319,7 +319,7 @@ Controls.Control {
             }
 
             width: parent.width - (slider.startIcon.length > 0 ? startIconLoader.width + Style.spacingM : 0) - (slider.endIcon.length > 0 ? endIconLoader.width + Style.spacingM : 0)
-            height: Math.max(slider.handleHeight, Style.sliderHandleHeight)
+            height: slider.handleHeight
             anchors.verticalCenter: parent.verticalCenter
 
             StyledRect {

@@ -42,8 +42,8 @@ Item {
                 centerY: root.height / 2
                 radiusX: root.radius
                 radiusY: root.radius
-                startAngle: 270
-                sweepAngle: 180
+                startAngle: 90
+                sweepAngle: 90
             }
 
             PathLine {

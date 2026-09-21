@@ -55,6 +55,8 @@ FocusScope {
     property int actualGridColumns: 5
     property bool _initialized: false
     property bool closeOnEscape: true
+    property string revealPath: ""
+    property string _pendingReveal: ""
     property var windowControls: null
 
     signal fileSelected(string path)
@@ -68,15 +70,42 @@ FocusScope {
 
     function initialize() {
         loadSettings();
-        currentPath = getLastPath();
+        currentPath = startPath();
         _initialized = true;
     }
 
     function reset() {
-        currentPath = getLastPath();
+        currentPath = startPath();
         selectedIndex = -1;
         keyboardNavigationActive = false;
         backButtonFocused = false;
+        applyPendingReveal();
+    }
+
+    function startPath() {
+        const slash = revealPath.startsWith("#") ? -1 : revealPath.lastIndexOf("/");
+        if (slash <= 0)
+            return getLastPath();
+        _pendingReveal = revealPath.substring(slash + 1);
+        return revealPath.substring(0, slash);
+    }
+
+    // Ready can fire with the previous folder's rows still in the model, so keep waiting until the name shows up.
+    function applyPendingReveal() {
+        if (!_pendingReveal || folderModel.status !== FolderListModel.Ready)
+            return;
+        for (let i = 0; i < folderModel.count; i++) {
+            if (folderModel.get(i, "fileName") !== _pendingReveal || folderModel.get(i, "fileIsDir"))
+                continue;
+            _pendingReveal = "";
+            keyboardNavigationActive = true;
+            selectedIndex = i;
+            Qt.callLater(() => {
+                fileGrid.positionViewAtIndex(i, GridView.Center);
+                fileList.positionViewAtIndex(i, ListView.Center);
+            });
+            return;
+        }
     }
 
     function loadSettings() {
@@ -173,6 +202,7 @@ FocusScope {
     }
 
     function navigateUp() {
+        _pendingReveal = "";
         const path = currentPath;
         if (path === homeDir)
             return;
@@ -190,6 +220,7 @@ FocusScope {
     }
 
     function navigateTo(path) {
+        _pendingReveal = "";
         currentPath = path;
         saveLastPath(path);
         selectedIndex = -1;
@@ -308,6 +339,9 @@ FocusScope {
 
     FolderListModel {
         id: folderModel
+
+        onStatusChanged: root.applyPendingReveal()
+        onCountChanged: root.applyPendingReveal()
 
         showDirsFirst: true
         showDotAndDotDot: false

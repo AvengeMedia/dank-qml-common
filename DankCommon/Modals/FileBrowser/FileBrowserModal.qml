@@ -16,6 +16,7 @@ FloatingWindow {
     property bool saveMode: false
     property bool folderMode: false
     property string defaultFileName: ""
+    property string revealPath: ""
     property var parentModal: null
     parentWindow: parentModal
     property bool shouldHaveFocus: visible
@@ -101,6 +102,7 @@ FloatingWindow {
             saveMode: fileBrowserModal.saveMode
             folderMode: fileBrowserModal.folderMode
             defaultFileName: fileBrowserModal.defaultFileName
+            revealPath: fileBrowserModal.revealPath
 
             Component.onCompleted: initialize()
 

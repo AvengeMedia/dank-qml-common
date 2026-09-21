@@ -68,27 +68,38 @@ Item {
         visible: !root.isAnimated
         asynchronous: true
         fillMode: root.fillMode
-        sourceSize.width: root.maxCacheSize
-        sourceSize.height: root.maxCacheSize
         smooth: true
+
+        // cache files are already bounded, and a sourceSize box would cover-scale them into a larger texture
+        function loadOriginal() {
+            root._fromCache = false;
+            sourceSize = Qt.size(root.maxCacheSize, root.maxCacheSize);
+            source = root.encodedImagePath;
+        }
 
         onStatusChanged: {
             switch (status) {
             case Image.Error:
                 if (!root._fromCache)
                     return;
-                root._fromCache = false;
-                source = root.encodedImagePath;
+                loadOriginal();
                 return;
             case Image.Ready:
-                if (root._fromCache || root.isRemoteUrl || !root.cachePath)
+                if (root.isRemoteUrl || !root.cachePath)
                     return;
+                if (root._fromCache) {
+                    // older builds grabbed at item size under the same file name
+                    if (Math.max(implicitWidth, implicitHeight) < root.maxCacheSize)
+                        loadOriginal();
+                    return;
+                }
                 if (!visible || width <= 0 || height <= 0 || !Window.window?.visible)
                     return;
                 const grabPath = root.cachePath;
+                const scale = root.maxCacheSize / Math.max(width, height);
                 grabToImage(res => {
                     res.saveToFile(grabPath);
-                });
+                }, Qt.size(Math.round(width * scale), Math.round(height * scale)));
                 return;
             }
         }
@@ -109,6 +120,7 @@ Item {
             return;
         if (path.startsWith("http://") || path.startsWith("https://")) {
             _fromCache = false;
+            staticImg.sourceSize = Qt.size(maxCacheSize, maxCacheSize);
             staticImg.source = path;
             return;
         }
@@ -117,11 +129,13 @@ Item {
         const hash = djb2Hash(stripped);
         if (!hash) {
             _fromCache = false;
+            staticImg.sourceSize = Qt.size(maxCacheSize, maxCacheSize);
             staticImg.source = encoded;
             return;
         }
         // Cache-first; a miss errors and falls back to encodedImagePath
         _fromCache = true;
+        staticImg.sourceSize = undefined;
         staticImg.source = `${Paths.stringify(Paths.imagecache)}/${hash}@${maxCacheSize}x${maxCacheSize}.png`;
     }
 

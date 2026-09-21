@@ -1,7 +1,7 @@
 import QtQuick
 import qs.DankCommon.Common
 
-Item {
+ShaderEffect {
     id: root
 
     property color swatchColor: "transparent"
@@ -10,45 +10,15 @@ Item {
     readonly property bool translucent: swatchColor.a < 1
     readonly property color displayColor: translucent && swatchColor.a > 0 ? Style.withAlpha(swatchColor, Math.max(swatchColor.a, minPreviewAlpha)) : swatchColor
 
-    Loader {
-        anchors.fill: parent
-        active: root.translucent
-        sourceComponent: Component {
-            Canvas {
-                id: checkerboard
+    readonly property real widthPx: width
+    readonly property real heightPx: height
+    readonly property real ringWidthPx: Style.outlineWidth
+    readonly property real checkerPx: Math.max(Style.spacingXXS, Math.round(width / 4))
+    readonly property real showChecker: translucent ? 1 : 0
+    readonly property color fillColor: displayColor
+    readonly property color checkerLight: Style.surfaceContainerLowest
+    readonly property color checkerDark: Style.surfaceContainerHighest
 
-                readonly property color styleSurfaceContainerLowest: Style.surfaceContainerLowest
-                readonly property color styleSurfaceContainerHighest: Style.surfaceContainerHighest
-
-                onPaint: {
-                    const ctx = getContext("2d");
-                    ctx.reset();
-                    ctx.beginPath();
-                    ctx.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI);
-                    ctx.clip();
-                    const s = Math.max(Style.spacingXXS, Math.round(width / 4));
-                    for (let y = 0; y < height; y += s) {
-                        for (let x = 0; x < width; x += s) {
-                            ctx.fillStyle = (((x / s) + (y / s)) % 2 === 0) ? Style.surfaceContainerLowest : Style.surfaceContainerHighest;
-                            ctx.fillRect(x, y, s, s);
-                        }
-                    }
-                }
-                onVisibleChanged: if (visible)
-                    requestPaint()
-                onWidthChanged: requestPaint()
-                onHeightChanged: requestPaint()
-                onStyleSurfaceContainerLowestChanged: requestPaint()
-                onStyleSurfaceContainerHighestChanged: requestPaint()
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        radius: Math.min(width, height) / 2
-        color: root.displayColor
-        border.color: root.ringColor
-        border.width: Style.outlineWidth
-    }
+    blending: true
+    fragmentShader: Qt.resolvedUrl("../Shaders/qsb/color_swatch.frag.qsb")
 }

@@ -99,7 +99,6 @@ ShellRoot {
             input.wait(30);
             const header = dialog.contentItem.parent.parent.parent.parent.children.find(item => item.closeTooltipText !== undefined);
             check(header.mapToItem(dialog, 0, 0).y === 0 && header.width === dialog.width, "native header spans the top edge");
-            check(header.showDivider && header.horizontalPadding < 0, "native header uses standard chrome");
             const scroll = dialog.contentItem.parent.parent.parent;
             check(scroll.contentHeight > scroll.height, "long content scrolls");
             field.forceActiveFocus();

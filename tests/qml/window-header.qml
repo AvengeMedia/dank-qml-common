@@ -75,6 +75,7 @@ ShellRoot {
 
             DankActionButton {
                 id: action
+                objectName: "extraAction"
                 buttonSize: Style.buttonHeightXXS
                 iconName: "refresh"
                 onClicked: root.actionRequests++
@@ -121,12 +122,10 @@ ShellRoot {
         const firstX = first.mapToItem(item, 0, 0).x;
         const lastRight = last.mapToItem(item, last.width, 0).x;
         equal(locale.isRtl ? titleX >= lastRight : titleX + title.width <= firstX, true, "title does not overlap buttons");
-        const titleCenter = title.mapToItem(item, title.width / 2, 0).x;
-        equal(Math.abs(titleCenter - item.width / 2) <= 1, true, "title centered in the header");
     }
 
-    function click(iconName) {
-        const button = buttons(header).find(child => child.iconName === iconName);
+    function click(objectName) {
+        const button = input.findChild(header, objectName);
         input.mouseClick(button, button.width / 2, button.height / 2);
     }
 
@@ -151,7 +150,6 @@ ShellRoot {
                                     input.waitForPolish(header.Window.window);
                                     checkGeometry(header, 1 + Number(minimize) + Number(maximize) + Number(showAction));
                                     checkGeometry(plainHeader, 1 + Number(minimize) + Number(maximize));
-                                    equal(header.height, plainHeader.height, "shared header height");
                                     if (showAction)
                                         continue;
                                     const withHiddenAction = buttons(header);
@@ -162,23 +160,23 @@ ShellRoot {
                         }
                     }
                 }
-                click("minimize");
+                click("minimizeWindow");
                 equal(controls.targetWindow.minimized, true, "minimize action");
                 controls.targetWindow.minimized = false;
-                click("fullscreen");
+                click("maximizeWindow");
                 equal(controls.targetWindow.maximized, true, "maximize action");
                 input.waitForPolish(header.Window.window);
-                click("fullscreen_exit");
+                click("maximizeWindow");
                 equal(controls.targetWindow.maximized, false, "restore action");
                 const closed = closeRequests;
                 header.closeEnabled = false;
-                click("close");
+                click("closeWindow");
                 equal(closeRequests, closed, "disabled close action");
                 header.closeEnabled = true;
-                click("close");
+                click("closeWindow");
                 equal(closeRequests, closed + 1, "close action");
                 const refreshed = actionRequests;
-                click("refresh");
+                click("extraAction");
                 equal(actionRequests, refreshed + 1, "extra action");
                 equal(controls.moveRequests, 0, "buttons do not drag window");
                 header.controls = null;

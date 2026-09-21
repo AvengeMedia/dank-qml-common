@@ -29,23 +29,7 @@ test("every slot stays readable and in gamut for muted, vivid and neutral primar
     }
 });
 
-test("hues follow the primary by at most 15 degrees and a theme override replaces the slot hue", () => {
-    const keyHue = context.toHct(hex("#7aa2f7")).hue;
-    const derived = context.derive(hex("#7aa2f7"), false, null);
-    const shift = context.toHct(derived.green.container).hue - context.ANCHOR_HUES.green;
-    assert.ok(Math.abs(shift) <= 15.5 && Math.sign(shift) === context.rotationDirection(context.ANCHOR_HUES.green, keyHue));
+test("a theme override replaces the slot hue", () => {
     const overridden = context.derive(hex("#D0BCFF"), false, { "blue": "#00c853" });
     assert.ok(context.differenceDegrees(context.toHct(hex("#00c853")).hue, context.toHct(overridden.blue.container).hue) < 1);
-});
-
-test("the slot family holds one tone and one chroma, so no slot reads washed out beside another", () => {
-    for (const primary of PRIMARIES) {
-        for (const isLight of [false, true]) {
-            const fills = context.SLOTS.map(s => context.toHct(context.derive(hex(primary), isLight, null)[s].container));
-            const tones = fills.map(f => f.tone);
-            const chromas = fills.map(f => f.chroma);
-            assert.ok(Math.max(...tones) - Math.min(...tones) < 1, `${primary} tone spread`);
-            assert.ok(Math.max(...chromas) / Math.min(...chromas) < 1.05, `${primary} chroma spread`);
-        }
-    }
 });

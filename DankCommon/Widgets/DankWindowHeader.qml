@@ -94,6 +94,7 @@ Item {
         }
 
         WindowButton {
+            objectName: "minimizeWindow"
             visible: root.controls?.canMinimize ?? false
             iconName: "minimize"
             Accessible.name: I18n.tr("Minimize")
@@ -101,6 +102,7 @@ Item {
         }
 
         WindowButton {
+            objectName: "maximizeWindow"
             visible: root.controls?.canMaximize ?? false
             iconName: root.controls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
             Accessible.name: root.controls?.targetWindow?.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
@@ -108,6 +110,7 @@ Item {
         }
 
         WindowButton {
+            objectName: "closeWindow"
             enabled: root.closeEnabled
             iconName: "close"
             tooltipText: root.closeTooltipText || null

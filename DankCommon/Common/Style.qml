@@ -471,7 +471,7 @@ Singleton {
     readonly property bool blurLayersActive: theme?.blurLayersActive ?? true
     readonly property bool connectedSurfaceBlurEnabled: theme?.connectedSurfaceBlurEnabled ?? true
     readonly property color blurBorderColor: {
-        if (!(settings?.blurBorderEnabled ?? true))
+        if (!(settings?.blurBorderEnabled ?? false))
             return "transparent";
         const opacity = settings?.blurBorderOpacity ?? 0.35;
         switch (settings?.blurBorderColor ?? "outline") {
@@ -487,7 +487,7 @@ Singleton {
             return withAlpha(outline, opacity);
         }
     }
-    readonly property int blurBorderWidth: (settings?.blurBorderEnabled ?? true) ? 1 : 0
+    readonly property int blurBorderWidth: (settings?.blurBorderEnabled ?? false) ? 1 : 0
 
     readonly property bool enableRippleEffects: settings?.enableRippleEffects ?? true
     readonly property bool popoutElevationEnabled: settings?.popoutElevationEnabled ?? true

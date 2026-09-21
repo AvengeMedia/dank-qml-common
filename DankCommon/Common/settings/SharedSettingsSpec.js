@@ -52,7 +52,7 @@ var SPEC = {
         def: true
     },
     blurBorderEnabled: {
-        def: true
+        def: false
     },
     blurBorderColor: {
         def: "outline"

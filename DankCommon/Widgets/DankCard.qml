@@ -85,8 +85,6 @@ FocusScope {
     Rectangle {
         id: surface
         anchors.fill: parent
-        border.width: Style.layerOutlineWidth
-        border.color: Style.outlineMedium
     }
 
     StyledButton {

@@ -45,7 +45,6 @@ Item {
     function reset() {
         animateLayout = false;
         cancel();
-        layoutTimer.stop();
         layout();
     }
 
@@ -159,7 +158,7 @@ Item {
         order = Array.from({
             length: count
         }, (_, i) => i);
-        layoutTimer.restart();
+        root.layout();
         if (active)
             dragCanceled();
     }
@@ -189,15 +188,15 @@ Item {
 
     onModelChanged: reset()
     onCountChanged: reset()
-    onOrderChanged: layoutTimer.restart()
-    onWidthChanged: layoutTimer.restart()
-    onSpacingChanged: layoutTimer.restart()
+    onOrderChanged: root.layout()
+    onWidthChanged: root.layout()
+    onSpacingChanged: root.layout()
     onGapIndexChanged: {
         if (gapIndex >= 0)
             animateLayout = true;
-        layoutTimer.restart();
+        root.layout();
     }
-    onGapHeightChanged: layoutTimer.restart()
+    onGapHeightChanged: root.layout()
     onCrossSectionActiveChanged: {
         if (crossSectionActive)
             order = Array.from({
@@ -220,7 +219,7 @@ Item {
         id: repeater
         onItemAdded: {
             root.delegateRevision++;
-            layoutTimer.restart();
+            root.layout();
         }
         onItemRemoved: root.delegateRevision++
     }
@@ -233,14 +232,8 @@ Item {
                 root.delegateRevision;
                 return root.itemAt(index)?.height ?? 0;
             }
-            onItemHeightChanged: layoutTimer.restart()
+            onItemHeightChanged: root.layout()
         }
-    }
-
-    Timer {
-        id: layoutTimer
-        interval: 0
-        onTriggered: root.layout()
     }
 
     Timer {

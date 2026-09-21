@@ -12,6 +12,8 @@ layout(std140, binding = 0) uniform buf {
     float checkerPx;
     float showChecker;
     vec4 fillColor;
+    vec4 secondaryFill;
+    vec4 tertiaryFill;
     vec4 ringColor;
     vec4 checkerLight;
     vec4 checkerDark;
@@ -25,8 +27,9 @@ vec4 blendOver(vec4 dst, vec4 premulSrc, float coverage) {
 void main() {
     vec2 size = vec2(ubuf.widthPx, ubuf.heightPx);
     vec2 px = qt_TexCoord0 * size;
+    vec2 fromCenter = px - size * 0.5;
     float radius = min(size.x, size.y) * 0.5;
-    float dist = length(px - size * 0.5) - radius;
+    float dist = length(fromCenter) - radius;
     float outer = clamp(0.5 - dist, 0.0, 1.0);
     float inner = clamp(0.5 - (dist + ubuf.ringWidthPx), 0.0, 1.0);
 
@@ -34,9 +37,12 @@ void main() {
     float parity = mod(cell.x + cell.y, 2.0);
     vec4 checker = mix(ubuf.checkerLight, ubuf.checkerDark, parity);
 
+    vec4 lower = mix(ubuf.secondaryFill, ubuf.tertiaryFill, clamp(fromCenter.x + 0.5, 0.0, 1.0));
+    vec4 fill = mix(lower, ubuf.fillColor, clamp(0.5 - fromCenter.y, 0.0, 1.0));
+
     vec4 acc = vec4(0.0);
     acc = blendOver(acc, checker, ubuf.showChecker * outer);
-    acc = blendOver(acc, ubuf.fillColor, outer);
+    acc = blendOver(acc, fill, outer);
     acc = blendOver(acc, ubuf.ringColor, outer - inner);
     fragColor = acc * ubuf.qt_Opacity;
 }

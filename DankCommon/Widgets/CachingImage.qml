@@ -11,6 +11,7 @@ Item {
     // AnimatedImage decodes full-size on the GUI thread and is never cached;
     // disable for thumbnail grids
     property bool animate: true
+    property bool asynchronous: true
     property bool _fromCache: false
 
     readonly property bool isRemoteUrl: imagePath.startsWith("http://") || imagePath.startsWith("https://")
@@ -56,7 +57,7 @@ Item {
         id: animatedImg
         anchors.fill: parent
         visible: root.isAnimated
-        asynchronous: true
+        asynchronous: root.asynchronous
         fillMode: root.fillMode
         source: root.isAnimated ? root.imagePath : ""
         playing: visible && status === AnimatedImage.Ready
@@ -66,7 +67,7 @@ Item {
         id: staticImg
         anchors.fill: parent
         visible: !root.isAnimated
-        asynchronous: true
+        asynchronous: root.asynchronous
         fillMode: root.fillMode
         smooth: true
 

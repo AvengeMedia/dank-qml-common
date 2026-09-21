@@ -274,6 +274,7 @@ Row {
                         name: typeof modelData === "object" ? modelData.icon || "" : ""
                         size: Style.iconSize
                         color: segment.contentColor
+                        filled: segment.selected
                         visible: name !== ""
                         anchors.verticalCenter: parent.verticalCenter
                     }

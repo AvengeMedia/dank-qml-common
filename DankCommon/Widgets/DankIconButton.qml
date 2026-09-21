@@ -34,6 +34,7 @@ DankActionButton {
         return round !== (checkable && checked) ? roundRadius : squareRadius;
     }
     iconColor: filled ? contentColor : Style.onSurfaceVariant
+    iconFilled: checkable && checked
     backgroundColor: !enabled && filled ? Style.onSurface_12 : (filled ? containerColor : "transparent")
     border.width: variant === "outlined" && !checked ? Style.outlineWidth : 0
     border.color: enabled ? Style.outlineVariant : Style.onSurface_12

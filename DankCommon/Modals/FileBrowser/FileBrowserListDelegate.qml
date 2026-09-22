@@ -144,8 +144,8 @@ StyledRect {
             return Style.surfacePressed;
         return listMouseArea.containsMouse ? Style.withAlpha(Style.cardSurface, Style.popupTransparency) : Style.withAlpha(Style.cardSurface, 0);
     }
-    border.color: keyboardNavigationActive && listDelegateRoot.index === selectedIndex ? Style.primary : Style.withAlpha(Style.primary, 0)
-    border.width: (keyboardNavigationActive && listDelegateRoot.index === selectedIndex) ? 2 : 0
+    border.color: keyboardNavigationActive && listDelegateRoot.index === selectedIndex ? Style.primary : Style.outlineMedium
+    border.width: (keyboardNavigationActive && listDelegateRoot.index === selectedIndex) ? Style.outlineWidthFocused : listMouseArea.containsMouse ? Style.layerOutlineWidth : 0
 
     Component.onCompleted: {
         if (keyboardNavigationActive && listDelegateRoot.index === selectedIndex)

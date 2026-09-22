@@ -43,6 +43,8 @@ ColumnLayout {
         bottomLeftRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
         bottomRightRadius: root.expanded ? Style.groupedListInnerRadius : Style.groupedListOuterRadius
         color: Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
+        border.width: Style.layerOutlineWidth
+        border.color: Style.outlineMedium
 
         Behavior on bottomLeftRadius {
             enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -124,6 +126,8 @@ ColumnLayout {
             bottomLeftRadius: Style.groupedListOuterRadius
             bottomRightRadius: Style.groupedListOuterRadius
             color: Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
+            border.width: Style.layerOutlineWidth
+            border.color: Style.outlineMedium
             opacity: root.showBackground && root.expanded ? 1.0 : 0.0
             visible: root.showBackground
 

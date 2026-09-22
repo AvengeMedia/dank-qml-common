@@ -553,7 +553,7 @@ Rectangle {
                 radius: Style.cornerRadius
                 color: Style.cardSurface
                 border.color: Style.outlineMedium
-                border.width: 1
+                border.width: Style.layerOutlineWidth
 
                 Item {
                     id: contentItem

@@ -172,6 +172,8 @@ FocusScope {
         anchors.centerIn: parent
         radius: Style.windowRadius
         color: Style.cardSurface
+        border.width: Style.layerOutlineWidth
+        border.color: Style.outlineMedium
         scale: root._opened ? 1 : Style.popupEnterScale
 
         Behavior on scale {

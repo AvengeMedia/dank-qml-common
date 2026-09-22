@@ -42,7 +42,7 @@ Item {
         color: Style.cardSurface
         radius: Style.windowRadius
         border.color: Style.outlineMedium
-        border.width: 1
+        border.width: Style.layerOutlineWidth
 
         Column {
             anchors.centerIn: parent

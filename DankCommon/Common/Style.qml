@@ -153,9 +153,10 @@ Singleton {
     readonly property color surfaceTextMedium: theme?.surfaceTextMedium ?? withAlpha(surfaceText, 0.7)
 
     readonly property color outlineButton: theme?.outlineButton ?? withAlpha(outline, 0.5)
-    readonly property color outlineMedium: theme?.outlineMedium ?? withAlpha(outline, 0.12)
-    readonly property int layerOutlineWidth: theme?.layerOutlineWidth ?? 1
-    readonly property color outlineStrong: theme?.outlineStrong ?? withAlpha(outline, 0.18)
+    readonly property real layerOutlineOpacity: theme?.layerOutlineOpacity ?? 0
+    readonly property color outlineMedium: theme?.outlineMedium ?? withAlpha(outline, layerOutlineOpacity)
+    readonly property int layerOutlineWidth: theme?.layerOutlineWidth ?? (layerOutlineOpacity > 0 ? 1 : 0)
+    readonly property color outlineStrong: theme?.outlineStrong ?? withAlpha(outline, Math.min(1, layerOutlineOpacity * 1.5))
     readonly property color outlineHeavy: theme?.outlineHeavy ?? withAlpha(outline, 0.2)
 
     readonly property color errorHover: theme?.errorHover ?? withAlpha(error, 0.12)

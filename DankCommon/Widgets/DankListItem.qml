@@ -37,6 +37,8 @@ StyledButton {
     Accessible.role: Accessible.ListItem
     Accessible.selected: isSelected
     color: externalHighlight ? "transparent" : isSelected || visualFocus ? Style.selectedContainer : root.surfaceColor
+    border.width: externalHighlight ? 0 : Style.layerOutlineWidth
+    border.color: Style.outlineMedium
     radius: Style.groupedListInnerRadius
     topLeftRadius: firstInGroup ? Style.groupedListOuterRadius : radius
     topRightRadius: topLeftRadius
@@ -55,6 +57,8 @@ StyledButton {
             visible: root.visible && !root._pooled
             opacity: root.opacity
             color: root.surfaceColor
+            border.width: Style.layerOutlineWidth
+            border.color: Style.outlineMedium
             topLeftRadius: root.topLeftRadius
             topRightRadius: root.topRightRadius
             bottomLeftRadius: root.bottomLeftRadius

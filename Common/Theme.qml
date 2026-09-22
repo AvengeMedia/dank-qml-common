@@ -125,8 +125,8 @@ Singleton {
     property color surfaceTextMedium: withAlpha(surfaceText, 0.7)
     property color surfaceTextSecondary: withAlpha(surfaceText, 0.6)
     property color outlineButton: withAlpha(outline, 0.5)
-    property color outlineMedium: withAlpha(outline, 0.12)
-    property color outlineStrong: withAlpha(outline, 0.18)
+    property color outlineMedium: withAlpha(outline, layerOutlineOpacity)
+    property color outlineStrong: withAlpha(outline, Math.min(1, layerOutlineOpacity * 1.5))
     property color outlineHeavy: withAlpha(outline, 0.2)
     property color shadowStrong: Qt.rgba(0, 0, 0, 0.3)
 
@@ -242,7 +242,8 @@ Singleton {
     readonly property real menuItemHeight: 40
     readonly property real outlineWidth: 1
     readonly property real outlineWidthFocused: 2
-    readonly property int layerOutlineWidth: 1
+    readonly property real layerOutlineOpacity: Math.max(0, Math.min(1, SettingsData.blurLayerOutlineOpacity))
+    readonly property int layerOutlineWidth: layerOutlineOpacity > 0 ? 1 : 0
     readonly property real dividerWidth: 1
     readonly property real focusRingWidth: 1.5
     readonly property real focusRingOffset: 3

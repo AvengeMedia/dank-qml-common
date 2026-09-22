@@ -19,6 +19,8 @@ T.Control {
 
     background: Rectangle {
         color: Style.foregroundColor(Style.cardSurface, Style.isFloatingWindow(root))
+        border.width: Style.layerOutlineWidth
+        border.color: Style.outlineMedium
         topLeftRadius: root.firstInGroup ? Style.groupedListOuterRadius : Style.groupedListInnerRadius
         topRightRadius: topLeftRadius
         bottomLeftRadius: root.lastInGroup ? Style.groupedListOuterRadius : Style.groupedListInnerRadius

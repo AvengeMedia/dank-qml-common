@@ -205,8 +205,8 @@ Item {
         y: searchInputField.height
         radius: Style.cornerRadiusM
         color: Style.withAlpha(Style.cardSurface, Style.popupTransparency)
-        border.color: Style.outlineVariant
-        border.width: Style.outlineWidth
+        border.color: Style.outlineMedium
+        border.width: Style.layerOutlineWidth
         visible: (locationInput.getActiveFocus() || searchResultsList.activeFocus) && root.canSearch(locationInput.text) && (searchResultsModel.count > 0 || root.isLoading)
 
         MouseArea {

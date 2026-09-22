@@ -17,7 +17,7 @@ StyledRect {
     color: surfaceColor
     radius: Style.windowRadius
     border.color: Style.outlineMedium
-    border.width: 1
+    border.width: Style.layerOutlineWidth
     visible: false
     z: 100
 

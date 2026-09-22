@@ -29,6 +29,8 @@ Rectangle {
     implicitWidth: desiredWidth
     implicitHeight: buttons.implicitHeight + Style.spacingL * 2 + (showHint ? hint.implicitHeight + Style.spacingM : 0)
     color: Style.cardSurface
+    border.width: Style.layerOutlineWidth
+    border.color: Style.outlineMedium
     radius: Style.windowRadius
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true

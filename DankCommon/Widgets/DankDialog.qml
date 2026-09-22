@@ -143,6 +143,8 @@ FocusScope {
                 level: Style.elevationLevel3
                 targetRadius: Style.windowRadius
                 targetColor: root.surfaceColor
+                borderWidth: Style.layerOutlineWidth
+                borderColor: Style.outlineMedium
                 shadowEnabled: Style.elevationEnabled
             }
 

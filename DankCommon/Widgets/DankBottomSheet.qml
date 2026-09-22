@@ -207,6 +207,8 @@ FocusScope {
             topLeftRadius: Style.cornerRadiusXL
             topRightRadius: Style.cornerRadiusXL
             color: root.surfaceColor
+            border.width: Style.layerOutlineWidth
+            border.color: Style.outlineMedium
             enabled: root.opened
 
             MouseArea {

@@ -26,6 +26,8 @@ Rectangle {
         }
     }
     color: Style.cardSurface
+    border.width: Style.layerOutlineWidth
+    border.color: Style.outlineMedium
 
     signal dismissed
 

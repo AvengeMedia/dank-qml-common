@@ -64,6 +64,8 @@ FocusScope {
 
     radius: bodyRadius
     color: surfaceColor
+    border.width: Style.layerOutlineWidth
+    border.color: Style.outlineMedium
     activeFocusOnTab: acceptsInput
     Accessible.role: Accessible.Pane
     Accessible.name: title

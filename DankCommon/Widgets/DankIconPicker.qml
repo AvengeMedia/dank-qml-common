@@ -141,6 +141,8 @@ Rectangle {
         contentItem: Rectangle {
             id: contentSurface
             color: Style.cardSurface
+            border.width: Style.layerOutlineWidth
+            border.color: Style.outlineMedium
             radius: Style.windowRadius
 
             ElevationShadow {

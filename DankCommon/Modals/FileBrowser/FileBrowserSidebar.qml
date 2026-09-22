@@ -11,6 +11,8 @@ StyledRect {
 
     width: 200
     color: Style.nestedSurface
+    border.width: Style.layerOutlineWidth
+    border.color: Style.outlineMedium
     clip: true
 
     Column {
@@ -35,6 +37,8 @@ StyledRect {
                 height: 38
                 radius: Style.cornerRadius
                 color: quickAccessMouseArea.containsMouse ? Style.withAlpha(Style.cardSurface, Style.popupTransparency) : (currentPath === modelData?.path ? Style.surfacePressed : Style.withAlpha(Style.surfacePressed, 0))
+                border.width: quickAccessMouseArea.containsMouse || currentPath === modelData?.path ? Style.layerOutlineWidth : 0
+                border.color: Style.outlineMedium
 
                 Row {
                     anchors.fill: parent

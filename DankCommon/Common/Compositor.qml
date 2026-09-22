@@ -27,6 +27,7 @@ Singleton {
         case "scroll":
         case "mango":
         case "miracle-wm":
+        case "umbriel":
         case "river":
         case "dwl":
             return false;

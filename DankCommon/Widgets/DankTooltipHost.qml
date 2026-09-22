@@ -25,13 +25,14 @@ Item {
             showNow();
     }
 
+    // a cancelled async incubation deletes tooltipLoader but keeps this root alive until deleteLater
     function dismiss() {
-        tooltipLoader.item?.hide();
+        tooltipLoader?.item?.hide();
         shown = false;
     }
 
     function present(delay) {
-        const tooltip = tooltipLoader.item;
+        const tooltip = tooltipLoader?.item;
         if (!tooltip || !enabled || !visible || !text || !target?.visible)
             return;
         tooltip.delay = delay;

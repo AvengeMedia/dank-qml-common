@@ -17,6 +17,7 @@ Item {
     property real contrastOverride: 0.0
     property real saturationOverride: 0.0
 
+    readonly property int rasterSize: Style.iconRasterSize(size) * 2
     readonly property bool hasCornerIcon: cornerIcon !== ""
     readonly property bool hasColorOverride: colorOverride.a > 0
     readonly property bool hasColorEffect: hasColorOverride || brightnessOverride !== 0.0 || contrastOverride !== 0.0 || saturationOverride !== 0.0
@@ -43,8 +44,8 @@ Item {
         mipmap: true
         asynchronous: true
         implicitSize: root.size * 2
-        backer.sourceSize.width: root.size * 2
-        backer.sourceSize.height: root.size * 2
+        backer.sourceSize.width: root.rasterSize
+        backer.sourceSize.height: root.rasterSize
         backer.cache: true
         layer.enabled: root.hasColorEffect
         layer.smooth: true

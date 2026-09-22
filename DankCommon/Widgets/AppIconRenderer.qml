@@ -51,6 +51,7 @@ Item {
             return "";
         return Paths.resolveIconPath(iconValue);
     }
+    readonly property int iconRequestSize: Style.iconRasterSize(iconSize)
 
     visible: iconValue !== undefined && iconValue !== ""
 
@@ -86,7 +87,7 @@ Item {
         id: cachingImg
         anchors.fill: parent
         imagePath: root.imagePath
-        maxCacheSize: root.iconSize * 2
+        maxCacheSize: root.iconRequestSize * 2
         animate: root.animate
         visible: root.isImage && status === Image.Ready
     }
@@ -97,12 +98,25 @@ Item {
         anchors.margins: root.iconMargins
         active: !root.hasSpecialPrefix && root.iconPath !== ""
         sourceComponent: IconImage {
+            // IconThemeService finishes indexing after the first paint and hands the
+            // same icon back under a different url, so hold the painted frame across a
+            // swap that stays on one icon and drop it when the renderer takes a new one
+            property string paintedFor: ""
+
+            readonly property bool holdsCurrentIcon: paintedFor !== "" && paintedFor === root.iconValue
+
             anchors.fill: parent
             source: root.iconPath
-            backer.sourceSize: Qt.size(root.iconSize * 2, root.iconSize * 2)
+            backer.sourceSize: Qt.size(root.iconRequestSize, root.iconRequestSize)
+            backer.retainWhileLoading: holdsCurrentIcon
             mipmap: true
             asynchronous: true
-            visible: status === Image.Ready
+            visible: status === Image.Ready || holdsCurrentIcon
+            onStatusChanged: {
+                if (status !== Image.Ready)
+                    return;
+                paintedFor = root.iconValue;
+            }
         }
     }
 
@@ -114,7 +128,7 @@ Item {
         anchors.rightMargin: root.fallbackRightMargin
         anchors.topMargin: root.fallbackTopMargin
         anchors.bottomMargin: root.fallbackBottomMargin
-        visible: !root.hasSpecialPrefix && (root.iconPath === "" || !iconImgLoader.item || iconImgLoader.item.status !== Image.Ready)
+        visible: !root.hasSpecialPrefix && (root.iconPath === "" || iconImgLoader.item?.status === Image.Error)
         color: root.fallbackBackgroundColor
         radius: root.fallbackRadius
         border.width: 0

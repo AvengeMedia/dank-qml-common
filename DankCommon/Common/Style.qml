@@ -223,6 +223,10 @@ Singleton {
     readonly property real cornerRadiusLarge: cornerRadiusL
     readonly property real windowRadius: theme?.windowRadius ?? cornerRadiusL
 
+    function iconRasterSize(size) {
+        return Math.max(32, Math.ceil(size / 16) * 16);
+    }
+
     function scaledRadius(radius, limit) {
         return Shape.scaledRadius(radius, limit, shapeScale, fixedRadius);
     }

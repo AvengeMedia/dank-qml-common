@@ -627,6 +627,8 @@ ShellRoot {
                             DankSpinner {
                                 size: Theme.iconSizeLarge
                             }
+
+                            DankLoadingIndicator {}
                         }
 
                         Section {

@@ -98,20 +98,18 @@ Item {
         anchors.margins: root.iconMargins
         active: !root.hasSpecialPrefix && root.iconPath !== ""
         sourceComponent: IconImage {
-            // IconThemeService finishes indexing after the first paint and hands the
-            // same icon back under a different url, so hold the painted frame across a
-            // swap that stays on one icon and drop it when the renderer takes a new one
             property string paintedFor: ""
 
             readonly property bool holdsCurrentIcon: paintedFor !== "" && paintedFor === root.iconValue
+            readonly property bool showsFrame: status === Image.Ready || (holdsCurrentIcon && status === Image.Loading)
 
             anchors.fill: parent
             source: root.iconPath
             backer.sourceSize: Qt.size(root.iconRequestSize, root.iconRequestSize)
-            backer.retainWhileLoading: holdsCurrentIcon
+            backer.retainWhileLoading: true
             mipmap: true
             asynchronous: true
-            visible: status === Image.Ready || holdsCurrentIcon
+            visible: showsFrame
             onStatusChanged: {
                 if (status !== Image.Ready)
                     return;
@@ -128,7 +126,7 @@ Item {
         anchors.rightMargin: root.fallbackRightMargin
         anchors.topMargin: root.fallbackTopMargin
         anchors.bottomMargin: root.fallbackBottomMargin
-        visible: !root.hasSpecialPrefix && (root.iconPath === "" || iconImgLoader.item?.status === Image.Error)
+        visible: !root.hasSpecialPrefix && !(iconImgLoader.item?.showsFrame ?? false)
         color: root.fallbackBackgroundColor
         radius: root.fallbackRadius
         border.width: 0

@@ -11,7 +11,9 @@ Rectangle {
     anchors.bottom: parent.bottom
     anchors.horizontalCenter: parent.horizontalCenter
     width: expressive ? Math.min(parent.width, LockMetrics.keyboardWidth) : parent.width
-    radius: expressive ? Style.cornerRadiusXL : 0
+    radius: expressive ? Style.cornerRadiusM + Style.spacingS : 0
+    bottomLeftRadius: 0
+    bottomRightRadius: 0
     Keys.onEscapePressed: root.dismissed()
     onOpacityChanged: {
         if (closing && opacity === 0)

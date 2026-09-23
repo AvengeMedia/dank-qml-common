@@ -31,7 +31,17 @@ MouseArea {
     readonly property bool controlFocused: control ? control.visualFocus : false
 
     function showTooltip() {
-        tooltipLoader.item?.showNow();
+        presentTooltip(0);
+    }
+
+    function presentTooltip(delay) {
+        if (!tooltipText)
+            return;
+        tooltipLoader.active = true;
+        const host = tooltipLoader.item;
+        host?.present(delay);
+        if (!host?.shown)
+            tooltipLoader.active = false;
     }
 
     onPressed: mouse => {
@@ -49,17 +59,20 @@ MouseArea {
 
     Rectangle {
         id: stateRect
+
+        property real stateAlpha: root.stateOpacity
+
         anchors.fill: parent
         radius: root.cornerRadius
         topLeftRadius: root.topLeftRadius
         topRightRadius: root.topRightRadius
         bottomLeftRadius: root.bottomLeftRadius
         bottomRightRadius: root.bottomRightRadius
-        color: Style.withAlpha(stateColor, stateOpacity)
+        color: Style.withAlpha(root.stateColor, stateAlpha)
 
-        Behavior on color {
+        Behavior on stateAlpha {
             enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
-            DankColorAnim {
+            DankAnim {
                 duration: root.transitionDuration
                 easing.bezierCurve: root.transitionCurve
             }
@@ -78,7 +91,7 @@ MouseArea {
         enableRipple: root.enableRipple
     }
 
-    onEntered: tooltipLoader.item?.schedule()
+    onEntered: presentTooltip(Style.tooltipDelay)
 
     onExited: {
         if (!controlFocused)
@@ -87,7 +100,7 @@ MouseArea {
 
     onControlFocusedChanged: {
         if (controlFocused) {
-            tooltipLoader.item?.showNow();
+            presentTooltip(0);
             return;
         }
         if (!containsMouse)
@@ -96,12 +109,26 @@ MouseArea {
 
     Loader {
         id: tooltipLoader
-        active: !!root.tooltipText
+        active: false
         sourceComponent: DankTooltipHost {
             text: root.tooltipText
             target: root
             side: root.tooltipSide
             enabled: !root.disabled
+            onShownChanged: {
+                if (shown) {
+                    releaseTimer.stop();
+                    return;
+                }
+                releaseTimer.restart();
+            }
+
+            // matches the DankTooltipV2 exit fade
+            Timer {
+                id: releaseTimer
+                interval: Style.shorterDuration
+                onTriggered: tooltipLoader.active = false
+            }
         }
     }
 }

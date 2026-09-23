@@ -78,8 +78,10 @@ FocusScope {
     }
 
     property int triggerHeight: Style.iconButtonSize
+    property real triggerRadius: Style.cornerRadiusXS
     readonly property int menuItemHeight: Style.menuItemHeight
     readonly property int menuPadding: Style.spacingS
+    readonly property real menuItemRadius: Math.max(0, Style.windowRadius - menuPadding)
     readonly property int menuSpacing: Style.spacingXXS
 
     readonly property int menuWidth: {
@@ -306,7 +308,7 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
-        radius: Style.cornerRadiusXS
+        radius: root.triggerRadius
         color: !root.enabled ? Style.onSurface_12 : (dropdown.hovered || root.menuVisible ? root.hoverBackgroundColor : Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency))
         border.color: !root.enabled ? "transparent" : (active || dropdown.hovered ? root.focusedBorderColor : root.normalBorderColor)
         border.width: active ? Style.outlineWidthFocused : Style.outlineWidth
@@ -561,7 +563,7 @@ FocusScope {
                             width: parent.width
                             height: root.triggerHeight
                             visible: root.enableFuzzySearch
-                            radius: Style.cornerRadiusM
+                            radius: root.menuItemRadius
                             color: "transparent"
 
                             Loader {
@@ -574,6 +576,7 @@ FocusScope {
                                     id: searchField
 
                                     placeholderText: I18n.tr("Search...")
+                                    cornerRadius: root.menuItemRadius
                                     backgroundColor: root.backgroundColor
                                     normalBorderColor: root.normalBorderColor
                                     focusedBorderColor: root.focusedBorderColor
@@ -694,7 +697,7 @@ FocusScope {
 
                                 width: ListView.view.width
                                 height: root.menuItemHeight
-                                radius: Style.cornerRadiusS
+                                radius: root.menuItemRadius
                                 color: {
                                     if (isCurrentValue)
                                         return Style.selectedContainer;

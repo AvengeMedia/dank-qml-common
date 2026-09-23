@@ -10,6 +10,7 @@ Flow {
     property var selectedValues: []
     property int chipHeight: Style.buttonHeightXS
     property int chipPadding: Style.spacingL
+    property real chipRadius: Style.cornerRadiusS
     property bool showCheck: true
     property bool showCounts: true
     readonly property int focusIndex: Math.max(0, Math.min(currentIndex, (model?.length ?? 0) - 1))
@@ -91,7 +92,7 @@ Flow {
 
             width: contentRow.implicitWidth + leadingPadding + root.chipPadding
             height: root.chipHeight
-            radius: Style.cornerRadiusS
+            radius: root.chipRadius
 
             Behavior on radius {
                 enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

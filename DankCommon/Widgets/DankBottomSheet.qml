@@ -72,12 +72,12 @@ FocusScope {
         return targets;
     }
 
-    function cycleFocus(backwards) {
+    function cycleFocus(backwards, reason) {
         const targets = focusItems(surface);
         const current = root.Window.window?.activeFocusItem;
         const index = targets.indexOf(current);
         const next = index < 0 ? (backwards ? targets.length - 1 : 0) : (index + (backwards ? -1 : 1) + targets.length) % targets.length;
-        (targets[next] ?? root).forceActiveFocus(backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason);
+        (targets[next] ?? root).forceActiveFocus(reason ?? (backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason));
         return true;
     }
 
@@ -99,13 +99,15 @@ FocusScope {
 
     readonly property Item windowFocusItem: root.Window.window?.activeFocusItem ?? null
     onWindowFocusItemChanged: {
-        if (!opened || !visible || !windowFocusItem)
+        if (!opened || !visible || !enabled || !windowFocusItem)
             return;
-        if (!containsItem(windowFocusItem)) {
-            containFocusTimer.restart();
+        if (containsItem(windowFocusItem)) {
+            revealFocus();
             return;
         }
-        revealFocus();
+        if (windowFocusItem.focusReason === Qt.MouseFocusReason)
+            return;
+        containFocusTimer.restart();
     }
 
     Keys.onShortcutOverride: event => {
@@ -155,8 +157,8 @@ FocusScope {
             id: containFocusTimer
             interval: 0
             onTriggered: {
-                if (root.opened && root.visible && !root.containsItem(root.windowFocusItem))
-                    root.cycleFocus(root.backwardsFocus);
+                if (root.opened && root.visible && root.enabled && !root.containsItem(root.windowFocusItem))
+                    root.cycleFocus(root.backwardsFocus, Qt.OtherFocusReason);
             }
         },
         Timer {
@@ -170,7 +172,7 @@ FocusScope {
                     root.savedFocusItem = null;
                     return;
                 }
-                if (!root.visible)
+                if (!root.visible || !root.enabled)
                     return;
                 const target = root.focusTarget;
                 (target?.visible && target.enabled ? target : root).forceActiveFocus(Qt.PopupFocusReason);

@@ -1,5 +1,6 @@
 import QtQuick
 import qs.DankCommon.Widgets
+import qs.DankCommon.FileBrowser
 import qs.Common
 
 Column {
@@ -367,5 +368,25 @@ Column {
     DankLocationSearch {
         width: parent.width
         currentLocation: "New York"
+    }
+
+    Section {
+        text: "Embedded file picker"
+    }
+
+    Rectangle {
+        width: parent.width
+        height: 520
+        radius: Theme.cornerRadiusL
+        color: Theme.surfaceContainer
+
+        FilePicker {
+            anchors.fill: parent
+            showHeader: false
+            multiple: true
+            bucket: "gallery-embedded"
+            onAccepted: paths => console.info("embedded picker accepted", paths)
+            onRejected: console.info("embedded picker rejected")
+        }
     }
 }

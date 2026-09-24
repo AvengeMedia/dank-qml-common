@@ -1,0 +1,118 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+import qs.DankCommon.Common
+import qs.DankCommon.Widgets
+
+StyledButton {
+    id: row
+
+    property string label: ""
+    property string iconName: ""
+    property string actionIcon: ""
+    property string actionTooltip: ""
+    property real ringValue: -1
+    property bool busy: false
+    property bool selected: false
+
+    property string dropPath: ""
+
+    signal actionTriggered
+    signal dropped(var drop)
+
+    readonly property bool showAction: actionIcon !== "" && (hovered || actionArea.containsMouse)
+    readonly property color contentColor: {
+        if (!enabled)
+            return Style.onSurface_38;
+        return selected ? Style.onSecondaryContainer : Style.surfaceText;
+    }
+
+    width: parent?.width ?? 0
+    implicitHeight: FileBrowserMetrics.sidebarRowHeight
+    radius: FileBrowserMetrics.sidebarRowRadius
+    color: dropZone.containsDrag ? Style.primaryContainer : selected ? Style.secondaryContainer : "transparent"
+    Accessible.name: label
+
+    DropArea {
+        id: dropZone
+
+        anchors.fill: parent
+        enabled: row.dropPath !== ""
+        onDropped: drop => row.dropped(drop)
+    }
+
+    StateLayer {
+        control: row
+        stateColor: row.contentColor
+    }
+
+    FocusRing {
+        visible: row.visualFocus
+        anchors.margins: Style.focusRingWidth / 2
+        radius: Math.max(0, row.radius - Style.focusRingWidth / 2)
+    }
+
+    RowLayout {
+        anchors.fill: parent
+        anchors.leftMargin: Style.spacingS
+        anchors.rightMargin: Style.spacingM
+        spacing: Style.spacingM
+
+        DankRingGauge {
+            Layout.preferredWidth: FileBrowserMetrics.sidebarIconSize
+            Layout.preferredHeight: FileBrowserMetrics.sidebarIconSize
+            value: row.ringValue
+            strokeWidth: Style.spinnerStrokeWidth
+            ringColor: row.ringValue >= FileBrowserMetrics.usageWarnRatio ? Style.error : Style.primary
+            trackColor: Style.surfaceContainerHighest
+
+            Rectangle {
+                anchors.fill: parent
+                radius: Style.fullRadius(width, height)
+                color: row.showAction ? Style.primaryContainer : Style.withAlpha(Style.primary, Style.tonalTintAlpha)
+
+                DankSpinner {
+                    anchors.centerIn: parent
+                    visible: row.busy
+                    size: FileBrowserMetrics.sidebarGlyphSize
+                    color: Style.primary
+                }
+
+                FileIcon {
+                    anchors.centerIn: parent
+                    visible: !row.busy && !row.showAction
+                    iconName: row.iconName
+                    size: FileBrowserMetrics.sidebarGlyphSize
+                    color: Style.primary
+                }
+
+                DankIcon {
+                    anchors.centerIn: parent
+                    visible: !row.busy && row.showAction
+                    name: row.actionIcon
+                    size: FileBrowserMetrics.sidebarGlyphSize
+                    color: Style.onPrimaryContainer
+                }
+
+                MouseArea {
+                    id: actionArea
+
+                    anchors.fill: parent
+                    enabled: row.actionIcon !== "" && !row.busy
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: row.actionTriggered()
+                }
+            }
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            text: row.label
+            color: row.contentColor
+            font.pixelSize: Style.fontSizeMedium
+            elide: Text.ElideMiddle
+        }
+    }
+}

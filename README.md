@@ -7,11 +7,13 @@ The library lives in `DankCommon/` and is consumed through Quickshell's `qs.` na
 ```qml
 import qs.DankCommon.Widgets
 import qs.DankCommon.Common
-import qs.DankCommon.Modals.FileBrowser
+import qs.DankCommon.FileBrowser
 import qs.DankCommon.Session
 ```
 
 `DankCommon/Session/` holds the components shared between the DMS lock screen and [dms-greeter](https://github.com/AvengeMedia/dank-greeter): the power menu (`LockPowerMenu`) and the on-screen keyboard (`Keyboard`, `KeyboardController`, `CustomButtonKeyboard`). `LockMetrics`, `LockActionButton`, and `LockNotificationCard` provide reusable lock-screen geometry and surfaces. `PowerMenuView` supplies the shared grid/list controls for the shell and lock power menus. `KeyboardController.expressive` and `LockPowerMenu.expressive` opt into Expressive styling; both default to `false`.
+
+`DankCommon/FileBrowser/` is the file browser shared with Dank Files, backed by `Host.files` (see the contract). `FilePicker` is the dialog body: `mode` (`open`, `openFolder`, `save`), `filters` (globs), `multiple`, `defaultName`, `startPath` (a directory opens it, a file opens its folder and selects it), `bucket` (the key its view mode, sort, zoom, hidden toggle and last folder persist under in `Host.cache.fileBrowserSettings`), signals `accepted(paths)` and `rejected`. `FileBrowserModal` hosts it in a floating window and keeps the old names (`browserTitle`, `browserType`, `fileExtensions`/`filterExtensions`, `showHiddenFiles`, `saveMode`, `folderMode`, `defaultFileName`, `revealPath`, `parentModal`, `fileSelected(path)`, `dialogClosed`) mapped onto it; `fileSelected` carries a plain path in every mode. `FileBrowserView` is the browser without dialog behaviour (sidebar of user dirs, back/forward, path bar, list and grid views, selection, keyboard, rubber band, inline rename, extra toolbar items as children), and its parts (`DirectoryModel`, `SelectionModel`, `NavigationHistory`, `FileViewBody`, `FileListView`, `FileGridView`, `FileRow`, `FileTile`, `PathBar`, `NavButtonPair`, `FilePlaceRow`, `FileMenu`, `FileSortButton`) are usable on their own. `FileBrowserSettings.load(bucket)` and `save(bucket, patch)` are the only readers and writers of the persisted records.
 
 `DankCommon/Common/LayoutCodes.js` (keyboard layout name → short code) is imported by relative path.
 
@@ -81,16 +83,16 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 ## The contract
 
-Shared code never imports app singletons. The app injects them once at startup (`DC.Style.theme = Theme`, `DC.Style.settings = SettingsData`, `DC.I18n.backend = I18n`, `DC.Paths.backend = Paths`, `DC.Log.backend = Log`, `DC.Host.session = SessionService`, `DC.Host.cache = CacheData`, with `import qs.DankCommon.Common as DC`), and `Style` reads every token through `theme?.x ?? fallback`. The gallery's `shell.qml` does the same with the stubs in `Common/` and `Services/`. Every consuming app must provide these singletons with at least the properties the library reads:
+Shared code never imports app singletons. The app injects them once at startup (`DC.Style.theme = Theme`, `DC.Style.settings = SettingsData`, `DC.I18n.backend = I18n`, `DC.Paths.backend = Paths`, `DC.Log.backend = Log`, `DC.Host.session = SessionService`, `DC.Host.cache = CacheData`, `DC.Host.files = <files backend>`, with `import qs.DankCommon.Common as DC`), and `Style` reads every token through `theme?.x ?? fallback`. The gallery's `shell.qml` does the same with the stubs in `Common/` and `Services/`. Every consuming app must provide these singletons with at least the properties the library reads:
 
 ### `qs.Common` → Theme
 
 Colors: `primary`, `primaryText`, `primaryContainer`, `primaryHover`, `primaryHoverLight`, `primaryPressed`, `primarySelected`, `secondary`, `surface`, `surfaceText`, `surfaceTextHover`, `surfaceTextMedium`, `surfaceTextSecondary`, `surfaceVariant`, `surfaceVariantText`, `surfaceVariantAlpha`, `surfaceHover`, `surfacePressed`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceTint`, `surfaceLight`, `background`, `outline`, `outlineButton`, `outlineMedium`, `outlineStrong`, `outlineHeavy`, `error`, `errorHover`, `errorSelected`, `warning`, `shadowStrong`, `buttonBg`, `buttonText`, `buttonHover`, `buttonPressed`, `floatingSurface`, `nestedSurface`, `floatingWindowSurface`, `floatingWindowNestedSurface`, `floatingWindowFieldColor`, `floatingWindowFieldBorderColor`, `floatingWindowFieldFocusedBorderColor`, `popupFieldColor`, `popupFieldBorderColor`, `popupFieldFocusedBorderColor`, `widgetBaseHoverColor`, `onPrimary`, `onSurface`, `onSurface_12`, `onSurface_38`, `contrastDark`, `contrastLight`.
- Widgets also read `tertiary`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainerHighest`, `surfaceBright`, `surfaceDim`, `outlineVariant`, `secondaryContainer`, `tertiaryContainer`, `onSurfaceVariant`, `onSurfaceVariant_30`, `onSurfaceVariant_40`, `onPrimaryContainer`, `onSecondaryContainer`, `onTertiaryContainer`, `onErrorContainer`, `selectedContainer`, `onSelectedContainer`, `accentOnPrimaryContainer`, `inverseSurface`, `inverseOnSurface`, `tonalTintAlpha`, `accents` (categorical container/glyph pairs from `Accents.derive`, read through `Style.accent(name)`).
+ Widgets also read `tertiary`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainerHighest`, `surfaceBright`, `surfaceDim`, `outlineVariant`, `secondaryContainer`, `tertiaryContainer`, `onSurfaceVariant`, `onSurfaceVariant_30`, `onSurfaceVariant_40`, `onPrimaryContainer`, `onSecondaryContainer`, `onTertiaryContainer`, `onErrorContainer`, `selectedContainer`, `onSelectedContainer`, `accentOnPrimaryContainer`, `inverseSurface`, `inverseOnSurface`, `errorContainer`, `tonalTintAlpha`, `accents` (categorical container/glyph pairs from `Accents.derive`, read through `Style.accent(name)`).
  Container fills go through the semantic roles `hostSurface`, `cardSurface`, `chipSurface`, `chipSurfaceNested`: a host floats over the desktop, a card sits inside a host, a chip sits inside a card, and a nested chip sits inside a chip. The raw `surfaceContainer*` tokens stay palette-honest.
 
 Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSizeSmall`/`iconSize`/`iconSizeLarge`, `cornerRadius`.
- Expressive: `fontSizeXXLarge`, the shape scale `shapeScale`, `cornerRadiusXS`..`cornerRadiusXXL`, `cornerRadiusLIncreased`, `cornerRadiusXLIncreased`, `cornerRadiusFull` (compatibility sentinel; `cornerRadiusSmall`/`cornerRadiusLarge` alias S/L), `groupedListGap`, `groupedListInnerRadius`, `groupedListOuterRadius`, `iconButtonSize`, `minimumTouchTargetSize`, `listItemHeight`, `listItemTwoLineHeight`, `avatarSize`, `sliderTrackHeight`, `sliderHandleWidth`, `sliderHandleWidthPressed`, `sliderHandleHeight`, `sliderHandleGap`, `sliderTrackHeightS/M/L/XL`, `sliderHandleHeightS/M/L/XL`, `switchTrackWidth`, `switchTrackHeight`, `switchOutlineWidth`, `switchThumbUnselected`, `switchThumbSelected`, `switchThumbPressed`, `sliderStopSize`, `sliderTickSize`, `sliderTrackMinAlpha`, `menuItemHeight`, `iconSizeMedium`, `outlineWidth`, `outlineWidthFocused`, `layerOutlineWidth`, `dividerWidth`, `focusRingWidth`, `focusRingOffset`, `focusRingColor`, `scrimAlpha`, `smallBreakpoint`, `mediumBreakpoint`, `fontSizeDisplay`, `fontSizeDisplayLarge`, `buttonHeightXS/S/M`, `buttonMinWidth`, `pressScale`, `iconEnterScale`, `popupEnterScale`, `osdHeight`, `dialogMaxWidth`, `bottomSheetHandleWidth`, `bottomSheetHandleHeight`, `pendingOpacity`, `spinnerStrokeWidth`, `tabMinWidth`, `tabIndicatorHeight`, `tabIndicatorMinWidth`, `tabIndicatorInset`, `fieldDefaultWidth`, `fieldHeight`, `fieldHeightLarge`, `outlinedFieldLabelLineHeight`, `textFieldSpatialStiffness`, `textFieldSpatialDampingRatio`, `textFieldFastEffectsStiffness`, `textFieldSlowEffectsStiffness`, `textEditHeight`, `tooltipMaxWidth`, `tooltipDelay`, `menuMaxHeight`, `clockFaceSize`, `clockOuterRingRatio`, `clockInnerRingRatio`, `clockHandWidth`, `clockHandleSize`, `clockCenterSize`, `clockSwitchDelay`, `chipIconSize`, `buttonGroupExpandRatio`.
+ Expressive: `fontSizeXXLarge`, the shape scale `shapeScale`, `cornerRadiusXS`..`cornerRadiusXXL`, `cornerRadiusLIncreased`, `cornerRadiusXLIncreased`, `cornerRadiusFull` (compatibility sentinel; `cornerRadiusSmall`/`cornerRadiusLarge` alias S/L), `groupedListGap`, `groupedListInnerRadius`, `groupedListOuterRadius`, `iconButtonSize`, `minimumTouchTargetSize`, `listItemHeight`, `listItemTwoLineHeight`, `avatarSize`, `sliderTrackHeight`, `sliderHandleWidth`, `sliderHandleWidthPressed`, `sliderHandleHeight`, `sliderHandleGap`, `sliderTrackHeightS/M/L/XL`, `sliderHandleHeightS/M/L/XL`, `switchTrackWidth`, `switchTrackHeight`, `switchOutlineWidth`, `switchThumbUnselected`, `switchThumbSelected`, `switchThumbPressed`, `sliderStopSize`, `sliderTickSize`, `sliderTrackMinAlpha`, `menuItemHeight`, `iconSizeMedium`, `outlineWidth`, `outlineWidthFocused`, `layerOutlineWidth`, `dividerWidth`, `focusRingWidth`, `focusRingOffset`, `focusRingColor`, `scrimAlpha`, `smallBreakpoint`, `mediumBreakpoint`, `fontSizeDisplay`, `fontSizeDisplayLarge`, `buttonHeightXXS/XS/S/M`, `windowRadius`, `buttonMinWidth`, `pressScale`, `iconEnterScale`, `popupEnterScale`, `osdHeight`, `dialogMaxWidth`, `sidebarWidth`, `bottomSheetHandleWidth`, `bottomSheetHandleHeight`, `pendingOpacity`, `spinnerStrokeWidth`, `tabMinWidth`, `tabIndicatorHeight`, `tabIndicatorMinWidth`, `tabIndicatorInset`, `fieldDefaultWidth`, `fieldHeight`, `fieldHeightLarge`, `outlinedFieldLabelLineHeight`, `textFieldSpatialStiffness`, `textFieldSpatialDampingRatio`, `textFieldFastEffectsStiffness`, `textFieldSlowEffectsStiffness`, `textEditHeight`, `tooltipMaxWidth`, `tooltipDelay`, `menuMaxHeight`, `clockFaceSize`, `clockOuterRingRatio`, `clockInnerRingRatio`, `clockHandWidth`, `clockHandleSize`, `clockCenterSize`, `clockSwitchDelay`, `chipIconSize`, `buttonGroupExpandRatio`.
 
 [Shapes](SHAPES.md) documents `radiusStrength`, the component baselines and the radius helpers.
 
@@ -121,9 +123,33 @@ Power menu (Session components): `powerActionConfirm`, `powerActionHoldDuration`
 ### `qs.Common` → Anims, Paths, CacheData, I18n
 
 - Anims: `durShort`, `standard`, `emphasized` (bezier arrays)
-- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`, `resolveIconPath(iconName)` (return `""` when the app has no icon-theme resolution), `trashPath(path, callback)` (callback receives a success bool), `copyPathToClipboard(path)`; the app must create `imagecache`. The stub defaults use `gio trash` and `Quickshell.clipboardText` - apps route these through their own trash and clipboard machinery so the library itself imposes no runtime dependency
-- CacheData: `fileBrowserSettings` (var), `wallpaperLastPath`, `profileLastPath`, `saveCache()`
+- Paths: `xdgCache`, `imagecache` (urls), `strip(url)`, `stringify(url)`, `resolveIconPath(iconName)` (return `""` when the app has no icon-theme resolution; `FileIcon` falls back to a Material Symbol), `copyPathToClipboard(path)`; the app must create `imagecache`. The stub uses `Quickshell.clipboardText`
+- CacheData: `fileBrowserSettings` (var, one record per picker `bucket`: `viewMode sortKey sortDesc gridZoom listZoom showSidebar showHidden lastPath`; read and written only through `FileBrowserSettings`), `saveCache()`
 - I18n: `tr(term, context)`, `isRtl`
+
+### `Host.files`
+
+The file browser never touches the disk. Every listing, stat, thumbnail and change goes through the backend the app injects as `DC.Host.files`, which is expected to forward to the shared `files.*` IPC family (`dankgo/files`) on the app's own daemon. `null` or `connected: false` renders an "unavailable" placeholder instead of failing. The stub `Services/FilesBackend.qml` implements the whole surface over an in-memory tree.
+
+Callbacks receive the method's result object, or `{error, code}` with a stable code (`ENOENT EACCES ENOTDIR EINVAL EEXIST EBUSY EIO NOTSUPPORTED SANDBOXED`, plus `UNAVAILABLE` from the library itself). Paths are absolute strings, never URIs.
+
+| member | shape |
+| --- | --- |
+| `connected` | bool |
+| `userDirs` | `[{key, name, path, iconName}]`, home first (`files.userDirs`) |
+| `capabilities` | `{mkdir, rename, trash}` bools; a missing or false key hides the action |
+| `watch(path, options, cb)` | `files.watch`. options `{includeHidden, filters, sortKey, sortDesc, dirsFirst, limit}`; result `{watchId, seq, entries, total, cursor, watching, pollOnFocus}` |
+| `page(watchId, options, cb)` | `files.list` with `watchId`, same options plus `cursor`; also changes the watch's sort, hidden and filters |
+| `unwatch(watchId)` | `files.unwatch`, no callback |
+| `stat(path, cb)` | `files.stat`, `{entry}` |
+| `count(paths, includeHidden, cb)` | `files.count`, `{counts: {path: {count, capped, code}}}` |
+| `thumbnails(paths, size, watchId, cb)` | `files.thumbnail`, `{results: [{path, thumbnail}]}`; late results arrive as `thumbnails` events |
+| `mkdir(path, cb)` | `files.mkdir`, `{path, entry}` |
+| `rename(path, name, cb)` | `files.rename`, `{path}` |
+| `trash(paths, cb)` | `files.trash`, `{trashed, failed: [{path, code, error}]}` |
+| `watchEvent(data)` | signal carrying every event of every watch the backend opened: `{watchId, kind, seq, added, addedAt, changed, removed, thumbnails}`, `kind` one of `batch resync gone thumbnails` |
+
+Entries are the `files.*` entry schema with every key present (`name path isDir isSymlink symlinkTarget symlinkBroken size mtimeMs ctimeMs atimeMs mode owner group hidden isExecutable extension mime iconName thumbnail thumbnailable unreadable displayName untrusted`). `filters` are case-insensitive globs over file names; directories always pass and `*`/`*.*` mean no filter. Watch batches are applied in order without sorting: removals by name, changes in place, then each added entry at its `addedAt`; a `seq` gap re-pages.
 
 ### `qs.Services` → Log
 

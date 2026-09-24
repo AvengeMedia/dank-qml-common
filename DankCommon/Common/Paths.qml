@@ -38,12 +38,6 @@ Singleton {
         return Quickshell.iconPath(iconName, true) || "";
     }
 
-    function trashPath(path, callback) {
-        if (!backend)
-            return;
-        backend.trashPath(path, callback);
-    }
-
     function copyPathToClipboard(path) {
         if (backend)
             backend.copyPathToClipboard(path);

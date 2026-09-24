@@ -269,6 +269,7 @@ Singleton {
     readonly property real avatarSize: theme?.avatarSize ?? 36
     readonly property real osdHeight: theme?.osdHeight ?? 60
     readonly property real dialogMaxWidth: theme?.dialogMaxWidth ?? 560
+    readonly property real sidebarWidth: theme?.sidebarWidth ?? 240
     readonly property real bottomSheetHandleWidth: theme?.bottomSheetHandleWidth ?? 36
     readonly property real bottomSheetHandleHeight: theme?.bottomSheetHandleHeight ?? 4
     readonly property real sliderTrackHeight: theme?.sliderTrackHeight ?? 16

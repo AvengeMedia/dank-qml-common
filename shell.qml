@@ -8,7 +8,7 @@ import qs.Common as App
 import qs.Services as AppServices
 import qs.DankCommon.Common
 import qs.DankCommon.Common as DC
-import qs.DankCommon.Modals.FileBrowser
+import qs.DankCommon.FileBrowser
 import qs.Services
 
 ShellRoot {
@@ -22,6 +22,7 @@ ShellRoot {
         DC.Log.backend = AppServices.Log;
         DC.Host.session = AppServices.SessionService;
         DC.Host.cache = App.CacheData;
+        DC.Host.files = AppServices.FilesBackend;
     }
 
     FloatingWindow {
@@ -517,6 +518,18 @@ ShellRoot {
                                 iconName: "folder"
                                 onClicked: folderBrowser.open()
                             }
+
+                            DankButton {
+                                text: "Pick several files"
+                                iconName: "library_add_check"
+                                onClicked: multiBrowser.open()
+                            }
+
+                            DankButton {
+                                text: "Save a file"
+                                iconName: "save"
+                                onClicked: saveBrowser.open()
+                            }
                         }
 
                         Section {
@@ -857,15 +870,38 @@ ShellRoot {
         id: fileBrowser
 
         browserTitle: "Pick a file"
-        onFileSelected: path => log.info("file selected:", path)
+        bucket: "gallery"
+        filters: ["*.png", "*.jpg", "*.svg", "*.webp"]
+        startPath: "/home/alice/Pictures/city.jpg"
+        onAccepted: paths => log.info("file selected:", paths)
     }
 
     FileBrowserModal {
         id: folderBrowser
 
         browserTitle: "Pick a folder"
-        browserIcon: "folder"
-        folderMode: true
-        onFileSelected: path => log.info("folder selected:", path)
+        mode: "openFolder"
+        bucket: "gallery-folder"
+        onAccepted: paths => log.info("folder selected:", paths)
+    }
+
+    FileBrowserModal {
+        id: multiBrowser
+
+        browserTitle: "Pick several files"
+        bucket: "gallery"
+        multiple: true
+        onAccepted: paths => log.info("files selected:", paths)
+    }
+
+    FileBrowserModal {
+        id: saveBrowser
+
+        browserTitle: "Save a file"
+        mode: "save"
+        bucket: "gallery-save"
+        defaultName: "theme.json"
+        filters: ["*.json"]
+        onAccepted: paths => log.info("save to:", paths)
     }
 }

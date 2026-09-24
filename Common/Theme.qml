@@ -31,6 +31,7 @@ Singleton {
     property color surfaceContainer: "#211F26"
     property color surfaceContainerHigh: "#2B2930"
     property color error: "#F2B8B5"
+    property color errorContainer: "#8C1D18"
     property color tertiary: "#EFB8C8"
     property color surfaceContainerLowest: "#0F0D13"
     property color surfaceContainerLow: "#1D1B20"
@@ -196,6 +197,7 @@ Singleton {
     readonly property real cornerRadiusFull: fixedRadius >= 0 ? fixedRadius : (shapeScale > 0 ? 9999 : 0)
     readonly property real cornerRadiusSmall: cornerRadiusS
     readonly property real cornerRadiusLarge: cornerRadiusL
+    readonly property real windowRadius: cornerRadiusL
 
     function scaledRadius(radius, limit) {
         return Shape.scaledRadius(radius, limit, shapeScale, fixedRadius);
@@ -255,6 +257,7 @@ Singleton {
     readonly property color screenOffColor: "#000000"
     readonly property real scrimAlpha: 0.55
     readonly property color scrimColor: "#000000"
+    readonly property real buttonHeightXXS: 28
     readonly property real buttonHeightXS: 32
     readonly property real buttonHeightS: 40
     readonly property real buttonHeightM: 56
@@ -263,6 +266,7 @@ Singleton {
     readonly property real iconEnterScale: 0.6
     readonly property real osdHeight: 60
     readonly property real dialogMaxWidth: 560
+    readonly property real sidebarWidth: 240
     readonly property real bottomSheetHandleWidth: 36
     readonly property real bottomSheetHandleHeight: 4
     readonly property real popupEnterScale: 0.92

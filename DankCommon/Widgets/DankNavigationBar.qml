@@ -147,7 +147,7 @@ T.Control {
                     readonly property bool selected: root.currentIndex === index
                     implicitHeight: Math.max(Style.navigationHeight, Style.navigationVerticalPadding * 2 + Style.navigationIndicatorHeight + Style.spacingXS + label.implicitHeight)
                     width: root.vertical ? root.width : root.evenlySpaced ? Math.max(Style.navigationItemMinWidth, (root.width - root.spacing * (root.count - 1)) / Math.max(1, root.count)) : Style.navigationItemMinWidth
-                    height: root.destinationHeight
+                    height: root.vertical && root.evenlySpaced ? Math.max(root.destinationHeight, (root.height - root.spacing * (root.count - 1)) / Math.max(1, root.count)) : root.destinationHeight
                     focusPolicy: Qt.NoFocus
                     Accessible.role: Accessible.PageTab
                     Accessible.name: modelData?.text ?? ""

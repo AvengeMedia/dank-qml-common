@@ -42,6 +42,12 @@ Item {
         return repeater.itemAt(index);
     }
 
+    function identityOrder() {
+        return Array.from({
+            length: count
+        }, (_, i) => i);
+    }
+
     function reset() {
         animateLayout = false;
         cancel();
@@ -147,6 +153,7 @@ Item {
         layout();
         if (next.some((index, slot) => index !== slot))
             reordered(next);
+        order = identityOrder();
         focusTimer.restart();
     }
 
@@ -155,9 +162,7 @@ Item {
         draggingIndex = -1;
         crossSectionActive = false;
         gapIndex = -1;
-        order = Array.from({
-            length: count
-        }, (_, i) => i);
+        order = identityOrder();
         root.layout();
         if (active)
             dragCanceled();
@@ -167,14 +172,13 @@ Item {
         const target = index + delta;
         if (!enabled || draggingIndex >= 0 || index < 0 || index >= count || target < 0 || target >= count)
             return;
-        const next = Array.from({
-            length: count
-        }, (_, i) => i);
+        const next = identityOrder();
         next.splice(index, 1);
         next.splice(target, 0, index);
         focusIndex = target;
         focusReason = Qt.TabFocusReason;
         reordered(next);
+        order = identityOrder();
         focusTimer.restart();
     }
 
@@ -199,9 +203,7 @@ Item {
     onGapHeightChanged: root.layout()
     onCrossSectionActiveChanged: {
         if (crossSectionActive)
-            order = Array.from({
-                length: count
-            }, (_, i) => i);
+            order = identityOrder();
     }
     onVisibleChanged: {
         if (!visible)

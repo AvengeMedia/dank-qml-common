@@ -61,8 +61,8 @@ Row {
     readonly property int focusIndex: Math.max(0, Math.min(focusedIndex, (model?.length ?? 0) - 1))
     onCurrentIndexChanged: focusedIndex = currentIndex
 
-    function requestFocus(backwards) {
-        repeater.itemAt(focusIndex)?.forceActiveFocus(backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason);
+    function requestFocus(backwards, reason) {
+        repeater.itemAt(focusIndex)?.forceActiveFocus(reason ?? (backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason));
     }
 
     Keys.onPressed: event => {

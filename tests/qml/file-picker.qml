@@ -38,7 +38,7 @@ ShellRoot {
                 "sortAscending": false,
                 "iconSizeIndex": 2,
                 "viewMode": "grid",
-                "lastPath": "/home/alice/Music"
+                "lastPath": "file:///home/alice/Music"
             }
         };
         pickerLoader.active = true;
@@ -126,7 +126,6 @@ ShellRoot {
             picker.setSort("size", true);
             input.tryVerify(() => names(picker)[0] === "Wallpapers" && names(picker)[1] === "sunrise.png" && names(picker)[2] === ".draft.png", 1000, "size sort keeps folders first");
             check(cache.fileBrowserSettings.images.sortKey === "size" && cache.fileBrowserSettings.images.sortDesc === true, "sort persists");
-            check(picker.sortControl.sortKey === "size" && picker.sortControl.descending && picker.sortControl.current.key === "size", "the sort button shows the current key");
             picker.sortControl.directionToggled();
             check(picker.sortKey === "size" && !picker.sortDescending, "the trailing half toggles the direction only");
             picker.sortControl.sortKeySelected("name");

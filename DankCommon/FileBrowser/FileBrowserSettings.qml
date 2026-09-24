@@ -31,12 +31,14 @@ Singleton {
             "listZoom": saved.listZoom ?? 1,
             "showSidebar": saved.showSidebar ?? true,
             "showHidden": saved.showHidden,
-            "lastPath": saved.lastPath ?? ""
+            "lastPath": FilePaths.normalize(saved.lastPath ?? "")
         };
     }
 
     function migrated(saved) {
         const record = Object.assign({}, saved);
+        if (typeof record.lastPath === "string")
+            record.lastPath = FilePaths.normalize(record.lastPath);
         if (record.sortKey === undefined && record.sortBy !== undefined)
             record.sortKey = sortKeyFor(record.sortBy);
         if (record.sortDesc === undefined && record.sortAscending !== undefined)

@@ -13,6 +13,8 @@ Item {
     property bool animate: true
     property bool asynchronous: true
     property bool _fromCache: false
+    property string _originalSource: ""
+    property string _cacheTarget: ""
 
     readonly property bool isRemoteUrl: imagePath.startsWith("http://") || imagePath.startsWith("https://")
     readonly property bool isAnimated: animate && !!imagePath && hasAnimatedExtension(imagePath)
@@ -75,7 +77,7 @@ Item {
         function loadOriginal() {
             root._fromCache = false;
             sourceSize = Qt.size(root.maxCacheSize, root.maxCacheSize);
-            source = root.encodedImagePath;
+            source = root._originalSource;
         }
 
         onStatusChanged: {
@@ -86,7 +88,7 @@ Item {
                 loadOriginal();
                 return;
             case Image.Ready:
-                if (root.isRemoteUrl || !root.cachePath)
+                if (!root._cacheTarget)
                     return;
                 if (root._fromCache) {
                     // older builds grabbed at item size under the same file name
@@ -96,9 +98,11 @@ Item {
                 }
                 if (!visible || width <= 0 || height <= 0 || !Window.window?.visible)
                     return;
-                const grabPath = root.cachePath;
+                const grabPath = root._cacheTarget;
                 const scale = root.maxCacheSize / Math.max(width, height);
                 grabToImage(res => {
+                    if (grabPath !== root._cacheTarget)
+                        return;
                     res.saveToFile(grabPath);
                 }, Qt.size(Math.round(width * scale), Math.round(height * scale)));
                 return;
@@ -112,15 +116,15 @@ Item {
     // the local-file branch on the first path change
     function resolveSource() {
         const path = imagePath;
+        _fromCache = false;
+        _cacheTarget = "";
         if (!path) {
-            _fromCache = false;
             staticImg.source = "";
             return;
         }
         if (animate && hasAnimatedExtension(path))
             return;
         if (path.startsWith("http://") || path.startsWith("https://")) {
-            _fromCache = false;
             staticImg.sourceSize = Qt.size(maxCacheSize, maxCacheSize);
             staticImg.source = path;
             return;
@@ -129,15 +133,15 @@ Item {
         const encoded = "file://" + stripped.split('/').map(s => encodeURIComponent(s)).join('/');
         const hash = djb2Hash(stripped);
         if (!hash) {
-            _fromCache = false;
             staticImg.sourceSize = Qt.size(maxCacheSize, maxCacheSize);
             staticImg.source = encoded;
             return;
         }
-        // Cache-first; a miss errors and falls back to encodedImagePath
+        _originalSource = encoded;
+        _cacheTarget = `${Paths.stringify(Paths.imagecache)}/${hash}@${maxCacheSize}x${maxCacheSize}.png`;
         _fromCache = true;
         staticImg.sourceSize = undefined;
-        staticImg.source = `${Paths.stringify(Paths.imagecache)}/${hash}@${maxCacheSize}x${maxCacheSize}.png`;
+        staticImg.source = _cacheTarget;
     }
 
     onImagePathChanged: resolveSource()

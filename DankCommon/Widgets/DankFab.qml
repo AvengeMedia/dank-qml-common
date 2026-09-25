@@ -104,7 +104,7 @@ StyledButton {
         StyledText {
             visible: root.extended
             text: root.text
-            font.pixelSize: Style.fontSizeLarge
+            font.pixelSize: Style.fontSizeMedium
             font.weight: Style.fontWeightMedium
             color: root.contentColor
             anchors.verticalCenter: parent.verticalCenter

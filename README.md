@@ -98,6 +98,8 @@ Metrics: `spacingXXS`..`spacingXL`, `fontSizeSmall`..`fontSizeXLarge`, `iconSize
 
 `DankSplitButton` supports `xs`, `s`, `m`, `l`, and `xl` sizes and `filled`, `tonal`, `outlined`, and `elevated` variants. Handle `clicked` for the main action and `menuClicked` for the menu. Set `menuOnly: true` to open the menu from either half. Bind `expanded` to the menu's visibility and use `trailingButton` as its anchor and focus return target. The gallery includes both interaction modes.
 
+`DankFab` is the M3 Expressive FAB. Set `text` for the small extended FAB or leave it empty for the icon-only FAB. `colorRole` accepts `primaryContainer` (default), `secondaryContainer`, `tertiaryContainer` and `primary`. `busy` swaps the icon for a spinner. The spec has no disabled FAB, so the container keeps its color; hide the FAB when its action is unavailable.
+
 `DankLayer` groups content for opacity effects and sizes its texture in physical pixels using the window's device pixel ratio.
 
 Google Sans Flex is bundled under the [SIL Open Font License](DankCommon/assets/fonts/google-sans-flex/OFL.txt), from [Google Fonts](https://fonts.google.com/specimen/Google+Sans+Flex).

@@ -337,6 +337,39 @@ ShellRoot {
                         }
 
                         Section {
+                            text: "DankFab"
+                        }
+
+                        Flow {
+                            width: parent.width
+                            spacing: Theme.spacingM
+
+                            Repeater {
+                                model: ["primaryContainer", "secondaryContainer", "tertiaryContainer", "primary"]
+
+                                DankFab {
+                                    required property string modelData
+                                    text: modelData
+                                    iconName: "edit"
+                                    colorRole: modelData
+                                }
+                            }
+
+                            DankFab {
+                                iconName: "add"
+                                Accessible.name: I18n.tr("Add")
+                            }
+
+                            DankFab {
+                                property bool spin: false
+                                text: I18n.tr("Sync")
+                                iconName: "sync"
+                                busy: spin
+                                onClicked: spin = !spin
+                            }
+                        }
+
+                        Section {
                             text: I18n.tr("Selection")
                         }
 

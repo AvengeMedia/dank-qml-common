@@ -20,6 +20,6 @@ Singleton {
     readonly property var standardAccel: [0.30, 0.00, 1.00, 1.00, 1.00, 1.00]
 
     readonly property var expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1, 1, 1]
-    readonly property var expressiveFastSpatial: [0.34, 1.5, 0.2, 1.0, 1.0, 1.0]
+    readonly property var expressiveFastSpatial: [0.42, 1.67, 0.21, 0.9, 1, 1]
     readonly property var expressiveEffects: [0.34, 0.8, 0.34, 1, 1, 1]
 }

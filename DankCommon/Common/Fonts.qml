@@ -11,7 +11,8 @@ Singleton {
     readonly property string nerd: firaCodeFont.name || "FiraCode Nerd Font"
     readonly property string display: dmSerifDisplayFont.name || "DM Serif Display"
     readonly property string notable: notableFont.name || "Notable"
-    readonly property var bundledFamilies: [display, notable]
+    readonly property string gochiHand: gochiHandFont.name || "Gochi Hand"
+    readonly property var bundledFamilies: [display, notable, gochiHand]
 
     FontLoader {
         id: googleSansFont
@@ -39,6 +40,11 @@ Singleton {
     FontLoader {
         id: notableFont
         source: Qt.resolvedUrl("../assets/fonts/notable/Notable-Regular.ttf")
+    }
+
+    FontLoader {
+        id: gochiHandFont
+        source: Qt.resolvedUrl("../assets/fonts/gochi-hand/GochiHand-Regular.ttf")
     }
 
     FontLoader {

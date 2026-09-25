@@ -675,6 +675,10 @@ ShellRoot {
                             }
 
                             DankLoadingIndicator {}
+
+                            DankLoadingIndicator {
+                                contained: true
+                            }
                         }
 
                         Section {

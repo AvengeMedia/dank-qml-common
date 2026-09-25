@@ -96,13 +96,9 @@ function polarBounds(radii) {
     };
 }
 
+// Compose divides by the control-point box, which is the unit square for these normalized shapes.
 function morphScale(profiles) {
-    let scale = 1;
-    for (const radii of profiles) {
-        const bounds = polarBounds(radii);
-        scale = Math.min(scale, Math.max(bounds.width, bounds.height) / (2 * Math.max(...radii)));
-    }
-    return scale;
+    return Math.min(1, ...profiles.map(radii => 1 / (2 * Math.max(...radii))));
 }
 
 function buildPath(kind, width, height, square) {

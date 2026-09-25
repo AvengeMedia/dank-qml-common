@@ -6,7 +6,9 @@ Item {
     id: root
 
     property real size: 48
-    property color color: Style.primary
+    property bool contained: false
+    property color containerColor: Style.primaryContainer
+    property color color: contained ? Style.onPrimaryContainer : Style.primary
     property bool running: visible
 
     readonly property var shapes: ["softBurst", "cookie9", "pentagon", "pill", "sunny", "cookie4", "oval"]
@@ -59,6 +61,15 @@ Item {
                     context.fillRect(column, row, 1, 1);
                 }));
         }
+    }
+
+    Rectangle {
+        anchors.centerIn: parent
+        width: Math.min(root.width, root.height)
+        height: width
+        radius: Style.fullRadius(width, height)
+        color: root.containerColor
+        visible: root.contained
     }
 
     ShaderEffect {

@@ -6,21 +6,19 @@ import qs.DankCommon.Common
 Controls.Control {
     id: slider
 
-    readonly property Item scrollContainer: {
+    readonly property bool containerScrolls: {
         for (let ancestor = parent; ancestor; ancestor = ancestor.parent) {
-            if ("flickableDirection" in ancestor)
-                return ancestor;
+            if ("flickableDirection" in ancestor && ancestor.contentHeight > ancestor.height)
+                return true;
         }
-        return null;
+        return false;
     }
 
     focusPolicy: enabled ? wheelEnabled ? Qt.WheelFocus : Qt.StrongFocus : Qt.NoFocus
     wheelEnabled: true
 
-    readonly property bool containerScrolls: scrollContainer !== null && scrollContainer.contentHeight > scrollContainer.height
-
     Binding on wheelEnabled {
-        when: slider.containerScrolls && !slider.wheelInsideScrollable
+        when: slider.containerScrolls
         value: false
         restoreMode: Binding.RestoreBindingOrValue
     }
@@ -30,7 +28,6 @@ Controls.Control {
     property int maximum: 100
     property int step: 1
     property int wheelStep: keyStep
-    property bool wheelInsideScrollable: false
     property string startIcon: ""
     property string endIcon: ""
     property alias leftIcon: slider.startIcon // ! TODO deprecate me after 1.7 release

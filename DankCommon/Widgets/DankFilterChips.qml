@@ -66,6 +66,7 @@ Flow {
             focusPolicy: activeFocus || root.multiSelect || index === root.focusIndex ? Qt.StrongFocus : Qt.ClickFocus
             Accessible.role: root.multiSelect ? Accessible.CheckBox : Accessible.RadioButton
             Accessible.name: label
+            Accessible.description: tooltip
             checkable: true
             checked: selected
             onClicked: activate()
@@ -84,6 +85,7 @@ Flow {
             property bool selected: root.multiSelect ? root.selectedValues.includes(value) : (index === root.currentIndex)
             property string label: typeof modelData === "string" ? modelData : (modelData.label || "")
             property int count: typeof modelData === "object" ? (modelData.count || 0) : 0
+            property string tooltip: typeof modelData === "object" ? (modelData.tooltip || "") : ""
             property bool showCount: root.showCounts && count > 0
             readonly property color contentColor: !enabled ? Style.onSurface_38 : selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
 
@@ -123,6 +125,7 @@ Flow {
                 control: chip
                 disabled: !root.enabled
                 stateColor: chip.contentColor
+                tooltipText: chip.tooltip || null
                 transitionDuration: Style.expressiveDurations.expressiveEffects
                 transitionCurve: Style.expressiveCurves.expressiveEffects
             }

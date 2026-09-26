@@ -30,6 +30,7 @@ FocusScope {
     readonly property real focusPadding: Style.focusRingOffset + Style.focusRingWidth
     readonly property real availableContentHeight: Math.max(0, scroll.height - focusPadding * 2)
     readonly property real bodyTop: popout ? padding : header.y + header.height + contentSpacing
+    readonly property bool active: embedded || opened || surface.opacity > 0
 
     signal accepted
     signal rejected

@@ -27,7 +27,7 @@ Rectangle {
         id: label
         anchors.horizontalCenter: parent.horizontalCenter
         y: Math.round((root.height - labelMetrics.tightBoundingRect.height) / 2 - baselineOffset - labelMetrics.tightBoundingRect.y)
-        width: Math.max(0, root.width - Style.spacingS * 2)
+        width: Math.min(implicitWidth, Math.max(0, root.maximumWidth - Style.spacingS * 2))
         font.pixelSize: Style.fontSizeSmall
         font.weight: Style.fontWeightMedium
         color: Style.onPrimary

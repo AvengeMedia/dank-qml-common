@@ -33,6 +33,23 @@ function readableOn(background, candidates, target = 4.5) {
     return best;
 }
 
+function subtleTint(base, tint, onColor, amount, target = 4.5) {
+    if (ratio(base, onColor) < target)
+        return base;
+    if (ratio(mix(base, tint, amount), onColor) >= target)
+        return mix(base, tint, amount);
+    let low = 0;
+    let high = amount;
+    for (let i = 0; i < 6; i++) {
+        const mid = (low + high) / 2;
+        if (ratio(mix(base, tint, mid), onColor) >= target)
+            low = mid;
+        else
+            high = mid;
+    }
+    return mix(base, tint, low);
+}
+
 function tintedContainer(base, tint, onColor, target = 4.5) {
     let low = 0.12;
     let high = 0.36;

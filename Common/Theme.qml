@@ -18,7 +18,10 @@ Singleton {
     readonly property color contrastLight: "#ffffff"
     property color primaryText: "#381E72"
     property color primaryContainer: "#4F378B"
-    property color selectedContainer: primaryContainer
+    readonly property real selectedContainerTint: 0.2
+    property bool themedSelectedContainer: true
+    property color selectedContainer: secondaryContainer
+    property color accentOnSelectedContainer: primary
     property color accentOnPrimaryContainer: primary
     readonly property var accents: Accents.derive(primary, isLightMode, null)
     property color secondary: "#CCC2DC"

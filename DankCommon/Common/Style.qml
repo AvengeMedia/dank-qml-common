@@ -43,8 +43,10 @@ Singleton {
     readonly property color contrastLight: theme?.contrastLight ?? "#ffffff"
     readonly property color primaryText: theme?.primaryText ?? "#381E72"
     readonly property color primaryContainer: theme?.primaryContainer ?? "#4F378B"
-    readonly property bool tonalPrimaryContainer: theme?.tonalPrimaryContainer ?? Contrast.isTonal(primaryContainer, surfaceText)
-    readonly property color selectedContainer: theme?.selectedContainer ?? (tonalPrimaryContainer ? primaryContainer : Contrast.tintedContainer(surfaceContainerHigh, primary, surfaceText))
+    readonly property real selectedContainerTint: theme?.selectedContainerTint ?? 0.2
+    readonly property bool themedSelectedContainer: theme?.themedSelectedContainer ?? (Contrast.isTonal(secondaryContainer, onSecondaryContainer) && Contrast.isTonal(secondaryContainer, surfaceText))
+    readonly property color selectedContainer: theme?.selectedContainer ?? (themedSelectedContainer ? secondaryContainer : Contrast.subtleTint(surfaceContainerHigh, primary, surfaceText, selectedContainerTint))
+    readonly property color accentOnSelectedContainer: theme?.accentOnSelectedContainer ?? (Contrast.ratio(primary, selectedContainer) >= 3 ? primary : onSelectedContainer)
     readonly property color accentOnPrimaryContainer: theme?.accentOnPrimaryContainer ?? (Contrast.ratio(primary, primaryContainer) >= 3 ? primary : onPrimaryContainer)
     readonly property var accents: theme?.accents ?? Accents.derive(primary, isLightMode, null)
     readonly property color secondary: theme?.secondary ?? "#CCC2DC"
@@ -133,7 +135,7 @@ Singleton {
         Binding {
             target: root
             property: "onSelectedContainer"
-            value: root.theme?.onSelectedContainer ?? (root.tonalPrimaryContainer ? root.onPrimaryContainer : root.surfaceText)
+            value: root.theme?.onSelectedContainer ?? (root.themedSelectedContainer ? root.onSecondaryContainer : root.surfaceText)
         }
     ]
     readonly property real tonalTintAlpha: theme?.tonalTintAlpha ?? 0.16

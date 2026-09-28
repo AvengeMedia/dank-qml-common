@@ -12,12 +12,12 @@ StyledButton {
     property bool current: false
     property color chipColor: Style.chipSurface
 
-    readonly property color contentColor: current ? Style.onPrimaryContainer : Style.surfaceText
+    readonly property color contentColor: current ? Style.onSelectedContainer : Style.surfaceText
 
     implicitWidth: row.implicitWidth + FileBrowserMetrics.pathPillPadding * 2
     implicitHeight: FileBrowserMetrics.pathPillHeight
     radius: FileBrowserMetrics.pathPillRadius
-    color: current ? Style.primaryContainer : chipColor
+    color: current ? Style.selectedContainer : chipColor
     Accessible.name: label
 
     StateLayer {

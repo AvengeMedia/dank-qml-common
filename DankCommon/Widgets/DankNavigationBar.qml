@@ -161,7 +161,7 @@ T.Control {
                         width: Style.navigationIndicatorWidth
                         height: Style.navigationIndicatorHeight
                         radius: Style.fullRadius(width, height)
-                        color: destination.selected ? Style.secondaryContainer : "transparent"
+                        color: destination.selected ? Style.selectedContainer : "transparent"
 
                         Behavior on color {
                             enabled: !Style.reduceMotion && Style.currentAnimationSpeed !== Style.AnimationSpeed.None
@@ -174,7 +174,7 @@ T.Control {
                         StateLayer {
                             control: destination
                             disabled: editButton.visible
-                            stateColor: Style.onSecondaryContainer
+                            stateColor: Style.onSelectedContainer
                         }
                     }
 
@@ -185,7 +185,7 @@ T.Control {
                         name: destination.modelData?.icon ?? ""
                         size: Style.iconSize
                         filled: destination.selected
-                        color: destination.selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
+                        color: destination.selected ? Style.onSelectedContainer : Style.onSurfaceVariant
                         visible: !editButton.revealed
                     }
 
@@ -218,13 +218,13 @@ T.Control {
                             anchors.centerIn: parent
                             name: "edit"
                             size: Style.iconSize
-                            color: Style.onSecondaryContainer
+                            color: Style.onSelectedContainer
                             visible: editButton.revealed
                         }
 
                         StateLayer {
                             control: editButton
-                            stateColor: Style.onSecondaryContainer
+                            stateColor: Style.onSelectedContainer
                         }
                     }
                 }

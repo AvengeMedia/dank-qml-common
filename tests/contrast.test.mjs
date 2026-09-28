@@ -31,6 +31,18 @@ test("readableOn takes the first candidate that meets the target, else the best"
     assert.deepEqual(contrast.readableOn(hex("#777777"), [hex("#888888"), hex("#666666")], 21), hex("#666666"));
 });
 
+test("subtle tint keeps the requested amount while the text stays readable, else backs off", () => {
+    const text = hex("#e6e0e9");
+    const base = hex("#2b2930");
+    const soft = contrast.subtleTint(base, hex("#d0bcff"), text, 0.2);
+    assert.deepEqual(soft, contrast.mix(base, hex("#d0bcff"), 0.2));
+    const loud = contrast.subtleTint(base, hex("#f0f0f0"), text, 0.9);
+    assert.ok(contrast.ratio(loud, text) >= 4.5);
+    assert.ok(contrast.ratio(loud, base) > 1.05);
+    const broken = hex("#777777");
+    assert.deepEqual(contrast.subtleTint(broken, hex("#ffffff"), hex("#888888"), 0.2), broken);
+});
+
 test("tinted containers respect an achievable contrast target", () => {
     for (const [base, tint, foreground, target] of [["#1d2024", "#42a5f5", "#e0e2e8", 4.5], ["#444b6a", "#7aa2f7", "#c0caf5", 4.4]]) {
         const fill = contrast.tintedContainer(hex(base), hex(tint), hex(foreground), target);

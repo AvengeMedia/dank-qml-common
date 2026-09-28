@@ -25,13 +25,13 @@ StyledButton {
     readonly property color contentColor: {
         if (!enabled)
             return Style.onSurface_38;
-        return selected ? Style.onSecondaryContainer : Style.surfaceText;
+        return selected ? Style.onSelectedContainer : Style.surfaceText;
     }
 
     width: parent?.width ?? 0
     implicitHeight: FileBrowserMetrics.sidebarRowHeight
     radius: FileBrowserMetrics.sidebarRowRadius
-    color: dropZone.containsDrag ? Style.primaryContainer : selected ? Style.secondaryContainer : "transparent"
+    color: dropZone.containsDrag ? Style.primaryContainer : selected ? Style.selectedContainer : "transparent"
     Accessible.name: label
 
     DropArea {

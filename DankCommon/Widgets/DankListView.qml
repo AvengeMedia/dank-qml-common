@@ -145,6 +145,18 @@ ListView {
         justChanged = false;
     }
 
+    property real _lastOriginY: 0
+
+    // A header that grows after the first layout extends upward past the viewport; a view resting at the top follows the new origin.
+    onOriginYChanged: {
+        const wasAtTop = contentY <= _lastOriginY + 0.5;
+        _lastOriginY = originY;
+        if (!wasAtTop || isUserScrolling || isMomentumActive)
+            return;
+        contentY = originY;
+        savedY = originY;
+    }
+
     function stopMomentum() {
         cancelFlick();
         momentumAnim.running = false;

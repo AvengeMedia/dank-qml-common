@@ -83,7 +83,17 @@ Controls.Control {
 
     readonly property real ratio: ratioForValue(value)
     LayoutMirroring.enabled: I18n.isRtl
-    readonly property real trackHeight: {
+    property real insetIconSize: {
+        switch (size) {
+        case "s":
+            return Style.iconSizeSmall;
+        case "xl":
+            return Style.iconSizeLarge;
+        default:
+            return Style.iconSize;
+        }
+    }
+    property real trackHeight: {
         switch (size) {
         case "s":
             return Style.sliderTrackHeightS;
@@ -97,7 +107,7 @@ Controls.Control {
             return Style.sliderTrackHeight;
         }
     }
-    readonly property real handleHeight: {
+    property real handleHeight: {
         switch (size) {
         case "s":
             return Style.sliderHandleHeightS;
@@ -111,7 +121,7 @@ Controls.Control {
             return Style.sliderHandleHeight;
         }
     }
-    readonly property real trackCornerRadius: {
+    property real trackCornerRadius: {
         switch (size) {
         case "s":
             return Style.sliderTrackCornerRadiusS;
@@ -306,7 +316,7 @@ Controls.Control {
             readonly property real emptyEnd: slider.mirrored ? sliderHandle.x - gap : width
             readonly property real tickSpacing: slider.tickCount > 1 ? travel / (slider.tickCount - 1) : 0
             readonly property bool ticksVisible: slider.showStops && slider.tickCount > 0 && tickSpacing >= Style.sliderTickSize + Style.sliderHandleGap
-            readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
+            readonly property bool insetIconVisible: slider.insetIcon.length > 0 && ["s", "m", "l", "xl"].indexOf(slider.size) !== -1 && !slider.centerMinimum
             readonly property bool insetIconLeftAligned: (!slider.mirrored && slider.insetIconPosition === "start") || (slider.mirrored && slider.insetIconPosition === "end")
             readonly property real insetIconExtent: Style.spacingXS + movingInsetIcon.width
             readonly property bool insetIconBehindHandle: {
@@ -420,7 +430,7 @@ Controls.Control {
                 id: movingInsetIcon
                 name: slider.insetIcon
                 rotation: slider.insetIconRotation
-                size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
+                size: slider.insetIconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.trackTextColor : slider.fillTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
                 x: sliderTrack.insetIconLeftAligned ? sliderHandle.x + sliderHandle.width + Style.spacingS : sliderHandle.x - width - Style.spacingS
@@ -439,7 +449,7 @@ Controls.Control {
             DankIcon {
                 name: slider.insetIcon
                 rotation: slider.insetIconRotation
-                size: slider.size === "xl" ? Style.iconSizeLarge : Style.iconSize
+                size: slider.insetIconSize
                 color: slider.enabled ? (slider.insetIconPosition === "start" ? slider.fillTextColor : slider.trackTextColor) : Style.onSurface_38
                 anchors.verticalCenter: parent.verticalCenter
                 x: sliderTrack.insetIconLeftAligned ? Style.spacingXS : sliderTrack.width - width - Style.spacingXS

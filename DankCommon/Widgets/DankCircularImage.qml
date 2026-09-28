@@ -11,6 +11,8 @@ Rectangle {
     property string fallbackIcon: "notifications"
     property string fallbackText: ""
     property bool cacheImages: true
+    property real ringWidth: 0
+    property color ringColor: Style.surfaceVariant
     property bool hasImage: imageSource !== ""
     readonly property bool shouldProbe: imageSource !== "" && !imageSource.startsWith("image://")
     property bool isAnimated: false
@@ -70,7 +72,20 @@ Rectangle {
     border.color: "transparent"
     border.width: 0
 
+    // ClippingRectangle's edge is not antialiased; an opaque ring straddling it hides the stair-step.
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: clipArea.anchors.margins - root.ringWidth / 2
+        z: 1
+        radius: width / 2
+        color: "transparent"
+        border.width: root.ringWidth
+        border.color: root.ringColor
+        visible: root.ringWidth > 0
+    }
+
     ClippingRectangle {
+        id: clipArea
         anchors.fill: parent
         anchors.margins: 2
         radius: Math.min(width, height) / 2
@@ -109,8 +124,8 @@ Rectangle {
             mipmap: true
             cache: root.cacheImages
             visible: root.activeImage === staticImage && staticImage.status === Image.Ready && root.imageSource !== ""
-            sourceSize.width: Math.max(width * 2, 128)
-            sourceSize.height: Math.max(height * 2, 128)
+            sourceSize.width: Math.max(1, Math.ceil(width * Screen.devicePixelRatio))
+            sourceSize.height: Math.max(1, Math.ceil(height * Screen.devicePixelRatio))
             source: {
                 if (!root.shouldProbe)
                     return root.imageSource;

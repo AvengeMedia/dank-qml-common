@@ -8,7 +8,7 @@ Rectangle {
     id: root
 
     property string imageSource: ""
-    property string fallbackIcon: "notifications"
+    property string fallbackIcon: "material:notifications"
     property string fallbackText: ""
     property bool cacheImages: true
     property real ringWidth: 0

@@ -58,7 +58,8 @@ FocusScope {
     readonly property var currentEntry: viewBody.cursorEntry()
     readonly property var selectedEntries: viewBody.selectedEntries()
 
-    property string _pendingReveal: ""
+    property var _pendingReveal: []
+    property bool _revealStarted: false
 
     signal activateRequested(var entry)
     signal itemMenuRequested(int index, real pointX, real pointY, int modifiers)
@@ -73,35 +74,37 @@ FocusScope {
     signal focusRequested
 
     function navigate(target) {
-        _pendingReveal = "";
+        _pendingReveal = [];
         _stamp();
         history.go(target);
     }
 
     function back() {
-        _pendingReveal = "";
+        _pendingReveal = [];
         _stamp();
         history.back();
     }
 
     function forward() {
-        _pendingReveal = "";
+        _pendingReveal = [];
         _stamp();
         history.forward();
     }
 
     function up() {
-        _pendingReveal = "";
+        _pendingReveal = [];
         _stamp();
         history.up();
     }
 
-    function reveal(target) {
-        const parent = FilePaths.parentOf(target);
+    function reveal(targets) {
+        const paths = [].concat(targets);
+        const parent = FilePaths.parentOf(paths[0] ?? "");
         if (parent === "")
             return;
         _stamp();
-        _pendingReveal = target;
+        _revealStarted = false;
+        _pendingReveal = paths.filter(path => FilePaths.parentOf(path) === parent);
         if (parent === history.path) {
             _applyPendingReveal();
             return;
@@ -131,6 +134,7 @@ FocusScope {
     }
 
     function restoreState(state) {
+        _pendingReveal = [];
         history.restore(state);
     }
 
@@ -146,10 +150,13 @@ FocusScope {
     }
 
     function _applyPendingReveal() {
-        if (_pendingReveal === "")
+        if (_pendingReveal.length === 0)
             return;
-        if (viewBody.reveal(_pendingReveal))
-            _pendingReveal = "";
+        const found = viewBody.reveal(_pendingReveal, _revealStarted);
+        if (found.length === 0)
+            return;
+        _revealStarted = true;
+        _pendingReveal = _pendingReveal.filter(path => !found.includes(path));
     }
 
     onShowHiddenChanged: optionsSettle.restart()

@@ -96,13 +96,17 @@ FocusScope {
         zoomRequested(viewMode, level);
     }
 
-    function reveal(target) {
-        const index = directory.indexOfPath(target);
-        if (index < 0)
-            return false;
-        selection.select(target);
-        view?.positionViewAtIndex(index, ListView.Center);
-        return true;
+    function reveal(targets, extend) {
+        const present = [].concat(targets).filter(path => directory.indexOfPath(path) >= 0);
+        if (present.length === 0)
+            return [];
+        if (!extend) {
+            selection.select(present[0]);
+            view?.positionViewAtIndex(directory.indexOfPath(present[0]), ListView.Center);
+        }
+        for (const path of present)
+            selection.add(path);
+        return present;
     }
 
     function activate(index) {

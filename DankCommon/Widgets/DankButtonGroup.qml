@@ -302,7 +302,7 @@ Row {
                         color: segment.contentColor
                         anchors.verticalCenter: parent.verticalCenter
                         width: capAvailable < 0 ? implicitWidth : Math.min(implicitWidth, capAvailable)
-                        maximumLineCount: 1
+                        wrapMode: Text.NoWrap
                     }
                 }
             }

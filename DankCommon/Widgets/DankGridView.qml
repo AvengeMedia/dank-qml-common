@@ -10,6 +10,7 @@ GridView {
     property bool isMomentumActive: false
     property real friction: Scroll.friction
     property bool showScrollBar: true
+    property real mouseWheelSpeed: Scroll.mouseWheelSpeed
 
     flickDeceleration: Scroll.flickDeceleration
     maximumFlickVelocity: Scroll.maximumFlickVelocity
@@ -27,7 +28,6 @@ GridView {
     WheelHandler {
         id: wheelHandler
 
-        property real mouseWheelSpeed: Scroll.mouseWheelSpeed
         property real touchpadSpeed: Scroll.touchpadSpeed
         property real momentumRetention: Scroll.momentumRetention
         property real lastWheelTime: 0
@@ -64,7 +64,7 @@ GridView {
                 momentumVelocity = 0;
 
                 const lines = Math.round(Math.abs(deltaY) / 120);
-                const scrollAmount = (deltaY > 0 ? -lines : lines) * cellHeight * 0.35;
+                const scrollAmount = (deltaY > 0 ? -lines : lines) * mouseWheelSpeed;
                 let newY = contentY + scrollAmount;
                 newY = Math.max(0, Math.min(contentHeight - height, newY));
 
@@ -81,7 +81,7 @@ GridView {
                 momentum = 0;
                 momentumVelocity = 0;
 
-                let delta = deltaY / 120 * cellHeight * 1.2;
+                let delta = deltaY / 8 * touchpadSpeed;
                 let newY = contentY - delta;
                 newY = Math.max(0, Math.min(contentHeight - height, newY));
 

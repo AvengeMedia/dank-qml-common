@@ -15,6 +15,10 @@ QtObject {
     property bool dirsFirst: true
     property int pageSize: 500
     property string thumbnailSize: "normal"
+    property string nameFilter: ""
+    property bool thumbnailsEnabled: true
+    property real thumbnailSizeLimit: -1
+    property bool networkThumbnails: true
 
     property bool loading: false
     property string error: ""
@@ -30,6 +34,7 @@ QtObject {
     readonly property int count: entries.count
     readonly property bool hasMore: cursor !== ""
 
+    property var _all: []
     property int _seq: 0
     property int _firstVisible: -1
     property int _lastVisible: -1
@@ -58,6 +63,7 @@ QtObject {
 
     onPathChanged: reload()
     onBackendChanged: reload()
+    onNameFilterChanged: _refilter()
     Component.onCompleted: reload()
     Component.onDestruction: _release()
 
@@ -69,6 +75,7 @@ QtObject {
             pathReset();
         }
         if (path === "") {
+            _all = [];
             entries.clear();
             total = 0;
             return;
@@ -115,8 +122,38 @@ QtObject {
             }
             cursor = result.cursor || "";
             total = result.total || 0;
-            entries.append(result.entries || []);
+            const more = result.entries || [];
+            _all = _all.concat(more);
+            entries.append(more.filter(entry => _passes(entry)));
+            listed();
         });
+    }
+
+    // The daemon owns sorting and hidden files; the name filter is the one
+    // client-side view, so batches are translated into filtered indices.
+    function _passes(entry) {
+        if (nameFilter === "")
+            return true;
+        const needle = nameFilter.toLowerCase();
+        const display = entry.displayName ?? "";
+        return entry.name.toLowerCase().includes(needle) || (display !== "" && display.toLowerCase().includes(needle));
+    }
+
+    function _refilter() {
+        entries.clear();
+        entries.append(_all.filter(entry => _passes(entry)));
+        if (_firstVisible >= 0)
+            _thumbnailRetry.restart();
+        listed();
+    }
+
+    function _filteredIndexBefore(rawIndex) {
+        let count = 0;
+        for (let i = 0; i < rawIndex && i < _all.length; i++) {
+            if (_passes(_all[i]))
+                count++;
+        }
+        return count;
     }
 
     function setSort(key, desc) {
@@ -159,12 +196,17 @@ QtObject {
         const last = _lastVisible;
         if (watchId === "" || first < 0 || last < first)
             return;
+        if (!thumbnailsEnabled || (pollOnFocus && !networkThumbnails))
+            return;
 
         const paths = [];
         for (let i = first; i <= Math.min(last, entries.count - 1); i++) {
             const entry = entries.get(i);
-            if (entry.thumbnailable && entry.thumbnail === "")
-                paths.push(entry.path);
+            if (!entry.thumbnailable || entry.thumbnail !== "")
+                continue;
+            if (thumbnailSizeLimit >= 0 && entry.size > thumbnailSizeLimit)
+                continue;
+            paths.push(entry.path);
         }
         if (paths.length === 0)
             return;
@@ -211,6 +253,7 @@ QtObject {
     function _fail(code, message) {
         error = message;
         errorCode = code;
+        _all = [];
         entries.clear();
         total = 0;
     }
@@ -278,8 +321,9 @@ QtObject {
 
     function _replace(result) {
         _seq = result.seq || 0;
+        _all = (result.entries || []).slice();
         entries.clear();
-        entries.append(result.entries || []);
+        entries.append(_all.filter(entry => _passes(entry)));
         total = result.total || 0;
         cursor = result.cursor || "";
         if (_firstVisible >= 0)
@@ -338,6 +382,9 @@ QtObject {
     function _applyBatch(data) {
         for (const name of data.removed || []) {
             total = Math.max(0, total - 1);
+            const raw = _rawIndexOfName(name);
+            if (raw >= 0)
+                _all.splice(raw, 1);
             const index = indexOfName(name);
             if (index >= 0)
                 entries.remove(index);
@@ -349,16 +396,22 @@ QtObject {
         const at = data.addedAt || [];
         for (let i = 0; i < added.length; i++) {
             total++;
-            const index = at[i] ?? entries.count;
-            if (index > entries.count || (index === entries.count && hasMore))
+            const index = at[i] ?? _all.length;
+            if (index > _all.length || (index === _all.length && hasMore))
                 continue;
-            entries.insert(index, added[i]);
+            const filteredIndex = _filteredIndexBefore(index);
+            _all.splice(index, 0, added[i]);
+            if (_passes(added[i]))
+                entries.insert(filteredIndex, added[i]);
         }
     }
 
     function _applyChanged(changed) {
         let awaitsThumbnail = false;
         for (const entry of changed) {
+            const raw = _rawIndexOfName(entry.name);
+            if (raw >= 0)
+                _all[raw] = entry;
             const index = indexOfName(entry.name);
             if (index < 0)
                 continue;
@@ -369,7 +422,14 @@ QtObject {
             _thumbnailRetry.restart();
     }
 
+    function _rawIndexOfName(name) {
+        return _all.findIndex(entry => entry.name === name);
+    }
+
     function _setThumbnail(target, thumbnail) {
+        const raw = _all.findIndex(entry => entry.path === target);
+        if (raw >= 0)
+            _all[raw].thumbnail = thumbnail;
         const index = indexOfPath(target);
         if (index < 0)
             return;

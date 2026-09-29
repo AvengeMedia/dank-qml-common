@@ -40,10 +40,18 @@ Popup {
         }
     }
 
-    contentItem: Column {
-        id: column
+    contentItem: DankFlickable {
+        implicitHeight: Math.min(column.height, Style.menuMaxHeight)
+        contentWidth: width
+        contentHeight: column.height
+        clip: true
 
-        spacing: 0
+        Column {
+            id: column
+
+            width: parent.width
+            spacing: 0
+        }
     }
 
     enter: Transition {

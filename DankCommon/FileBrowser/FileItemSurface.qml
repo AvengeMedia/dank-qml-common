@@ -41,6 +41,11 @@ StyledButton {
         border.color: Style.focusRingColor
     }
 
+    HoverHandler {
+        enabled: surface.view?.singleClickActivates === true && !surface.renaming
+        cursorShape: Qt.PointingHandCursor
+    }
+
     StateLayer {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         enabled: !surface.renaming
@@ -58,7 +63,7 @@ StyledButton {
         }
 
         onDoubleClicked: mouse => {
-            if (mouse.button !== Qt.LeftButton)
+            if (mouse.button !== Qt.LeftButton || surface.view?.singleClickActivates === true)
                 return;
             surface.view.itemActivated(surface.index);
         }

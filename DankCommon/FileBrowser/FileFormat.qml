@@ -79,6 +79,31 @@ Singleton {
         }
     }
 
+    function location(path) {
+        const parent = FilePaths.parentOf(path);
+        if (parent === "")
+            return "";
+        const home = FilePaths.home;
+        if (home !== "" && (parent === home || parent.startsWith(home + "/")))
+            return "~" + parent.substring(home.length);
+        return parent;
+    }
+
+    function escapeMarkup(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Marks the first case-insensitive hit of needle for Text.StyledText.
+    function highlight(text, needle, color) {
+        if (needle === "")
+            return text;
+        const at = text.toLowerCase().indexOf(needle.toLowerCase());
+        if (at < 0)
+            return escapeMarkup(text);
+        const end = at + needle.length;
+        return escapeMarkup(text.substring(0, at)) + `<font color="${color}"><b>` + escapeMarkup(text.substring(at, end)) + "</b></font>" + escapeMarkup(text.substring(end));
+    }
+
     function validName(name) {
         const trimmed = name.trim();
         return trimmed !== "" && trimmed !== "." && trimmed !== ".." && !trimmed.includes("/");

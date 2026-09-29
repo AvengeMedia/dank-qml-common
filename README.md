@@ -139,7 +139,7 @@ Callbacks receive the method's result object, or `{error, code}` with a stable c
 | --- | --- |
 | `connected` | bool |
 | `userDirs` | `[{key, name, path, iconName}]`, home first (`files.userDirs`) |
-| `capabilities` | `{mkdir, rename, trash}` bools; a missing or false key hides the action |
+| `capabilities` | `{mkdir, rename, trash, search}` bools; a missing or false key hides the action |
 | `watch(path, options, cb)` | `files.watch`. options `{includeHidden, filters, sortKey, sortDesc, dirsFirst, limit}`; result `{watchId, seq, entries, total, cursor, watching, pollOnFocus}` |
 | `page(watchId, options, cb)` | `files.list` with `watchId`, same options plus `cursor`; also changes the watch's sort, hidden and filters |
 | `unwatch(watchId)` | `files.unwatch`, no callback |
@@ -150,6 +150,9 @@ Callbacks receive the method's result object, or `{error, code}` with a stable c
 | `rename(path, name, cb)` | `files.rename`, `{path}` |
 | `trash(paths, cb)` | `files.trash`, `{trashed, failed: [{path, code, error}]}` |
 | `watchEvent(data)` | signal carrying every event of every watch the backend opened: `{watchId, kind, seq, added, addedAt, changed, removed, thumbnails}`, `kind` one of `batch resync gone thumbnails` |
+| `search(root, query, options, cb)` | optional, `search.start`. options `{includeHidden, crossDevice, types, modifiedAfterMs, minSize, maxSize, limit}`; result `{searchId, topic, limit}`. `SearchModel` hides the actions when it is missing |
+| `cancelSearch(searchId)` | optional, `search.cancel`, no callback |
+| `searchEvent(data)` | signal carrying `{searchId, kind, entries, count, truncated, cancelled, unreadable}` with `kind` `results` (a batch to append) or `done` |
 
 Entries are the `files.*` entry schema with every key present (`name path isDir isSymlink symlinkTarget symlinkBroken size mtimeMs ctimeMs atimeMs mode owner group hidden isExecutable extension mime iconName thumbnail thumbnailable unreadable displayName untrusted`). `filters` are case-insensitive globs over file names; directories always pass and `*`/`*.*` mean no filter. Watch batches are applied in order without sorting: removals by name, changes in place, then each added entry at its `addedAt`; a `seq` gap re-pages.
 

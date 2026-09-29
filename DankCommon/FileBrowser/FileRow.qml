@@ -24,7 +24,9 @@ FileItemSurface {
     required property bool unreadable
     required property bool hidden
 
+    readonly property string highlight: view?.nameHighlight ?? ""
     readonly property var entry: ({
+            "path": path,
             "isDir": isDir,
             "symlinkBroken": symlinkBroken,
             "extension": extension,
@@ -98,7 +100,8 @@ FileItemSurface {
         anchors.verticalCenter: parent.verticalCenter
         visible: !row.renaming
         opacity: row.cut ? Style.pendingOpacity : 1
-        text: row.displayName !== "" ? row.displayName : row.name
+        text: FileFormat.highlight(row.displayName !== "" ? row.displayName : row.name, row.highlight, row.selected ? row.contentColor : Style.primary)
+        textFormat: row.highlight === "" ? Text.PlainText : Text.StyledText
         color: row.contentColor
         font.pixelSize: Style.fontSizeMedium
         wrapMode: Text.NoWrap

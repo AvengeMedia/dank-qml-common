@@ -29,6 +29,12 @@ FocusScope {
     property string emptyText: I18n.tr("This folder is empty", "empty directory placeholder")
     property Component header: null
     property var cutSet: ({})
+    property string nameFilter: ""
+    property bool singleClickActivates: false
+    property bool thumbnailsEnabled: true
+    property real thumbnailSizeLimit: -1
+    property bool networkThumbnails: true
+    property var pathSuggestions: []
     property color paneColor: "transparent"
     property color chipColor: Style.chipSurface
     property real paneRadius: FileBrowserMetrics.paneRadius
@@ -167,6 +173,10 @@ FocusScope {
         filters: root.filters
         sortKey: root.sortKey
         sortDesc: root.sortDescending
+        nameFilter: root.nameFilter
+        thumbnailsEnabled: root.thumbnailsEnabled
+        thumbnailSizeLimit: root.thumbnailSizeLimit
+        networkThumbnails: root.networkThumbnails
         onGone: history.up()
         onListed: root._applyPendingReveal()
     }
@@ -282,6 +292,7 @@ FocusScope {
                 path: root.path
                 homePath: root.homePath
                 chipColor: root.chipColor
+                suggestions: root.pathSuggestions
                 onEditingFinished: root.focusBody()
                 onNavigated: target => {
                     root.focusRequested();
@@ -317,6 +328,8 @@ FocusScope {
                 surfaceColor: root.paneColor
                 header: root.header
                 cutSet: root.cutSet
+                singleClickActivates: root.singleClickActivates
+                nameHighlight: root.nameFilter
                 onActivateRequested: entry => root.activateRequested(entry)
                 onItemMenuRequested: (index, pointX, pointY, modifiers) => {
                     root.focusRequested();

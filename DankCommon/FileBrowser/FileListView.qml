@@ -17,6 +17,8 @@ DankListView {
     property bool dragEnabled: true
     property bool dropEnabled: true
     property bool multiSelect: true
+    property bool singleClickActivates: false
+    property string nameHighlight: ""
 
     readonly property int columnsPerRow: 1
     readonly property real rowHeight: FileBrowserMetrics.listRowHeightFor(iconSize)

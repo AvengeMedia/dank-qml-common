@@ -19,6 +19,8 @@ FileItemSurface {
     required property bool unreadable
     required property bool hidden
 
+    readonly property string highlight: view?.nameHighlight ?? ""
+
     width: view?.cellWidth ?? 0
     height: view?.cellHeight ?? 0
     contentRadius: FileBrowserMetrics.gridTileRadius
@@ -56,7 +58,8 @@ FileItemSurface {
             width: parent.width
             visible: !tile.renaming
             opacity: tile.cut ? Style.pendingOpacity : 1
-            text: tile.displayName !== "" ? tile.displayName : tile.name
+            text: FileFormat.highlight(tile.displayName !== "" ? tile.displayName : tile.name, tile.highlight, tile.selected ? tile.contentColor : Style.primary)
+            textFormat: tile.highlight === "" ? Text.PlainText : Text.StyledText
             color: tile.contentColor
             font.pixelSize: Style.fontSizeSmall
             horizontalAlignment: Text.AlignHCenter

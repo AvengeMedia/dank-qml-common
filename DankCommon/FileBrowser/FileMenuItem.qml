@@ -10,6 +10,7 @@ StyledButton {
     property string iconName: ""
     property bool submenu: false
     property bool danger: false
+    property bool highlighted: false
 
     readonly property color contentColor: {
         if (!enabled)
@@ -36,7 +37,7 @@ StyledButton {
     StateLayer {
         control: root
         disabled: !root.enabled
-        hovered: root.hovered
+        hovered: root.hovered || root.highlighted
         stateColor: root.contentColor
     }
 
@@ -67,6 +68,7 @@ StyledButton {
             color: root.contentColor
             font.pixelSize: Style.fontSizeMedium
             horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.NoWrap
             elide: Text.ElideRight
         }
     }

@@ -11,6 +11,22 @@ FocusScope {
     property string homePath: FilePaths.home
     property color chipColor: Style.chipSurface
     property bool editing: false
+    property var suggestions: []
+
+    readonly property var matchingSuggestions: {
+        if (!editing)
+            return [];
+        const typed = field.text.trim().toLowerCase();
+        const out = [];
+        for (const candidate of suggestions) {
+            if (candidate === "" || candidate.toLowerCase() === typed || (typed !== "" && !candidate.toLowerCase().includes(typed)))
+                continue;
+            out.push(candidate);
+            if (out.length >= FileBrowserMetrics.suggestionRows)
+                break;
+        }
+        return out;
+    }
 
     signal navigated(string target)
     signal editingFinished
@@ -51,13 +67,23 @@ FocusScope {
     function startEditing() {
         editing = true;
         field.text = path;
+        suggestionPopup.highlightIndex = -1;
         field.forceActiveFocus();
         field.selectAll();
     }
 
     function stopEditing() {
         editing = false;
+        suggestionPopup.highlightIndex = -1;
         editingFinished();
+    }
+
+    function acceptTyped() {
+        const picked = suggestionPopup.highlightedPath();
+        const target = picked !== "" ? picked : FilePaths.expandTilde(field.text.trim());
+        stopEditing();
+        if (target.startsWith("/"))
+            navigated(target);
     }
 
     implicitHeight: FileBrowserMetrics.pathPillHeight
@@ -68,6 +94,34 @@ FocusScope {
             return;
         }
         stopEditing();
+    }
+
+    Keys.onPressed: event => {
+        if (!editing || matchingSuggestions.length === 0)
+            return;
+        switch (event.key) {
+        case Qt.Key_Down:
+            suggestionPopup.move(1);
+            break;
+        case Qt.Key_Up:
+            suggestionPopup.move(-1);
+            break;
+        default:
+            return;
+        }
+        event.accepted = true;
+    }
+
+    PathSuggestions {
+        id: suggestionPopup
+
+        anchorItem: field
+        paths: bar.matchingSuggestions
+        visible: bar.editing && bar.matchingSuggestions.length > 0
+        onChosen: target => {
+            bar.stopEditing();
+            bar.navigated(target);
+        }
     }
 
     DankFlickable {
@@ -159,15 +213,13 @@ FocusScope {
         keyForwardTargets: [bar]
         Keys.onReturnPressed: event => event.accepted = true
         Keys.onEnterPressed: event => event.accepted = true
-        onAccepted: {
-            const target = FilePaths.expandTilde(text.trim());
-            bar.stopEditing();
-            if (target.startsWith("/"))
-                bar.navigated(target);
-        }
+        onAccepted: bar.acceptTyped()
+        onTextChanged: suggestionPopup.highlightIndex = -1
         onFocusStateChanged: hasFocus => {
-            if (!hasFocus && bar.editing)
-                bar.editing = false;
+            if (hasFocus || !bar.editing)
+                return;
+            bar.editing = false;
+            suggestionPopup.highlightIndex = -1;
         }
     }
 }

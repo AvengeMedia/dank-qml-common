@@ -46,6 +46,7 @@ Singleton {
     readonly property real typeColumnWidth: Style.spacingXL * 5
     readonly property real ownerColumnWidth: Style.spacingXL * 4
     readonly property real permissionsColumnWidth: Style.spacingXL * 4
+    readonly property real locationColumnWidth: Style.spacingXL * 8
 
     readonly property real selectionFooterHeight: Style.buttonHeightS
     readonly property real emblemMinSize: Style.iconSizeSmall
@@ -72,6 +73,8 @@ Singleton {
     readonly property real pickerScreenFraction: 0.9
     readonly property int settleInterval: 150
     readonly property int typeAheadInterval: 1000
+    readonly property int activationDebounce: 400
+    readonly property int suggestionRows: 8
 
     readonly property bool animationsEnabled: !Style.reduceMotion && Style.currentAnimationBaseDuration > 0
 }

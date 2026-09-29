@@ -12,7 +12,8 @@ Singleton {
     readonly property var capabilities: ({
             "mkdir": true,
             "rename": true,
-            "trash": true
+            "trash": true,
+            "search": true
         })
     readonly property var userDirs: [
         {
@@ -50,8 +51,10 @@ Singleton {
     property var nodes: seed()
     property var watches: ({})
     property int nextWatch: 0
+    property int nextSearch: 0
 
     signal watchEvent(var data)
+    signal searchEvent(var data)
 
     function seed() {
         const now = Date.now();
@@ -282,6 +285,42 @@ Singleton {
         callback?.({
             "counts": counts
         });
+    }
+
+    function search(rootPath, query, options, callback) {
+        if (!nodes[rootPath]?.isDir) {
+            fail(callback, "ENOENT", "not a directory: " + rootPath);
+            return;
+        }
+        const id = "s" + (++nextSearch);
+        const needle = (query || "").toLowerCase();
+        const hits = Object.keys(nodes).filter(path => path !== rootPath && path.startsWith(rootPath + "/")).map(entryFor).filter(entry => {
+            if (!options?.includeHidden && entry.path.substring(rootPath.length).split("/").some(part => part.startsWith(".")))
+                return false;
+            return needle === "" || entry.name.toLowerCase().includes(needle);
+        });
+        callback?.({
+            "searchId": id,
+            "topic": "search:" + id,
+            "limit": 10000
+        });
+        Qt.callLater(() => {
+            searchEvent({
+                "searchId": id,
+                "kind": "results",
+                "entries": hits,
+                "count": hits.length
+            });
+            searchEvent({
+                "searchId": id,
+                "kind": "done",
+                "count": hits.length,
+                "truncated": false
+            });
+        });
+    }
+
+    function cancelSearch(searchId) {
     }
 
     function thumbnails(paths, size, watchId, callback) {

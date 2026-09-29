@@ -42,6 +42,12 @@ Singleton {
             "sortKey": "",
             "width": FileBrowserMetrics.modifiedColumnWidth,
             "align": Text.AlignRight
+        },
+        {
+            "id": "location",
+            "sortKey": "",
+            "width": FileBrowserMetrics.locationColumnWidth,
+            "align": Text.AlignLeft
         }
     ]
 
@@ -61,6 +67,8 @@ Singleton {
             return I18n.tr("Permissions", "file list column header");
         case "created":
             return I18n.tr("Created", "file list column header");
+        case "location":
+            return I18n.tr("Location", "file list column header");
         default:
             return id;
         }
@@ -82,6 +90,8 @@ Singleton {
             return entry.mode;
         case "created":
             return FileFormat.modified(entry.ctimeMs);
+        case "location":
+            return FileFormat.location(entry.path);
         default:
             return "";
         }

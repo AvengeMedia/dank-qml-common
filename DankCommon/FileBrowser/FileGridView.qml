@@ -14,6 +14,8 @@ DankGridView {
     property bool dragEnabled: true
     property bool dropEnabled: true
     property bool multiSelect: true
+    property bool singleClickActivates: false
+    property string nameHighlight: ""
 
     readonly property real minimumCellWidth: iconSize + FileBrowserMetrics.gridTilePadding * 2 + FileBrowserMetrics.gridGap
     readonly property int columnsPerRow: Math.max(1, Math.floor(width / minimumCellWidth))

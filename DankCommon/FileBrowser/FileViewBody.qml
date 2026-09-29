@@ -7,7 +7,7 @@ import qs.DankCommon.Widgets
 FocusScope {
     id: body
 
-    required property DirectoryModel directory
+    required property var directory
     required property SelectionModel selection
 
     property string viewMode: "list"
@@ -29,6 +29,9 @@ FocusScope {
     property string renamingPath: ""
     property var cutSet: ({})
     property var childCounts: ({})
+    property bool singleClickActivates: false
+    property string nameHighlight: ""
+    property real _lastActivation: 0
 
     readonly property var view: viewLoader.item
     readonly property bool columnsScroll: header !== null && viewMode === "list"
@@ -106,6 +109,10 @@ FocusScope {
         const entry = entryAt(index);
         if (!entry)
             return;
+        const now = Date.now();
+        if (singleClickActivates && now - _lastActivation < FileBrowserMetrics.activationDebounce)
+            return;
+        _lastActivation = now;
         selection.select(entry.path);
         activateRequested(entry);
     }
@@ -118,6 +125,10 @@ FocusScope {
         selection.keyboardCursor = false;
         if (!multiSelect) {
             selection.select(entry.path);
+            return;
+        }
+        if (singleClickActivates && modifiers === Qt.NoModifier) {
+            activate(index);
             return;
         }
         if ((modifiers & Qt.ShiftModifier) !== 0) {
@@ -350,6 +361,8 @@ FocusScope {
             childCounts: body.childCounts
             columnIds: body.listColumns
             storedWidths: body.columnWidths
+            singleClickActivates: body.singleClickActivates
+            nameHighlight: body.nameHighlight
             multiSelect: body.multiSelect
             dragEnabled: body.dragEnabled
             dropEnabled: body.dropEnabled
@@ -381,6 +394,8 @@ FocusScope {
             iconSize: body.iconSize
             renamingPath: body.renamingPath
             cutSet: body.cutSet
+            singleClickActivates: body.singleClickActivates
+            nameHighlight: body.nameHighlight
             multiSelect: body.multiSelect
             dragEnabled: body.dragEnabled
             dropEnabled: body.dropEnabled

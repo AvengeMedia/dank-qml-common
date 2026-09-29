@@ -13,10 +13,12 @@ FocusScope {
     property real padding: Style.spacingL
     property real contentSpacing: Style.spacingS
     property real scrimRadius: 0
+    property vector4d scrimRadii: Qt.vector4d(scrimRadius, scrimRadius, scrimRadius, scrimRadius)
     property color surfaceColor: Style.cardSurface
     property Item initialFocusItem: null
     property Item returnFocusItem: null
     default property alias content: body.data
+    property alias headerActions: headerSlot.data
     readonly property alias contentItem: body
     readonly property bool animating: slide.running
     readonly property bool active: opened || progress > 0
@@ -180,7 +182,10 @@ FocusScope {
         },
         Rectangle {
             anchors.fill: parent
-            radius: root.scrimRadius
+            topLeftRadius: root.scrimRadii.x
+            topRightRadius: root.scrimRadii.y
+            bottomRightRadius: root.scrimRadii.z
+            bottomLeftRadius: root.scrimRadii.w
             color: Style.scrimColor
             opacity: root.opened ? Style.scrimAlpha : 0
 
@@ -208,6 +213,8 @@ FocusScope {
             y: root.height - (height - Math.max(0, Math.min(height, root.dragOffset))) * Math.max(0, Math.min(1, root.progress))
             topLeftRadius: Style.cornerRadiusXL
             topRightRadius: Style.cornerRadiusXL
+            bottomLeftRadius: width >= root.width ? root.scrimRadii.w : 0
+            bottomRightRadius: width >= root.width ? root.scrimRadii.z : 0
             color: root.surfaceColor
             border.width: Style.layerOutlineWidth
             border.color: Style.outlineMedium
@@ -269,18 +276,26 @@ FocusScope {
                 x: root.padding
                 y: handleArea.height
                 width: parent.width - root.padding * 2
-                height: heading.implicitHeight
+                height: Math.max(heading.implicitHeight, headerSlot.height)
 
                 StyledText {
                     id: heading
                     anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.right: headerSlot.left
+                    anchors.rightMargin: headerSlot.width > 0 ? Style.spacingS : 0
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.title
                     font.pixelSize: Style.fontSizeLarge
                     font.weight: Style.fontWeightMedium
                     color: Style.onSurface
                     elide: Text.ElideRight
+                }
+
+                Row {
+                    id: headerSlot
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: Style.spacingXS
                 }
             }
 

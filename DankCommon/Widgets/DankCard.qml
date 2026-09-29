@@ -29,34 +29,14 @@ FocusScope {
 
     readonly property bool acceptsInput: clickable && interactive && enabled
     readonly property bool floatingWindow: Style.isFloatingWindow(card)
-    readonly property bool tinted: tone === "primary" || tone === "secondary" || tone === "tertiary"
-    readonly property color containerColor: {
-        switch (tone) {
-        case "primary":
-            return Style.primaryContainer;
-        case "secondary":
-            return Style.secondaryContainer;
-        case "tertiary":
-            return Style.tertiaryContainer;
-        }
-        return Style.cardSurface;
-    }
-    readonly property color contentColor: {
-        switch (tone) {
-        case "primary":
-            return Style.onPrimaryContainer;
-        case "secondary":
-            return Style.onSecondaryContainer;
-        case "tertiary":
-            return Style.onTertiaryContainer;
-        }
-        return Style.surfaceText;
-    }
-    readonly property color accentColor: tinted ? contentColor : Style.primary
+    readonly property bool tinted: toneColors.tinted
+    readonly property color containerColor: toneColors.containerColor
+    readonly property color contentColor: toneColors.contentColor
+    readonly property color accentColor: toneColors.accentColor
     property color onAccentColor
-    readonly property color mutedColor: tinted ? Style.withAlpha(contentColor, 0.72) : Style.onSurfaceVariant
-    readonly property color chipColor: tinted ? Style.foregroundColor(Style.withAlpha(contentColor, Style.stateLayerFocus), floatingWindow) : Style.foregroundColor(Style.chipSurface, floatingWindow)
-    readonly property color surfaceColor: Style.foregroundColor(containerColor, floatingWindow)
+    readonly property color mutedColor: toneColors.mutedColor
+    readonly property color chipColor: toneColors.chipColor
+    readonly property color surfaceColor: toneColors.surfaceColor
     property bool showFocusRing: true
     property bool clipContent: false
     property real restRadius: Style.cornerRadiusM
@@ -70,10 +50,16 @@ FocusScope {
     Accessible.role: Accessible.Pane
     Accessible.name: title
 
+    DankTone {
+        id: toneColors
+        tone: card.tone
+        floatingWindow: card.floatingWindow
+    }
+
     Binding {
         target: card
         property: "onAccentColor"
-        value: card.tinted ? card.containerColor : Style.onPrimary
+        value: toneColors.onAccentColor
     }
 
     Behavior on bodyRadius {

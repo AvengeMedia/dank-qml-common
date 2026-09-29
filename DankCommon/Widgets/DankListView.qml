@@ -8,6 +8,7 @@ ListView {
     id: listView
 
     property real scrollBarTopMargin: 0
+    property bool showScrollBar: true
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
     property real savedY: 0
     property bool justChanged: false
@@ -332,6 +333,8 @@ ListView {
 
     ScrollBar.vertical: DankScrollbar {
         id: vbar
-        topPadding: listView.scrollBarTopMargin
+        targetFlickable: listView
+        allowed: listView.showScrollBar
+        topMargin: listView.scrollBarTopMargin
     }
 }

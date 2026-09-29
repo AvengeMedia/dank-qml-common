@@ -357,6 +357,9 @@ Singleton {
     readonly property real textEditHeight: theme?.textEditHeight ?? Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: theme?.tooltipMaxWidth ?? 500
     readonly property int tooltipDelay: theme?.tooltipDelay ?? 400
+    readonly property real scrollbarThickness: theme?.scrollbarThickness ?? 6
+    readonly property real scrollbarGap: theme?.scrollbarGap ?? spacingXS
+    readonly property int scrollbarHideDelay: theme?.scrollbarHideDelay ?? 1200
     readonly property real menuMaxHeight: theme?.menuMaxHeight ?? 400
     readonly property real clockFaceSize: theme?.clockFaceSize ?? 256
     readonly property real clockOuterRingRatio: theme?.clockOuterRingRatio ?? 101 / clockFaceSize
@@ -505,6 +508,7 @@ Singleton {
 
     readonly property bool enableRippleEffects: settings?.enableRippleEffects ?? true
     readonly property bool popoutElevationEnabled: settings?.popoutElevationEnabled ?? true
+    readonly property bool scrollbarsEnabled: settings?.scrollbarsEnabled ?? true
     readonly property int textRenderType: settings?.textRenderType ?? Style.TextRenderType.Qt
     readonly property int textRenderQuality: settings?.textRenderQuality ?? Style.TextRenderQuality.Default
     readonly property bool powerActionConfirm: settings?.powerActionConfirm ?? true

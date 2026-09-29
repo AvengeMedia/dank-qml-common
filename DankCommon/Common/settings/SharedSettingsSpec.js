@@ -51,6 +51,9 @@ var SPEC = {
     popoutElevationEnabled: {
         def: true
     },
+    scrollbarsEnabled: {
+        def: true
+    },
     blurBorderEnabled: {
         def: false
     },

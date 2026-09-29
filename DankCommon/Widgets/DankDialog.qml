@@ -184,11 +184,6 @@ FocusScope {
                 contentWidth: width
                 contentHeight: scrollBody.implicitHeight + root.focusPadding * 2
                 clip: true
-                verticalScrollBar.parent: surface
-                verticalScrollBar.targetFlickable: scroll
-                verticalScrollBar.x: I18n.isRtl ? Math.max(0, scroll.x - verticalScrollBar.width) : Math.min(surface.width - verticalScrollBar.width, scroll.x + scroll.width)
-                verticalScrollBar.y: scroll.y
-                verticalScrollBar.height: scroll.height
 
                 Column {
                     id: scrollBody

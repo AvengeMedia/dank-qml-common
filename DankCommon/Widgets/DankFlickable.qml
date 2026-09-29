@@ -8,6 +8,7 @@ Flickable {
     id: flickable
 
     property alias verticalScrollBar: vbar
+    property bool showScrollBar: true
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
     property bool wheelEnabled: true
     property real momentumVelocity: 0
@@ -200,5 +201,7 @@ Flickable {
 
     ScrollBar.vertical: DankScrollbar {
         id: vbar
+        targetFlickable: flickable
+        allowed: flickable.showScrollBar
     }
 }

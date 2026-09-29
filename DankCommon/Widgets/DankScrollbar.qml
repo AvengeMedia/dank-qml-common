@@ -5,42 +5,132 @@ import qs.DankCommon.Common
 ScrollBar {
     id: scrollbar
 
-    property var targetFlickable: null
-    readonly property var _target: targetFlickable ?? parent
+    property Flickable targetFlickable: null
+    property bool allowed: true
+    property real topMargin: 0
 
     property bool _scrollBarActive: false
     property alias hideTimer: hideScrollBarTimer
-    property bool _isParentMoving: _target && (_target.moving || _target.flicking || _target.isMomentumActive)
-    property bool _shouldShow: pressed || hovered || active || _isParentMoving || _scrollBarActive
+    readonly property Item scrollTarget: targetFlickable ?? parent
+    readonly property bool scrollTargetMoving: !!scrollTarget && (scrollTarget.moving || scrollTarget.flicking || scrollTarget.isMomentumActive === true)
+    readonly property bool shouldShow: pressed || hovered || active || scrollTargetMoving || _scrollBarActive
+    readonly property bool scrollable: !!scrollTarget && scrollTarget.contentHeight > scrollTarget.height
+    readonly property var placement: targetFlickable && policy !== ScrollBar.AlwaysOff ? placementFor(targetFlickable) : null
+    readonly property real thumbX: placement ? thumbXFor(targetFlickable, placement.room) : 0
 
-    policy: (_target && _target.contentHeight > _target.height) ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
+    function managesChildren(item) {
+        return typeof item.positioningComplete === "function" || item.layoutDirection !== undefined || typeof item.itemAt === "function";
+    }
+
+    // reading border would create a pen, which makes a transparent Rectangle paint
+    function isSurface(item) {
+        return item.radius !== undefined && item.color !== undefined;
+    }
+
+    function placementFor(view) {
+        let result = null;
+        let room = 0;
+        let x = 0;
+        let y = 0;
+        let opacity = 1;
+        let item = view;
+        while (item.parent) {
+            const parent = item.parent;
+            x += item.x;
+            y += item.y;
+            opacity *= item.opacity;
+            const extent = mirrored ? x : parent.width - x - view.width;
+            if (room === 0 && extent >= Style.scrollbarThickness)
+                room = extent;
+            if ((!result || room > 0) && !managesChildren(parent)) {
+                result = {
+                    "host": parent,
+                    "anchor": item,
+                    "x": x,
+                    "y": y,
+                    "opacity": opacity,
+                    "room": room
+                };
+                if (room > 0)
+                    return result;
+            }
+            if (room === 0 && isSurface(parent))
+                return result;
+            item = parent;
+        }
+        return result;
+    }
+
+    function thumbXFor(view, room) {
+        let lead = view.width;
+        let trail = 0;
+        for (const child of view.contentItem.children) {
+            if (!child.visible || child.width <= 0)
+                continue;
+            const padded = typeof child.positioningComplete === "function";
+            lead = Math.min(lead, view.contentItem.x + child.x + (padded ? child.leftPadding : 0));
+            trail = Math.max(trail, view.contentItem.x + child.x + child.width - (padded ? child.rightPadding : 0));
+        }
+        lead = Math.max(0, Math.min(lead, view.width));
+        trail = trail > 0 ? Math.min(trail, view.width) : view.width;
+        const thickness = Style.scrollbarThickness;
+        const gutter = mirrored ? lead + room : view.width + room - trail;
+        if (gutter < thickness)
+            return mirrored ? Style.spacingXXS - room : view.width + room - thickness - Style.spacingXXS;
+        const gap = Math.min(Style.scrollbarGap, (gutter - thickness) / 2);
+        return mirrored ? lead - gap - thickness : trail + gap;
+    }
+
+    Binding on parent {
+        when: scrollbar.targetFlickable !== null
+        value: scrollbar.placement?.host ?? null
+    }
+
+    // the attached ScrollBar calls setX and setHeight when it adopts the bar, which drops plain bindings
+    Binding on x {
+        when: scrollbar.placement !== null
+        value: scrollbar.placement ? scrollbar.placement.x + scrollbar.thumbX - scrollbar.leftPadding : 0
+    }
+
+    Binding on height {
+        when: scrollbar.targetFlickable !== null
+        value: scrollbar.targetFlickable?.height ?? 0
+    }
+
+    y: placement?.y ?? 0
+    z: placement?.anchor.z ?? 0
+    policy: Style.scrollbarsEnabled && allowed && scrollable ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
     minimumSize: 0.08
-    implicitWidth: 10
+    padding: 0
+    leftPadding: Style.scrollbarGap
+    rightPadding: Style.scrollbarGap
+    topPadding: Style.spacingXXS + topMargin
+    bottomPadding: Style.spacingXXS
     interactive: true
     hoverEnabled: true
-    z: 1000
-    opacity: (policy !== ScrollBar.AlwaysOff && _shouldShow) ? 1.0 : 0.0
-    visible: policy !== ScrollBar.AlwaysOff
+    enabled: scrollTarget?.enabled ?? false
+    visible: policy !== ScrollBar.AlwaysOff && (scrollTarget?.visible ?? false)
+    opacity: policy !== ScrollBar.AlwaysOff && shouldShow ? (placement?.opacity ?? 1) : 0
 
     Behavior on opacity {
-        NumberAnimation {
-            duration: 160
-            easing.type: Easing.OutQuad
+        enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+        DankAnim {
+            duration: Style.expressiveDurations.expressiveEffects
+            easing.bezierCurve: Style.expressiveCurves.expressiveEffects
         }
     }
 
     contentItem: Rectangle {
-        implicitWidth: 6
+        implicitWidth: Style.scrollbarThickness
         radius: Style.fullRadius(width, height)
-        color: scrollbar.pressed ? Style.primary : scrollbar._shouldShow ? Style.outline : Style.outlineMedium
-        opacity: scrollbar.pressed ? 1.0 : scrollbar._shouldShow ? 1.0 : 0.6
+        color: scrollbar.pressed ? Style.primary : Style.outline
     }
 
     background: Item {}
 
     Timer {
         id: hideScrollBarTimer
-        interval: 1200
+        interval: Style.scrollbarHideDelay
         onTriggered: scrollbar._scrollBarActive = false
     }
 }

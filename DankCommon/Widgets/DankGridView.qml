@@ -9,6 +9,7 @@ GridView {
     property real momentumVelocity: 0
     property bool isMomentumActive: false
     property real friction: Scroll.friction
+    property bool showScrollBar: true
 
     flickDeceleration: Scroll.flickDeceleration
     maximumFlickVelocity: Scroll.maximumFlickVelocity
@@ -171,5 +172,7 @@ GridView {
 
     ScrollBar.vertical: DankScrollbar {
         id: vbar
+        targetFlickable: gridView
+        allowed: gridView.showScrollBar
     }
 }

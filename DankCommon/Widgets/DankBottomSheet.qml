@@ -8,7 +8,9 @@ FocusScope {
     property bool opened: false
     property bool dismissible: true
     property string title: ""
+    readonly property real titleExtent: title !== "" ? heading.implicitHeight + Style.spacingS : 0
     property real maximumWidth: Style.dialogMaxWidth
+    property real sheetHeight: -1
     property real topMargin: Style.spacingL
     property real padding: Style.spacingL
     property real contentSpacing: Style.spacingS
@@ -18,7 +20,6 @@ FocusScope {
     property Item initialFocusItem: null
     property Item returnFocusItem: null
     default property alias content: body.data
-    property alias headerActions: headerSlot.data
     readonly property alias contentItem: body
     readonly property bool animating: slide.running
     readonly property bool active: opened || progress > 0
@@ -146,11 +147,16 @@ FocusScope {
         }
     }
 
+    onActiveChanged: {
+        if (!active)
+            dragOffset = 0;
+    }
+
     Behavior on dragOffset {
-        enabled: root.animationsEnabled && !handleDrag.active
+        enabled: root.animationsEnabled && root.opened && !handleDrag.active
         DankAnim {
-            duration: Style.expressiveDurations.expressiveFastSpatial
-            easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+            duration: Style.expressiveDurations.expressiveDefaultSpatial
+            easing.bezierCurve: Style.expressiveCurves.expressiveDefaultSpatial
         }
     }
 
@@ -208,7 +214,7 @@ FocusScope {
         Rectangle {
             id: surface
             width: Math.min(root.maximumWidth, root.width)
-            height: Math.max(0, Math.min(root.height - root.topMargin, header.y + header.height + Style.spacingS + body.implicitHeight + root.padding))
+            height: Math.max(0, Math.min(root.height - root.topMargin, root.sheetHeight >= 0 ? root.sheetHeight : header.y + root.titleExtent + body.implicitHeight + root.padding))
             x: (root.width - width) / 2
             y: root.height - (height - Math.max(0, Math.min(height, root.dragOffset))) * Math.max(0, Math.min(1, root.progress))
             topLeftRadius: Style.cornerRadiusXL
@@ -276,13 +282,13 @@ FocusScope {
                 x: root.padding
                 y: handleArea.height
                 width: parent.width - root.padding * 2
-                height: Math.max(heading.implicitHeight, headerSlot.height)
+                height: heading.implicitHeight
+                visible: root.title !== ""
 
                 StyledText {
                     id: heading
                     anchors.left: parent.left
-                    anchors.right: headerSlot.left
-                    anchors.rightMargin: headerSlot.width > 0 ? Style.spacingS : 0
+                    anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.title
                     font.pixelSize: Style.fontSizeLarge
@@ -290,19 +296,12 @@ FocusScope {
                     color: Style.onSurface
                     elide: Text.ElideRight
                 }
-
-                Row {
-                    id: headerSlot
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: Style.spacingXS
-                }
             }
 
             DankFlickable {
                 id: scroll
                 x: root.padding - root.focusPadding
-                y: header.y + header.height + Style.spacingS - root.focusPadding
+                y: header.y + root.titleExtent - root.focusPadding
                 width: parent.width - root.padding * 2 + root.focusPadding * 2
                 height: Math.max(0, parent.height - y - root.padding + root.focusPadding)
                 contentWidth: width

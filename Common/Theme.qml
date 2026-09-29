@@ -306,6 +306,9 @@ Singleton {
     readonly property real textEditHeight: Math.round(fontSizeMedium * 8)
     readonly property real tooltipMaxWidth: 500
     readonly property int tooltipDelay: 400
+    readonly property real scrollbarThickness: 6
+    readonly property real scrollbarGap: spacingXS
+    readonly property int scrollbarHideDelay: 1200
     readonly property real menuMaxHeight: 400
     readonly property real clockFaceSize: 256
     readonly property real clockOuterRingRatio: 101 / clockFaceSize

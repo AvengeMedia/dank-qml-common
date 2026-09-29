@@ -42,6 +42,7 @@ Singleton {
     property string powerMenuDefaultAction: "logout"
     property bool powerMenuGridLayout: false
     property bool popoutElevationEnabled: true
+    property bool scrollbarsEnabled: true
     property int textRenderType: SettingsData.TextRenderType.Qt
     property int textRenderQuality: SettingsData.TextRenderQuality.Default
 }

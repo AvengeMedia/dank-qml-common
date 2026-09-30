@@ -86,11 +86,13 @@ Flow {
             property string label: typeof modelData === "string" ? modelData : (modelData.label || "")
             property int count: typeof modelData === "object" ? (modelData.count || 0) : 0
             property string tooltip: typeof modelData === "object" ? (modelData.tooltip || "") : ""
+            property string leadingIcon: typeof modelData === "object" ? (modelData.icon || "") : ""
             property bool showCount: root.showCounts && count > 0
             readonly property color contentColor: !enabled ? Style.onSurface_38 : selected ? Style.onSecondaryContainer : Style.onSurfaceVariant
 
             readonly property bool hasCheck: root.showCheck && selected
-            readonly property real leadingPadding: hasCheck ? root.chipPadding * 0.5 : root.chipPadding
+            readonly property bool hasLeadingIcon: hasCheck || leadingIcon !== ""
+            readonly property real leadingPadding: hasLeadingIcon ? root.chipPadding * 0.5 : root.chipPadding
 
             width: contentRow.implicitWidth + leadingPadding + root.chipPadding
             height: root.chipHeight
@@ -138,11 +140,11 @@ Flow {
                 spacing: Style.spacingS
 
                 DankIcon {
-                    name: "check"
+                    name: chip.hasCheck ? "check" : chip.leadingIcon
                     size: Style.chipIconSize
                     anchors.verticalCenter: parent.verticalCenter
-                    color: chip.contentColor
-                    visible: chip.hasCheck
+                    color: chip.selected || !chip.enabled ? chip.contentColor : Style.primary
+                    visible: chip.hasLeadingIcon
                 }
 
                 StyledText {

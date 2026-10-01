@@ -19,7 +19,7 @@ FocusScope {
     property real padding: nativeWindow || popout ? Style.spacingL : Style.spacingXL
     property real maximumWidth: Style.dialogMaxWidth
     property real maximumHeight: Infinity
-    property color surfaceColor: nativeWindow ? Style.cardSurface : Style.surfaceContainerHigh
+    property color surfaceColor: nativeWindow ? Style.cardSurface : Style.hostSurface
     property real surfaceRadius: nativeWindow ? Style.windowRadius : Style.cornerRadiusXL
     default property alias content: body.data
     property alias actions: actionFlow.data

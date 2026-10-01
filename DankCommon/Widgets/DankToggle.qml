@@ -135,8 +135,8 @@ FocusScope {
 
         color: {
             if (!toggle.enabled)
-                return toggle.checked ? Style.onSurface_12 : Style.withAlpha(Style.surfaceContainerHighest, 0.12);
-            return toggle.checked ? Style.primary : Style.surfaceContainerHighest;
+                return toggle.checked ? Style.onSurface_12 : Style.withAlpha(Style.chipSurfaceNested, 0.12);
+            return toggle.checked ? Style.primary : Style.chipSurfaceNested;
         }
         border.width: toggle.checked ? 0 : Style.switchOutlineWidth
         border.color: toggle.enabled ? Style.outline : Style.onSurface_12
@@ -222,8 +222,8 @@ FocusScope {
                 visible: name !== ""
                 color: {
                     if (!toggle.enabled)
-                        return toggle.checked ? Style.onSurface_38 : Style.surfaceContainerHighest;
-                    return toggle.checked ? Style.onPrimaryContainer : Style.surfaceContainerHighest;
+                        return toggle.checked ? Style.onSurface_38 : Style.chipSurfaceNested;
+                    return toggle.checked ? Style.onPrimaryContainer : Style.chipSurfaceNested;
                 }
             }
 

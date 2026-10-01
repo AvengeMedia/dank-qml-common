@@ -53,7 +53,8 @@ Controls.Control {
     readonly property bool containsMouse: sliderMouseArea.containsMouse
     readonly property var focusTargets: [startIconLoader.action, insetAction.enabled ? insetAction : null, slider, endIconLoader.action].filter(item => item && item.enabled)
 
-    property color thumbOutlineColor: Style.surfaceContainer
+    // Unused; third-party plugins still assign it and fail to load without it.
+    property color thumbOutlineColor
     property color fillColor: Style.primary
     property color fillTextColor: Style.onPrimary
     property color trackColor: Style.secondaryContainer
@@ -411,7 +412,6 @@ Controls.Control {
                 anchors.verticalCenter: parent.verticalCenter
                 color: slider.enabled ? slider.fillColor : Style.onSurface_38
                 border.width: 0
-                border.color: slider.thumbOutlineColor
 
                 Behavior on width {
                     enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

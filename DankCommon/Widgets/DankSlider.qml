@@ -28,6 +28,7 @@ Controls.Control {
     property int maximum: 100
     property int step: 1
     property int wheelStep: keyStep
+    property bool upDownKeysStep: true
     property string startIcon: ""
     property string endIcon: ""
     property alias leftIcon: slider.startIcon // ! TODO deprecate me after 1.7 release
@@ -197,6 +198,8 @@ Controls.Control {
             return;
         const upKey = mirrored ? Qt.Key_Left : Qt.Key_Right;
         const downKey = mirrored ? Qt.Key_Right : Qt.Key_Left;
+        if (!upDownKeysStep && (event.key === Qt.Key_Up || event.key === Qt.Key_Down))
+            return;
         switch (event.key) {
         case upKey:
         case Qt.Key_Up:

@@ -9,6 +9,7 @@ Row {
     property var model: []
     property int currentIndex: -1
     property string selectionMode: "single"
+    property bool arrowKeysSelect: true
     property bool multiSelect: selectionMode === "multi"
     property var initialSelection: []
     property var currentSelection: initialSelection
@@ -59,14 +60,17 @@ Row {
 
     property int focusedIndex: currentIndex
     readonly property int focusIndex: Math.max(0, Math.min(focusedIndex, (model?.length ?? 0) - 1))
-    onCurrentIndexChanged: focusedIndex = currentIndex
+    onCurrentIndexChanged: {
+        if (arrowKeysSelect || !repeater.itemAt(focusIndex)?.activeFocus)
+            focusedIndex = currentIndex;
+    }
 
     function requestFocus(backwards, reason) {
         repeater.itemAt(focusIndex)?.forceActiveFocus(reason ?? (backwards ? Qt.BacktabFocusReason : Qt.TabFocusReason));
     }
 
     Keys.onPressed: event => {
-        if (!enabled || (model?.length ?? 0) === 0)
+        if (!enabled || (event.modifiers & ~Qt.KeypadModifier) !== Qt.NoModifier || (model?.length ?? 0) === 0)
             return;
         const count = model.length;
         const forwardKey = I18n.isRtl ? Qt.Key_Left : Qt.Key_Right;
@@ -85,7 +89,7 @@ Row {
     function focusSegment(index) {
         focusedIndex = index;
         repeater.itemAt(index)?.forceActiveFocus(Qt.TabFocusReason);
-        if (!multiSelect)
+        if (!multiSelect && arrowKeysSelect)
             selectItem(index);
     }
 
@@ -135,6 +139,8 @@ Row {
             onActiveFocusChanged: {
                 if (activeFocus)
                     root.focusedIndex = index;
+                else if (!root.arrowKeysSelect)
+                    root.focusedIndex = root.currentIndex;
             }
             onClicked: root.selectItem(index)
             onPressedChanged: {
@@ -142,7 +148,7 @@ Row {
                     root.interactionStarted = true;
             }
 
-            Accessible.role: root.multiSelect ? Accessible.CheckBox : Accessible.RadioButton
+            Accessible.role: root.multiSelect ? Accessible.CheckBox : root.arrowKeysSelect ? Accessible.RadioButton : Accessible.Button
             Accessible.name: buttonText.text
             checkable: true
             checked: selected

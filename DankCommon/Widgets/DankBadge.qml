@@ -7,6 +7,8 @@ Rectangle {
     property alias text: label.text
     property alias textColor: label.color
     property real maximumWidth: Infinity
+    property var tooltipText: null
+    readonly property bool truncated: label.truncated
 
     implicitWidth: text ? Math.min(maximumWidth, Math.max(implicitHeight, Math.ceil(label.implicitWidth) + Style.spacingS * 2)) : implicitHeight
     implicitHeight: text ? Math.max(Style.spacingL + Style.spacingXS, Math.ceil(labelMetrics.tightBoundingRect.height) + Style.spacingXS * 2) : Style.spacingXS + Style.spacingXXS
@@ -35,5 +37,19 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignTop
         visible: text !== ""
+    }
+
+    MouseArea {
+        id: hoverArea
+        anchors.fill: parent
+        enabled: root.tooltipText !== null && root.tooltipText !== ""
+        hoverEnabled: enabled
+        acceptedButtons: Qt.NoButton
+    }
+
+    DankTooltipHost {
+        text: root.tooltipText
+        target: root
+        hoverArea: hoverArea
     }
 }

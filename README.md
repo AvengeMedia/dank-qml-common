@@ -42,6 +42,12 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSlider` leaves wheel input to its enclosing flickables while any of them overflows, which forces `wheelEnabled` false. There is no per-slider opt-out. Otherwise `wheelEnabled` controls wheel adjustment. Dragging and keyboard adjustment work in either case.
 
+`DankSlider` steps with the arrow keys, `DankDropdown` opens on Down, and `DankDragHandle` moves its item on Up and Down. In a surface where Up and Down move focus between controls, set `DankSlider.upDownKeysStep: false` (Left and Right still step), `DankDropdown.downKeyOpens: false` (Alt+Down, Enter and Space still open it) and `DankDragHandle.upDownKeysMove: false` (the owner handles reordering, for example on Ctrl+Up and Ctrl+Down).
+
+`DankBadge.maximumWidth` elides the label; `truncated` reports when it did, and `tooltipText` shows a hover tooltip, so `tooltipText: truncated ? text : null` restores the full text.
+
+`DankDetailChip` shows a `label: value` pair on the chip tier, for read-only details such as a network's frequency or a printer's state.
+
 `DankDialog` provides a title, supporting text, scrollable content and trailing actions. Use it as content inside a window, or set `embedded: false` for its scrim, elevated surface and entry motion. Handle `accepted` and `rejected`; use `acceptEnabled` and `closeEnabled` for pending actions.
 
 `DankBottomSheet` fills its parent with a scrim and a bottom-aligned, scrollable sheet. Bind `opened`, handle `dismissRequested`, and place content inside it. The handle supports dragging down to dismiss. `initialFocusItem` selects the first control; `returnFocusItem` overrides the saved opener. `dismissible: false` blocks dismissal. Use the visible viewport as its parent when the underlying content scrolls. The handle uses `bottomSheetHandleWidth` and `bottomSheetHandleHeight` (36 and 4). Its color is `onSurfaceVariant_40` (`onSurfaceVariant` at 40% opacity).
@@ -67,6 +73,8 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSparkline.xValues` positions samples on an explicit axis between `minimumX` and `maximumX`. Omit it for evenly spaced samples.
 
+`DankButtonGroup` uses arrows to move focus and select single choices by default. Set `arrowKeysSelect: false` to move focus without selecting; Enter, Space or a click applies the focused choice. This manual mode exposes the segments as checkable buttons instead of radio buttons.
+
 `DankButtonGroup` accepts `{ text, icon }` options. Set `iconOnly: true` for icons with text tooltips and accessible names.
 
 `DankFlickable.wheelEnabled` disables its vertical wheel handler when a surface supplies horizontal wheel navigation. Touch and mouse dragging remain available.
@@ -81,7 +89,7 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DankSaturationValuePicker` edits saturation and value for a given hue. Bind its three values and handle `colorChanged(saturation, value)`. Arrow keys adjust by 1%, Shift adjusts by 10%, Home/End set saturation, and PageUp/PageDown adjust value.
 
-`DankColorButton` displays `swatchColor` with a selection check and emits `clicked`. Set `selected` to reflect the current color. `DankColorSwatch.minPreviewAlpha: 0` displays the exact alpha over a checkerboard.
+`DankColorButton` displays `swatchColor` with a selection check and emits `clicked`. Set `selected` to reflect the current color, and `tooltipText` to name the color instead of showing its hex value. `DankColorSwatch.minPreviewAlpha: 0` displays the exact alpha over a checkerboard.
 
 ## The contract
 

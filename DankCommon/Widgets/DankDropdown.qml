@@ -53,6 +53,7 @@ FocusScope {
     property color focusedBorderColor: Style.primary
     property var transientSurfaceTracker: null
     property bool popupGrabsFocus: true
+    property bool downKeyOpens: true
     property bool menuBlurEnabled: true
 
     signal valueChanged(string value)
@@ -298,7 +299,13 @@ FocusScope {
         Accessible.name: root.Accessible.name || root.text || root.currentValue
         Accessible.description: root.Accessible.description || root.description
         onClicked: root.openDropdownMenu()
-        Keys.onDownPressed: root.showDropdownMenu()
+        Keys.onDownPressed: event => {
+            if (!root.downKeyOpens && !(event.modifiers & Qt.AltModifier)) {
+                event.accepted = false;
+                return;
+            }
+            root.showDropdownMenu();
+        }
 
         readonly property bool active: root.menuVisible || visualFocus
 

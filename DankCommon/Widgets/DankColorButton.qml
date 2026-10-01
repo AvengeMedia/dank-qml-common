@@ -6,11 +6,12 @@ StyledButton {
 
     property color swatchColor: "transparent"
     property bool selected: false
+    property var tooltipText: null
 
     implicitWidth: Style.iconButtonSize
     implicitHeight: implicitWidth
     radius: Style.fullRadius(width, height)
-    Accessible.name: swatchColor.toString()
+    Accessible.name: tooltipText || swatchColor.toString()
     Accessible.role: Accessible.RadioButton
     Accessible.checkable: true
     Accessible.checked: selected
@@ -58,7 +59,7 @@ StyledButton {
         control: root
         disabled: !root.enabled
         stateColor: Style.onSurface
-        tooltipText: root.swatchColor.toString()
+        tooltipText: root.tooltipText || root.swatchColor.toString()
     }
 
     FocusRing {

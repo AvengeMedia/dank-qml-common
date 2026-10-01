@@ -6,6 +6,7 @@ DankActionButton {
 
     required property Item coordinateItem
     property string label: ""
+    property bool upDownKeysMove: true
     property bool dragging: false
     property bool canMoveUp: true
     property bool canMoveDown: true
@@ -31,6 +32,8 @@ DankActionButton {
     }
 
     Keys.onPressed: event => {
+        if (!upDownKeysMove && (event.key === Qt.Key_Up || event.key === Qt.Key_Down))
+            return;
         switch (event.key) {
         case Qt.Key_Up:
             if (root.canMoveUp)

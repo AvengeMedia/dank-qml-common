@@ -7,6 +7,8 @@ MouseArea {
 
     property bool disabled: false
     property bool hovered: control ? control.hovered : containsMouse
+    // visualFocus is keyboard-only, so pointer focus never tints
+    property bool focused: control ? control.visualFocus : false
     property T.AbstractButton control: null
     property color stateColor: Style.surfaceText
     property real cornerRadius: parent && parent.radius !== undefined ? parent.radius : Style.cornerRadius
@@ -20,7 +22,7 @@ MouseArea {
     property int transitionDuration: Style.shorterDuration
     property var transitionCurve: Style.expressiveCurves.standardDecel
 
-    readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : hovered ? Style.stateLayerHover : 0
+    readonly property real stateOpacity: disabled ? 0 : (control ? control.down : pressed) ? Style.stateLayerPressed : focused ? Style.stateLayerFocus : hovered ? Style.stateLayerHover : 0
     readonly property bool controlPressed: control ? control.pressed : false
 
     anchors.fill: parent

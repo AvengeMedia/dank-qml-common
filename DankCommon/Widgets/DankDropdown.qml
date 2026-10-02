@@ -47,7 +47,7 @@ FocusScope {
     property string emptyText: ""
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
     property color backgroundColor: Style.chipSurface
-    property color hoverBackgroundColor: Style._blend(Style.chipSurface, Style.onSurface, Style.stateLayerHover)
+    property color hoverBackgroundColor: Style._blend(backgroundColor, Style.onSurface, Style.stateLayerHover)
     property color menuBackgroundColor: usePopupTransparency ? Style.floatingSurface : Style.floatingWindowSurface
     property color normalBorderColor: Style.outlineVariant
     property color focusedBorderColor: Style.primary

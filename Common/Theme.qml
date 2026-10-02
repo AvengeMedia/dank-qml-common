@@ -169,6 +169,7 @@ Singleton {
     property real spacingXS: 4
     property real spacingS: 8
     property real spacingM: 12
+    readonly property real windowInset: spacingM
     property real spacingL: 16
     property real spacingXL: 24
 

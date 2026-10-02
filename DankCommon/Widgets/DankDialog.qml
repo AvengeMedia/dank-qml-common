@@ -169,7 +169,7 @@ FocusScope {
                 titleWeight: root.nativeWindow ? Style.fontWeightMedium : Style.fontWeight
                 wrapTitle: !root.nativeWindow
                 horizontalPadding: root.nativeWindow ? -1 : 0
-                showDivider: root.nativeWindow
+                verticalPadding: root.nativeWindow ? Style.windowInset : Style.spacingXS
                 closeEnabled: root.closeEnabled
                 onCloseRequested: root.rejected()
             }

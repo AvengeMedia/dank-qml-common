@@ -251,6 +251,7 @@ Singleton {
     readonly property real spacingXS: theme?.spacingXS ?? 4
     readonly property real spacingS: theme?.spacingS ?? 8
     readonly property real spacingM: theme?.spacingM ?? 12
+    readonly property real windowInset: theme?.windowInset ?? spacingM
     readonly property real spacingL: theme?.spacingL ?? 16
     readonly property real spacingXL: theme?.spacingXL ?? 24
     readonly property real fontSizeSmall: theme?.fontSizeSmall ?? 12

@@ -7,7 +7,7 @@ import qs.DankCommon.Common
 
 Singleton {
     readonly property real headerHeight: Style.buttonHeightS
-    readonly property real contentMargin: Style.spacingL
+    readonly property real contentMargin: Style.windowInset
     readonly property real contentSpacing: Style.spacingM
     readonly property real controlSize: Style.buttonHeightS + Style.spacingXS
     readonly property real controlSpacing: Style.spacingS

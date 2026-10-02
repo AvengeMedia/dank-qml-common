@@ -1,7 +1,10 @@
 .pragma library
 .import "MaterialShapeData.js" as Data
+.import "DankLogoShape.js" as Logo
 
-var catalog = Data.cubics;
+var catalog = Object.assign({
+    dankLogo: Logo.cubics
+}, Data.cubics);
 
 function rotationScale(kind, aspectRatio = 1) {
     const cubics = catalog[kind] ?? catalog.circle;
@@ -108,8 +111,13 @@ function buildPath(kind, width, height, square) {
         return "M 0 0 H " + width + " V " + height + " H 0 Z";
     const cubics = catalog[kind] ?? catalog.circle;
     const pair = (x, y) => (x * width).toFixed(4) + " " + (y * height).toFixed(4);
-    let path = "M " + pair(cubics[0][0], cubics[0][1]);
-    for (const cubic of cubics)
+    let path = "";
+    let end = null;
+    for (const cubic of cubics) {
+        if (!end || end[0] !== cubic[0] || end[1] !== cubic[1])
+            path += (end ? " Z " : "") + "M " + pair(cubic[0], cubic[1]);
         path += " C " + pair(cubic[2], cubic[3]) + " " + pair(cubic[4], cubic[5]) + " " + pair(cubic[6], cubic[7]);
+        end = [cubic[6], cubic[7]];
+    }
     return path + " Z";
 }

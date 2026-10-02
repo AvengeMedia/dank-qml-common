@@ -1,8 +1,13 @@
 .pragma library
+.import "../MaterialWallpaper.js" as MaterialWallpaper
 
 var SPEC = {
     isLightMode: {
         def: false
+    },
+    materialWallpapers: {
+        def: {},
+        coerce: MaterialWallpaper.normalizeStore
     },
     wallpaperPath: {
         def: ""

@@ -27,8 +27,8 @@ FocusScope {
     property string viewMode: defaultViewMode
     property string sortKey: "name"
     property bool sortDescending: false
-    property int gridZoom: 1
-    property int listZoom: 1
+    property int gridZoom: FileBrowserMetrics.defaultGridZoom
+    property int listZoom: FileBrowserMetrics.defaultListZoom
     property bool showSidebar: true
     property bool showHidden: defaultShowHidden
 

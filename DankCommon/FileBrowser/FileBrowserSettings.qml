@@ -27,8 +27,8 @@ Singleton {
             "viewMode": saved.viewMode ?? "",
             "sortKey": sortKeyFor(saved.sortKey ?? saved.sortBy),
             "sortDesc": saved.sortDesc ?? saved.sortAscending === false,
-            "gridZoom": saved.gridZoom ?? saved.iconSizeIndex ?? 1,
-            "listZoom": saved.listZoom ?? 1,
+            "gridZoom": saved.gridZoom ?? saved.iconSizeIndex ?? FileBrowserMetrics.defaultGridZoom,
+            "listZoom": saved.listZoom ?? FileBrowserMetrics.defaultListZoom,
             "showSidebar": saved.showSidebar ?? true,
             "showHidden": saved.showHidden,
             "lastPath": FilePaths.normalize(saved.lastPath ?? "")

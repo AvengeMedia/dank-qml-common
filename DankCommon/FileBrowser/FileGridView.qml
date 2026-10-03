@@ -8,7 +8,7 @@ DankGridView {
     id: grid
 
     property SelectionModel selection: null
-    property real iconSize: FileBrowserMetrics.gridIconSizes[1]
+    property real iconSize: FileBrowserMetrics.gridIconSizes[FileBrowserMetrics.defaultGridZoom]
     property string renamingPath: ""
     property var cutSet: ({})
     property bool dragEnabled: true
@@ -56,7 +56,7 @@ DankGridView {
     keyNavigationEnabled: false
     activeFocusOnTab: false
     cellWidth: Math.floor(width / columnsPerRow)
-    cellHeight: iconSize + Style.fontSizeSmall * 3 + FileBrowserMetrics.gridTilePadding * 2 + FileBrowserMetrics.gridNameSpacing * 2
+    cellHeight: iconSize + Style.fontSizeSmall * 3 + FileBrowserMetrics.gridTileVerticalPadding * 2 + FileBrowserMetrics.gridNameSpacing * 2
     cacheBuffer: Math.max(0, height)
     currentIndex: -1
     reuseItems: true

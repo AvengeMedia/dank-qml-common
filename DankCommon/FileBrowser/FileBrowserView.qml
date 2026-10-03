@@ -31,6 +31,9 @@ FocusScope {
     property var cutSet: ({})
     property string nameFilter: ""
     property bool singleClickActivates: false
+    property bool typeAheadEnabled: true
+    property bool countFolders: true
+    property bool dirsFirst: true
     property bool thumbnailsEnabled: true
     property real thumbnailSizeLimit: -1
     property bool networkThumbnails: true
@@ -39,6 +42,7 @@ FocusScope {
     property color chipColor: Style.chipSurface
     property real paneRadius: FileBrowserMetrics.paneRadius
     property real paneMargin: FileBrowserMetrics.paneMargin
+    property real paneMarginHorizontal: FileBrowserMetrics.paneMarginHorizontal
     property real paneBorderWidth: 0
     property color paneBorderColor: Style.primary
     default property alias toolbarItems: toolbarExtras.data
@@ -140,7 +144,7 @@ FocusScope {
 
     function marker() {
         return {
-            "contentY": (viewBody.view?.contentY ?? 0) - (viewBody.view?.originY ?? 0),
+            "contentY": viewBody.scrollOffset(),
             "cursor": selectionModel.cursorPath
         };
     }
@@ -180,6 +184,7 @@ FocusScope {
         filters: root.filters
         sortKey: root.sortKey
         sortDesc: root.sortDescending
+        dirsFirst: root.dirsFirst
         nameFilter: root.nameFilter
         thumbnailsEnabled: root.thumbnailsEnabled
         thumbnailSizeLimit: root.thumbnailSizeLimit
@@ -209,12 +214,7 @@ FocusScope {
         property real pending: 0
 
         interval: 0
-        onTriggered: {
-            const view = viewBody.view;
-            if (!view)
-                return;
-            view.contentY = view.originY + Math.max(0, Math.min(pending, view.contentHeight - view.height));
-        }
+        onTriggered: viewBody.scrollTo(pending)
     }
 
     FileBrowserSidebar {
@@ -295,7 +295,9 @@ FocusScope {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: root.paneMargin
+                anchors.topMargin: root.paneMargin
+                anchors.leftMargin: root.paneMarginHorizontal
+                anchors.rightMargin: root.paneMarginHorizontal
                 path: root.path
                 homePath: root.homePath
                 chipColor: root.chipColor
@@ -314,7 +316,10 @@ FocusScope {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: root.paneMargin
+                anchors.topMargin: root.paneMargin
+                anchors.bottomMargin: root.paneMargin
+                anchors.leftMargin: root.paneMarginHorizontal
+                anchors.rightMargin: root.paneMarginHorizontal
                 focus: true
                 directory: directory
                 selection: selectionModel
@@ -336,6 +341,9 @@ FocusScope {
                 header: root.header
                 cutSet: root.cutSet
                 singleClickActivates: root.singleClickActivates
+                typeAheadEnabled: root.typeAheadEnabled
+                countFolders: root.countFolders
+                homePath: root.homePath
                 nameHighlight: root.nameFilter
                 onActivateRequested: entry => root.activateRequested(entry)
                 onItemMenuRequested: (index, pointX, pointY, modifiers) => {
@@ -359,6 +367,10 @@ FocusScope {
                 onZoomRequested: (mode, level) => root.zoomRequested(mode, level)
                 onColumnResizeRequested: (id, width) => root.columnResizeRequested(id, width)
                 onFocusRequested: root.focusRequested()
+                onRevealRequested: target => {
+                    root.focusRequested();
+                    root.reveal(target);
+                }
                 onOpenRequested: target => {
                     root.focusRequested();
                     if (target === "..") {

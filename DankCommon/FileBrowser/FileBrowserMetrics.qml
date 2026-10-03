@@ -22,17 +22,35 @@ Singleton {
     readonly property real pathPillSpacing: Style.spacingXS
     readonly property real pathIconSize: Style.iconSizeSmall
 
-    readonly property var gridIconSizes: [Style.iconSizeLarge * 2, Style.iconSizeLarge * 3, Style.iconSizeLarge * 4, Style.iconSizeLarge * 6]
-    readonly property var listIconSizes: [Style.iconSizeMedium, Style.iconSize, Style.iconSizeLarge, Style.iconSizeLarge * 1.5]
+    readonly property var gridIconSizes: [Style.iconSizeLarge * 1.5, Style.iconSizeLarge * 2, Style.iconSizeLarge * 3, Style.iconSizeLarge * 4, Style.iconSizeLarge * 5, Style.iconSizeLarge * 6, Style.iconSizeLarge * 8]
+    readonly property var listIconSizes: [Style.iconSizeMedium, Style.iconSize, Style.iconSizeLarge, Style.iconSizeLarge * 1.25, Style.iconSizeLarge * 1.5, Style.iconSizeLarge * 2]
+    readonly property int defaultGridZoom: 2
+    readonly property int defaultListZoom: 0
     readonly property real gridTilePadding: Style.spacingM
+    readonly property real gridTileVerticalPadding: Style.spacingL
     readonly property real gridTileRadius: Style.cornerRadiusL
-    readonly property real gridGap: Style.spacingS
+    readonly property real gridGap: Style.spacingM
     readonly property real gridNameSpacing: Style.spacingXS
-    readonly property real quickTileSize: gridIconSizes[1] + gridTilePadding * 2
-    readonly property real quickTileIconSize: gridIconSizes[0]
+    readonly property real quickTileIconSize: Style.spacingXL * 3
+    readonly property real quickTileSize: quickTileIconSize + Style.spacingXL * 2
+    readonly property real quickTileGap: Style.spacingL
+
+    readonly property real columnPaneWidth: Style.sidebarWidth
+    readonly property real previewPaneWidth: Style.sidebarWidth * 1.5
+    readonly property real previewIconSize: gridIconSizes[4]
+    readonly property int previewBytes: 16384
 
     readonly property real listRowHeight: Style.listItemHeight
-    readonly property real listRowPadding: Style.spacingM
+    readonly property real listRowPadding: Style.spacingL
+    readonly property real nameColumnMinWidth: Style.spacingXL * 6
+
+    function iconSizesFor(viewMode) {
+        return viewMode === "grid" ? gridIconSizes : listIconSizes;
+    }
+
+    function defaultZoom(viewMode) {
+        return viewMode === "grid" ? defaultGridZoom : defaultListZoom;
+    }
 
     function listRowHeightFor(iconSize) {
         return Math.max(listRowHeight, iconSize + listRowPadding * 2);
@@ -61,11 +79,14 @@ Singleton {
     readonly property real sidebarIconSize: Style.avatarSize
     readonly property real sidebarRowHeight: sidebarIconSize + Style.spacingL
     readonly property real sidebarRowRadius: Style.cornerRadiusM
+    readonly property real sidebarRowGap: Style.spacingXS
     readonly property real sidebarGlyphSize: Style.iconSizeMedium
     readonly property real usageWarnRatio: 0.9
     readonly property real paneRadius: Style.windowRadius
     readonly property real paneMargin: Style.spacingM
+    readonly property real paneMarginHorizontal: Style.spacingL
     readonly property real menuWidth: Style.spacingXL * 9
+    readonly property real menuMargin: Style.spacingL
     readonly property real pickerWidth: Style.launcherWidthLarge
     readonly property real pickerHeight: Style.launcherHeightDefault + Style.spacingXL
     readonly property real pickerMinWidth: Style.launcherWidthMicro

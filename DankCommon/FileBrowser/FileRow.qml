@@ -92,10 +92,22 @@ FileItemSurface {
         }
     }
 
+    DankIcon {
+        id: chevron
+
+        anchors.right: columns.left
+        anchors.verticalCenter: parent.verticalCenter
+        visible: row.isDir && (row.view?.chevrons ?? false)
+        width: visible ? size : 0
+        name: "chevron_right"
+        size: Style.iconSizeMedium
+        color: row.supportingColor
+    }
+
     StyledText {
         anchors.left: visual.right
         anchors.leftMargin: FileBrowserMetrics.listRowPadding
-        anchors.right: columns.left
+        anchors.right: chevron.left
         anchors.rightMargin: FileBrowserMetrics.columnGap
         anchors.verticalCenter: parent.verticalCenter
         visible: !row.renaming
@@ -111,7 +123,7 @@ FileItemSurface {
     Loader {
         anchors.left: visual.right
         anchors.leftMargin: FileBrowserMetrics.listRowPadding
-        anchors.right: columns.left
+        anchors.right: chevron.left
         anchors.rightMargin: FileBrowserMetrics.columnGap
         anchors.verticalCenter: parent.verticalCenter
         active: row.renaming

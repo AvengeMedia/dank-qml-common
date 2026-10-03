@@ -18,6 +18,7 @@ DankListView {
     property bool dropEnabled: true
     property bool multiSelect: true
     property bool singleClickActivates: false
+    property bool chevrons: false
     property string nameHighlight: ""
 
     readonly property int columnsPerRow: 1

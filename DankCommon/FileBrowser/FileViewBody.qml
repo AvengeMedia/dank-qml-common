@@ -30,13 +30,30 @@ FocusScope {
     property var cutSet: ({})
     property var childCounts: ({})
     property bool singleClickActivates: false
+    property bool typeAheadEnabled: true
+    property bool countFolders: true
+    property string homePath: ""
     property string nameHighlight: ""
     property real _lastActivation: 0
 
     readonly property var view: viewLoader.item
+    readonly property bool columnsMode: viewMode === "columns"
     readonly property bool columnsScroll: header !== null && viewMode === "list"
     readonly property int zoom: viewMode === "grid" ? gridZoom : listZoom
-    readonly property real iconSize: viewMode === "grid" ? FileBrowserMetrics.gridIconSizes[zoom] : FileBrowserMetrics.listIconSizes[zoom]
+    readonly property var iconSizes: FileBrowserMetrics.iconSizesFor(viewMode)
+    readonly property real iconSize: iconSizes[Math.max(0, Math.min(iconSizes.length - 1, zoom))]
+    readonly property var fittingColumns: {
+        let available = width - iconSize - FileBrowserMetrics.listRowPadding * 3 - FileBrowserMetrics.nameColumnMinWidth;
+        const kept = [];
+        for (const id of listColumns) {
+            const needed = columnWidthFor(id) + FileBrowserMetrics.columnGap;
+            if (needed > available)
+                break;
+            available -= needed;
+            kept.push(id);
+        }
+        return kept;
+    }
     readonly property bool listing: directory.loading && directory.count === 0
     readonly property bool empty: !directory.loading && directory.error === "" && directory.count === 0
 
@@ -48,6 +65,7 @@ FocusScope {
     signal dragRequested(var paths)
     signal renameRequested(string path, string name)
     signal openRequested(string path)
+    signal revealRequested(string path)
     signal focusRequested
     signal sortRequested(string key)
     signal zoomRequested(string viewMode, int level)
@@ -84,13 +102,67 @@ FocusScope {
             renameRequested(target, name);
     }
 
+    function scrollOffset() {
+        const target = view?.activeList ?? view;
+        return target ? target.contentY - target.originY : 0;
+    }
+
+    function scrollTo(offset) {
+        const target = view?.activeList ?? view;
+        if (!target)
+            return;
+        target.contentY = target.originY + Math.max(0, Math.min(offset, target.contentHeight - target.height));
+    }
+
+    function enterCursor() {
+        const entry = cursorEntry();
+        if (entry?.isDir)
+            openRequested(entry.path);
+    }
+
+    function leaveColumn() {
+        if (FilePaths.parentOf(directory.path) === "")
+            return;
+        revealRequested(directory.path);
+    }
+
+    function cursorRect() {
+        const index = cursorIndex();
+        if (index < 0 || !view)
+            return Qt.rect(0, 0, 0, 0);
+        view.positionViewAtIndex(index, ListView.Contain);
+        const item = view.itemAtIndex(index);
+        if (!item)
+            return Qt.rect(0, 0, 0, 0);
+        const point = item.mapToItem(body, 0, 0);
+        return Qt.rect(point.x, point.y, item.width, item.height);
+    }
+
+    function toggleAtCursor() {
+        if (selection.cursorPath === "")
+            return;
+        selection.keyboardCursor = true;
+        if (multiSelect) {
+            selection.toggle(selection.cursorPath);
+            return;
+        }
+        selection.select(selection.cursorPath);
+    }
+
     function forwardItemMenu(source, index, pointX, pointY, modifiers) {
+        const entry = entryAt(index);
+        if (entry && !selection.contains(entry.path))
+            selection.select(entry.path);
         const point = source.mapToItem(body, pointX, pointY);
         itemMenuRequested(index, point.x, point.y, modifiers);
     }
 
+    function columnWidthFor(id) {
+        return columnWidths[id] ?? FileColumns.specFor(id)?.width ?? FileBrowserMetrics.columnMinWidth;
+    }
+
     function zoomBy(step) {
-        const level = Math.max(0, Math.min(FileBrowserMetrics.gridIconSizes.length - 1, zoom + step));
+        const level = Math.max(0, Math.min(iconSizes.length - 1, zoom + step));
         if (level === zoom)
             return;
         zoomRequested(viewMode, level);
@@ -188,7 +260,7 @@ FocusScope {
     }
 
     function requestCounts(first, last) {
-        if (viewMode !== "list" || !listColumns.includes("size"))
+        if (!countFolders || viewMode !== "list" || !fittingColumns.includes("size"))
             return;
         const wanted = [];
         for (let i = first; i <= Math.min(last, directory.count - 1); i++) {
@@ -285,9 +357,17 @@ FocusScope {
             moveCursor(-columns, modifiers);
             break;
         case Qt.Key_Right:
+            if (columnsMode) {
+                enterCursor();
+                break;
+            }
             moveCursor(viewMode === "grid" ? 1 : columns, modifiers);
             break;
         case Qt.Key_Left:
+            if (columnsMode) {
+                leaveColumn();
+                break;
+            }
             moveCursor(viewMode === "grid" ? -1 : -columns, modifiers);
             break;
         case Qt.Key_Home:
@@ -303,14 +383,7 @@ FocusScope {
             moveCursor(-pageStep(), modifiers);
             break;
         case Qt.Key_Space:
-            if (selection.cursorPath === "")
-                break;
-            selection.keyboardCursor = true;
-            if (multiSelect) {
-                selection.toggle(selection.cursorPath);
-                break;
-            }
-            selection.select(selection.cursorPath);
+            toggleAtCursor();
             break;
         case Qt.Key_Escape:
             if (!escapeClearsSelection || selection.empty)
@@ -324,8 +397,12 @@ FocusScope {
             }
             openRequested("..");
             break;
+        case Qt.Key_Slash:
+        case Qt.Key_Question:
+            // Left to the host: search and help, never a name prefix.
+            return;
         default:
-            if (modifiers !== Qt.NoModifier && modifiers !== Qt.ShiftModifier)
+            if (!typeAheadEnabled || (modifiers !== Qt.NoModifier && modifiers !== Qt.ShiftModifier))
                 return;
             if (event.text === "" || event.text.charCodeAt(0) < 0x20)
                 return;
@@ -363,7 +440,7 @@ FocusScope {
             renamingPath: body.renamingPath
             cutSet: body.cutSet
             childCounts: body.childCounts
-            columnIds: body.listColumns
+            columnIds: body.fittingColumns
             storedWidths: body.columnWidths
             singleClickActivates: body.singleClickActivates
             nameHighlight: body.nameHighlight
@@ -385,6 +462,15 @@ FocusScope {
             ViewBackground {
                 view: listView
             }
+        }
+    }
+
+    Component {
+        id: columnsComponent
+
+        FileColumnsView {
+            body: body
+            onViewportChanged: settle.restart()
         }
     }
 
@@ -424,7 +510,7 @@ FocusScope {
     component ColumnHeader: FileColumnHeader {
         id: columns
 
-        columnIds: body.listColumns
+        columnIds: body.fittingColumns
         widths: body.columnWidths
         sortKey: body.sortKey
         sortDescending: body.sortDescending
@@ -472,19 +558,19 @@ FocusScope {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        sourceComponent: body.viewMode === "grid" ? gridComponent : listComponent
+        sourceComponent: body.viewMode === "grid" ? gridComponent : (body.columnsMode ? columnsComponent : listComponent)
     }
 
     LoadingSkeleton {
         anchors.fill: viewLoader
         anchors.topMargin: body.view?.headerItem?.height ?? 0
-        visible: body.listing
-        rowHeight: body.viewMode === "grid" ? FileBrowserMetrics.gridIconSizes[body.zoom] : FileBrowserMetrics.listRowHeightFor(body.iconSize)
+        visible: body.listing && !body.columnsMode
+        rowHeight: body.viewMode === "grid" ? body.iconSize : FileBrowserMetrics.listRowHeightFor(body.iconSize)
     }
 
     StyledText {
         anchors.centerIn: viewLoader
-        visible: body.empty && body.emptyText !== ""
+        visible: body.empty && body.emptyText !== "" && !body.columnsMode
         text: body.emptyText
         color: Style.surfaceVariantText
         font.pixelSize: Style.fontSizeLarge

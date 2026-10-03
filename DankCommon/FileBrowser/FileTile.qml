@@ -31,14 +31,14 @@ FileItemSurface {
 
     Column {
         anchors.top: parent.top
-        anchors.topMargin: FileBrowserMetrics.gridTilePadding
+        anchors.topMargin: FileBrowserMetrics.gridTileVerticalPadding
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width - FileBrowserMetrics.gridTilePadding * 2
         spacing: FileBrowserMetrics.gridNameSpacing
 
         FileItemVisual {
             anchors.horizontalCenter: parent.horizontalCenter
-            iconSize: tile.view?.iconSize ?? FileBrowserMetrics.gridIconSizes[1]
+            iconSize: tile.view?.iconSize ?? FileBrowserMetrics.gridIconSizes[FileBrowserMetrics.defaultGridZoom]
             iconName: tile.iconName
             thumbnail: tile.thumbnail
             path: tile.path

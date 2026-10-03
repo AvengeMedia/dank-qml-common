@@ -13,7 +13,7 @@ Column {
 
     default property alias rows: body.data
 
-    spacing: Style.spacingXXS
+    spacing: FileBrowserMetrics.sidebarRowGap
 
     StyledText {
         text: section.title
@@ -28,7 +28,7 @@ Column {
         id: body
 
         width: section.width
-        spacing: Style.spacingXXS
+        spacing: FileBrowserMetrics.sidebarRowGap
     }
 
     StyledText {

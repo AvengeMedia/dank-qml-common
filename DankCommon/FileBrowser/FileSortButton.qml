@@ -51,6 +51,7 @@ Row {
     component Segment: StyledButton {
         id: segment
 
+        focusPolicy: Qt.TabFocus
         required property bool leading
         property bool round: false
         property string tooltipText: ""

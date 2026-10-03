@@ -39,11 +39,9 @@ Popup {
         return path;
     }
 
-    readonly property point anchorPoint: anchorItem ? anchorItem.mapToItem(Overlay.overlay, 0, anchorItem.height + Style.spacingXS) : Qt.point(0, 0)
-
-    parent: Overlay.overlay
-    x: anchorPoint.x
-    y: anchorPoint.y
+    parent: anchorItem
+    x: 0
+    y: (anchorItem?.height ?? 0) + Style.spacingXS
     width: Math.max(anchorItem?.width ?? 0, Style.launcherWidthMicro * 0.6)
     padding: Style.spacingXS
     modal: false

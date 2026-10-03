@@ -344,7 +344,9 @@ FocusScope {
         }
     }
 
-    Keys.onPressed: event => {
+    Keys.onPressed: event => handleKey(event)
+
+    function handleKey(event) {
         const modifiers = event.modifiers;
         const columns = view?.columnsPerRow ?? 1;
         if ((modifiers & Qt.AltModifier) !== 0)

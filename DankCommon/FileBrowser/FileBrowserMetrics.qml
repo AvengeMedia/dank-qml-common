@@ -31,9 +31,6 @@ Singleton {
     readonly property real gridTileRadius: Style.cornerRadiusL
     readonly property real gridGap: Style.spacingM
     readonly property real gridNameSpacing: Style.spacingXS
-    readonly property real quickTileIconSize: Style.spacingXL * 3
-    readonly property real quickTileSize: quickTileIconSize + Style.spacingXL * 2
-    readonly property real quickTileGap: Style.spacingL
 
     readonly property real columnPaneWidth: Style.sidebarWidth
     readonly property real previewPaneWidth: Style.sidebarWidth * 1.5
@@ -96,6 +93,7 @@ Singleton {
     readonly property int typeAheadInterval: 1000
     readonly property int activationDebounce: 400
     readonly property int suggestionRows: 8
+    readonly property int completionLimit: 500
 
     readonly property bool animationsEnabled: !Style.reduceMotion && Style.currentAnimationBaseDuration > 0
 }

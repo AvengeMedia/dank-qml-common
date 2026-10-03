@@ -20,6 +20,7 @@ Row {
     component Segment: StyledButton {
         id: segment
 
+        focusPolicy: Qt.TabFocus
         required property bool leading
         property string iconName: ""
         property string tooltipText: ""

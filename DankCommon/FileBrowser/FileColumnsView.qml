@@ -37,8 +37,14 @@ Item {
     readonly property var picked: body.selectedEntries()
     readonly property var pickedEntry: picked.length === 1 ? picked[0] : null
     readonly property string lookaheadPath: pickedEntry?.isDir ? pickedEntry.path : ""
+    readonly property real trailingWidth: Math.max(FileBrowserMetrics.previewPaneWidth, strip.width - activeColumn.x - activeColumn.width)
 
     signal viewportChanged
+
+    function revealActive() {
+        const end = row.width - strip.width;
+        strip.contentX = Math.max(0, Math.min(activeColumn.x, end));
+    }
 
     function positionViewAtIndex(index, mode) {
         activeList.positionViewAtIndex(index, mode);
@@ -74,7 +80,16 @@ Item {
     }
 
     onAncestorsChanged: syncAncestors()
+    onActivePathChanged: Qt.callLater(revealActive)
     Component.onCompleted: syncAncestors()
+
+    Connections {
+        target: columns.body.selection
+
+        function onCursorPathChanged() {
+            Qt.callLater(columns.revealActive);
+        }
+    }
 
     ListModel {
         id: ancestorModel
@@ -216,8 +231,8 @@ Item {
         contentHeight: height
         flickableDirection: Flickable.HorizontalFlick
         clip: true
-        onContentWidthChanged: contentX = Math.max(0, contentWidth - width)
-        onWidthChanged: contentX = Math.max(0, contentWidth - width)
+        onContentWidthChanged: columns.revealActive()
+        onWidthChanged: columns.revealActive()
 
         Row {
             id: row
@@ -311,7 +326,7 @@ Item {
                 active: columns.pickedEntry !== null && !columns.pickedEntry.isDir
                 visible: active
                 sourceComponent: ColumnFrame {
-                    paneWidth: FileBrowserMetrics.previewPaneWidth
+                    paneWidth: columns.trailingWidth
 
                     FilePreviewPane {
                         anchors.fill: parent
@@ -327,7 +342,7 @@ Item {
                 active: columns.picked.length > 1
                 visible: active
                 sourceComponent: ColumnFrame {
-                    paneWidth: FileBrowserMetrics.previewPaneWidth
+                    paneWidth: columns.trailingWidth
 
                     Column {
                         anchors.centerIn: parent

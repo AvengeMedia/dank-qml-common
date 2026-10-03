@@ -12,10 +12,34 @@ FocusScope {
     property color chipColor: Style.chipSurface
     property bool editing: false
     property var suggestions: []
+    property var backend: null
+
+    property var completions: []
+    property string completionKey: ""
+    property int completionRequest: 0
+
+    readonly property bool canComplete: typeof backend?.list === "function"
+    readonly property string typedPath: {
+        const typed = field.text.trim();
+        if (typed === "" || !(typed.startsWith("/") || typed.startsWith("~")))
+            return "";
+        const expanded = FilePaths.expandTilde(typed);
+        return expanded === path ? expanded + "/" : expanded;
+    }
+    readonly property string completionDir: {
+        if (typedPath === "")
+            return "";
+        if (typedPath.endsWith("/"))
+            return typedPath.length > 1 ? typedPath.replace(/\/+$/, "") : "/";
+        return FilePaths.parentOf(typedPath);
+    }
+    readonly property string completionPrefix: typedPath.endsWith("/") ? "" : FilePaths.baseName(typedPath).toLowerCase()
 
     readonly property var matchingSuggestions: {
         if (!editing)
             return [];
+        if (typedPath !== "" && canComplete)
+            return completions.filter(entry => entry.name.toLowerCase().startsWith(completionPrefix)).slice(0, FileBrowserMetrics.suggestionRows).map(entry => entry.path);
         const typed = field.text.trim().toLowerCase();
         const out = [];
         for (const candidate of suggestions) {
@@ -70,12 +94,55 @@ FocusScope {
         suggestionPopup.highlightIndex = -1;
         field.forceActiveFocus();
         field.selectAll();
+        fetchCompletions();
+    }
+
+    function fetchCompletions() {
+        if (!editing || !canComplete || completionDir === "") {
+            completions = [];
+            completionKey = "";
+            return;
+        }
+        const hidden = completionPrefix.startsWith(".");
+        const key = completionDir + (hidden ? "\u0000." : "");
+        if (key === completionKey)
+            return;
+        completionKey = key;
+        const request = ++completionRequest;
+        backend.list(completionDir, {
+            "limit": FileBrowserMetrics.completionLimit,
+            "includeHidden": hidden,
+            "dirsFirst": true,
+            "sortKey": "name"
+        }, result => {
+            if (request !== bar.completionRequest)
+                return;
+            bar.completions = result.error ? [] : (result.entries || []).filter(entry => entry.isDir);
+        });
+    }
+
+    function completeHighlighted() {
+        const picked = suggestionPopup.highlightedPath() !== "" ? suggestionPopup.highlightedPath() : (matchingSuggestions.length === 1 ? matchingSuggestions[0] : "");
+        if (picked === "")
+            return false;
+        field.text = picked + "/";
+        field.cursorPosition = field.text.length;
+        suggestionPopup.highlightIndex = -1;
+        return true;
     }
 
     function stopEditing() {
         editing = false;
         suggestionPopup.highlightIndex = -1;
+        completions = [];
+        completionKey = "";
         editingFinished();
+    }
+
+    onCompletionDirChanged: fetchCompletions()
+    onCompletionPrefixChanged: {
+        if (completionPrefix.startsWith(".") !== completionKey.endsWith("."))
+            fetchCompletions();
     }
 
     function acceptTyped() {
@@ -105,6 +172,10 @@ FocusScope {
             break;
         case Qt.Key_Up:
             suggestionPopup.move(-1);
+            break;
+        case Qt.Key_Tab:
+            if (!completeHighlighted())
+                return;
             break;
         default:
             return;

@@ -28,6 +28,7 @@ StyledButton {
         return selected ? Style.onSelectedContainer : Style.surfaceText;
     }
 
+    focusPolicy: Qt.TabFocus
     width: parent?.width ?? 0
     implicitHeight: FileBrowserMetrics.sidebarRowHeight
     radius: FileBrowserMetrics.sidebarRowRadius

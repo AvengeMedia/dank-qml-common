@@ -14,6 +14,7 @@ StyledButton {
 
     readonly property color contentColor: current ? Style.onSelectedContainer : Style.surfaceText
 
+    focusPolicy: Qt.TabFocus
     implicitWidth: row.implicitWidth + FileBrowserMetrics.pathPillPadding * 2
     implicitHeight: FileBrowserMetrics.pathPillHeight
     radius: FileBrowserMetrics.pathPillRadius

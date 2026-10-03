@@ -302,6 +302,7 @@ FocusScope {
                 homePath: root.homePath
                 chipColor: root.chipColor
                 suggestions: root.pathSuggestions
+                backend: root.backend
                 onEditingFinished: root.focusBody()
                 onNavigated: target => {
                     root.focusRequested();

@@ -15,6 +15,9 @@ var SPEC = {
     perMonitorWallpaper: {
         def: false
     },
+    perModeWallpaper: {
+        def: false
+    },
     monitorWallpapers: {
         def: {}
     },

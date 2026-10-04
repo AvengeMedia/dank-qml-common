@@ -9,7 +9,7 @@ FocusScope {
     property int minute: 0
     property bool is24Hour: false
     property string title: I18n.tr("Select time")
-    property real faceSize: Style.clockFaceSize
+    property real faceSize: Math.min(Style.clockFaceSize, height - chromeHeight)
 
     signal accepted(int hour, int minute)
     signal rejected
@@ -23,6 +23,7 @@ FocusScope {
 
     readonly property bool animationsEnabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
     readonly property real digitHeight: Style.iconButtonSize * 2
+    readonly property real chromeHeight: Style.spacingXL * 5 + Style.spacingL + Style.spacingXS + Style.spacingM + titleText.implicitHeight + digitHeight + actionRow.implicitHeight
     readonly property real digitWidth: is24Hour ? digitHeight + Style.spacingL * 2 + Style.spacingXXS : digitHeight + Style.spacingL
     readonly property real outerRingRadius: faceSize * Style.clockOuterRingRatio
     readonly property real innerRingRadius: faceSize * Style.clockInnerRingRatio
@@ -167,7 +168,7 @@ FocusScope {
     Rectangle {
         id: card
 
-        width: root.faceSize + Style.spacingXL * 3
+        width: Math.max(root.faceSize, digitRow.implicitWidth) + Style.spacingXL * 3
         height: cardColumn.implicitHeight + Style.spacingXL * 2
         anchors.centerIn: parent
         radius: Style.windowRadius
@@ -208,6 +209,7 @@ FocusScope {
             spacing: 0
 
             StyledText {
+                id: titleText
                 text: root.title
                 font.pixelSize: Style.fontSizeMedium
                 font.weight: Style.fontWeightMedium
@@ -215,6 +217,7 @@ FocusScope {
             }
 
             RowLayout {
+                id: digitRow
                 Layout.alignment: Qt.AlignHCenter
                 Layout.topMargin: Style.spacingL + Style.spacingXS
                 spacing: 0
@@ -543,6 +546,7 @@ FocusScope {
             }
 
             Row {
+                id: actionRow
                 Layout.alignment: Qt.AlignRight
                 Layout.topMargin: Style.spacingXL
                 spacing: Style.spacingS

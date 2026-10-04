@@ -2,7 +2,52 @@
 .import "./SpecUtil.js" as Util
 .import "../Shape.js" as Shape
 
+function lockWidgetDefaults() {
+    const common = {
+        displayPreferences: ["all"],
+        syncPositionAcrossScreens: true
+    };
+    const entry = (id, widgetType, enabled, config) => ({
+                id: id,
+                widgetType: widgetType,
+                enabled: enabled,
+                config: Object.assign({}, common, config)
+            });
+    const tint = {
+        colorMode: "default",
+        customColor: "#ffffff"
+    };
+    return [entry("lock_clock", "lockClock", true, Object.assign({
+            style: "expressive",
+            weight: 0,
+            twoTone: true,
+            autoPosition: true,
+            showAnalogNumbers: false,
+            showAnalogSeconds: true
+        }, tint)), entry("lock_date", "lockDate", true, Object.assign({
+            format: "short"
+        }, tint)), entry("lock_auth", "lockAuth", true, {
+            style: "expressive",
+            profileVisibility: "typing",
+            passwordVisibility: "typing"
+        }), entry("lock_notifications", "lockNotifications", false, {
+            mode: 1
+        }), entry("lock_status", "lockStatus", true, {
+            showMediaPlayer: true,
+            showWeather: true,
+            background: false
+        }), entry("lock_power", "lockPower", false, {
+            shape: "round"
+        })];
+}
+
 var SPEC = {
+    lockScreenWidgetInstances: {
+        def: lockWidgetDefaults()
+    },
+    displayNameMode: {
+        def: "system"
+    },
     currentThemeName: {
         def: "purple",
         onChange: "applyStoredTheme"

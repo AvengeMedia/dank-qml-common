@@ -26,5 +26,11 @@ var SPEC = {
     },
     weatherCoordinates: {
         def: "40.7128,-74.0060"
+    },
+    desktopWidgetInstancePositions: {
+        def: {}
+    },
+    lockScreenAutoPositions: {
+        def: {}
     }
 };

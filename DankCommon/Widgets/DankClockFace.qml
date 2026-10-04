@@ -10,6 +10,7 @@ Item {
     property string dateText: ""
     property bool stacked: false
     property color color: Style.primary
+    property color minutesColor: color
     property color supportingColor: Style.onSurfaceVariant
 
     readonly property bool tall: height > Style.buttonHeightM * 2
@@ -33,17 +34,30 @@ Item {
     implicitWidth: Style.fontSizeDisplay * 6
     implicitHeight: Style.fontSizeDisplay * 4
 
+    function escapedDigits(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
     Column {
         y: (root.digitsHeight - height) / 2
         width: root.digitsWidth
         spacing: -Style.spacingS
 
         Digits {
-            text: root.vertical ? root.hours : root.timeText
+            readonly property bool accented: !root.vertical && root.minutesColor !== root.color
+            textFormat: accented ? Text.StyledText : Text.PlainText
+            text: {
+                if (root.vertical)
+                    return root.hours;
+                if (!accented)
+                    return root.timeText;
+                return root.escapedDigits(root.hours + ":") + '<font color="' + root.minutesColor + '">' + root.escapedDigits(root.minutes + (root.inlineSeconds ? ":" + root.seconds : "")) + '</font>';
+            }
         }
 
         Digits {
             text: root.minutes
+            color: root.minutesColor
             visible: root.vertical
         }
     }

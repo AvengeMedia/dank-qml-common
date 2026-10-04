@@ -24,14 +24,14 @@ function lockWidgetDefaults() {
             autoPosition: true,
             showAnalogNumbers: false,
             showAnalogSeconds: true
-        }, tint)), entry("lock_date", "lockDate", true, Object.assign({
+        }, tint)), entry("lock_date", "lockDate", false, Object.assign({
             format: "short"
         }, tint)), entry("lock_auth", "lockAuth", true, {
             style: "expressive",
             profileVisibility: "typing",
             passwordVisibility: "typing"
-        }), entry("lock_notifications", "lockNotifications", false, {
-            mode: 1
+        }), entry("lock_notifications", "lockNotifications", true, {
+            mode: 2
         }), entry("lock_status", "lockStatus", true, {
             showMediaPlayer: true,
             showWeather: true,

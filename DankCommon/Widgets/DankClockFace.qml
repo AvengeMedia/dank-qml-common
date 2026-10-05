@@ -12,6 +12,12 @@ Item {
     property color color: Style.primary
     property color minutesColor: color
     property color supportingColor: Style.onSurfaceVariant
+    property string fontFamily: ""
+    property int weight: 0
+    property bool rounded: true
+
+    readonly property bool variableFont: fontFamily === "" || fontFamily === Style.defaultFontFamily
+    readonly property int digitWeight: weight > 0 ? weight : 750
 
     readonly property bool tall: height > Style.buttonHeightM * 2
     readonly property bool vertical: tall && (stacked || height > width * 0.6)
@@ -91,16 +97,17 @@ Item {
         height: root.rowHeight
         color: root.color
         font.pixelSize: root.displaySize
+        font.family: root.fontFamily || resolvedFontFamily
         // only Normal resolves to the variable face, other weights pick axis-less static instances
-        font.weight: Font.Normal
+        font.weight: root.variableFont ? Font.Normal : Math.min(Font.Black, root.digitWeight)
         font.features: ({
                 "tnum": 1
             })
-        font.variableAxes: ({
-                "ROND": 100,
-                "wght": 750,
-                "opsz": root.displaySize
-            })
+        font.variableAxes: root.variableFont ? {
+            "ROND": root.rounded ? 100 : 0,
+            "wght": root.digitWeight,
+            "opsz": root.displaySize
+        } : {}
         minimumPixelSize: Style.fontSizeLarge
         fontSizeMode: Text.HorizontalFit
         horizontalAlignment: Text.AlignHCenter

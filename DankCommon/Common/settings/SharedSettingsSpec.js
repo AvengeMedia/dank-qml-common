@@ -44,9 +44,37 @@ function lockWidgetDefaults() {
         })];
 }
 
+var GREETER_WIDGET_TYPES = ["desktopClock", "lockDate", "lockAuth", "lockStatus", "lockPower", "greeterSession"];
+
+function greeterSessionDefault() {
+    return {
+        id: "greeter_session",
+        widgetType: "greeterSession",
+        enabled: true,
+        config: {
+            displayPreferences: ["all"],
+            syncPositionAcrossScreens: true
+        }
+    };
+}
+
+// The greeter shows the lock widgets it can render plus its own session picker.
+function greeterWidgetsFromLock(lockInstances, previous) {
+    const mirrored = (lockInstances || []).filter(inst => GREETER_WIDGET_TYPES.includes(inst.widgetType)).map(inst => JSON.parse(JSON.stringify(inst)));
+    const own = (previous || []).filter(inst => inst.widgetType === "greeterSession").map(inst => JSON.parse(JSON.stringify(inst)));
+    return mirrored.concat(own.length ? own : [greeterSessionDefault()]);
+}
+
+function greeterWidgetDefaults() {
+    return greeterWidgetsFromLock(lockWidgetDefaults(), []);
+}
+
 var SPEC = {
     lockScreenWidgetInstances: {
         def: lockWidgetDefaults()
+    },
+    greeterWidgetInstances: {
+        def: greeterWidgetDefaults()
     },
     displayNameMode: {
         def: "system"

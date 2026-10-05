@@ -16,7 +16,7 @@ test("widget behavior", { concurrency: 2 }, async t => {
         try {
             const configDirectory = join(directory, "shell");
             mkdirSync(configDirectory);
-            for (const name of ["DankCommon", "Common", "Services"])
+            for (const name of ["DCommon", "Common", "Services"])
                 symlinkSync(fileURLToPath(new URL(`../${name}`, import.meta.url)), join(configDirectory, name));
             copyFileSync(new URL(`qml/${fixture}.qml`, import.meta.url), join(configDirectory, "shell.qml"));
             mkdirSync(join(directory, "runtime"), { mode: 0o700 });

@@ -1,8 +1,8 @@
 import QtQuick
 import QtTest
 import Quickshell
-import qs.DankCommon.Common
-import qs.DankCommon.Widgets
+import qs.DCommon.Common
+import qs.DCommon.Widgets
 
 ShellRoot {
     id: root
@@ -33,7 +33,7 @@ ShellRoot {
         implicitWidth: 600
         implicitHeight: 640
 
-        DankDialog {
+        DDialog {
             id: dialog
             anchors.fill: parent
             title: "Dialog title"
@@ -45,7 +45,7 @@ ShellRoot {
                 width: parent.width
                 height: 800
             }
-            DankTextField {
+            DTextField {
                 id: field
                 width: parent.width
                 outlined: true
@@ -53,14 +53,14 @@ ShellRoot {
             }
 
             actions: [
-                DankButton {
+                DButton {
                     id: cancel
                     text: "Cancel"
                     maximumWidth: dialog.actionWidth
                     wrapText: true
                     onClicked: root.rejects++
                 },
-                DankButton {
+                DButton {
                     id: confirm
                     text: "Confirm"
                     maximumWidth: dialog.actionWidth

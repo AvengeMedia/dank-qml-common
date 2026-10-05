@@ -1,8 +1,8 @@
 import QtQuick
 import QtTest
 import Quickshell
-import qs.DankCommon.Common
-import qs.DankCommon.Widgets
+import qs.DCommon.Common
+import qs.DCommon.Widgets
 
 ShellRoot {
     id: root
@@ -29,7 +29,7 @@ ShellRoot {
                 height: slider.height
                 y: 24
 
-                DankSlider {
+                DSlider {
                     id: slider
                     width: parent.width
                     value: 50
@@ -38,7 +38,7 @@ ShellRoot {
             }
         }
 
-        DankFlickable {
+        DFlickable {
             id: scroll
             y: plain.height
             width: parent.width

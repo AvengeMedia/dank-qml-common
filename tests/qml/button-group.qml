@@ -1,8 +1,8 @@
 import QtQuick
 import QtTest
 import Quickshell
-import qs.DankCommon.Widgets
-import qs.DankCommon.Common
+import qs.DCommon.Widgets
+import qs.DCommon.Common
 
 ShellRoot {
     id: root
@@ -26,7 +26,7 @@ ShellRoot {
         implicitWidth: 640
         implicitHeight: 200
 
-        DankButtonGroup {
+        DButtonGroup {
             id: group
             x: 20
             y: 20

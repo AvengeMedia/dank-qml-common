@@ -5,7 +5,7 @@ import test from "node:test";
 
 const rgba = (r, g, b, a = 1) => ({ r, g, b, a });
 const context = vm.createContext({ Qt: { rgba } });
-vm.runInContext(readFileSync(new URL("../DankCommon/Common/Hct.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), context);
+vm.runInContext(readFileSync(new URL("../DCommon/Common/Hct.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), context);
 const fixture = JSON.parse(readFileSync(new URL("./hct-fixture.json", import.meta.url), "utf8"));
 
 const argbOf = c => (255 << 24 | Math.round(c.r * 255) << 16 | Math.round(c.g * 255) << 8 | Math.round(c.b * 255)) >>> 0;

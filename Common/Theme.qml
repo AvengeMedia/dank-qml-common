@@ -2,11 +2,11 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import "../DankCommon/Common/Shape.js" as Shape
-import "../DankCommon/Common/Surface.js" as Surface
-import "../DankCommon/Common/Accents.js" as Accents
+import "../DCommon/Common/Shape.js" as Shape
+import "../DCommon/Common/Surface.js" as Surface
+import "../DCommon/Common/Accents.js" as Accents
 import Quickshell
-import qs.DankCommon.Common
+import qs.DCommon.Common
 
 Singleton {
     id: root

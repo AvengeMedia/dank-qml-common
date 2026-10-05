@@ -1,6 +1,6 @@
 import QtQuick
-import qs.DankCommon.Widgets
-import qs.DankCommon.FileBrowser
+import qs.DCommon.Widgets
+import qs.DCommon.FileBrowser
 import qs.Common
 
 Column {
@@ -23,19 +23,19 @@ Column {
         width: parent.width
         spacing: Theme.spacingL
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Name")
             placeholderText: I18n.tr("Full name")
         }
 
-        DankSearchField {
+        DSearchField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             placeholderText: I18n.tr("Search")
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Username")
@@ -44,7 +44,7 @@ Column {
             showClearButton: true
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Password")
@@ -53,7 +53,7 @@ Column {
             showPasswordToggle: true
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Confirm password")
@@ -64,7 +64,7 @@ Column {
             supportingText: I18n.tr("Passwords do not match")
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Disabled")
@@ -73,7 +73,7 @@ Column {
             enabled: false
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             labelText: I18n.tr("Read only")
@@ -82,13 +82,13 @@ Column {
             showClearButton: true
         }
 
-        DankTextField {
+        DTextField {
             width: Math.min(Theme.fieldDefaultWidth, root.width)
             outlined: true
             placeholderText: I18n.tr("Command")
         }
 
-        DankDropdown {
+        DDropdown {
             dropdownWidth: Math.min(Theme.fieldDefaultWidth, root.width)
             options: [I18n.tr("Default"), I18n.tr("Custom")]
             currentValue: options[0]
@@ -104,7 +104,7 @@ Column {
         spacing: Theme.spacingS
         Repeater {
             model: ["Ctrl", "Shift", "K"]
-            DankKeycap {
+            DKeycap {
                 required property string modelData
                 text: modelData
             }
@@ -121,7 +121,7 @@ Column {
 
         Repeater {
             model: ["standard", "filled", "tonal", "outlined"]
-            DankIconButton {
+            DIconButton {
                 required property string modelData
                 variant: modelData
                 iconName: "favorite"
@@ -130,7 +130,7 @@ Column {
             }
         }
 
-        DankIconButton {
+        DIconButton {
             size: "m"
             widthMode: "wide"
             variant: "tonal"
@@ -156,7 +156,7 @@ Column {
                 if (!visible)
                     tooltip.hide();
             }
-            DankIcon {
+            DIcon {
                 anchors.centerIn: parent
                 name: "help"
                 size: Theme.iconSize
@@ -165,7 +165,7 @@ Column {
         }
     }
 
-    DankTooltipV2 {
+    DTooltipV2 {
         id: tooltip
     }
 
@@ -179,7 +179,7 @@ Column {
 
         Repeater {
             model: ["primary", "secondary", "tertiary"]
-            DankCard {
+            DCard {
                 id: previewCard
                 required property string modelData
                 width: Math.min(Theme.fieldDefaultWidth, root.width)
@@ -196,7 +196,7 @@ Column {
 
         Repeater {
             model: ["cookie4", "cookie9", "heart", "clover4"]
-            DankMaterialShape {
+            DMaterialShape {
                 required property string modelData
                 width: Theme.buttonHeightM
                 height: width
@@ -209,7 +209,7 @@ Column {
         text: I18n.tr("Widgets")
     }
 
-    DankReorderGroup {
+    DReorderGroup {
         id: reorderGroup
         coordinateItem: reorderArea
         onTransferred: (source, sourceIndex, target, targetIndex) => {
@@ -228,7 +228,7 @@ Column {
 
         Repeater {
             model: 2
-            DankReorderList {
+            DReorderList {
                 id: reorderList
                 required property int index
                 property var entries: index === 0 ? [I18n.tr("Clock"), I18n.tr("Weather")] : [I18n.tr("CPU"), I18n.tr("Memory")]
@@ -241,7 +241,7 @@ Column {
                     entries = indices.map(i => entries[i]);
                 }
 
-                delegate: DankListItem {
+                delegate: DListItem {
                     id: entry
                     required property int index
                     required property string modelData
@@ -254,7 +254,7 @@ Column {
                         handle.forceActiveFocus(reason);
                     }
 
-                    DankDragHandle {
+                    DDragHandle {
                         id: handle
                         anchors.left: parent.left
                         anchors.leftMargin: Theme.spacingS
@@ -291,13 +291,13 @@ Column {
         width: parent.width
         spacing: Theme.spacingL
 
-        DankMonthGrid {
+        DMonthGrid {
             width: Math.min(Theme.clockFaceSize, root.width)
             height: width
             onDayClicked: date => selectedDate = date
         }
 
-        DankClockFace {
+        DClockFace {
             width: Math.min(Theme.clockFaceSize, root.width)
             height: width
             hours: "10"
@@ -305,7 +305,7 @@ Column {
             dateText: Qt.formatDate(new Date(), Qt.DefaultLocaleShortDate)
         }
 
-        DankAnalogClock {
+        DAnalogClock {
             width: Math.min(Theme.clockFaceSize, root.width)
             height: width
             hours: 10
@@ -321,7 +321,7 @@ Column {
         text: I18n.tr("System monitor")
     }
 
-    DankSparkline {
+    DSparkline {
         width: parent.width
         height: Theme.listItemTwoLineHeight
         maximum: 100
@@ -332,10 +332,10 @@ Column {
     Row {
         spacing: Theme.spacingL
 
-        DankRingGauge {
+        DRingGauge {
             value: 0.4
 
-            DankIcon {
+            DIcon {
                 anchors.centerIn: parent
                 name: "memory"
                 size: Theme.iconSizeSmall
@@ -343,7 +343,7 @@ Column {
             }
         }
 
-        DankRingGauge {
+        DRingGauge {
             width: Theme.iconButtonSize * 2
             height: width
             value: 0.62
@@ -352,7 +352,7 @@ Column {
             strokeWidth: Theme.spacingXS + Theme.spacingXXS
             trackGap: Theme.spacingXXS
 
-            DankIcon {
+            DIcon {
                 anchors.centerIn: parent
                 name: "smartphone"
                 size: Theme.iconSize
@@ -365,7 +365,7 @@ Column {
         text: I18n.tr("Location")
     }
 
-    DankLocationSearch {
+    DLocationSearch {
         width: parent.width
         currentLocation: "New York"
     }

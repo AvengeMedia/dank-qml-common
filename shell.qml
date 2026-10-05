@@ -1,14 +1,14 @@
 //@ pragma UseQApplication
 
 import QtQuick
-import qs.DankCommon.Widgets
+import qs.DCommon.Widgets
 import Quickshell
 import qs.Common
 import qs.Common as App
 import qs.Services as AppServices
-import qs.DankCommon.Common
-import qs.DankCommon.Common as DC
-import qs.DankCommon.FileBrowser
+import qs.DCommon.Common
+import qs.DCommon.Common as DC
+import qs.DCommon.FileBrowser
 import qs.Services
 
 ShellRoot {
@@ -52,7 +52,7 @@ ShellRoot {
         readonly property int presetWidth: widthPresets[widthPresetIndex].value
         readonly property string layoutClass: width < Style.smallBreakpoint ? "small" : width < Style.mediumBreakpoint ? "medium" : "large"
 
-        title: "DankCommon Gallery"
+        title: "DCommon Gallery"
         implicitWidth: presetWidth
         implicitHeight: 800
         minimumSize: Qt.size(360, 400)
@@ -79,7 +79,7 @@ ShellRoot {
                     anchors.margins: Theme.spacingM
                     spacing: Theme.spacingM
 
-                    DankButton {
+                    DButton {
                         text: I18n.tr("Text fields")
                         onClicked: galleryFlickable.contentY = widgetExamples.y
                     }
@@ -94,7 +94,7 @@ ShellRoot {
                             color: Theme.surfaceVariantText
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: parent.width
                             Accessible.name: I18n.tr("Radius scale")
                             value: Theme.radiusStrength
@@ -113,7 +113,7 @@ ShellRoot {
                             color: Theme.surfaceVariantText
                         }
 
-                        DankButtonGroup {
+                        DButtonGroup {
                             model: window.widthPresets.map(p => p.label)
                             currentIndex: window.widthPresetIndex
                             onSelectionChanged: (index, selected) => {
@@ -152,7 +152,7 @@ ShellRoot {
                 border.width: 1
                 clip: true
 
-                DankFlickable {
+                DFlickable {
                     id: galleryFlickable
                     anchors.fill: parent
                     anchors.margins: Theme.spacingM
@@ -173,7 +173,7 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankButton {
+                            DButton {
                                 property int clicks: 0
 
                                 text: clicks > 0 ? `Clicked ${clicks}x` : "Filled"
@@ -181,20 +181,20 @@ ShellRoot {
                                 onClicked: clicks++
                             }
 
-                            DankButton {
+                            DButton {
                                 text: "Tonal"
                                 backgroundColor: Theme.secondaryContainer
                                 textColor: Theme.onSecondaryContainer
                             }
 
-                            DankButton {
+                            DButton {
                                 text: "Large"
                                 buttonHeight: 56
                                 iconName: "schedule"
                                 onClicked: timePicker.open()
                             }
 
-                            DankButton {
+                            DButton {
                                 text: "Square button"
                                 buttonHeight: 56
                                 shape: "square"
@@ -202,20 +202,20 @@ ShellRoot {
                                 onClicked: timePicker.open()
                             }
 
-                            DankActionButton {
+                            DActionButton {
                                 iconName: "info"
                                 buttonSize: Theme.iconButtonSize
                                 tooltipText: I18n.tr("Icon button")
                             }
 
-                            DankRefreshButton {
+                            DRefreshButton {
                                 property bool spin: false
                                 busy: spin
                                 onClicked: spin = !spin
                             }
                         }
 
-                        DankButtonGroup {
+                        DButtonGroup {
                             model: ["List", "Grid", "Tree"]
                             currentIndex: 0
                             onSelectionChanged: (index, selected) => {
@@ -225,7 +225,7 @@ ShellRoot {
                         }
 
                         Section {
-                            text: "DankSplitButton"
+                            text: "DSplitButton"
                         }
 
                         Column {
@@ -233,7 +233,7 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankSplitButton {
+                            DSplitButton {
                                 id: splitSortButton
                                 property bool descending: false
                                 property string sortBy: I18n.tr("Name")
@@ -250,7 +250,7 @@ ShellRoot {
                                     splitSortMenu.openDropdownMenu();
                                 }
 
-                                DankDropdown {
+                                DDropdown {
                                     id: splitSortMenu
                                     showTrigger: false
                                     popupAnchorItem: splitSortButton.trailingButton
@@ -261,7 +261,7 @@ ShellRoot {
                                 }
                             }
 
-                            DankSplitButton {
+                            DSplitButton {
                                 id: splitFilterButton
                                 property string filter: I18n.tr("Enabled")
                                 text: I18n.tr("Filter") + ": " + filter
@@ -276,7 +276,7 @@ ShellRoot {
                                     splitFilterMenu.openDropdownMenu();
                                 }
 
-                                DankDropdown {
+                                DDropdown {
                                     id: splitFilterMenu
                                     showTrigger: false
                                     popupAnchorItem: splitFilterButton.trailingButton
@@ -294,7 +294,7 @@ ShellRoot {
                                 Repeater {
                                     model: ["filled", "tonal", "outlined", "elevated"]
 
-                                    DankSplitButton {
+                                    DSplitButton {
                                         required property string modelData
                                         property int clicks: 0
                                         text: modelData + (clicks ? " · " + clicks : "")
@@ -306,7 +306,7 @@ ShellRoot {
                                     }
                                 }
 
-                                DankSplitButton {
+                                DSplitButton {
                                     text: I18n.tr("Disabled")
                                     iconName: "add"
                                     enabled: false
@@ -317,7 +317,7 @@ ShellRoot {
                             Repeater {
                                 model: ["xs", "s", "m", "l", "xl"]
 
-                                DankSplitButton {
+                                DSplitButton {
                                     required property string modelData
                                     property int clicks: 0
                                     text: modelData.toUpperCase() + (clicks ? " · " + clicks : "")
@@ -330,14 +330,14 @@ ShellRoot {
                             }
                         }
 
-                        DankButtonGroup {
+                        DButtonGroup {
                             model: ["Mon", "Tue", "Wed", "Thu", "Fri"]
                             selectionMode: "multi"
                             initialSelection: ["Mon", "Fri"]
                         }
 
                         Section {
-                            text: "DankFab"
+                            text: "DFab"
                         }
 
                         Flow {
@@ -347,7 +347,7 @@ ShellRoot {
                             Repeater {
                                 model: ["primaryContainer", "secondaryContainer", "tertiaryContainer", "primary"]
 
-                                DankFab {
+                                DFab {
                                     required property string modelData
                                     text: modelData
                                     iconName: "edit"
@@ -355,12 +355,12 @@ ShellRoot {
                                 }
                             }
 
-                            DankFab {
+                            DFab {
                                 iconName: "add"
                                 Accessible.name: I18n.tr("Add")
                             }
 
-                            DankFab {
+                            DFab {
                                 property bool spin: false
                                 text: I18n.tr("Sync")
                                 iconName: "sync"
@@ -373,7 +373,7 @@ ShellRoot {
                             text: I18n.tr("Selection")
                         }
 
-                        DankToggle {
+                        DToggle {
                             id: featureToggle
 
                             text: I18n.tr("Toggle")
@@ -382,7 +382,7 @@ ShellRoot {
                             onToggled: checked => featureToggle.checked = checked
                         }
 
-                        DankToggle {
+                        DToggle {
                             id: gatedToggle
 
                             text: "Gated toggle"
@@ -391,12 +391,12 @@ ShellRoot {
                             onToggled: checked => gatedToggle.checked = checked
                         }
 
-                        DankFilterChips {
+                        DFilterChips {
                             width: Math.min(340, gallery.width)
                             model: ["All", "Active", "Muted"]
                         }
 
-                        DankTabBar {
+                        DTabBar {
                             width: Math.min(340, gallery.width)
                             model: [
                                 {
@@ -419,7 +419,7 @@ ShellRoot {
                             text: I18n.tr("Sliders")
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 50
                             step: 25
@@ -427,20 +427,20 @@ ShellRoot {
                             onSliderValueChanged: newValue => value = newValue
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 30
                             enabled: false
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 65
                             size: "m"
                             onSliderValueChanged: newValue => value = newValue
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 65
                             size: "m"
@@ -449,7 +449,7 @@ ShellRoot {
                             insetIconPosition: "end"
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 45
                             size: "xl"
@@ -467,12 +467,12 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankSearchField {
+                            DSearchField {
                                 width: Math.min(300, gallery.width)
                                 placeholderText: "Search settings"
                             }
 
-                            DankTextField {
+                            DTextField {
                                 width: Math.min(300, gallery.width)
                                 labelText: "Password"
                                 outlined: true
@@ -489,13 +489,13 @@ ShellRoot {
                             flickable: galleryFlickable
                         }
 
-                        DankTextEdit {
+                        DTextEdit {
                             width: parent.width
                             leftIconName: "edit"
                             placeholderText: "Multi-line notes..."
                         }
 
-                        DankDropdown {
+                        DDropdown {
                             width: Math.min(320, gallery.width)
                             text: "Fruit"
                             description: "Fuzzy search enabled"
@@ -505,7 +505,7 @@ ShellRoot {
                             onValueChanged: value => currentValue = value
                         }
 
-                        DankCollapsibleSection {
+                        DCollapsibleSection {
                             width: Math.min(340, gallery.width)
                             title: "Details"
                             description: "Grouped header, expands below"
@@ -516,7 +516,7 @@ ShellRoot {
                             }
                         }
 
-                        DankNumberStepper {
+                        DNumberStepper {
                             property int count: 5
 
                             text: count
@@ -524,7 +524,7 @@ ShellRoot {
                             onDecrement: () => count--
                         }
 
-                        DankTimePicker {
+                        DTimePicker {
                             id: timePicker
                             parent: window.contentItem
                             hour: 7
@@ -540,25 +540,25 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankButton {
+                            DButton {
                                 text: I18n.tr("Pick a file")
                                 iconName: "folder_open"
                                 onClicked: fileBrowser.open()
                             }
 
-                            DankButton {
+                            DButton {
                                 text: I18n.tr("Pick a folder")
                                 iconName: "folder"
                                 onClicked: folderBrowser.open()
                             }
 
-                            DankButton {
+                            DButton {
                                 text: "Pick several files"
                                 iconName: "library_add_check"
                                 onClicked: multiBrowser.open()
                             }
 
-                            DankButton {
+                            DButton {
                                 text: "Save a file"
                                 iconName: "save"
                                 onClicked: saveBrowser.open()
@@ -573,7 +573,7 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankButton {
+                            DButton {
                                 id: sheetOpener
 
                                 text: I18n.tr("Open bottom sheet")
@@ -584,7 +584,7 @@ ShellRoot {
                                 }
                             }
 
-                            DankButton {
+                            DButton {
                                 text: I18n.tr("Open modal sheet")
                                 iconName: "lock"
                                 onClicked: {
@@ -594,7 +594,7 @@ ShellRoot {
                             }
                         }
 
-                        DankBottomSheet {
+                        DBottomSheet {
                             id: bottomSheet
 
                             parent: window.contentItem
@@ -603,7 +603,7 @@ ShellRoot {
                             returnFocusItem: sheetOpener
                             onDismissRequested: opened = false
 
-                            DankToggle {
+                            DToggle {
                                 id: mirrorToggle
 
                                 width: parent.width
@@ -616,7 +616,7 @@ ShellRoot {
                             Repeater {
                                 model: 8
 
-                                DankToggle {
+                                DToggle {
                                     required property int index
 
                                     width: parent.width
@@ -626,7 +626,7 @@ ShellRoot {
                                 }
                             }
 
-                            DankButton {
+                            DButton {
                                 width: parent.width
                                 text: I18n.tr("Close")
                                 onClicked: bottomSheet.opened = false
@@ -641,42 +641,42 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingM
 
-                            DankIcon {
+                            DIcon {
                                 name: "palette"
                                 color: Theme.primary
                             }
 
-                            DankIcon {
+                            DIcon {
                                 name: "favorite"
                                 filled: true
                                 color: Theme.error
                             }
 
-                            DankNFIcon {
+                            DNFIcon {
                                 name: "arch"
                                 size: Theme.iconSizeLarge
                             }
 
-                            DankNFIcon {
+                            DNFIcon {
                                 name: "file"
                                 size: Theme.iconSizeLarge
                             }
 
-                            DankColorSwatch {
+                            DColorSwatch {
                                 swatchColor: Theme.primary
                             }
 
-                            DankColorSwatch {
+                            DColorSwatch {
                                 swatchColor: Theme.withAlpha(Theme.secondary, 0.5)
                             }
 
-                            DankSpinner {
+                            DSpinner {
                                 size: Theme.iconSizeLarge
                             }
 
-                            DankLoadingIndicator {}
+                            DLoadingIndicator {}
 
-                            DankLoadingIndicator {
+                            DLoadingIndicator {
                                 contained: true
                             }
                         }
@@ -691,7 +691,7 @@ ShellRoot {
                             color: Theme.surfaceContainer
                             radius: Theme.cornerRadius
 
-                            DankListView {
+                            DListView {
                                 anchors.fill: parent
                                 anchors.margins: Theme.spacingS
                                 clip: true
@@ -733,7 +733,7 @@ ShellRoot {
                             color: Theme.surfaceContainer
                             radius: Theme.cornerRadius
 
-                            DankGridView {
+                            DGridView {
                                 anchors.fill: parent
                                 anchors.margins: Theme.spacingS
                                 clip: true
@@ -800,7 +800,7 @@ ShellRoot {
                             text: I18n.tr("Progress")
                         }
 
-                        DankSlider {
+                        DSlider {
                             width: Math.min(340, gallery.width)
                             value: 40
                             startIcon: "volume_down"
@@ -824,7 +824,7 @@ ShellRoot {
                             width: parent.width
                             spacing: Theme.spacingL
 
-                            DankCircularImage {
+                            DCircularImage {
                                 width: 48
                                 height: 48
                                 fallbackIcon: "person"
@@ -851,7 +851,7 @@ ShellRoot {
                             text: "Icon picker"
                         }
 
-                        DankIconPicker {
+                        DIconPicker {
                             onIconSelected: (iconName, iconType) => log.info("icon:", iconName, iconType)
                         }
 
@@ -859,7 +859,7 @@ ShellRoot {
                             text: "Location search"
                         }
 
-                        DankLocationSearch {
+                        DLocationSearch {
                             width: Math.min(340, gallery.width)
                             onLocationSelected: (displayName, coordinates) => log.info("location:", displayName, coordinates)
                         }
@@ -875,14 +875,14 @@ ShellRoot {
                             StyledText {
                                 id: blinkTarget
 
-                                text: "DankBlink target"
+                                text: "DBlink target"
                             }
 
-                            DankBlink {
+                            DBlink {
                                 target: blinkTarget
                             }
 
-                            DankTextCursor {
+                            DTextCursor {
                                 height: 20
                             }
                         }

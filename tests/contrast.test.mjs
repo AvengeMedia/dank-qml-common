@@ -6,7 +6,7 @@ import test from "node:test";
 const rgba = (r, g, b, a = 1) => ({ r, g, b, a });
 const hex = value => rgba(...[1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16) / 255));
 const contrast = vm.createContext({ Qt: { rgba } });
-vm.runInContext(readFileSync(new URL("../DankCommon/Common/Contrast.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), contrast);
+vm.runInContext(readFileSync(new URL("../DCommon/Common/Contrast.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), contrast);
 
 const black = hex("#000000");
 const white = hex("#ffffff");

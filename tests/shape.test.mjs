@@ -4,7 +4,7 @@ import vm from "node:vm";
 import test from "node:test";
 
 const shape = vm.createContext({});
-vm.runInContext(readFileSync(new URL("../DankCommon/Common/Shape.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), shape);
+vm.runInContext(readFileSync(new URL("../DCommon/Common/Shape.js", import.meta.url), "utf8").replace(/^\.pragma.*$/gm, ""), shape);
 
 test("legacy radii map to the nearest available strength", () => {
     for (let radius = 0; radius <= 32; radius += 0.25) {

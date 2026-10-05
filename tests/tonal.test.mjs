@@ -6,7 +6,7 @@ import test from "node:test";
 const rgba = (r, g, b, a = 1) => ({ r, g, b, a });
 const hex = value => rgba(...[1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16) / 255));
 const context = vm.createContext({ Qt: { rgba, color: hex } });
-const load = name => vm.runInContext(readFileSync(new URL(`../DankCommon/Common/${name}`, import.meta.url), "utf8").replace(/^\.(pragma|import).*$/gm, ""), context);
+const load = name => vm.runInContext(readFileSync(new URL(`../DCommon/Common/${name}`, import.meta.url), "utf8").replace(/^\.(pragma|import).*$/gm, ""), context);
 load("Contrast.js");
 context.Contrast = { mix: context.mix };
 load("Hct.js");

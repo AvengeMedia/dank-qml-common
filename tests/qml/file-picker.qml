@@ -1,8 +1,8 @@
 import QtQuick
 import QtTest
 import Quickshell
-import qs.DankCommon.Common
-import qs.DankCommon.FileBrowser
+import qs.DCommon.Common
+import qs.DCommon.FileBrowser
 import qs.Services as Stub
 
 ShellRoot {

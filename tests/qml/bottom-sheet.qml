@@ -1,8 +1,8 @@
 import QtQuick
 import QtTest
 import Quickshell
-import qs.DankCommon.Common
-import qs.DankCommon.Widgets
+import qs.DCommon.Common
+import qs.DCommon.Widgets
 
 ShellRoot {
     id: root
@@ -38,7 +38,7 @@ ShellRoot {
         implicitWidth: 600
         implicitHeight: 420
 
-        DankButton {
+        DButton {
             id: opener
             text: "Open"
             onClicked: root.backgroundClicks++
@@ -54,7 +54,7 @@ ShellRoot {
             onActivated: root.shortcutHits++
         }
 
-        DankBottomSheet {
+        DBottomSheet {
             id: sheet
             title: "Outputs"
             initialFocusItem: first
@@ -63,7 +63,7 @@ ShellRoot {
                 opened = false;
             }
 
-            DankButton {
+            DButton {
                 id: first
                 width: parent.width
                 text: "First"
@@ -71,14 +71,14 @@ ShellRoot {
 
             Repeater {
                 model: 12
-                DankButton {
+                DButton {
                     required property int index
                     width: parent.width
                     text: "Output " + index
                 }
             }
 
-            DankButton {
+            DButton {
                 id: last
                 width: parent.width
                 text: "Last"

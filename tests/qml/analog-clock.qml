@@ -1,6 +1,6 @@
 import QtQuick
-import qs.DankCommon.Widgets
-import qs.DankCommon.Common
+import qs.DCommon.Widgets
+import qs.DCommon.Common
 
 Item {
     id: root
@@ -10,7 +10,7 @@ Item {
     }
     Component {
         id: clockFactory
-        DankAnalogClock {
+        DAnalogClock {
             width: 200
             height: 200
         }

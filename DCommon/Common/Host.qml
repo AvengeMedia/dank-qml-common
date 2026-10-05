@@ -8,4 +8,5 @@ Singleton {
     property var session: null
     property var cache: null
     property var files: null
+    property bool hyprlandFocusGrab: false
 }

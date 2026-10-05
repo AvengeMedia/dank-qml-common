@@ -52,7 +52,8 @@ FocusScope {
     property color normalBorderColor: Style.outlineVariant
     property color focusedBorderColor: Style.primary
     property var transientSurfaceTracker: null
-    property bool popupGrabsFocus: true
+    // Hyprland drops a focus grab when a whitelisted popup takes its own xdg grab
+    property bool popupGrabsFocus: !(Host.hyprlandFocusGrab && transientSurfaceTracker)
     property bool downKeyOpens: true
     property bool menuBlurEnabled: true
 

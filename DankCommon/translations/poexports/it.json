@@ -1,15 +1,45 @@
 {
+  "%1 items": {
+    "%1 items": ""
+  },
+  "%1 selected": {
+    "%1 selected": ""
+  },
+  "1 item": {
+    "1 item": ""
+  },
+  "1 selected": {
+    "1 selected": ""
+  },
   "A file with this name already exists. Do you want to overwrite it?": {
     "A file with this name already exists. Do you want to overwrite it?": "Esiste già un file con questo nome. Vuoi sovrascriverlo?"
+  },
+  "A name cannot be empty or contain a slash": {
+    "A name cannot be empty or contain a slash": ""
+  },
+  "AM": {
+    "AM": "AM"
   },
   "Actions": {
     "Actions": "Azioni"
   },
-  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Indietro • F1/I: Info file • F10: Aiuto • Esc: Chiudi"
-  },
   "Ascending": {
     "Ascending": "Crescente"
+  },
+  "B": {
+    "B": ""
+  },
+  "Back": {
+    "Back": "Indietro"
+  },
+  "Backspace": {
+    "Backspace": ""
+  },
+  "Binary file": {
+    "Binary file": ""
+  },
+  "Broken link": {
+    "Broken link": ""
   },
   "Cancel": {
     "Cancel": "Annulla"
@@ -17,47 +47,98 @@
   "Choose icon": {
     "Choose icon": "Scegli l'icona"
   },
+  "Clear": {
+    "Clear": "Cancella"
+  },
+  "Clear the selection": {
+    "Clear the selection": ""
+  },
+  "Close": {
+    "Close": "Chiudi"
+  },
+  "Color": {
+    "Color": "Colore"
+  },
   "Communication": {
     "Communication": "Comunicazione"
+  },
+  "Confirm": {
+    "Confirm": "Conferma"
   },
   "Copy path": {
     "Copy path": "Copia percorso"
   },
+  "Create": {
+    "Create": "Crea"
+  },
+  "Created": {
+    "Created": ""
+  },
+  "Decrease": {
+    "Decrease": "Diminuisci"
+  },
   "Descending": {
     "Descending": "Decrescente"
-  },
-  "Desktop": {
-    "Desktop": "Scrivania"
   },
   "Development": {
     "Development": "Sviluppo"
   },
-  "Documents": {
-    "Documents": "Documenti"
+  "Drag to reorder": {
+    "Drag to reorder": "Trascina per riposizionare"
   },
-  "Downloads": {
-    "Downloads": "Download"
+  "Edit": {
+    "Edit": "Modifica"
+  },
+  "Enter": {
+    "Enter": ""
   },
   "Enter filename...": {
     "Enter filename...": "Inserisci il nome del file..."
   },
-  "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Attiva/disattiva • F10: Aiuto"
+  "File": {
+    "File": "File"
   },
   "File Already Exists": {
     "File Already Exists": "File già esistente"
   },
-  "File Information": {
-    "File Information": "Informazioni sul file"
+  "File System": {
+    "File System": ""
   },
   "Files - %1": {
     "Files - %1": "File - %1"
   },
+  "Files are unavailable because the file service is not running": {
+    "Files are unavailable because the file service is not running": ""
+  },
+  "First %1 of %2": {
+    "First %1 of %2": ""
+  },
+  "Folder": {
+    "Folder": "Cartella"
+  },
+  "Folder name": {
+    "Folder name": ""
+  },
+  "Forward": {
+    "Forward": ""
+  },
   "Fun": {
     "Fun": "Divertimento"
   },
+  "GB": {
+    "GB": ""
+  },
+  "Grid view": {
+    "Grid view": ""
+  },
   "Hibernate": {
     "Hibernate": "Iberna"
+  },
+  "Hide keyboard": {
+    "Hide keyboard": ""
+  },
+  "Hide password": {
+    "Hide password": "Nascondi password"
   },
   "Hold longer to confirm": {
     "Hold longer to confirm": "Tieni premuto più a lungo per confermare"
@@ -71,11 +152,35 @@
   "Home": {
     "Home": "Home"
   },
+  "Hour": {
+    "Hour": ""
+  },
+  "Increase": {
+    "Increase": "Aumenta"
+  },
+  "List view": {
+    "List view": ""
+  },
+  "Location": {
+    "Location": "Posizione"
+  },
   "Log Out": {
     "Log Out": "Termina sessione"
   },
+  "MB": {
+    "MB": ""
+  },
+  "Maximize": {
+    "Maximize": "Massimizza"
+  },
   "Media": {
     "Media": "Media"
+  },
+  "Minimize": {
+    "Minimize": "Minimizza"
+  },
+  "Minute": {
+    "Minute": ""
   },
   "Modified": {
     "Modified": "Modificato"
@@ -83,26 +188,38 @@
   "Move to Trash": {
     "Move to Trash": "Sposta nel cestino"
   },
-  "Music": {
-    "Music": "Musica"
-  },
   "Name": {
     "Name": "Nome"
   },
   "Navigation": {
     "Navigation": "Navigazione"
   },
+  "New folder": {
+    "New folder": ""
+  },
+  "No locations found": {
+    "No locations found": ""
+  },
   "Numbers": {
     "Numbers": "Numeri"
   },
-  "Order": {
-    "Order": "Ordine"
+  "OK": {
+    "OK": "OK"
+  },
+  "Open": {
+    "Open": "Apri"
   },
   "Overwrite": {
     "Overwrite": "Sovrascrivi"
   },
-  "Pictures": {
-    "Pictures": "Immagini"
+  "Owner": {
+    "Owner": ""
+  },
+  "PM": {
+    "PM": "PM"
+  },
+  "Permissions": {
+    "Permissions": ""
   },
   "Power Off": {
     "Power Off": "Spegni"
@@ -116,6 +233,21 @@
   "Reboot": {
     "Reboot": "Riavvia"
   },
+  "Refresh": {
+    "Refresh": "Aggiorna"
+  },
+  "Rename": {
+    "Rename": "Rinomina"
+  },
+  "Restore": {
+    "Restore": "Ripristina"
+  },
+  "Review changes": {
+    "Review changes": ""
+  },
+  "Saturation %1%, brightness %2%": {
+    "Saturation %1%, brightness %2%": ""
+  },
   "Save": {
     "Save": "Salva"
   },
@@ -125,14 +257,32 @@
   "Search...": {
     "Search...": "Cerca..."
   },
+  "Searching...": {
+    "Searching...": ""
+  },
   "Select File": {
     "Select File": "Seleziona file"
+  },
+  "Select time": {
+    "Select time": ""
+  },
+  "Shift": {
+    "Shift": ""
+  },
+  "Show hidden files": {
+    "Show hidden files": ""
+  },
+  "Show password": {
+    "Show password": "Mostra password"
   },
   "Size": {
     "Size": "Dimensione"
   },
   "Sort By": {
     "Sort By": "Ordina per"
+  },
+  "Space": {
+    "Space": ""
   },
   "Status": {
     "Status": "Stato"
@@ -146,19 +296,52 @@
   "System": {
     "System": "Sistema"
   },
-  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Nav griglia • Invio/Spazio: Seleziona"
+  "TB": {
+    "TB": ""
+  },
+  "This folder could not be opened": {
+    "This folder could not be opened": ""
+  },
+  "This folder is empty": {
+    "This folder is empty": ""
+  },
+  "This folder no longer exists": {
+    "This folder no longer exists": ""
+  },
+  "This item already exists": {
+    "This item already exists": ""
+  },
+  "This item cannot be moved here directly": {
+    "This item cannot be moved here directly": ""
+  },
+  "This item could not be handled": {
+    "This item could not be handled": ""
+  },
+  "This item is in use": {
+    "This item is in use": ""
+  },
+  "This item no longer exists": {
+    "This item no longer exists": ""
   },
   "Type": {
     "Type": "Tipo"
   },
+  "Unknown": {
+    "Unknown": "Sconosciuto"
+  },
   "Use this folder": {
     "Use this folder": "Usa questa cartella"
   },
-  "Videos": {
-    "Videos": "Video"
-  },
   "Workspace": {
     "Workspace": "Spazio di Lavoro"
+  },
+  "You do not have permission to do this": {
+    "You do not have permission to do this": ""
+  },
+  "You do not have permission to view this folder": {
+    "You do not have permission to view this folder": ""
+  },
+  "kB": {
+    "kB": ""
   }
 }

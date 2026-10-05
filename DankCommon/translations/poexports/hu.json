@@ -1,15 +1,45 @@
 {
+  "%1 items": {
+    "%1 items": ""
+  },
+  "%1 selected": {
+    "%1 selected": ""
+  },
+  "1 item": {
+    "1 item": ""
+  },
+  "1 selected": {
+    "1 selected": ""
+  },
   "A file with this name already exists. Do you want to overwrite it?": {
     "A file with this name already exists. Do you want to overwrite it?": "Egy ilyen nevű fájl már létezik. Felül szeretnéd írni?"
+  },
+  "A name cannot be empty or contain a slash": {
+    "A name cannot be empty or contain a slash": ""
+  },
+  "AM": {
+    "AM": "DE"
   },
   "Actions": {
     "Actions": "Műveletek"
   },
-  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: Vissza • F1/I: Fájlinformáció • F10: Súgó • Esc: Bezárás"
-  },
   "Ascending": {
     "Ascending": "Növekvő"
+  },
+  "B": {
+    "B": ""
+  },
+  "Back": {
+    "Back": "Vissza"
+  },
+  "Backspace": {
+    "Backspace": ""
+  },
+  "Binary file": {
+    "Binary file": ""
+  },
+  "Broken link": {
+    "Broken link": ""
   },
   "Cancel": {
     "Cancel": "Mégse"
@@ -17,47 +47,98 @@
   "Choose icon": {
     "Choose icon": "Ikon kiválasztása"
   },
+  "Clear": {
+    "Clear": "Törlés"
+  },
+  "Clear the selection": {
+    "Clear the selection": ""
+  },
+  "Close": {
+    "Close": "Bezárás"
+  },
+  "Color": {
+    "Color": "Szín"
+  },
   "Communication": {
     "Communication": "Kommunikáció"
+  },
+  "Confirm": {
+    "Confirm": "Megerősítés"
   },
   "Copy path": {
     "Copy path": "Útvonal másolása"
   },
+  "Create": {
+    "Create": "Létrehozás"
+  },
+  "Created": {
+    "Created": ""
+  },
+  "Decrease": {
+    "Decrease": "Csökkentés"
+  },
   "Descending": {
     "Descending": "Csökkenő"
-  },
-  "Desktop": {
-    "Desktop": "Asztal"
   },
   "Development": {
     "Development": "Fejlesztés"
   },
-  "Documents": {
-    "Documents": "Dokumentumok"
+  "Drag to reorder": {
+    "Drag to reorder": "Húzd az átrendezéshez"
   },
-  "Downloads": {
-    "Downloads": "Letöltések"
+  "Edit": {
+    "Edit": "Szerkesztés"
+  },
+  "Enter": {
+    "Enter": ""
   },
   "Enter filename...": {
     "Enter filename...": "Írd be a fájlnevet..."
   },
-  "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: Váltás • F10: Súgó"
+  "File": {
+    "File": "Fájl"
   },
   "File Already Exists": {
     "File Already Exists": "A fájl már létezik"
   },
-  "File Information": {
-    "File Information": "Fájlinformációk"
+  "File System": {
+    "File System": ""
   },
   "Files - %1": {
     "Files - %1": "Fájlok - %1"
   },
+  "Files are unavailable because the file service is not running": {
+    "Files are unavailable because the file service is not running": ""
+  },
+  "First %1 of %2": {
+    "First %1 of %2": ""
+  },
+  "Folder": {
+    "Folder": "Mappa"
+  },
+  "Folder name": {
+    "Folder name": ""
+  },
+  "Forward": {
+    "Forward": ""
+  },
   "Fun": {
     "Fun": "Szórakozás"
   },
+  "GB": {
+    "GB": ""
+  },
+  "Grid view": {
+    "Grid view": ""
+  },
   "Hibernate": {
     "Hibernate": "Hibernálás"
+  },
+  "Hide keyboard": {
+    "Hide keyboard": ""
+  },
+  "Hide password": {
+    "Hide password": "Jelszó elrejtése"
   },
   "Hold longer to confirm": {
     "Hold longer to confirm": "Tartsd lenyomva a megerősítéshez"
@@ -71,11 +152,35 @@
   "Home": {
     "Home": "Kezdőlap"
   },
+  "Hour": {
+    "Hour": ""
+  },
+  "Increase": {
+    "Increase": "Növelés"
+  },
+  "List view": {
+    "List view": ""
+  },
+  "Location": {
+    "Location": "Hely"
+  },
   "Log Out": {
     "Log Out": "Kijelentkezés"
   },
+  "MB": {
+    "MB": ""
+  },
+  "Maximize": {
+    "Maximize": "Maximalizálás"
+  },
   "Media": {
     "Media": "Média"
+  },
+  "Minimize": {
+    "Minimize": "Minimalizálás"
+  },
+  "Minute": {
+    "Minute": ""
   },
   "Modified": {
     "Modified": "Módosítva"
@@ -83,26 +188,38 @@
   "Move to Trash": {
     "Move to Trash": "Áthelyezés a Kukába"
   },
-  "Music": {
-    "Music": "Zene"
-  },
   "Name": {
     "Name": "Név"
   },
   "Navigation": {
     "Navigation": "Navigáció"
   },
+  "New folder": {
+    "New folder": ""
+  },
+  "No locations found": {
+    "No locations found": ""
+  },
   "Numbers": {
     "Numbers": "Számok"
   },
-  "Order": {
-    "Order": "Sorrend"
+  "OK": {
+    "OK": "OK"
+  },
+  "Open": {
+    "Open": "Megnyitás"
   },
   "Overwrite": {
     "Overwrite": "Felülírás"
   },
-  "Pictures": {
-    "Pictures": "Képek"
+  "Owner": {
+    "Owner": ""
+  },
+  "PM": {
+    "PM": "DÉ"
+  },
+  "Permissions": {
+    "Permissions": ""
   },
   "Power Off": {
     "Power Off": "Leállítás"
@@ -116,6 +233,21 @@
   "Reboot": {
     "Reboot": "Újraindítás"
   },
+  "Refresh": {
+    "Refresh": "Újratöltés"
+  },
+  "Rename": {
+    "Rename": "Átnevezés"
+  },
+  "Restore": {
+    "Restore": "Visszaállítás"
+  },
+  "Review changes": {
+    "Review changes": ""
+  },
+  "Saturation %1%, brightness %2%": {
+    "Saturation %1%, brightness %2%": ""
+  },
   "Save": {
     "Save": "Mentés"
   },
@@ -125,14 +257,32 @@
   "Search...": {
     "Search...": "Keresés…"
   },
+  "Searching...": {
+    "Searching...": ""
+  },
   "Select File": {
     "Select File": "Fájl kiválasztása"
+  },
+  "Select time": {
+    "Select time": ""
+  },
+  "Shift": {
+    "Shift": ""
+  },
+  "Show hidden files": {
+    "Show hidden files": ""
+  },
+  "Show password": {
+    "Show password": "Jelszó megjelenítése"
   },
   "Size": {
     "Size": "Méret"
   },
   "Sort By": {
     "Sort By": "Rendezés"
+  },
+  "Space": {
+    "Space": ""
   },
   "Status": {
     "Status": "Állapot"
@@ -146,19 +296,52 @@
   "System": {
     "System": "Rendszer"
   },
-  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: Nav • ←→↑↓: Rácsnavigáció • Enter/Szóköz: Kiválasztás"
+  "TB": {
+    "TB": ""
+  },
+  "This folder could not be opened": {
+    "This folder could not be opened": ""
+  },
+  "This folder is empty": {
+    "This folder is empty": ""
+  },
+  "This folder no longer exists": {
+    "This folder no longer exists": ""
+  },
+  "This item already exists": {
+    "This item already exists": ""
+  },
+  "This item cannot be moved here directly": {
+    "This item cannot be moved here directly": ""
+  },
+  "This item could not be handled": {
+    "This item could not be handled": ""
+  },
+  "This item is in use": {
+    "This item is in use": ""
+  },
+  "This item no longer exists": {
+    "This item no longer exists": ""
   },
   "Type": {
     "Type": "Típus"
   },
+  "Unknown": {
+    "Unknown": "Ismeretlen"
+  },
   "Use this folder": {
     "Use this folder": "Mappa használata"
   },
-  "Videos": {
-    "Videos": "Videók"
-  },
   "Workspace": {
     "Workspace": "Munkaterület"
+  },
+  "You do not have permission to do this": {
+    "You do not have permission to do this": ""
+  },
+  "You do not have permission to view this folder": {
+    "You do not have permission to view this folder": ""
+  },
+  "kB": {
+    "kB": ""
   }
 }

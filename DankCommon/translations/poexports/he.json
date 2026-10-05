@@ -1,15 +1,45 @@
 {
+  "%1 items": {
+    "%1 items": ""
+  },
+  "%1 selected": {
+    "%1 selected": ""
+  },
+  "1 item": {
+    "1 item": ""
+  },
+  "1 selected": {
+    "1 selected": ""
+  },
   "A file with this name already exists. Do you want to overwrite it?": {
     "A file with this name already exists. Do you want to overwrite it?": "קובץ בשם זה כבר קיים. האם ברצונך להחליף אותו?"
+  },
+  "A name cannot be empty or contain a slash": {
+    "A name cannot be empty or contain a slash": ""
+  },
+  "AM": {
+    "AM": "AM"
   },
   "Actions": {
     "Actions": "פעולות"
   },
-  "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": {
-    "Alt+←/Backspace: Back • F1/I: File Info • F10: Help • Esc: Close": "Alt+←/Backspace: חזרה • F1/I: פרטי קובץ • F10: עזרה • Esc: סגירה"
-  },
   "Ascending": {
     "Ascending": "סדר עולה"
+  },
+  "B": {
+    "B": ""
+  },
+  "Back": {
+    "Back": "חזרה"
+  },
+  "Backspace": {
+    "Backspace": ""
+  },
+  "Binary file": {
+    "Binary file": ""
+  },
+  "Broken link": {
+    "Broken link": ""
   },
   "Cancel": {
     "Cancel": "ביטול"
@@ -17,47 +47,98 @@
   "Choose icon": {
     "Choose icon": "בחר/י סמל"
   },
+  "Clear": {
+    "Clear": "ניקוי"
+  },
+  "Clear the selection": {
+    "Clear the selection": ""
+  },
+  "Close": {
+    "Close": "סגירה"
+  },
+  "Color": {
+    "Color": "צבע"
+  },
   "Communication": {
     "Communication": "תקשורת"
+  },
+  "Confirm": {
+    "Confirm": "אשר/י"
   },
   "Copy path": {
     "Copy path": "העתק/י נתיב"
   },
+  "Create": {
+    "Create": "יצירה"
+  },
+  "Created": {
+    "Created": ""
+  },
+  "Decrease": {
+    "Decrease": "הפחת/י"
+  },
   "Descending": {
     "Descending": "סדר יורד"
-  },
-  "Desktop": {
-    "Desktop": "שולחן עבודה"
   },
   "Development": {
     "Development": "פיתוח"
   },
-  "Documents": {
-    "Documents": "מסמכים"
+  "Drag to reorder": {
+    "Drag to reorder": "גרירה בכדי לסדר מחדש"
   },
-  "Downloads": {
-    "Downloads": "הורדות"
+  "Edit": {
+    "Edit": "עריכה"
+  },
+  "Enter": {
+    "Enter": ""
   },
   "Enter filename...": {
     "Enter filename...": "הזן/י שם קובץ..."
   },
-  "F1/I: Toggle • F10: Help": {
-    "F1/I: Toggle • F10: Help": "F1/I: החלפה • F10: עזרה"
+  "File": {
+    "File": "קובץ"
   },
   "File Already Exists": {
     "File Already Exists": "הקובץ כבר קיים"
   },
-  "File Information": {
-    "File Information": "פרטי קובץ"
+  "File System": {
+    "File System": ""
   },
   "Files - %1": {
     "Files - %1": "קבצים - %1"
   },
+  "Files are unavailable because the file service is not running": {
+    "Files are unavailable because the file service is not running": ""
+  },
+  "First %1 of %2": {
+    "First %1 of %2": ""
+  },
+  "Folder": {
+    "Folder": "תיקייה"
+  },
+  "Folder name": {
+    "Folder name": ""
+  },
+  "Forward": {
+    "Forward": ""
+  },
   "Fun": {
     "Fun": "כיף"
   },
+  "GB": {
+    "GB": ""
+  },
+  "Grid view": {
+    "Grid view": ""
+  },
   "Hibernate": {
     "Hibernate": "שינה עמוקה"
+  },
+  "Hide keyboard": {
+    "Hide keyboard": ""
+  },
+  "Hide password": {
+    "Hide password": "הסתר/י סיסמה"
   },
   "Hold longer to confirm": {
     "Hold longer to confirm": "החזק/י לחוץ זמן רב יותר כדי לאשר"
@@ -71,11 +152,35 @@
   "Home": {
     "Home": "בית"
   },
+  "Hour": {
+    "Hour": ""
+  },
+  "Increase": {
+    "Increase": "הגדל/י"
+  },
+  "List view": {
+    "List view": ""
+  },
+  "Location": {
+    "Location": "מיקום"
+  },
   "Log Out": {
     "Log Out": "התנתקות"
   },
+  "MB": {
+    "MB": ""
+  },
+  "Maximize": {
+    "Maximize": "ממוקסם"
+  },
   "Media": {
     "Media": "מדיה"
+  },
+  "Minimize": {
+    "Minimize": "מזעור"
+  },
+  "Minute": {
+    "Minute": ""
   },
   "Modified": {
     "Modified": "שונה"
@@ -83,26 +188,38 @@
   "Move to Trash": {
     "Move to Trash": "העברה לאשפה"
   },
-  "Music": {
-    "Music": "מוזיקה"
-  },
   "Name": {
     "Name": "שם"
   },
   "Navigation": {
     "Navigation": "ניווט"
   },
+  "New folder": {
+    "New folder": ""
+  },
+  "No locations found": {
+    "No locations found": ""
+  },
   "Numbers": {
     "Numbers": "מספרים"
   },
-  "Order": {
-    "Order": "סדר"
+  "OK": {
+    "OK": "תקין"
+  },
+  "Open": {
+    "Open": "פתח/י"
   },
   "Overwrite": {
     "Overwrite": "החלפה"
   },
-  "Pictures": {
-    "Pictures": "תמונות"
+  "Owner": {
+    "Owner": ""
+  },
+  "PM": {
+    "PM": "PM"
+  },
+  "Permissions": {
+    "Permissions": ""
   },
   "Power Off": {
     "Power Off": "כיבוי"
@@ -116,6 +233,21 @@
   "Reboot": {
     "Reboot": "הפעלה מחדש"
   },
+  "Refresh": {
+    "Refresh": "רענון"
+  },
+  "Rename": {
+    "Rename": "שנה/י שם"
+  },
+  "Restore": {
+    "Restore": "שחזור"
+  },
+  "Review changes": {
+    "Review changes": ""
+  },
+  "Saturation %1%, brightness %2%": {
+    "Saturation %1%, brightness %2%": ""
+  },
   "Save": {
     "Save": "שמירה"
   },
@@ -125,14 +257,32 @@
   "Search...": {
     "Search...": "חיפוש..."
   },
+  "Searching...": {
+    "Searching...": ""
+  },
   "Select File": {
     "Select File": "בחר/י קובץ"
+  },
+  "Select time": {
+    "Select time": ""
+  },
+  "Shift": {
+    "Shift": ""
+  },
+  "Show hidden files": {
+    "Show hidden files": ""
+  },
+  "Show password": {
+    "Show password": "הצג/י סיסמה"
   },
   "Size": {
     "Size": "גודל"
   },
   "Sort By": {
     "Sort By": "מיין/י לפי"
+  },
+  "Space": {
+    "Space": ""
   },
   "Status": {
     "Status": "מצב"
@@ -146,19 +296,52 @@
   "System": {
     "System": "מערכת"
   },
-  "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": {
-    "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select": "Tab/Shift+Tab: ניווט • ←→↑↓: ניווט ברשת • Enter/Space: בחירה"
+  "TB": {
+    "TB": ""
+  },
+  "This folder could not be opened": {
+    "This folder could not be opened": ""
+  },
+  "This folder is empty": {
+    "This folder is empty": ""
+  },
+  "This folder no longer exists": {
+    "This folder no longer exists": ""
+  },
+  "This item already exists": {
+    "This item already exists": ""
+  },
+  "This item cannot be moved here directly": {
+    "This item cannot be moved here directly": ""
+  },
+  "This item could not be handled": {
+    "This item could not be handled": ""
+  },
+  "This item is in use": {
+    "This item is in use": ""
+  },
+  "This item no longer exists": {
+    "This item no longer exists": ""
   },
   "Type": {
     "Type": "סוג"
   },
+  "Unknown": {
+    "Unknown": "לא ידוע"
+  },
   "Use this folder": {
     "Use this folder": "השתמש/י בתיקייה זו"
   },
-  "Videos": {
-    "Videos": "סרטונים"
-  },
   "Workspace": {
     "Workspace": "סביבת עבודה"
+  },
+  "You do not have permission to do this": {
+    "You do not have permission to do this": ""
+  },
+  "You do not have permission to view this folder": {
+    "You do not have permission to view this folder": ""
+  },
+  "kB": {
+    "kB": ""
   }
 }

@@ -104,16 +104,13 @@ var SPEC = {
         onChange: "updateCompositorLayout"
     },
     clockFormat: {
-        def: "auto",
-        onChange: "markGreeterSyncPending"
+        def: "auto"
     },
     showSeconds: {
-        def: false,
-        onChange: "markGreeterSyncPending"
+        def: false
     },
     padHours12Hour: {
-        def: false,
-        onChange: "markGreeterSyncPending"
+        def: false
     },
     useFahrenheit: {
         def: false
@@ -156,12 +153,10 @@ var SPEC = {
         def: ""
     },
     greeterRememberLastSession: {
-        def: true,
-        onChange: "markGreeterSyncPending"
+        def: true
     },
     greeterRememberLastUser: {
-        def: true,
-        onChange: "markGreeterSyncPending"
+        def: true
     },
     greeterEnableFprint: {
         def: false,

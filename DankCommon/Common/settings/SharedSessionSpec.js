@@ -35,5 +35,8 @@ var SPEC = {
     },
     lockScreenAutoPositions: {
         def: {}
+    },
+    greeterAutoPositions: {
+        def: {}
     }
 };

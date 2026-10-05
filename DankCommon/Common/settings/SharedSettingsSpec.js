@@ -31,7 +31,7 @@ function lockWidgetDefaults() {
             format: "short"
         }, tint)), entry("lock_auth", "lockAuth", true, {
             style: "expressive",
-            profileVisibility: "typing",
+            profileVisibility: "always",
             passwordVisibility: "always"
         }), entry("lock_notifications", "lockNotifications", true, {
             mode: 2

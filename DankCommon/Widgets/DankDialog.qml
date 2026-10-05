@@ -16,6 +16,7 @@ FocusScope {
     property bool opened: true
     readonly property bool nativeWindow: windowControls !== null
     property real contentSpacing: nativeWindow || popout ? Style.spacingM : Style.spacingL
+    property real actionSpacing: nativeWindow || popout ? contentSpacing : Style.spacingXL
     property real padding: nativeWindow || popout ? Style.spacingL : Style.spacingXL
     property real maximumWidth: Style.dialogMaxWidth
     property real maximumHeight: Infinity
@@ -36,7 +37,7 @@ FocusScope {
     signal rejected
 
     implicitWidth: maximumWidth
-    implicitHeight: bodyTop + scrollBody.implicitHeight + actionFlow.implicitHeight + padding + (actionFlow.implicitHeight > 0 ? contentSpacing : 0)
+    implicitHeight: bodyTop + scrollBody.implicitHeight + actionFlow.implicitHeight + padding + (actionFlow.implicitHeight > 0 ? actionSpacing : 0)
     focus: true
     Accessible.role: Accessible.Dialog
     Accessible.name: title
@@ -180,7 +181,7 @@ FocusScope {
                 x: root.padding - root.focusPadding
                 y: root.bodyTop - root.focusPadding
                 width: parent.width - root.padding * 2 + root.focusPadding * 2
-                height: Math.max(0, actionFlow.y - y - (actionFlow.height > 0 ? root.contentSpacing : 0) + root.focusPadding)
+                height: Math.max(0, actionFlow.y - y - (actionFlow.height > 0 ? root.actionSpacing : 0) + root.focusPadding)
                 contentWidth: width
                 contentHeight: scrollBody.implicitHeight + root.focusPadding * 2
                 clip: true

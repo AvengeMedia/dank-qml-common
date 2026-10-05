@@ -261,6 +261,7 @@ Singleton {
     readonly property real fontSizeXXLarge: theme?.fontSizeXXLarge ?? 28
     readonly property real fontSizeDisplay: theme?.fontSizeDisplay ?? 36
     readonly property real fontSizeDisplayLarge: theme?.fontSizeDisplayLarge ?? 57
+    readonly property string defaultFontFamily: theme?.defaultFontFamily ?? "Google Sans Flex"
     readonly property real iconSize: theme?.iconSize ?? 24
     readonly property real iconSizeSmall: theme?.iconSizeSmall ?? 16
     readonly property real iconSizeMedium: theme?.iconSizeMedium ?? 20

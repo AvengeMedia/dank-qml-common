@@ -17,19 +17,22 @@ function lockWidgetDefaults() {
         colorMode: "default",
         customColor: "#ffffff"
     };
-    return [entry("lock_clock", "lockClock", true, Object.assign({
+    return [entry("lock_clock", "desktopClock", true, Object.assign({
             style: "expressive",
+            transparency: 0,
             weight: 0,
             twoTone: true,
-            autoPosition: true,
+            showDate: false,
+            showDigitalSeconds: false,
             showAnalogNumbers: false,
-            showAnalogSeconds: true
+            showAnalogSeconds: true,
+            autoPosition: true
         }, tint)), entry("lock_date", "lockDate", false, Object.assign({
             format: "short"
         }, tint)), entry("lock_auth", "lockAuth", true, {
             style: "expressive",
             profileVisibility: "typing",
-            passwordVisibility: "typing"
+            passwordVisibility: "always"
         }), entry("lock_notifications", "lockNotifications", true, {
             mode: 2
         }), entry("lock_status", "lockStatus", true, {

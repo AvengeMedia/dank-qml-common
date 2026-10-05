@@ -33,6 +33,7 @@ Singleton {
     readonly property real gridNameSpacing: Style.spacingXS
 
     readonly property real columnPaneWidth: Style.sidebarWidth
+    readonly property real columnMinPaneWidth: Style.sidebarWidth * 0.7
     readonly property real previewPaneWidth: Style.sidebarWidth * 1.5
     readonly property real previewIconSize: gridIconSizes[4]
     readonly property int previewBytes: 16384

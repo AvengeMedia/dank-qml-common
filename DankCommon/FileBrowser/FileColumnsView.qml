@@ -37,13 +37,15 @@ Item {
     readonly property var picked: body.selectedEntries()
     readonly property var pickedEntry: picked.length === 1 ? picked[0] : null
     readonly property string lookaheadPath: pickedEntry?.isDir ? pickedEntry.path : ""
+    readonly property bool trailingPane: picked.length > 1 || (pickedEntry !== null && !pickedEntry.isDir)
+    readonly property int dirColumnCount: ancestors.length + 1 + (lookaheadPath !== "" ? 1 : 0)
+    readonly property real dirColumnWidth: Math.floor(Math.max(FileBrowserMetrics.columnMinPaneWidth, Math.min(FileBrowserMetrics.columnPaneWidth, (strip.width - (trailingPane ? FileBrowserMetrics.previewPaneWidth : 0)) / dirColumnCount)))
     readonly property real trailingWidth: Math.max(FileBrowserMetrics.previewPaneWidth, strip.width - activeColumn.x - activeColumn.width)
 
     signal viewportChanged
 
     function revealActive() {
-        const end = row.width - strip.width;
-        strip.contentX = Math.max(0, Math.min(activeColumn.x, end));
+        strip.contentX = Math.max(0, row.width - strip.width);
     }
 
     function positionViewAtIndex(index, mode) {
@@ -98,7 +100,7 @@ Item {
     component ColumnFrame: Item {
         id: frame
 
-        property real paneWidth: FileBrowserMetrics.columnPaneWidth
+        property real paneWidth: columns.dirColumnWidth
 
         width: paneWidth
         height: strip.height
@@ -253,6 +255,9 @@ Item {
                 id: activeColumn
 
                 readonly property alias list: activeList
+
+                onXChanged: columns.revealActive()
+                onWidthChanged: columns.revealActive()
 
                 FileListView {
                     id: activeList

@@ -24,7 +24,7 @@ DankListView {
     readonly property int columnsPerRow: 1
     readonly property real rowHeight: FileBrowserMetrics.listRowHeightFor(iconSize)
     readonly property real rowPitch: rowHeight + spacing
-    readonly property real contentOrigin: (headerItem?.y ?? 0) + (headerItem?.height ?? 0)
+    readonly property real contentOrigin: headerItem ? headerItem.y + headerItem.height : originY
 
     signal itemClicked(int index, int modifiers)
     signal itemActivated(int index)
@@ -59,7 +59,7 @@ DankListView {
     spacing: Style.groupedListGap
     cacheBuffer: Math.max(0, height)
     currentIndex: -1
-    reuseItems: true
+    reuseItems: false
 
     delegate: FileRow {
         view: list

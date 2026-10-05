@@ -204,7 +204,7 @@ QtObject {
             const entry = entries.get(i);
             if (!entry.thumbnailable || entry.thumbnail !== "")
                 continue;
-            if (thumbnailSizeLimit >= 0 && entry.size > thumbnailSizeLimit)
+            if (thumbnailSizeLimit >= 0 && entry.size > thumbnailSizeLimit && entry.mime.startsWith("image/"))
                 continue;
             paths.push(entry.path);
         }

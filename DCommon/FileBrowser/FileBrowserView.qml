@@ -191,6 +191,7 @@ FocusScope {
         networkThumbnails: root.networkThumbnails
         onGone: history.up()
         onListed: root._applyPendingReveal()
+        onEntriesAdded: root._applyPendingReveal()
     }
 
     SelectionModel {

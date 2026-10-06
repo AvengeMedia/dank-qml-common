@@ -92,16 +92,18 @@ FileItemSurface {
         }
     }
 
-    DIcon {
+    Loader {
         id: chevron
 
         anchors.right: columns.left
         anchors.verticalCenter: parent.verticalCenter
-        visible: row.isDir && (row.view?.chevrons ?? false)
-        width: visible ? size : 0
-        name: "chevron_right"
-        size: Style.iconSizeMedium
-        color: row.supportingColor
+        active: row.isDir && (row.view?.chevrons ?? false)
+        width: active ? Style.iconSizeMedium : 0
+        sourceComponent: DIcon {
+            name: "chevron_right"
+            size: Style.iconSizeMedium
+            color: row.supportingColor
+        }
     }
 
     StyledText {

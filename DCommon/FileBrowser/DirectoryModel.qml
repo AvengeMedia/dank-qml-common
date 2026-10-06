@@ -46,6 +46,7 @@ QtObject {
 
     signal gone
     signal listed
+    signal entriesAdded
     signal pathReset
 
     readonly property Connections _backendLink: Connections {
@@ -214,10 +215,11 @@ QtObject {
         backend.thumbnails(paths, thumbnailSize, watchId, result => {
             if (result.error)
                 return;
+            const at = _positions();
             for (const item of result.results || []) {
                 if (!item.thumbnail)
                     continue;
-                _setThumbnail(item.path, item.thumbnail);
+                _setThumbnail(item.path, item.thumbnail, at);
             }
         });
     }
@@ -383,10 +385,12 @@ QtObject {
         for (const name of data.removed || []) {
             total = Math.max(0, total - 1);
             const raw = _rawIndexOfName(name);
-            if (raw >= 0)
-                _all.splice(raw, 1);
-            const index = indexOfName(name);
-            if (index >= 0)
+            if (raw < 0)
+                continue;
+            const shown = _passes(_all[raw]);
+            const index = _filteredIndexBefore(raw);
+            _all.splice(raw, 1);
+            if (shown)
                 entries.remove(index);
         }
 
@@ -394,6 +398,7 @@ QtObject {
 
         const added = data.added || [];
         const at = data.addedAt || [];
+        let inserted = false;
         for (let i = 0; i < added.length; i++) {
             total++;
             const index = at[i] ?? _all.length;
@@ -401,21 +406,28 @@ QtObject {
                 continue;
             const filteredIndex = _filteredIndexBefore(index);
             _all.splice(index, 0, added[i]);
-            if (_passes(added[i]))
-                entries.insert(filteredIndex, added[i]);
+            if (!_passes(added[i]))
+                continue;
+            entries.insert(filteredIndex, added[i]);
+            inserted = true;
         }
+        if (inserted)
+            entriesAdded();
     }
 
     function _applyChanged(changed) {
+        if (changed.length === 0)
+            return;
+        const at = _positions();
         let awaitsThumbnail = false;
         for (const entry of changed) {
-            const raw = _rawIndexOfName(entry.name);
-            if (raw >= 0)
-                _all[raw] = entry;
-            const index = indexOfName(entry.name);
-            if (index < 0)
+            const raw = at.raw.get(entry.path);
+            if (raw === undefined)
                 continue;
-            entries.set(index, entry);
+            _all[raw] = entry;
+            const index = at.shown.get(entry.path);
+            if (index !== undefined)
+                entries.set(index, entry);
             awaitsThumbnail = awaitsThumbnail || (entry.thumbnailable && entry.thumbnail === "");
         }
         if (awaitsThumbnail)
@@ -426,12 +438,29 @@ QtObject {
         return _all.findIndex(entry => entry.name === name);
     }
 
-    function _setThumbnail(target, thumbnail) {
-        const raw = _all.findIndex(entry => entry.path === target);
-        if (raw >= 0)
-            _all[raw].thumbnail = thumbnail;
-        const index = indexOfPath(target);
-        if (index < 0)
+    function _positions() {
+        const raw = new Map();
+        const shown = new Map();
+        let visible = 0;
+        for (let i = 0; i < _all.length; i++) {
+            const entry = _all[i];
+            raw.set(entry.path, i);
+            if (_passes(entry))
+                shown.set(entry.path, visible++);
+        }
+        return {
+            "raw": raw,
+            "shown": shown
+        };
+    }
+
+    function _setThumbnail(target, thumbnail, at) {
+        const raw = at.raw.get(target);
+        if (raw === undefined)
+            return;
+        _all[raw].thumbnail = thumbnail;
+        const index = at.shown.get(target);
+        if (index === undefined)
             return;
         entries.setProperty(index, "thumbnail", thumbnail);
     }

@@ -53,19 +53,23 @@ Item {
         }
     }
 
-    Emblem {
+    Loader {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        visible: root.isSymlink
-        iconName: root.symlinkBroken ? "link_off" : "link"
-        iconColor: root.symlinkBroken ? Style.error : Style.surfaceVariantText
+        active: root.isSymlink
+        sourceComponent: Emblem {
+            iconName: root.symlinkBroken ? "link_off" : "link"
+            iconColor: root.symlinkBroken ? Style.error : Style.surfaceVariantText
+        }
     }
 
-    Emblem {
+    Loader {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        visible: root.untrusted || root.unreadable
-        iconName: root.unreadable ? "lock" : "warning"
-        iconColor: Style.error
+        active: root.untrusted || root.unreadable
+        sourceComponent: Emblem {
+            iconName: root.unreadable ? "lock" : "warning"
+            iconColor: Style.error
+        }
     }
 }

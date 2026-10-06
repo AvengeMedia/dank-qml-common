@@ -65,30 +65,36 @@ Item {
         }
     }
 
-    Image {
+    Loader {
         anchors.fill: parent
-        visible: root.thumbnail !== ""
-        source: root.thumbnail === "" ? "" : FilePaths.toFileUrl(root.thumbnail)
-        sourceSize.width: root.rasterSize
-        sourceSize.height: root.rasterSize
-        fillMode: Image.PreserveAspectFit
-        asynchronous: true
-        cache: true
-        smooth: true
+        active: root.thumbnail !== ""
+        sourceComponent: Image {
+            source: FilePaths.toFileUrl(root.thumbnail)
+            sourceSize.width: root.rasterSize
+            sourceSize.height: root.rasterSize
+            fillMode: Image.PreserveAspectFit
+            asynchronous: true
+            cache: true
+            smooth: true
+        }
     }
 
-    DSVGIcon {
+    Loader {
         anchors.fill: parent
-        visible: root.thumbnail === "" && root.themeIconPath !== ""
-        source: root.themeIconPath
-        size: root.size
+        active: root.thumbnail === "" && root.themeIconPath !== ""
+        sourceComponent: DSVGIcon {
+            source: root.themeIconPath
+            size: root.size
+        }
     }
 
-    DIcon {
+    Loader {
         anchors.centerIn: parent
-        visible: root.thumbnail === "" && root.themeIconPath === ""
-        name: root.glyphFor(root.iconName)
-        size: root.size
-        color: root.color
+        active: root.thumbnail === "" && root.themeIconPath === ""
+        sourceComponent: DIcon {
+            name: root.glyphFor(root.iconName)
+            size: root.size
+            color: root.color
+        }
     }
 }

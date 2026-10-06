@@ -24,6 +24,10 @@ StyledButton {
 
     default property alias content: holder.data
 
+    // The DListView orphan sweep hides pooled rows; reuse must show them again.
+    ListView.onReused: visible = true
+    GridView.onReused: visible = true
+
     focusPolicy: Qt.NoFocus
     radius: contentRadius
     color: selected ? Style.selectedContainer : dropTarget ? Style.primaryContainer : "transparent"

@@ -59,7 +59,7 @@ DGridView {
     cellHeight: iconSize + Style.fontSizeSmall * 3 + FileBrowserMetrics.gridTileVerticalPadding * 2 + FileBrowserMetrics.gridNameSpacing * 2
     cacheBuffer: Math.max(0, height)
     currentIndex: -1
-    reuseItems: false
+    reuseItems: true
 
     delegate: FileTile {
         view: grid

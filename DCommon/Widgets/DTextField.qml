@@ -40,19 +40,34 @@ StyledRect {
     property real rightAccessoryWidth: 0
     property bool passwordVisible: false
     property bool usePopupTransparency: !Style.isFloatingWindow(root)
-    property color backgroundColor: Style.chipSurface
-    property color focusedBorderColor: Style.primary
-    property color normalBorderColor: outlined ? Style.outline : Style.outlineVariant
+    property color backgroundColor: expressive ? Style.surfaceContainerHigh : Style.chipSurface
+    property color focusedBorderColor: expressive ? Style.focusRingColor : Style.primary
+    property color normalBorderColor: expressive ? Style.outlineMedium : outlined ? Style.outline : Style.outlineVariant
     property color placeholderColor: Style.onSurfaceVariant
     property bool hidePlaceholderOnFocus: true
-    property real borderWidth: Style.outlineWidth
-    property real focusedBorderWidth: Style.outlineWidthFocused
-    property real cornerRadius: Style.cornerRadiusXS
-    property real controlHeight: Style.iconButtonSize
+    property real borderWidth: expressive ? Style.layerOutlineWidth : Style.outlineWidth
+    property real focusedBorderWidth: expressive ? (Style.focusRingWidth > 0 ? Math.max(Style.outlineWidth, Style.focusRingWidth) : Style.layerOutlineWidth) : Style.outlineWidthFocused
+    property real cornerRadius: expressive ? Style.cornerRadiusXL : Style.cornerRadiusXS
+    property real controlHeight: expressive ? Style.buttonHeightM : Style.iconButtonSize
+    property bool expressive: false
+    property bool morph: false
+    property bool busy: false
+    property bool showAcceptButton: false
+    property string acceptButtonName: ""
+    property Component trailingContent: null
+    property real shakeOffset: 0
+    property int typedCount: 0
+    readonly property var morphShapes: ["cookie4", "clover4", "sunny", "cookie9", "softBurst", "pentagon", "oval", "cookie6"]
+    readonly property real morphSize: controlHeight - Style.spacingS * 2
+    readonly property bool morphShown: expressive && morph
+    readonly property int spatialDuration: Style.reduceMotion ? 0 : Style.expressiveDurations.expressiveFastSpatial
+    readonly property int effectsDuration: Style.reduceMotion ? 0 : Style.expressiveDurations.expressiveEffects
 
     readonly property real accessorySize: outlined ? Math.min(controlHeight, Style.fieldHeightLarge) : Style.buttonHeightXS
     readonly property real contentPadding: outlined ? Style.spacingL : Style.spacingM
     readonly property real leftPadding: {
+        if (morphShown)
+            return Style.spacingS + morphSize + Style.spacingM;
         if (leadingLoader.item)
             return contentPadding + leadingLoader.width + Style.spacingS;
         if (outlined && leftIconName)
@@ -99,25 +114,41 @@ StyledRect {
     function insertText(str) {
         textInput.insert(textInput.cursorPosition, str);
     }
+    function backspace() {
+        if (textInput.selectedText.length > 0) {
+            textInput.remove(textInput.selectionStart, textInput.selectionEnd);
+            return;
+        }
+        if (textInput.cursorPosition === 0)
+            return;
+        textInput.remove(textInput.cursorPosition - 1, textInput.cursorPosition);
+    }
+    function shake() {
+        if (!shakeLoader.item)
+            return;
+        shakeLoader.item.restart();
+    }
 
     readonly property real labelBandHeight: Math.round(Style.fontSizeSmall * 1.4) + Style.spacingXS * 2
     readonly property bool labelFloated: textInput.activeFocus || text.length > 0 || textInput.inputMethodComposing
     readonly property real labelProgress: Math.max(0, Math.min(1, labelMotion.value))
     readonly property real containerTop: outlined && labelText ? Style.outlinedFieldLabelLineHeight / 2 : 0
-    readonly property real supportingHeight: supportingText ? supportingLabel.implicitHeight + Style.spacingXS : 0
+    readonly property string shownPlaceholderText: expressive && labelText ? labelText : placeholderText
+    readonly property string shownSupportingText: supportingText || (expressive && labelText ? placeholderText : "")
+    readonly property real supportingHeight: shownSupportingText ? supportingLabel.implicitHeight + Style.spacingXS : 0
     readonly property real containerHeight: height - containerTop - supportingHeight
-    readonly property bool placeholderVisible: textInput.text.length === 0 && !textInput.inputMethodComposing && (outlined ? (!labelText || labelFloated) : (!hidePlaceholderOnFocus || !textInput.activeFocus))
+    readonly property bool placeholderVisible: textInput.text.length === 0 && !textInput.inputMethodComposing && (outlined ? (!labelText || labelFloated) : expressive || !hidePlaceholderOnFocus || !textInput.activeFocus)
     readonly property color outlineTargetColor: !enabled ? Style.onSurface_12 : isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : textInput.activeFocus ? focusedBorderColor : fieldHover.hovered ? Style.onSurface : normalBorderColor
     readonly property real outlineStrokeWidth: !enabled ? borderWidth : borderWidth + (focusedBorderWidth - borderWidth) * Math.max(0, Math.min(1, strokeMotion.value))
     readonly property color labelTargetColor: !enabled ? Style.onSurface_38 : isError ? (fieldHover.hovered && !textInput.activeFocus ? Style.onErrorContainer : Style.error) : textInput.activeFocus ? Style.primary : fieldHover.hovered ? Style.onSurface : Style.onSurfaceVariant
 
     width: Style.fieldDefaultWidth
-    implicitHeight: outlined ? Math.max(controlHeight, textInput.contentHeight + topPadding + bottomPadding) + containerTop + supportingHeight : Style.fieldHeight + (labelText ? labelBandHeight : 0)
+    implicitHeight: outlined ? Math.max(controlHeight, textInput.contentHeight + topPadding + bottomPadding) + containerTop + supportingHeight : expressive ? controlHeight + supportingHeight : Style.fieldHeight + (labelText ? labelBandHeight : 0)
     height: implicitHeight
     radius: cornerRadius
-    color: outlined ? "transparent" : Style.foregroundColor(backgroundColor, !usePopupTransparency)
+    color: outlined || expressive ? "transparent" : Style.foregroundColor(backgroundColor, !usePopupTransparency)
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
-    border.width: outlined ? 0 : textInput.activeFocus ? focusedBorderWidth : borderWidth
+    border.width: outlined || expressive ? 0 : textInput.activeFocus ? focusedBorderWidth : borderWidth
 
     Component.onCompleted: {
         labelMotion.snapTo(labelFloated ? 1 : 0);
@@ -125,6 +156,15 @@ StyledRect {
         placeholderMotion.snapTo(placeholderVisible ? 1 : 0);
     }
     onLabelFloatedChanged: labelMotion.retarget(labelFloated ? 1 : 0)
+    onTextChanged: {
+        const grew = text.length > typedCount;
+        typedCount = text.length;
+        if (grew && morphLoader.item)
+            morphLoader.item.pulse();
+    }
+    transform: Translate {
+        x: root.shakeOffset
+    }
     onEnabledChanged: {
         if (!enabled)
             strokeMotion.snapTo(0);
@@ -199,6 +239,37 @@ StyledRect {
         antialiasing: true
     }
 
+    Loader {
+        active: root.expressive
+        visible: active
+        width: root.width
+        height: root.containerHeight
+        sourceComponent: Rectangle {
+            readonly property bool errorOutline: root.isError && !root.morph
+
+            radius: root.cornerRadius
+            color: Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency)
+            border.color: errorOutline ? Style.error : textInput.activeFocus ? root.focusedBorderColor : root.normalBorderColor
+            border.width: errorOutline ? Style.outlineWidth : textInput.activeFocus ? root.focusedBorderWidth : root.borderWidth
+
+            Behavior on border.color {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DColorAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+                }
+            }
+
+            Behavior on border.width {
+                enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None
+                DAnim {
+                    duration: Style.expressiveDurations.expressiveEffects
+                    easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+                }
+            }
+        }
+    }
+
     Item {
         width: root.cutoutStart
         height: root.cutoutBottom
@@ -227,8 +298,77 @@ StyledRect {
 
     MouseArea {
         anchors.fill: parent
-        enabled: root.outlined && root.enabled
+        enabled: (root.outlined || root.expressive) && root.enabled
         onPressed: root.forceActiveFocus()
+    }
+
+    Loader {
+        id: morphLoader
+
+        anchors.left: parent.left
+        anchors.leftMargin: Style.spacingS
+        anchors.verticalCenter: textInput.verticalCenter
+        active: root.morphShown
+        visible: active
+        width: root.morphSize
+        height: root.morphSize
+        sourceComponent: Item {
+            function pulse() {
+                morphPulse.restart();
+            }
+
+            DMaterialShape {
+                id: morphShape
+
+                anchors.fill: parent
+                shape: root.morphShapes[root.text.length % root.morphShapes.length]
+                color: root.isError ? Style.errorContainer : Style.primaryContainer
+
+                SequentialAnimation {
+                    id: morphPulse
+                    NumberAnimation {
+                        target: morphShape
+                        property: "scale"
+                        to: 1.15
+                        duration: root.spatialDuration / 2
+                        easing.type: Easing.BezierSpline
+                        easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+                    }
+                    NumberAnimation {
+                        target: morphShape
+                        property: "scale"
+                        to: 1
+                        duration: root.spatialDuration
+                        easing.type: Easing.BezierSpline
+                        easing.bezierCurve: Style.expressiveCurves.expressiveDefaultSpatial
+                    }
+                }
+
+                Behavior on color {
+                    DColorAnim {
+                        duration: root.effectsDuration
+                        easing.bezierCurve: Style.expressiveCurves.expressiveEffects
+                    }
+                }
+            }
+
+            Loader {
+                anchors.fill: parent
+                active: root.busy
+                sourceComponent: DLoadingIndicator {
+                    size: root.morphSize
+                    contained: true
+                }
+            }
+
+            DIcon {
+                anchors.centerIn: parent
+                name: root.leftIconName
+                size: Style.iconSizeSmall
+                color: root.isError ? Style.onErrorContainer : Style.onPrimaryContainer
+                visible: !root.busy && root.leftIconName !== ""
+            }
+        }
     }
 
     DIcon {
@@ -240,7 +380,7 @@ StyledRect {
         name: leftIconName
         size: leftIconSize
         color: root.outlined ? (root.enabled ? root.leftIconColor : Style.onSurface_38) : textInput.activeFocus ? leftIconFocusedColor : leftIconColor
-        visible: leftIconName !== "" && !leadingLoader.item
+        visible: leftIconName !== "" && !leadingLoader.item && !root.morphShown
     }
 
     Loader {
@@ -249,7 +389,7 @@ StyledRect {
         anchors.left: parent.left
         anchors.leftMargin: root.contentPadding
         anchors.verticalCenter: textInput.verticalCenter
-        active: root.leadingContent !== null
+        active: root.leadingContent !== null && !root.morphShown
         sourceComponent: root.leadingContent
     }
 
@@ -264,7 +404,7 @@ StyledRect {
         implicitWidth: labelGlyph.width * textScale
         width: implicitWidth
         height: root.outlined ? root.font.pixelSize + Style.spacingS + (Style.outlinedFieldLabelLineHeight - root.font.pixelSize - Style.spacingS) * root.labelProgress : Style.outlinedFieldLabelLineHeight
-        visible: root.labelText !== ""
+        visible: root.labelText !== "" && !root.expressive
 
         StyledText {
             id: labelGlyph
@@ -295,9 +435,9 @@ StyledRect {
         anchors.right: rightButtonsRow.visible ? rightButtonsRow.left : parent.right
         anchors.rightMargin: rightButtonsRow.visible ? Style.spacingS : root.contentPadding + root.rightAccessoryWidth
         anchors.top: parent.top
-        anchors.topMargin: root.outlined ? root.containerTop + root.topPadding : root.labelText !== "" ? root.labelBandHeight : root.topPadding
+        anchors.topMargin: root.outlined ? root.containerTop + root.topPadding : root.labelText !== "" && !root.expressive ? root.labelBandHeight : root.topPadding
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: root.bottomPadding + (root.outlined ? root.supportingHeight : 0)
+        anchors.bottomMargin: root.bottomPadding + (root.outlined || root.expressive ? root.supportingHeight : 0)
         font.pixelSize: Style.fontSizeMedium
         font.family: Style.fontFamily
         font.weight: Style.fontWeight
@@ -380,14 +520,14 @@ StyledRect {
         id: rightButtonsRow
 
         anchors.right: parent.right
-        anchors.rightMargin: (root.outlined ? Style.spacingXS : Style.spacingS) + root.rightAccessoryWidth
+        anchors.rightMargin: (root.outlined || root.expressive ? Style.spacingXS : Style.spacingS) + root.rightAccessoryWidth
         anchors.verticalCenter: textInput.verticalCenter
-        spacing: root.outlined ? 0 : Style.spacingXS
-        visible: showPasswordToggle || (showClearButton && !readOnly && text.length > 0)
+        spacing: root.outlined || root.expressive ? 0 : Style.spacingXS
+        visible: showPasswordToggle || (showClearButton && !readOnly && text.length > 0) || trailingContent !== null || showAcceptButton || (busy && expressive && !morph)
 
         Loader {
             active: root.showPasswordToggle
-            visible: active
+            visible: active && (!root.expressive || root.text.length > 0 || root.passwordVisible)
             sourceComponent: DActionButton {
                 focusPolicy: Qt.TabFocus
                 checkable: true
@@ -414,6 +554,43 @@ StyledRect {
                 onClicked: textInput.text = ""
             }
         }
+
+        Loader {
+            active: root.trailingContent !== null
+            visible: active
+            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: root.trailingContent
+        }
+
+        Loader {
+            active: root.busy && root.expressive && !root.morph
+            visible: active
+            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: Item {
+                width: root.accessorySize
+                height: root.accessorySize
+
+                DLoadingIndicator {
+                    anchors.centerIn: parent
+                    size: Style.iconSize
+                }
+            }
+        }
+
+        Loader {
+            active: root.showAcceptButton
+            visible: active && !root.busy
+            sourceComponent: DActionButton {
+                focusPolicy: Qt.TabFocus
+                Accessible.name: root.acceptButtonName
+                buttonSize: root.accessorySize
+                iconName: "keyboard_return"
+                iconSize: root.outlined ? Style.iconSize : Style.iconSizeSmall
+                iconColor: Style.onSurfaceVariant
+                enabled: root.enabled
+                onClicked: root.accepted()
+            }
+        }
     }
 
     Item {
@@ -423,7 +600,7 @@ StyledRect {
 
         StyledText {
             anchors.fill: parent
-            text: root.placeholderText
+            text: root.shownPlaceholderText
             font: textInput.font
             color: root.outlined && !root.enabled ? Style.onSurface_38 : placeholderColor
             horizontalAlignment: Text.AlignLeft
@@ -441,8 +618,8 @@ StyledRect {
         anchors.bottom: parent.bottom
         anchors.leftMargin: root.contentPadding
         anchors.rightMargin: root.contentPadding
-        visible: root.outlined && root.supportingText !== ""
-        text: root.supportingText
+        visible: (root.outlined || root.expressive) && root.shownSupportingText !== ""
+        text: root.shownSupportingText
         font.pixelSize: Style.fontSizeSmall
         lineHeightMode: Text.FixedHeight
         lineHeight: Style.outlinedFieldLabelLineHeight
@@ -458,6 +635,37 @@ StyledRect {
     }
 
     onPlaceholderVisibleChanged: placeholderMotion.retarget(placeholderVisible ? 1 : 0)
+
+    Loader {
+        id: shakeLoader
+        active: root.expressive
+        sourceComponent: SequentialAnimation {
+            NumberAnimation {
+                target: root
+                property: "shakeOffset"
+                to: Style.spacingS
+                duration: root.spatialDuration / 3
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+            }
+            NumberAnimation {
+                target: root
+                property: "shakeOffset"
+                to: -Style.spacingS
+                duration: root.spatialDuration / 3
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+            }
+            NumberAnimation {
+                target: root
+                property: "shakeOffset"
+                to: 0
+                duration: root.spatialDuration / 3
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Style.expressiveCurves.expressiveFastSpatial
+            }
+        }
+    }
 
     Behavior on border.color {
         enabled: Style.currentAnimationSpeed !== Style.AnimationSpeed.None

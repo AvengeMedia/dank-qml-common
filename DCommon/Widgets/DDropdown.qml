@@ -16,21 +16,28 @@ FocusScope {
     property string currentValue: ""
     property var options: []
     property var optionIcons: []
+    property var optionImages: []
     property bool enableFuzzySearch: false
     property var optionIconMap: ({})
+    property var optionImageMap: ({})
     property var optionColorMap: ({})
 
     function rebuildIconMap() {
-        const map = {};
+        const icons = {};
+        const images = {};
         for (let i = 0; i < options.length; i++) {
             if (optionIcons.length > i)
-                map[options[i]] = optionIcons[i];
+                icons[options[i]] = optionIcons[i];
+            if (optionImages.length > i && optionImages[i])
+                images[options[i]] = optionImages[i];
         }
-        optionIconMap = map;
+        optionIconMap = icons;
+        optionImageMap = images;
     }
 
     onOptionsChanged: rebuildIconMap()
     onOptionIconsChanged: rebuildIconMap()
+    onOptionImagesChanged: rebuildIconMap()
 
     property int popupWidthOffset: 0
     property int maxPopupHeight: Style.menuMaxHeight
@@ -385,13 +392,30 @@ FocusScope {
                 visible: name !== ""
             }
 
+            Loader {
+                id: triggerImage
+
+                readonly property string imageValue: root.optionImageMap[root.currentValue] ?? ""
+
+                width: Style.iconSizeMedium
+                height: Style.iconSizeMedium
+                anchors.verticalCenter: parent.verticalCenter
+                active: imageValue !== ""
+                visible: active
+                sourceComponent: AppIconRenderer {
+                    iconValue: triggerImage.imageValue
+                    iconSize: Style.iconSizeMedium
+                    fallbackText: root.currentValue.charAt(0).toUpperCase()
+                }
+            }
+
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
                 visible: root.showLabel
                 text: root.currentValue !== "" ? root.currentValue : root.emptyText
                 font.pixelSize: Style.fontSizeMedium
                 color: !root.enabled ? Style.onSurface_38 : (root.currentValue !== "" ? Style.surfaceText : Style.onSurfaceVariant)
-                width: contentRow.width - (triggerSwatch.visible ? triggerSwatch.width + contentRow.spacing : 0) - (triggerIcon.visible ? triggerIcon.width + contentRow.spacing : 0)
+                width: contentRow.width - (triggerSwatch.visible ? triggerSwatch.width + contentRow.spacing : 0) - (triggerIcon.visible ? triggerIcon.width + contentRow.spacing : 0) - (triggerImage.visible ? triggerImage.width + contentRow.spacing : 0)
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
                 horizontalAlignment: Text.AlignLeft
@@ -712,6 +736,7 @@ FocusScope {
                                 property bool isSelected: root.selectedIndex === index
                                 property bool isCurrentValue: root.currentValue === modelData
                                 property string iconName: root.optionIconMap[modelData] ?? ""
+                                property string imageValue: root.optionImageMap[modelData] ?? ""
                                 property var swatchColor: root.optionColorMap[modelData]
                                 readonly property color contentColor: isCurrentValue ? Style.onSelectedContainer : Style.surfaceText
 
@@ -762,13 +787,29 @@ FocusScope {
                                         visible: name !== ""
                                     }
 
+                                    Loader {
+                                        id: optionImage
+
+                                        width: Style.iconSizeMedium
+                                        height: Style.iconSizeMedium
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        active: delegateRoot.imageValue !== ""
+                                        visible: active
+                                        sourceComponent: AppIconRenderer {
+                                            iconValue: delegateRoot.imageValue
+                                            iconSize: Style.iconSizeMedium
+                                            iconColor: delegateRoot.contentColor
+                                            fallbackText: String(delegateRoot.modelData).charAt(0).toUpperCase()
+                                        }
+                                    }
+
                                     StyledText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: delegateRoot.modelData
                                         font.pixelSize: Style.fontSizeMedium
                                         color: delegateRoot.contentColor
                                         font.weight: delegateRoot.isCurrentValue ? Style.fontWeightMedium : Style.fontWeight
-                                        width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingM * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0))
+                                        width: root.popupWidth > 0 ? undefined : (delegateRoot.width - parent.x - Style.spacingM * 2 - (optionSwatch.visible ? optionSwatch.width + parent.spacing : 0) - (optionImage.visible ? optionImage.width + parent.spacing : 0))
                                         elide: root.popupWidth > 0 ? Text.ElideNone : Text.ElideRight
                                         wrapMode: Text.NoWrap
                                         horizontalAlignment: Text.AlignLeft

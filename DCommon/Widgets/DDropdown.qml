@@ -38,7 +38,8 @@ FocusScope {
     property int popupWidth: 0
     property bool alignPopupRight: false
     property int dropdownWidth: 200
-    property bool compactMode: text === "" && description === ""
+    property bool showLabel: true
+    property bool compactMode: !showLabel || (text === "" && description === "")
     property bool showTrigger: true
     property Item popupAnchorItem: null
     property Item focusReturnTarget: null
@@ -89,6 +90,8 @@ FocusScope {
     readonly property int menuWidth: {
         if (root.popupWidth > 0)
             return root.popupWidth;
+        if (!root.showLabel)
+            return root.dropdownWidth;
         return Math.max(1, dropdown.width + root.popupWidthOffset);
     }
 
@@ -225,7 +228,8 @@ FocusScope {
         root.selectedIndex = -1;
     }
 
-    width: !showTrigger ? 0 : (compactMode ? dropdownWidth : parent.width)
+    readonly property real labelFreeWidth: Style.spacingS * 2 + contentRow.implicitWidth + Style.spacingXS + Style.iconSize
+    width: !showTrigger ? 0 : (!showLabel ? labelFreeWidth : compactMode ? dropdownWidth : parent.width)
     implicitHeight: !showTrigger ? 0 : (compactMode ? triggerHeight : Math.max(Style.listItemHeight + Style.spacingXS, labelColumn.implicitHeight + Style.spacingM))
     activeFocusOnTab: showTrigger && enabled && focusPolicy !== Qt.NoFocus
     readonly property Item focusTarget: dropdown
@@ -317,8 +321,15 @@ FocusScope {
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Style.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter
         radius: root.triggerRadius
-        color: !root.enabled ? Style.onSurface_12 : (dropdown.hovered || root.menuVisible ? root.hoverBackgroundColor : Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency))
-        border.color: !root.enabled ? "transparent" : (active || dropdown.hovered ? root.focusedBorderColor : root.normalBorderColor)
+        color: {
+            const lit = dropdown.hovered || root.menuVisible;
+            if (!root.showLabel)
+                return root.enabled && lit ? Style.withAlpha(Style.onSurface, Style.stateLayerHover) : "transparent";
+            if (!root.enabled)
+                return Style.onSurface_12;
+            return lit ? root.hoverBackgroundColor : Style.foregroundColor(root.backgroundColor, !root.usePopupTransparency);
+        }
+        border.color: !root.enabled || (!root.showLabel && !visualFocus) ? "transparent" : (active || dropdown.hovered ? root.focusedBorderColor : root.normalBorderColor)
         border.width: active ? Style.outlineWidthFocused : Style.outlineWidth
 
         Behavior on color {
@@ -350,8 +361,8 @@ FocusScope {
             anchors.left: parent.left
             anchors.right: expandIcon.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: Style.spacingL
-            anchors.rightMargin: Style.spacingS
+            anchors.leftMargin: root.showLabel ? Style.spacingL : Style.spacingS
+            anchors.rightMargin: root.showLabel ? Style.spacingS : Style.spacingXS
             spacing: Style.spacingS
 
             DColorSwatch {
@@ -376,6 +387,7 @@ FocusScope {
 
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
+                visible: root.showLabel
                 text: root.currentValue !== "" ? root.currentValue : root.emptyText
                 font.pixelSize: Style.fontSizeMedium
                 color: !root.enabled ? Style.onSurface_38 : (root.currentValue !== "" ? Style.surfaceText : Style.onSurfaceVariant)

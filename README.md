@@ -44,6 +44,8 @@ For qmlls completion, create an empty `.qmlls.ini` at the repo root once (`touch
 
 `DSlider` steps with the arrow keys, `DDropdown` opens on Down, and `DDragHandle` moves its item on Up and Down. In a surface where Up and Down move focus between controls, set `DSlider.upDownKeysStep: false` (Left and Right still step), `DDropdown.downKeyOpens: false` (Alt+Down, Enter and Space still open it) and `DDragHandle.upDownKeysMove: false` (the owner handles reordering, for example on Ctrl+Up and Ctrl+Down).
 
+`DDropdown.showLabel: false` shrinks the trigger to its swatch or icon plus the arrow, on whatever surface it sits on: no fill until hover and no outline until keyboard focus; the menu keeps `dropdownWidth` unless `popupWidth` is set. `text` still names it for screen readers.
+
 `DBadge.maximumWidth` elides the label; `truncated` reports when it did, and `tooltipText` shows a hover tooltip, so `tooltipText: truncated ? text : null` restores the full text.
 
 `DDetailChip` shows a `label: value` pair on the chip tier, for read-only details such as a network's frequency or a printer's state.

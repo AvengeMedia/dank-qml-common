@@ -19,6 +19,8 @@ Item {
     property string closeTooltipText: ""
     default property alias actions: extraActions.data
 
+    readonly property bool compositorDecorated: controls !== null && !Host.ownWindowDecorations
+    readonly property bool hasActions: extraActions.children.length > 0
     readonly property bool centered: titleAlignment === Text.AlignHCenter
     readonly property real edgeInset: horizontalPadding >= 0 ? horizontalPadding : Style.windowInset
     readonly property real titleGap: horizontalPadding >= 0 ? horizontalPadding : Style.spacingM
@@ -26,7 +28,7 @@ Item {
 
     signal closeRequested
 
-    implicitHeight: Math.max(buttons.implicitHeight, titleColumn.implicitHeight) + verticalPadding * 2
+    implicitHeight: compositorDecorated && !hasActions ? 0 : Math.max(buttons.implicitHeight, titleColumn.implicitHeight) + verticalPadding * 2
     height: implicitHeight
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
@@ -43,7 +45,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.rightMargin: Style.spacingM
-        enabled: root.controls !== null
+        enabled: root.controls !== null && !root.compositorDecorated
         onPressed: root.controls.tryStartMove()
         onDoubleClicked: root.controls.tryToggleMaximize()
     }
@@ -54,6 +56,7 @@ Item {
         x: root.centered ? (root.width - width) / 2 : (LayoutMirroring.enabled ? root.buttonsReserve : root.edgeInset)
         anchors.verticalCenter: parent.verticalCenter
         spacing: Style.spacingXS
+        visible: !root.compositorDecorated
 
         StyledText {
             width: parent.width
@@ -93,7 +96,7 @@ Item {
 
         WindowButton {
             objectName: "minimizeWindow"
-            visible: root.controls?.canMinimize ?? false
+            visible: !root.compositorDecorated && (root.controls?.canMinimize ?? false)
             iconName: "minimize"
             Accessible.name: I18n.tr("Minimize")
             onClicked: root.controls.tryMinimize()
@@ -101,7 +104,7 @@ Item {
 
         WindowButton {
             objectName: "maximizeWindow"
-            visible: root.controls?.canMaximize ?? false
+            visible: !root.compositorDecorated && (root.controls?.canMaximize ?? false)
             iconName: root.controls?.targetWindow?.maximized ? "fullscreen_exit" : "fullscreen"
             Accessible.name: root.controls?.targetWindow?.maximized ? I18n.tr("Restore") : I18n.tr("Maximize")
             onClicked: root.controls.tryToggleMaximize()
@@ -109,6 +112,7 @@ Item {
 
         WindowButton {
             objectName: "closeWindow"
+            visible: !root.compositorDecorated
             enabled: root.closeEnabled
             iconName: "close"
             backgroundColor: Style.secondaryContainer

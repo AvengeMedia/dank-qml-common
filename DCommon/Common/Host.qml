@@ -9,4 +9,5 @@ Singleton {
     property var cache: null
     property var files: null
     property bool hyprlandFocusGrab: false
+    property bool ownWindowDecorations: true
 }

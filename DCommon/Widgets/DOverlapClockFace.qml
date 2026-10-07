@@ -27,7 +27,7 @@ Item {
     readonly property real rowAdvance: digitSize * 0.7
     readonly property real rowShift: -digitSize * 0.08
     readonly property bool variableFont: fontFamily === "" || fontFamily === Style.defaultFontFamily
-    readonly property real minutesLeft: (hoursRow.width - minutesRow.width) / 2 + rowShift
+    readonly property real minutesLeft: rowShift
     readonly property real leftEdge: Math.min(0, minutesLeft)
     readonly property real padding: outlineWidth + Style.spacingXS
     readonly property real pixelRatio: Window.window?.devicePixelRatio ?? Screen.devicePixelRatio
@@ -41,8 +41,29 @@ Item {
             "wght": weight,
             "ROND": 0,
             "opsz": 18
-        } : {}
+        } : {},
+        features: {
+            "tnum": 1
+        }
     })
+    // reading the font registers the dependency, the method calls alone bind nothing
+    readonly property real cellWidth: {
+        const font = digitMetrics.font;
+        return Math.max(..."0123456789".split("").map(digit => digitMetrics.advanceWidth(digit)));
+    }
+    readonly property rect digitInk: {
+        const font = digitMetrics.font;
+        return digitMetrics.tightBoundingRect("0123456789");
+    }
+
+    function cellX(index, ink) {
+        return index * (cellWidth + tracking) + (cellWidth - ink.width) / 2 - ink.x;
+    }
+
+    FontMetrics {
+        id: digitMetrics
+        font: root.digitFont
+    }
 
     implicitWidth: Math.max(hoursRow.width, minutesLeft + minutesRow.width) - leftEdge + padding * 2
     implicitHeight: Math.max(hoursRow.height, minutesRow.y - hoursRow.y + minutesRow.height) + padding * 2
@@ -123,7 +144,6 @@ Item {
 
         required property string text
         readonly property rect inkBounds: metrics.tightBoundingRect
-        readonly property real advanceWidth: metrics.advanceWidth
         readonly property real capturePadding: 2 / root.rasterScale
         readonly property rect captureRect: Qt.rect(boundingRect.x - capturePadding, boundingRect.y - capturePadding, boundingRect.width + capturePadding * 2, boundingRect.height + capturePadding * 2)
         readonly property color fillChannel: Qt.rgba(1, 0, 0, 1)
@@ -171,25 +191,21 @@ Item {
         required property string text
         readonly property alias first: firstDigit
         readonly property alias second: secondDigit
-        readonly property real secondX: firstDigit.advanceWidth + root.tracking
-        readonly property real leftBearing: Math.min(firstDigit.inkBounds.x, secondX + secondDigit.inkBounds.x)
-        readonly property real topBearing: Math.min(firstDigit.inkBounds.y, secondDigit.inkBounds.y)
-        readonly property real bottomBearing: Math.max(firstDigit.inkBounds.y + firstDigit.inkBounds.height, secondDigit.inkBounds.y + secondDigit.inkBounds.height)
 
-        implicitWidth: Math.max(firstDigit.inkBounds.x + firstDigit.inkBounds.width, secondX + secondDigit.inkBounds.x + secondDigit.inkBounds.width) - leftBearing
-        implicitHeight: bottomBearing - topBearing
-        baselineOffset: -topBearing
+        implicitWidth: root.cellWidth * 2 + root.tracking
+        implicitHeight: root.digitInk.height
+        baselineOffset: -root.digitInk.y
 
         ClockDigit {
             id: firstDigit
-            x: -row.leftBearing
+            x: root.cellX(0, inkBounds)
             y: row.baselineOffset
             text: row.text[0] ?? ""
         }
 
         ClockDigit {
             id: secondDigit
-            x: row.secondX - row.leftBearing
+            x: root.cellX(1, inkBounds)
             y: row.baselineOffset
             text: row.text[1] ?? ""
         }

@@ -12,7 +12,6 @@ layout(std140, binding = 0) uniform buf {
     vec4 minutesSecondRect;
     vec4 lightColor;
     vec4 darkColor;
-    vec4 outlineColor;
 } ubuf;
 
 layout(binding = 1) uniform sampler2D hoursFirst;
@@ -26,8 +25,7 @@ vec4 compositeGlyph(sampler2D tex, vec4 rect, vec4 color, vec4 under) {
         return under;
 
     vec4 mask = texture(tex, uv);
-    float rim = max(0.0, mask.a - mask.r) * under.a;
-    return color * mask.r + ubuf.outlineColor * rim + under * (1.0 - mask.a);
+    return color * mask.r + under * (1.0 - mask.a);
 }
 
 void main() {

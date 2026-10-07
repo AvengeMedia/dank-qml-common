@@ -19,16 +19,12 @@ Item {
     property string fontFamily: ""
     property int weight: 1000
     property real digitSize: Style.fontSizeDisplayLarge * 2
-    property color outlineColor: Style.withAlpha(Style.scrimColor, Style.scrimAlpha)
-    property real outlineWidth: digitSize * 0.012
+    property real outlineWidth: digitSize * 0.02
     property real renderScale: 1
 
     readonly property real tracking: -digitSize * 0.1
     readonly property real rowAdvance: digitSize * 0.7
-    readonly property real rowShift: -digitSize * 0.08
     readonly property bool variableFont: fontFamily === "" || fontFamily === Style.defaultFontFamily
-    readonly property real minutesLeft: rowShift
-    readonly property real leftEdge: Math.min(0, minutesLeft)
     readonly property real padding: outlineWidth + Style.spacingXS
     readonly property real pixelRatio: Window.window?.devicePixelRatio ?? Screen.devicePixelRatio
     readonly property real supersample: 4
@@ -65,19 +61,19 @@ Item {
         font: root.digitFont
     }
 
-    implicitWidth: Math.max(hoursRow.width, minutesLeft + minutesRow.width) - leftEdge + padding * 2
+    implicitWidth: Math.max(hoursRow.width, minutesRow.width) + padding * 2
     implicitHeight: Math.max(hoursRow.height, minutesRow.y - hoursRow.y + minutesRow.height) + padding * 2
 
     DigitRow {
         id: hoursRow
-        x: (root.width - root.implicitWidth) / 2 + root.padding - root.leftEdge
+        x: (root.width - root.implicitWidth) / 2 + root.padding
         y: root.padding
         text: root.hours.padStart(2, "0")
     }
 
     DigitRow {
         id: minutesRow
-        x: hoursRow.x + root.minutesLeft
+        x: hoursRow.x
         y: hoursRow.y + hoursRow.baselineOffset + root.rowAdvance - baselineOffset
         text: root.minutes.padStart(2, "0")
     }
@@ -135,7 +131,6 @@ Item {
         readonly property vector4d minutesSecondRect: minutesSecond.faceRect
         readonly property color lightColor: root.color
         readonly property color darkColor: root.shadowColor
-        readonly property color outlineColor: root.outlineColor
         fragmentShader: Qt.resolvedUrl("../Shaders/qsb/clock_knockout.frag.qsb")
     }
 

@@ -87,7 +87,7 @@ Rectangle {
     ClippingRectangle {
         id: clipArea
         anchors.fill: parent
-        anchors.margins: 2
+        anchors.margins: root.ringWidth > 0 ? 2 : 0
         radius: Math.min(width, height) / 2
         color: "transparent"
 

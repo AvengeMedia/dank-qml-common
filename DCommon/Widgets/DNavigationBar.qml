@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Templates as T
 import qs.DCommon.Common
+import "../Common/WheelInput.js" as WheelInput
 
 T.Control {
     id: root
@@ -117,7 +118,7 @@ T.Control {
         WheelHandler {
             enabled: !root.vertical && viewport.contentWidth > viewport.width
             onWheel: event => {
-                const delta = event.pixelDelta.x || event.pixelDelta.y || event.angleDelta.x || event.angleDelta.y;
+                const delta = WheelInput.anyAxisDelta(event);
                 viewport.contentX = Math.max(0, Math.min(viewport.contentWidth - viewport.width, viewport.contentX - delta));
                 event.accepted = true;
             }

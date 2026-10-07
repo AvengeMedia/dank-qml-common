@@ -17,6 +17,8 @@ import qs.DCommon.Session
 
 `DCommon/Common/LayoutCodes.js` (keyboard layout name → short code) is imported by relative path.
 
+`DCommon/Common/WheelInput.js` classifies a QML WheelEvent by its scroll phase: `isTouchpad(wheel)` (finger source, the only one Qt Wayland gives phases), `verticalKind(wheel)` (`touchpad`, `wheel`, `highResWheel`, `none`) and `anyAxisDelta(wheel)`. Use it instead of testing `pixelDelta`, which wheels also carry from Qt 6.12. Imported by relative path.
+
 ## Consuming from an app
 
 Add this repo as a git submodule at the app repo root, then symlink it into the quickshell config root:

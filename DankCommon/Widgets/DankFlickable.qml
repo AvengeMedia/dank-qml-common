@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import qs.DankCommon.Widgets
 import "ScrollConstants.js" as Scroll
+import "../Common/WheelInput.js" as WheelInput
 
 Flickable {
     id: flickable
@@ -45,13 +46,10 @@ Flickable {
             const timeDelta = currentTime - lastWheelTime;
             lastWheelTime = currentTime;
 
-            const hasPixel = event.pixelDelta && event.pixelDelta.y !== 0;
+            const kind = WheelInput.verticalKind(event);
             const deltaY = event.angleDelta.y;
-            const isTraditionalMouse = !hasPixel && Math.abs(deltaY) >= 120 && (Math.abs(deltaY) % 120) === 0;
-            const isHighDpiMouse = !hasPixel && !isTraditionalMouse && deltaY !== 0;
-            const isTouchpad = hasPixel;
 
-            if (isTraditionalMouse) {
+            if (kind === WheelInput.Kind.wheel) {
                 sessionUsedMouseWheel = true;
                 momentumAnim.running = false;
                 flickable.isMomentumActive = false;
@@ -69,7 +67,7 @@ Flickable {
                 }
 
                 flickable.contentY = newY;
-            } else if (isHighDpiMouse) {
+            } else if (kind === WheelInput.Kind.highResWheel) {
                 sessionUsedMouseWheel = true;
                 momentumAnim.running = false;
                 flickable.isMomentumActive = false;
@@ -86,7 +84,7 @@ Flickable {
                 }
 
                 flickable.contentY = newY;
-            } else if (isTouchpad) {
+            } else if (kind === WheelInput.Kind.touchpad) {
                 sessionUsedMouseWheel = false;
                 momentumAnim.running = false;
                 flickable.isMomentumActive = false;

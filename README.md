@@ -13,6 +13,8 @@ import qs.DankCommon.Session
 
 `DankCommon/Session/` holds the components shared between the DMS lock screen and [dms-greeter](https://github.com/AvengeMedia/dank-greeter): the power menu (`LockPowerMenu`) and the on-screen keyboard (`Keyboard`, `KeyboardController`, `CustomButtonKeyboard`). `DankCommon/Common/LayoutCodes.js` (keyboard layout name → short code) is imported by relative path.
 
+`DankCommon/Common/WheelInput.js` classifies a QML WheelEvent by its scroll phase: `isTouchpad(wheel)` (finger source, the only one Qt Wayland gives phases), `verticalKind(wheel)` (`touchpad`, `wheel`, `highResWheel`, `none`) and `anyAxisDelta(wheel)`. Use it instead of testing `pixelDelta`, which wheels also carry from Qt 6.12. Imported by relative path.
+
 ## Consuming from an app
 
 Add this repo as a git submodule at the app repo root, then symlink it into the quickshell config root:

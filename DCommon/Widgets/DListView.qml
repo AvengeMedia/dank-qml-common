@@ -159,6 +159,16 @@ ListView {
         savedY = originY;
     }
 
+    function forwardWheel(event) {
+        if (!wheelEnabled)
+            return;
+        wheelHandler.handleWheel(event);
+    }
+
+    function forwardWheelEnd() {
+        wheelHandler.release();
+    }
+
     function stopMomentum() {
         cancelFlick();
         momentumAnim.running = false;
@@ -191,7 +201,9 @@ ListView {
 
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
 
-        onWheel: event => {
+        onWheel: event => handleWheel(event)
+
+        function handleWheel(event) {
             isUserScrolling = true;
             vbar._scrollBarActive = true;
             vbar.hideTimer.restart();
@@ -286,14 +298,17 @@ ListView {
         }
 
         onActiveChanged: {
-            if (!active) {
-                isUserScrolling = false;
-                if (!sessionUsedMouseWheel && Math.abs(momentumVelocity) >= Scroll.minMomentumVelocity) {
-                    startMomentum();
-                } else {
-                    velocitySamples = [];
-                    momentumVelocity = 0;
-                }
+            if (!active)
+                release();
+        }
+
+        function release() {
+            isUserScrolling = false;
+            if (!sessionUsedMouseWheel && Math.abs(momentumVelocity) >= Scroll.minMomentumVelocity) {
+                startMomentum();
+            } else {
+                velocitySamples = [];
+                momentumVelocity = 0;
             }
         }
     }

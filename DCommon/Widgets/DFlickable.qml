@@ -45,7 +45,9 @@ Flickable {
 
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
 
-        onWheel: event => {
+        onWheel: event => handleWheel(event)
+
+        function handleWheel(event) {
             vbar._scrollBarActive = true;
             vbar.hideTimer.restart();
 
@@ -133,13 +135,16 @@ Flickable {
         }
 
         onActiveChanged: {
-            if (!active) {
-                if (!sessionUsedMouseWheel && Math.abs(flickable.momentumVelocity) >= Scroll.minMomentumVelocity) {
-                    startMomentum();
-                } else {
-                    velocitySamples = [];
-                    flickable.momentumVelocity = 0;
-                }
+            if (!active)
+                release();
+        }
+
+        function release() {
+            if (!sessionUsedMouseWheel && Math.abs(flickable.momentumVelocity) >= Scroll.minMomentumVelocity) {
+                startMomentum();
+            } else {
+                velocitySamples = [];
+                flickable.momentumVelocity = 0;
             }
         }
     }
@@ -149,6 +154,16 @@ Flickable {
         vbar.hideTimer.stop();
     }
     onMovementEnded: vbar.hideTimer.restart()
+
+    function forwardWheel(event) {
+        if (!wheelEnabled)
+            return;
+        wheelHandler.handleWheel(event);
+    }
+
+    function forwardWheelEnd() {
+        wheelHandler.release();
+    }
 
     function stopMomentum() {
         cancelFlick();

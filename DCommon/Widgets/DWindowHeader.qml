@@ -21,6 +21,7 @@ Item {
 
     readonly property bool compositorDecorated: controls !== null && !Host.ownWindowDecorations
     readonly property bool hasActions: extraActions.children.length > 0
+    readonly property bool collapsed: compositorDecorated && !hasActions
     readonly property bool centered: titleAlignment === Text.AlignHCenter
     readonly property real edgeInset: horizontalPadding >= 0 ? horizontalPadding : Style.windowInset
     readonly property real titleGap: horizontalPadding >= 0 ? horizontalPadding : Style.spacingM
@@ -28,7 +29,7 @@ Item {
 
     signal closeRequested
 
-    implicitHeight: compositorDecorated && !hasActions ? 0 : Math.max(buttons.implicitHeight, titleColumn.implicitHeight) + verticalPadding * 2
+    implicitHeight: collapsed ? verticalPadding : Math.max(buttons.implicitHeight, titleColumn.implicitHeight) + verticalPadding * 2
     height: implicitHeight
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true

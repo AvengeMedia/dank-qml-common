@@ -372,7 +372,7 @@ FocusScope {
         anchors.left: parent.left
         anchors.right: parent.right
         visible: root.showHeader
-        height: visible && implicitHeight > 0 ? Math.max(implicitHeight, FileBrowserMetrics.headerHeight) : 0
+        height: !visible ? 0 : collapsed ? implicitHeight : Math.max(implicitHeight, FileBrowserMetrics.headerHeight)
         controls: root.windowControls
         title: root.title
         onCloseRequested: root.rejected()

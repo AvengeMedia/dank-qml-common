@@ -193,7 +193,7 @@ QtObject {
             return;
         switch (data.kind) {
         case "results":
-            entries.append(data.entries || []);
+            entries.append(Array.from(data.entries || []));
             total = data.count || entries.count;
             listed();
             break;

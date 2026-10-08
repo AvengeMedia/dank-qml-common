@@ -16,6 +16,8 @@ Flickable {
     property real fadeLength: Style.spacingXL
     property real fadeTopInset: 0
     property real fadeBottomInset: 0
+    property real fadeSideInset: 0
+    property real fadeRadius: Style.groupedListOuterRadius
     readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
     readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
 
@@ -229,11 +231,14 @@ Flickable {
         anchors.fill: parent
         anchors.topMargin: flickable.fadeTopInset
         anchors.bottomMargin: flickable.fadeBottomInset
+        anchors.leftMargin: flickable.fadeSideInset
+        anchors.rightMargin: flickable.fadeSideInset
         z: 1
         active: flickable.fadeEdges && flickable.contentHeight > flickable.height + 1
         sourceComponent: DEdgeFade {
             target: flickable
             length: flickable.fadeLength
+            radius: flickable.fadeRadius
         }
     }
 

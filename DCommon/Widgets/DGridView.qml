@@ -17,6 +17,8 @@ GridView {
     property real fadeLength: Style.spacingXL
     property real fadeTopInset: 0
     property real fadeBottomInset: 0
+    property real fadeSideInset: 0
+    property real fadeRadius: Style.groupedListOuterRadius
     readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
     readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
 
@@ -193,11 +195,14 @@ GridView {
         anchors.fill: parent
         anchors.topMargin: gridView.fadeTopInset
         anchors.bottomMargin: gridView.fadeBottomInset
+        anchors.leftMargin: gridView.fadeSideInset
+        anchors.rightMargin: gridView.fadeSideInset
         z: 1
         active: gridView.fadeEdges && gridView.contentHeight > gridView.height + 1
         sourceComponent: DEdgeFade {
             target: gridView
             length: gridView.fadeLength
+            radius: gridView.fadeRadius
         }
     }
 

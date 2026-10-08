@@ -15,6 +15,8 @@ ListView {
     property real fadeLength: Style.spacingXL
     property real fadeTopInset: 0
     property real fadeBottomInset: 0
+    property real fadeSideInset: 0
+    property real fadeRadius: Style.groupedListOuterRadius
     readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
     readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
 
@@ -389,11 +391,14 @@ ListView {
         anchors.fill: parent
         anchors.topMargin: listView.fadeTopInset
         anchors.bottomMargin: listView.fadeBottomInset
+        anchors.leftMargin: listView.fadeSideInset
+        anchors.rightMargin: listView.fadeSideInset
         z: 1
         active: listView.fadeEdges && listView.contentHeight > listView.height + 1
         sourceComponent: DEdgeFade {
             target: listView
             length: listView.fadeLength
+            radius: listView.fadeRadius
         }
     }
 

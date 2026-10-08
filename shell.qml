@@ -1,5 +1,7 @@
 //@ pragma UseQApplication
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import qs.DCommon.Widgets
 import Quickshell
@@ -12,6 +14,8 @@ import qs.DCommon.FileBrowser
 import qs.Services
 
 ShellRoot {
+    id: root
+
     readonly property var log: Log.scoped("Gallery")
 
     Component.onCompleted: {
@@ -529,7 +533,7 @@ ShellRoot {
                             parent: window.contentItem
                             hour: 7
                             minute: 0
-                            onAccepted: (h, m) => log.info("time:", h, m)
+                            onAccepted: (h, m) => root.log.info("time:", h, m)
                         }
 
                         Section {
@@ -699,6 +703,8 @@ ShellRoot {
                                 spacing: Theme.spacingXXS
 
                                 delegate: StyledRect {
+                                    id: listRow
+
                                     required property int index
 
                                     width: parent ? parent.width : 0
@@ -710,14 +716,14 @@ ShellRoot {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left
                                         anchors.leftMargin: Theme.spacingM
-                                        text: `Row ${index + 1}`
+                                        text: `Row ${listRow.index + 1}`
                                     }
 
                                     StateLayer {
                                         id: rowLayer
 
                                         cornerRadius: Theme.cornerRadius
-                                        onClicked: log.info("row clicked:", index + 1)
+                                        onClicked: root.log.info("row clicked:", listRow.index + 1)
                                     }
                                 }
                             }
@@ -742,6 +748,8 @@ ShellRoot {
                                 cellHeight: 64
 
                                 delegate: Item {
+                                    id: gridCell
+
                                     required property int index
 
                                     width: 64
@@ -751,11 +759,11 @@ ShellRoot {
                                         anchors.fill: parent
                                         anchors.margins: Theme.spacingXS
                                         radius: Theme.cornerRadius
-                                        color: Theme.withAlpha(Theme.primary, 0.1 + (index % 8) * 0.1)
+                                        color: Theme.withAlpha(Theme.primary, 0.1 + (gridCell.index % 8) * 0.1)
 
                                         StyledText {
                                             anchors.centerIn: parent
-                                            text: index + 1
+                                            text: gridCell.index + 1
                                             font.pixelSize: Theme.fontSizeSmall
                                         }
                                     }
@@ -775,7 +783,7 @@ ShellRoot {
                             color: Theme.surfaceContainerHigh
                             radius: Theme.cornerRadius
 
-                            ElevationShadow {
+                            DC.ElevationShadow {
                                 anchors.fill: parent
                                 z: -1
                                 targetRadius: card.radius
@@ -792,7 +800,7 @@ ShellRoot {
 
                             StateLayer {
                                 cornerRadius: card.radius
-                                onClicked: log.info("card clicked")
+                                onClicked: root.log.info("card clicked")
                             }
                         }
 
@@ -806,7 +814,7 @@ ShellRoot {
                             startIcon: "volume_down"
                             endIcon: "volume_up"
                             iconsClickable: true
-                            onSliderValueChanged: newValue => log.info("slider:", newValue)
+                            onSliderValueChanged: newValue => root.log.info("slider:", newValue)
                         }
 
                         M3WaveProgress {
@@ -852,7 +860,7 @@ ShellRoot {
                         }
 
                         DIconPicker {
-                            onIconSelected: (iconName, iconType) => log.info("icon:", iconName, iconType)
+                            onIconSelected: (iconName, iconType) => root.log.info("icon:", iconName, iconType)
                         }
 
                         Section {
@@ -861,7 +869,7 @@ ShellRoot {
 
                         DLocationSearch {
                             width: Math.min(340, gallery.width)
-                            onLocationSelected: (displayName, coordinates) => log.info("location:", displayName, coordinates)
+                            onLocationSelected: (displayName, coordinates) => root.log.info("location:", displayName, coordinates)
                         }
 
                         Section {
@@ -910,7 +918,7 @@ ShellRoot {
         bucket: "gallery"
         filters: ["*.png", "*.jpg", "*.svg", "*.webp"]
         startPath: "/home/alice/Pictures/city.jpg"
-        onAccepted: paths => log.info("file selected:", paths)
+        onAccepted: paths => root.log.info("file selected:", paths)
     }
 
     FileBrowserModal {
@@ -919,7 +927,7 @@ ShellRoot {
         browserTitle: "Pick a folder"
         mode: "openFolder"
         bucket: "gallery-folder"
-        onAccepted: paths => log.info("folder selected:", paths)
+        onAccepted: paths => root.log.info("folder selected:", paths)
     }
 
     FileBrowserModal {
@@ -928,7 +936,7 @@ ShellRoot {
         browserTitle: "Pick several files"
         bucket: "gallery"
         multiple: true
-        onAccepted: paths => log.info("files selected:", paths)
+        onAccepted: paths => root.log.info("files selected:", paths)
     }
 
     FileBrowserModal {
@@ -939,6 +947,6 @@ ShellRoot {
         bucket: "gallery-save"
         defaultName: "theme.json"
         filters: ["*.json"]
-        onAccepted: paths => log.info("save to:", paths)
+        onAccepted: paths => root.log.info("save to:", paths)
     }
 }

@@ -18,7 +18,6 @@ GridView {
     property real fadeTopInset: 0
     property real fadeBottomInset: 0
     property real fadeSideInset: 0
-    property real fadeRadius: Style.groupedListOuterRadius
     readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
     readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
 
@@ -202,7 +201,6 @@ GridView {
         sourceComponent: DEdgeFade {
             target: gridView
             length: gridView.fadeLength
-            radius: gridView.fadeRadius
         }
     }
 

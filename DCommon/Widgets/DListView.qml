@@ -16,7 +16,6 @@ ListView {
     property real fadeTopInset: 0
     property real fadeBottomInset: 0
     property real fadeSideInset: 0
-    property real fadeRadius: Style.groupedListOuterRadius
     readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
     readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
 
@@ -398,7 +397,6 @@ ListView {
         sourceComponent: DEdgeFade {
             target: listView
             length: listView.fadeLength
-            radius: listView.fadeRadius
         }
     }
 

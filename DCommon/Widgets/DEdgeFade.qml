@@ -10,7 +10,6 @@ Item {
 
     required property Flickable target
     property real length: Style.spacingXL
-    property real radius: Style.groupedListOuterRadius
 
     readonly property var surfaceHost: resolveSurfaceHost()
     readonly property color color: {
@@ -24,8 +23,6 @@ Item {
         return host.color;
     }
     readonly property color clear: Style.withAlpha(color, 0)
-    // Over an opaque surface the strip is the surface itself; over a translucent one it reads as a shadow, so it takes the row shape
-    readonly property real cornerRadius: color.a < 1 ? radius : 0
     readonly property real topStrength: Math.min(1, Math.max(0, (target.contentY - target.originY) / length))
     readonly property real bottomStrength: Math.min(1, Math.max(0, (target.originY + target.contentHeight - target.height - target.contentY) / length))
 
@@ -47,8 +44,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.length
-        topLeftRadius: root.cornerRadius
-        topRightRadius: root.cornerRadius
         opacity: root.topStrength
         visible: opacity > 0
         gradient: Gradient {
@@ -68,8 +63,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.length
-        bottomLeftRadius: root.cornerRadius
-        bottomRightRadius: root.cornerRadius
         opacity: root.bottomStrength
         visible: opacity > 0
         gradient: Gradient {

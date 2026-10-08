@@ -3,6 +3,7 @@ import QtQuick.Controls
 import qs.DCommon.Common
 import qs.DCommon.Widgets
 import "ScrollConstants.js" as Scroll
+import "Reveal.js" as Reveal
 import "../Common/WheelInput.js" as WheelInput
 
 ListView {
@@ -10,6 +11,24 @@ ListView {
 
     property real scrollBarTopMargin: 0
     property bool showScrollBar: true
+    property bool fadeEdges: true
+    property real fadeLength: Style.spacingXL
+    property real fadeTopInset: 0
+    property real fadeBottomInset: 0
+    readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
+    readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
+
+    function revealRange(top, bottom) {
+        contentY = Reveal.contentYFor(listView, top, bottom, revealInsetTop, revealInsetBottom);
+    }
+
+    function revealIndex(index) {
+        positionViewAtIndex(index, ListView.Contain);
+        const item = itemAtIndex(index);
+        if (!item)
+            return;
+        contentY = Reveal.contentYFor(listView, item.y, item.y + item.height, revealInsetTop, revealInsetBottom);
+    }
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
     property real savedY: 0
     property bool justChanged: false
@@ -365,8 +384,22 @@ ListView {
         }
     }
 
+    Loader {
+        parent: listView
+        anchors.fill: parent
+        anchors.topMargin: listView.fadeTopInset
+        anchors.bottomMargin: listView.fadeBottomInset
+        z: 1
+        active: listView.fadeEdges && listView.contentHeight > listView.height + 1
+        sourceComponent: DEdgeFade {
+            target: listView
+            length: listView.fadeLength
+        }
+    }
+
     ScrollBar.vertical: DScrollbar {
         id: vbar
+        z: 2
         targetFlickable: listView
         allowed: listView.showScrollBar
         topMargin: listView.scrollBarTopMargin

@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Controls
+import qs.DCommon.Common
 import qs.DCommon.Widgets
 import "ScrollConstants.js" as Scroll
+import "Reveal.js" as Reveal
 import "../Common/WheelInput.js" as WheelInput
 
 GridView {
@@ -11,6 +13,24 @@ GridView {
     property bool isMomentumActive: false
     property real friction: Scroll.friction
     property bool showScrollBar: true
+    property bool fadeEdges: true
+    property real fadeLength: Style.spacingXL
+    property real fadeTopInset: 0
+    property real fadeBottomInset: 0
+    readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
+    readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
+
+    function revealRange(top, bottom) {
+        contentY = Reveal.contentYFor(gridView, top, bottom, revealInsetTop, revealInsetBottom);
+    }
+
+    function revealIndex(index) {
+        positionViewAtIndex(index, GridView.Contain);
+        const item = itemAtIndex(index);
+        if (!item)
+            return;
+        contentY = Reveal.contentYFor(gridView, item.y, item.y + item.height, revealInsetTop, revealInsetBottom);
+    }
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
 
     flickDeceleration: Scroll.flickDeceleration
@@ -168,8 +188,22 @@ GridView {
         }
     }
 
+    Loader {
+        parent: gridView
+        anchors.fill: parent
+        anchors.topMargin: gridView.fadeTopInset
+        anchors.bottomMargin: gridView.fadeBottomInset
+        z: 1
+        active: gridView.fadeEdges && gridView.contentHeight > gridView.height + 1
+        sourceComponent: DEdgeFade {
+            target: gridView
+            length: gridView.fadeLength
+        }
+    }
+
     ScrollBar.vertical: DScrollbar {
         id: vbar
+        z: 2
         targetFlickable: gridView
         allowed: gridView.showScrollBar
     }

@@ -130,7 +130,7 @@ FocusScope {
         const index = cursorIndex();
         if (index < 0 || !view)
             return Qt.rect(0, 0, 0, 0);
-        view.positionViewAtIndex(index, ListView.Contain);
+        view.revealIndex(index);
         const item = view.itemAtIndex(index);
         if (!item)
             return Qt.rect(0, 0, 0, 0);
@@ -219,7 +219,7 @@ FocusScope {
     }
 
     function moveTo(target, modifiers) {
-        view?.positionViewAtIndex(target, ListView.Contain);
+        view?.revealIndex(target);
         selection.keyboardCursor = true;
         if (multiSelect && (modifiers & Qt.ShiftModifier) !== 0) {
             selection.extendTo(directory.entries, target);

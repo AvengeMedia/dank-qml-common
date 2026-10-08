@@ -458,6 +458,10 @@ FocusScope {
             property bool opensUpwards: false
 
             function scrollTo(index, mode) {
+                if (mode === ListView.Contain) {
+                    listView.revealIndex(index);
+                    return;
+                }
                 listView.positionViewAtIndex(index, mode);
             }
 

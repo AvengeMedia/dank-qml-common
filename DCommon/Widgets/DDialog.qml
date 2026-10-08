@@ -79,12 +79,7 @@ FocusScope {
         if (!ancestor)
             return;
         const point = target.mapToItem(scroll.contentItem, 0, 0);
-        const top = point.y - root.focusPadding;
-        const bottom = point.y + target.height + root.focusPadding;
-        if (top < scroll.contentY)
-            scroll.contentY = Math.max(0, top);
-        else if (bottom > scroll.contentY + scroll.height)
-            scroll.contentY = Math.max(0, Math.min(scroll.contentHeight - scroll.height, bottom - scroll.height));
+        scroll.revealRange(point.y - root.focusPadding, point.y + target.height + root.focusPadding);
     }
 
     readonly property Item windowActiveFocusItem: root.Window.window?.activeFocusItem ?? null

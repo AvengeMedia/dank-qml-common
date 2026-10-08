@@ -1,8 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
+import qs.DCommon.Common
 import qs.DCommon.Widgets
 import "ScrollConstants.js" as Scroll
+import "Reveal.js" as Reveal
 import "../Common/WheelInput.js" as WheelInput
 
 Flickable {
@@ -10,6 +12,16 @@ Flickable {
 
     property alias verticalScrollBar: vbar
     property bool showScrollBar: true
+    property bool fadeEdges: true
+    property real fadeLength: Style.spacingXL
+    property real fadeTopInset: 0
+    property real fadeBottomInset: 0
+    readonly property real revealInsetTop: fadeEdges ? fadeTopInset + fadeLength : 0
+    readonly property real revealInsetBottom: fadeEdges ? fadeBottomInset + fadeLength : 0
+
+    function revealRange(top, bottom) {
+        contentY = Reveal.contentYFor(flickable, top, bottom, revealInsetTop, revealInsetBottom);
+    }
     property real mouseWheelSpeed: Scroll.mouseWheelSpeed
     property bool wheelEnabled: true
     property real momentumVelocity: 0
@@ -212,8 +224,22 @@ Flickable {
         }
     }
 
+    Loader {
+        parent: flickable
+        anchors.fill: parent
+        anchors.topMargin: flickable.fadeTopInset
+        anchors.bottomMargin: flickable.fadeBottomInset
+        z: 1
+        active: flickable.fadeEdges && flickable.contentHeight > flickable.height + 1
+        sourceComponent: DEdgeFade {
+            target: flickable
+            length: flickable.fadeLength
+        }
+    }
+
     ScrollBar.vertical: DScrollbar {
         id: vbar
+        z: 2
         targetFlickable: flickable
         allowed: flickable.showScrollBar
     }

@@ -534,16 +534,30 @@ Singleton {
         };
     }
 
+    function toColor(c) {
+        if (!c)
+            return null;
+        if (c.r !== undefined)
+            return c;
+        try {
+            return Qt.color(c);
+        } catch (e) {
+            return null;
+        }
+    }
+
     function withAlpha(c, a) {
-        if (!c || c.r === undefined)
+        const col = toColor(c);
+        if (!col)
             return Qt.rgba(0, 0, 0, 0);
-        return Qt.rgba(c.r, c.g, c.b, a);
+        return Qt.rgba(col.r, col.g, col.b, a);
     }
 
     function blendAlpha(c, a) {
-        if (!c || c.r === undefined)
+        const col = toColor(c);
+        if (!col)
             return Qt.rgba(0, 0, 0, 0);
-        return Qt.rgba(c.r, c.g, c.b, c.a * a);
+        return Qt.rgba(col.r, col.g, col.b, col.a * a);
     }
 
     function _blend(c1, c2, r) {

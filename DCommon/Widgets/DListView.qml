@@ -18,6 +18,48 @@ ListView {
     property bool isMomentumActive: false
     property real friction: Scroll.friction
     readonly property real maximumContentY: Math.max(originY, contentHeight - height + originY)
+    // Rows the model just inserted fade in; rows the view creates while scrolling do not
+    readonly property bool populating: orphanSweep.running
+    property bool rowFadeEnabled: Math.floor(Style.currentAnimationBaseDuration * 0.4) >= 1
+    property int _insertFirst: 0
+
+    // Called from a delegate's Component.onCompleted. A ViewTransition would park every position the
+    // view writes while it runs (QQuickItemViewTransitionableItem::moveTo), so rows fade on their own.
+    function fadeIn(row: Item, index: int) {
+        if (!rowFadeEnabled || !populating)
+            return;
+        row.opacity = 0;
+        rowFade.createObject(row, {
+            "target": row,
+            "stagger": Math.min(8, Math.max(0, index - _insertFirst))
+        }).start();
+    }
+
+    Component {
+        id: rowFade
+
+        SequentialAnimation {
+            id: fade
+
+            required property Item target
+            required property int stagger
+
+            PauseAnimation {
+                duration: fade.stagger * Math.round(Style.currentAnimationBaseDuration * 0.03)
+            }
+
+            DAnim {
+                target: fade.target
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: Style.expressiveDurations.fast
+                easing.bezierCurve: Style.expressiveCurves.emphasizedDecel
+            }
+
+            onStopped: destroy()
+        }
+    }
 
     property bool highlightSelection: false
     property bool animateSelection: true
@@ -61,17 +103,16 @@ ListView {
     pressDelay: 0
     flickableDirection: Flickable.VerticalFlick
 
-    add: ListViewTransitions.add
-    remove: ListViewTransitions.remove
-    displaced: ListViewTransitions.displaced
-    move: ListViewTransitions.move
-
-    // QQmlDelegateModel can release a delegate back to its cache without hiding it,
-    // leaving a stale row painted over live ones. Hide anything the view no longer claims.
+    // QQmlDelegateModel can pool or release a delegate without hiding it, leaving a stale row
+    // painted at its old position. Hide anything the view no longer claims.
     Connections {
         target: listView.model?.objectName !== undefined ? listView.model : null
         ignoreUnknownSignals: true
-        function onRowsInserted() {
+        function onRowsInserted(parent, first) {
+            listView._insertFirst = first;
+            orphanSweep.arm();
+        }
+        function onDataChanged() {
             orphanSweep.arm();
         }
         function onRowsRemoved() {
@@ -97,33 +138,13 @@ ListView {
 
         onTriggered: {
             const kids = listView.contentItem.children;
-            const rows = [];
             for (let i = 0; i < kids.length; i++) {
                 const c = kids[i];
                 if (!c || c.index === undefined)
                     continue;
                 const claimed = listView.itemAtIndex(c.index) === c;
-                if (claimed && !c.visible) {
-                    c.visible = true;
-                    continue;
-                }
-                if (c.visible)
-                    rows.push({
-                        item: c,
-                        claimed: claimed
-                    });
-            }
-            for (let a = 0; a < rows.length; a++) {
-                if (rows[a].claimed)
-                    continue;
-                for (let b = 0; b < rows.length; b++) {
-                    if (a === b || !rows[b].claimed)
-                        continue;
-                    if (Math.abs(rows[a].item.y - rows[b].item.y) < rows[b].item.height / 2) {
-                        rows[a].item.visible = false;
-                        break;
-                    }
-                }
+                if (c.visible !== claimed)
+                    c.visible = claimed;
             }
             if (++frames >= 3)
                 running = false;

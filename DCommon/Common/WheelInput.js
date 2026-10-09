@@ -27,3 +27,13 @@ function anyAxisDelta(wheel) {
     const point = isTouchpad(wheel) ? wheel.pixelDelta : wheel.angleDelta;
     return point.x || point.y;
 }
+
+function isHorizontal(wheel) {
+    if (wheel.modifiers & Qt.ShiftModifier)
+        return true;
+    return Math.abs(wheel.angleDelta.x) > Math.abs(wheel.angleDelta.y);
+}
+
+function dominantDelta(point) {
+    return Math.abs(point.x) > Math.abs(point.y) ? point.x : point.y;
+}

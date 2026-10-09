@@ -9,6 +9,10 @@ var SPEC = {
         def: {},
         coerce: MaterialWallpaper.normalizeStore
     },
+    materialWallpaperProfiles: {
+        def: {},
+        coerce: MaterialWallpaper.normalizeProfiles
+    },
     wallpaperPath: {
         def: ""
     },

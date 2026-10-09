@@ -42,6 +42,16 @@ DCard {
         }
     }
 
+    readonly property string headline: accent !== "" ? brand + " " + accent : brand
+    readonly property real headlineSize: Math.max(Style.fontSizeXXLarge, Math.min(Style.fontSizeDisplayLarge, Style.fontSizeDisplayLarge * heroColumn.width / Math.max(1, headlineMetrics.width)))
+
+    StyledTextMetrics {
+        id: headlineMetrics
+        text: root.headline
+        font.pixelSize: Style.fontSizeDisplayLarge
+        font.weight: Style.fontWeightBold
+    }
+
     Column {
         id: heroColumn
         anchors.centerIn: parent
@@ -55,15 +65,17 @@ DCard {
             StyledText {
                 id: brandText
                 text: root.brand
-                font.pixelSize: Style.fontSizeDisplayLarge
+                font.pixelSize: root.headlineSize
                 font.weight: Style.fontWeightBold
                 color: Style.surfaceText
             }
 
             StyledText {
+                width: Math.min(implicitWidth, Math.max(0, heroColumn.width - brandText.width - parent.spacing))
                 text: root.accent
                 font: brandText.font
                 color: Style.primary
+                elide: Text.ElideRight
                 visible: text !== ""
             }
         }

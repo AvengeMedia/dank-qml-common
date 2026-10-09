@@ -9,6 +9,8 @@ StyledButton {
     id: row
 
     property string label: ""
+    property string subtitle: ""
+    property string tooltipText: ""
     property string iconName: ""
     property string actionIcon: ""
     property string actionTooltip: ""
@@ -30,10 +32,11 @@ StyledButton {
 
     focusPolicy: Qt.TabFocus
     width: parent?.width ?? 0
-    implicitHeight: FileBrowserMetrics.sidebarRowHeight
+    implicitHeight: Math.max(FileBrowserMetrics.sidebarRowHeight, labels.implicitHeight + Style.spacingM)
     radius: FileBrowserMetrics.sidebarRowRadius
     color: dropZone.containsDrag ? Style.primaryContainer : selected ? Style.selectedContainer : "transparent"
     Accessible.name: label
+    Accessible.description: tooltipText
 
     DropArea {
         id: dropZone
@@ -45,6 +48,8 @@ StyledButton {
 
     StateLayer {
         control: row
+        tooltipText: actionArea.containsMouse && row.actionTooltip !== "" ? "" : row.tooltipText
+        tooltipMultiline: true
         stateColor: row.contentColor
     }
 
@@ -96,6 +101,13 @@ StyledButton {
                     color: Style.onPrimaryContainer
                 }
 
+                DTooltipHost {
+                    text: row.actionTooltip
+                    target: actionArea
+                    hoverArea: actionArea
+                    enabled: actionArea.enabled
+                }
+
                 MouseArea {
                     id: actionArea
 
@@ -108,12 +120,30 @@ StyledButton {
             }
         }
 
-        StyledText {
+        ColumnLayout {
+            id: labels
+
             Layout.fillWidth: true
-            text: row.label
-            color: row.contentColor
-            font.pixelSize: Style.fontSizeMedium
-            elide: Text.ElideMiddle
+            spacing: Style.spacingXS
+
+            StyledText {
+                Layout.fillWidth: true
+                text: row.label
+                color: row.contentColor
+                font.pixelSize: Style.fontSizeMedium
+                wrapMode: Text.NoWrap
+                elide: Text.ElideMiddle
+            }
+
+            StyledText {
+                Layout.fillWidth: true
+                visible: row.subtitle !== ""
+                text: row.subtitle
+                color: row.selected || !row.enabled ? row.contentColor : Style.onSurfaceVariant
+                font.pixelSize: Style.fontSizeSmall
+                wrapMode: Text.NoWrap
+                elide: Text.ElideMiddle
+            }
         }
     }
 }

@@ -21,8 +21,10 @@ FileItemSurface {
 
     readonly property string highlight: view?.nameHighlight ?? ""
 
-    width: view?.cellWidth ?? 0
-    height: view?.cellHeight ?? 0
+    hitTargets: [visual, nameLabel, sizeLabel]
+
+    width: Math.max(0, (view?.cellWidth ?? 0) - FileBrowserMetrics.gridGap)
+    height: Math.max(0, (view?.cellHeight ?? 0) - FileBrowserMetrics.gridGap)
     contentRadius: FileBrowserMetrics.gridTileRadius
     selected: view?.selection?.contains(path) ?? false
     cursor: view?.selection?.showsCursor(path) ?? false
@@ -37,6 +39,8 @@ FileItemSurface {
         spacing: FileBrowserMetrics.gridNameSpacing
 
         FileItemVisual {
+            id: visual
+
             anchors.horizontalCenter: parent.horizontalCenter
             iconSize: tile.view?.iconSize ?? FileBrowserMetrics.gridIconSizes[FileBrowserMetrics.defaultGridZoom]
             iconName: tile.iconName
@@ -55,6 +59,8 @@ FileItemSurface {
         }
 
         StyledText {
+            id: nameLabel
+
             width: parent.width
             visible: !tile.renaming
             opacity: tile.cut ? Style.pendingOpacity : 1
@@ -69,6 +75,8 @@ FileItemSurface {
         }
 
         StyledText {
+            id: sizeLabel
+
             width: parent.width
             visible: !tile.renaming && !tile.isDir && tile.size >= 0
             text: FileFormat.size(tile.size)

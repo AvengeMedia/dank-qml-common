@@ -5,6 +5,7 @@ Item {
     id: root
 
     property var text: null
+    property bool multiline: false
     property Item target: null
     property MouseArea hoverArea: null
     property string side: "bottom"
@@ -57,6 +58,8 @@ Item {
     Loader {
         id: tooltipLoader
         active: !!root.text
-        sourceComponent: DTooltipV2 {}
+        sourceComponent: DTooltipV2 {
+            multiline: root.multiline
+        }
     }
 }

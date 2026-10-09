@@ -39,6 +39,8 @@ FileItemSurface {
             "childCount": view?.childCounts?.[path] ?? -1
         })
 
+    hitTargets: [visual, nameLabel, chevron].concat(Array.from(columns.children))
+
     width: view?.width ?? 0
     height: view?.rowHeight ?? FileBrowserMetrics.listRowHeight
     selected: view?.selection?.contains(path) ?? false
@@ -107,6 +109,8 @@ FileItemSurface {
     }
 
     StyledText {
+        id: nameLabel
+
         anchors.left: visual.right
         anchors.leftMargin: FileBrowserMetrics.listRowPadding
         anchors.right: chevron.left

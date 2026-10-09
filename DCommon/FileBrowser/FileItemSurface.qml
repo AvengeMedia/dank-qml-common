@@ -16,6 +16,7 @@ StyledButton {
     property bool cursor: false
     property bool cut: false
     property bool renaming: false
+    property var hitTargets: []
     property real contentRadius: Style.groupedListInnerRadius
 
     readonly property bool dropTarget: isDir && !renaming && dropZone.containsDrag
@@ -23,6 +24,32 @@ StyledButton {
     readonly property color supportingColor: selected ? Style.onSelectedContainer : Style.surfaceVariantText
 
     default property alias content: holder.data
+
+    function containsContent(pointX, pointY) {
+        if (renaming || hitTargets.length === 0)
+            return true;
+        const padding = Style.spacingXS;
+        for (const target of hitTargets) {
+            if (!target.visible || target.width <= 0 || target.height <= 0)
+                continue;
+            const point = target.mapFromItem(surface, pointX, pointY);
+            const width = Math.min(target.width, target.contentWidth ?? target.width);
+            const height = Math.min(target.height, target.contentHeight ?? target.height);
+            let left = 0;
+            switch (target.effectiveHorizontalAlignment) {
+            case Text.AlignHCenter:
+                left = (target.width - width) / 2;
+                break;
+            case Text.AlignRight:
+                left = target.width - width;
+                break;
+            }
+            const top = target.verticalAlignment === Text.AlignVCenter ? (target.height - height) / 2 : 0;
+            if (point.x >= left - padding && point.x <= left + width + padding && point.y >= top - padding && point.y <= top + height + padding)
+                return true;
+        }
+        return false;
+    }
 
     // The DListView orphan sweep hides pooled rows; reuse must show them again.
     ListView.onReused: visible = true

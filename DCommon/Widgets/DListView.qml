@@ -10,6 +10,7 @@ ListView {
     id: listView
 
     property real scrollBarTopMargin: 0
+    property bool wheelEnabled: true
     property bool showScrollBar: true
     property bool fadeEdges: true
     property real fadeLength: Style.spacingXL
@@ -229,6 +230,7 @@ ListView {
 
     WheelHandler {
         id: wheelHandler
+        enabled: listView.wheelEnabled
         property real touchpadSpeed: Scroll.touchpadSpeed
         property real lastWheelTime: 0
         property real momentum: 0

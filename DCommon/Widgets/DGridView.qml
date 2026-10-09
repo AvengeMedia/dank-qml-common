@@ -12,6 +12,7 @@ GridView {
     property real momentumVelocity: 0
     property bool isMomentumActive: false
     property real friction: Scroll.friction
+    property bool wheelEnabled: true
     property bool showScrollBar: true
     property bool fadeEdges: true
     property real fadeLength: Style.spacingXL
@@ -47,8 +48,28 @@ GridView {
     }
     onMovementEnded: vbar.hideTimer.restart()
 
+    function forwardWheel(event) {
+        if (!wheelEnabled)
+            return;
+        wheelHandler.handleWheel(event);
+    }
+
+    function forwardWheelEnd() {
+        wheelHandler.release();
+    }
+
+    function stopMomentum() {
+        cancelFlick();
+        momentumAnim.running = false;
+        isMomentumActive = false;
+        momentumVelocity = 0;
+        wheelHandler.momentum = 0;
+        wheelHandler.velocitySamples = [];
+    }
+
     WheelHandler {
         id: wheelHandler
+        enabled: gridView.wheelEnabled
 
         property real touchpadSpeed: Scroll.touchpadSpeed
         property real momentumRetention: Scroll.momentumRetention
@@ -63,7 +84,9 @@ GridView {
         }
 
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        onWheel: event => {
+        onWheel: event => handleWheel(event)
+
+        function handleWheel(event) {
             vbar._scrollBarActive = true;
             vbar.hideTimer.restart();
 
@@ -150,14 +173,17 @@ GridView {
             event.accepted = true;
         }
         onActiveChanged: {
-            if (!active) {
-                if (!sessionUsedMouseWheel && Math.abs(momentumVelocity) >= Scroll.minMomentumVelocity) {
-                    startMomentum();
-                } else {
-                    velocitySamples = [];
-                    momentumVelocity = 0;
-                }
+            if (!active)
+                release();
+        }
+
+        function release() {
+            if (!sessionUsedMouseWheel && Math.abs(momentumVelocity) >= Scroll.minMomentumVelocity) {
+                startMomentum();
+                return;
             }
+            velocitySamples = [];
+            momentumVelocity = 0;
         }
     }
 

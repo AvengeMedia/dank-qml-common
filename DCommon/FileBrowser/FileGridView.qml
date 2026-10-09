@@ -37,15 +37,25 @@ DGridView {
 
     function indicesIn(rect) {
         const firstRow = Math.max(0, Math.floor((rect.y - contentOrigin) / cellHeight));
-        const lastRow = Math.floor((rect.y + rect.height - contentOrigin) / cellHeight);
-        const firstColumn = Math.max(0, Math.floor(rect.x / cellWidth));
-        const lastColumn = Math.min(columnsPerRow - 1, Math.floor((rect.x + rect.width) / cellWidth));
-
+        const lastRow = Math.min(Math.ceil(count / columnsPerRow) - 1, Math.floor((rect.y + rect.height - contentOrigin) / cellHeight));
+        const mirrored = effectiveLayoutDirection === Qt.RightToLeft;
+        const left = mirrored ? width - rect.x - rect.width : rect.x;
+        const right = left + rect.width;
+        const firstColumn = Math.max(0, Math.floor(left / cellWidth));
+        const lastColumn = Math.min(columnsPerRow - 1, Math.floor(right / cellWidth));
+        const tileWidth = cellWidth - FileBrowserMetrics.gridGap;
+        const tileHeight = cellHeight - FileBrowserMetrics.gridGap;
         const out = [];
         for (let row = firstRow; row <= lastRow; row++) {
+            const top = contentOrigin + row * cellHeight;
+            if (top >= rect.y + rect.height || top + tileHeight <= rect.y)
+                continue;
             for (let column = firstColumn; column <= lastColumn; column++) {
+                const start = column * cellWidth + (mirrored ? FileBrowserMetrics.gridGap : 0);
+                if (start >= right || start + tileWidth <= left)
+                    continue;
                 const index = row * columnsPerRow + column;
-                if (index >= 0 && index < count)
+                if (index < count)
                     out.push(index);
             }
         }

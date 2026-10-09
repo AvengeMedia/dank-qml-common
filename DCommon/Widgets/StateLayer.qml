@@ -17,6 +17,7 @@ MouseArea {
     property real bottomLeftRadius: parent && parent.bottomLeftRadius !== undefined ? parent.bottomLeftRadius : cornerRadius
     property real bottomRightRadius: parent && parent.bottomRightRadius !== undefined ? parent.bottomRightRadius : cornerRadius
     property var tooltipText: null
+    property bool tooltipMultiline: false
     property string tooltipSide: "bottom"
     property bool enableRipple: Style.enableRippleEffects
     property int transitionDuration: Style.shorterDuration
@@ -114,6 +115,7 @@ MouseArea {
         active: false
         sourceComponent: DTooltipHost {
             text: root.tooltipText
+            multiline: root.tooltipMultiline
             target: root
             side: root.tooltipSide
             enabled: !root.disabled

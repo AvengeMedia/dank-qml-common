@@ -7,6 +7,7 @@ Item {
     id: root
 
     property string text: ""
+    property bool multiline: false
     property alias delay: tooltip.delay
     property Item sourceItem: null
     readonly property var sourceWindow: sourceItem?.Window.window ?? null
@@ -130,6 +131,7 @@ Item {
     ToolTip {
         id: tooltip
 
+        implicitWidth: Math.min(textContent.implicitWidth, Style.tooltipMaxWidth) + leftPadding + rightPadding
         leftPadding: Style.spacingM
         rightPadding: Style.spacingM
         topPadding: Style.spacingS
@@ -162,9 +164,10 @@ Item {
             font.pixelSize: Style.fontSizeSmall
             font.family: Style.fontFamily
             color: Style.inverseOnSurface
-            wrapMode: Text.NoWrap
-            maximumLineCount: 1
-            elide: Text.ElideRight
+            textFormat: root.multiline ? Text.PlainText : Text.AutoText
+            wrapMode: root.multiline ? Text.WrapAnywhere : Text.NoWrap
+            maximumLineCount: root.multiline ? 2147483647 : 1
+            elide: root.multiline ? Text.ElideNone : Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

@@ -19,10 +19,10 @@ Item {
     property string fontFamily: ""
     property int weight: 1000
     property real digitSize: Style.fontSizeDisplayLarge * 2
-    property real outlineWidth: digitSize * 0.02
+    property real outlineWidth: digitSize * 0.025
     property real renderScale: 1
 
-    readonly property real tracking: -digitSize * 0.1
+    readonly property real tracking: -digitSize * 0.22
     readonly property real rowAdvance: digitSize * 0.7
     readonly property bool variableFont: fontFamily === "" || fontFamily === Style.defaultFontFamily
     readonly property real padding: outlineWidth + Style.spacingXS
@@ -35,12 +35,9 @@ Item {
         weight: variableFont ? Font.Normal : Math.min(Font.Black, weight),
         variableAxes: variableFont ? {
             "wght": weight,
-            "ROND": 0,
+            "ROND": 20,
             "opsz": 18
         } : {},
-        features: {
-            "tnum": 1
-        }
     })
     // reading the font registers the dependency, the method calls alone bind nothing
     readonly property real cellWidth: {
@@ -53,7 +50,7 @@ Item {
     }
 
     function cellX(index, ink) {
-        return index * (cellWidth + tracking) + (cellWidth - ink.width) / 2 - ink.x;
+        return index * (cellWidth + tracking) + (cellWidth - ink.width) / 2;
     }
 
     FontMetrics {

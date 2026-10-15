@@ -100,14 +100,25 @@ Item {
             return Style.secondary;
         case "custom":
             return customColor;
+        default:
+            return Style.primary;
         }
-        return Style.primary;
     }
     property color accentColor: themeAccent
     property color twoToneColor: lockScreen ? Style.lockScreenContentColor : Style.onSurface
     readonly property color minutesColor: twoTone ? (colorMode === "primary" ? twoToneColor : Style.primary) : accentColor
     readonly property color dimColor: Style.withAlpha(accentColor, 0.65)
-    readonly property color backgroundColor: Style.withAlpha(Style.hostSurface, transparency)
+    readonly property color backgroundColorBase: {
+        switch (colorMode) {
+        case "primary":
+            return Style.primaryContainer;
+        case "secondary":
+            return Style.secondaryContainer;
+        default:
+            return Style.hostSurface;
+        }
+    }
+    readonly property color backgroundColor: Style.withAlpha(backgroundColorBase, transparency)
     readonly property bool themedOverlap: lockScreen && colorMode === "default"
     readonly property var primaryHct: Hct.toHct(Style.primary)
     readonly property color overlapFaceColor: {

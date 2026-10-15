@@ -104,7 +104,7 @@ Item {
         return Style.primary;
     }
     property color accentColor: themeAccent
-    readonly property color minutesColor: twoTone ? Style.primary : accentColor
+    readonly property color minutesColor: twoTone ? (colorMode === "primary" ? "#ffffff" : Style.primary) : accentColor
     readonly property color dimColor: Style.withAlpha(accentColor, 0.65)
     readonly property color backgroundColor: Style.withAlpha(Style.hostSurface, transparency)
     readonly property bool themedOverlap: lockScreen && colorMode === "default"
@@ -207,7 +207,8 @@ Item {
             stacked: tallBox
             color: root.accentColor
             minutesColor: root.minutesColor
-            supportingColor: root.dimColor
+            secondsColor: root.dimColor
+            supportingColor: root.accentColor
             fontFamily: root.fontFamily
             weight: root.weight
             rounded: root.rounded

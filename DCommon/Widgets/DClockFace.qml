@@ -11,6 +11,7 @@ Item {
     property bool stacked: false
     property color color: Style.primary
     property color minutesColor: color
+    property color secondsColor: minutesColor
     property color supportingColor: Style.onSurfaceVariant
     property string fontFamily: ""
     property int weight: 0
@@ -18,38 +19,36 @@ Item {
 
     readonly property bool variableFont: fontFamily === "" || fontFamily === Style.defaultFontFamily
     readonly property int digitWeight: weight > 0 ? weight : 750
+    readonly property real padding: Style.spacingS
 
     readonly property bool tall: height > Style.buttonHeightM * 2
     readonly property bool vertical: tall && (stacked || height > width * 0.6)
     readonly property string supportText: [dateText, vertical ? seconds : ""].filter(s => s !== "").join(" · ")
     readonly property bool hasSupport: supportText !== ""
-    readonly property real supportLine: Style.fontSizeMedium * 1.5
-    readonly property real supportNatural: hasSupport ? supportMetrics.advanceWidth + Style.spacingS : 0
-    readonly property bool sideFits: hasSupport && width - supportNatural >= Style.fontSizeDisplay * 3
-    readonly property bool sideSupport: sideFits && (vertical ? width >= height * 1.1 : !tall)
-    readonly property bool belowSupport: hasSupport && !sideSupport
-    readonly property real supportHeight: belowSupport ? supportLine + Style.spacingS : 0
-    readonly property real sideWidth: sideSupport ? supportNatural : 0
-    readonly property real digitsWidth: width - sideWidth
-    readonly property real digitsHeight: height - supportHeight
+    readonly property real supportHeight: supportText.height
+    readonly property real digitsWidth: width
+    readonly property real digitsHeight: height - (hasSupport ? supportHeight : 0)
     readonly property bool inlineSeconds: seconds !== "" && !vertical && digitsWidth >= Style.fontSizeDisplay * 5
     readonly property string timeText: hours + ":" + minutes + (inlineSeconds ? ":" + seconds : "")
     readonly property real rowHeight: vertical ? (digitsHeight + Style.spacingS) / 2 : digitsHeight
-    readonly property real displaySize: rowHeight / 1.05
+    readonly property real displaySize: rowHeight
+    readonly property real supportDisplaySize: rowHeight / 5
 
     implicitWidth: Style.fontSizeDisplay * 6
-    implicitHeight: Style.fontSizeDisplay * 4
+    implicitHeight: root.padding + hoursRowDigits.height + (minutesRow.visible ? minutesRowDigits.height : 0) + (support.visible ? supportText.height : 0)
 
     function escapedDigits(text) {
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    Column {
-        y: (root.digitsHeight - height) / 2
-        width: root.digitsWidth
-        spacing: -Style.spacingS
-
+    Item {
+        id: hoursRow
+        width: parent.width
+        height: hoursRowDigits.height
+        y: root.padding
+        baselineOffset: hoursRowDigits.baselineOffset
         Digits {
+            id: hoursRowDigits
             readonly property bool accented: !root.vertical && root.minutesColor !== root.color
             textFormat: accented ? Text.StyledText : Text.PlainText
             text: {
@@ -57,39 +56,44 @@ Item {
                     return root.hours;
                 if (!accented)
                     return root.timeText;
-                return root.escapedDigits(root.hours + ":") + '<font color="' + root.minutesColor + '">' + root.escapedDigits(root.minutes + (root.inlineSeconds ? ":" + root.seconds : "")) + '</font>';
+                return `${root.escapedDigits(root.hours + ":")}<font color="${root.minutesColor}">${root.escapedDigits(root.minutes)}</font>${root.inlineSeconds ? `<font color="${root.secondsColor}">:${root.escapedDigits(root.seconds)}</font>` : ""}`;
             }
         }
+    }
+
+    Item {
+        id: minutesRow
+        width: parent.width
+        y: hoursRow.y + hoursRow.baselineOffset
+        baselineOffset: minutesRowDigits.baselineOffset
+        visible: root.vertical
 
         Digits {
+            id: minutesRowDigits
             text: root.minutes
             color: root.minutesColor
-            visible: root.vertical
         }
     }
 
-    StyledText {
+    Item {
         id: support
+        width: parent.width
+        y: (minutesRow.visible ? minutesRow.y + minutesRow.baselineOffset : hoursRow.y + hoursRow.baselineOffset) + supportText.height / 3
         visible: root.hasSupport
-        x: root.sideSupport ? root.digitsWidth + Style.spacingS : 0
-        y: root.sideSupport ? (root.height - height) / 2 : root.digitsHeight + Style.spacingS
-        width: root.sideSupport ? root.sideWidth - Style.spacingS : root.width
-        height: root.supportLine
-        text: root.supportText
-        color: root.supportingColor
-        font.pixelSize: Style.fontSizeMedium
-        font.weight: Style.fontWeightMedium
-        minimumPixelSize: Style.fontSizeSmall
-        fontSizeMode: Text.HorizontalFit
-        horizontalAlignment: root.sideSupport ? Text.AlignLeft : Text.AlignHCenter
-        wrapMode: Text.NoWrap
-        elide: Text.ElideRight
-    }
 
-    TextMetrics {
-        id: supportMetrics
-        font: support.font
-        text: root.supportText
+        StyledText {
+            id: supportText
+            width: root.width
+            text: root.supportText
+            color: root.supportingColor
+            font.pixelSize: root.supportDisplaySize
+            font.weight: Style.fontWeightMedium
+            minimumPixelSize: Style.fontSizeSmall
+            fontSizeMode: Text.HorizontalFit
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.NoWrap
+            elide: Text.ElideRight
+        }
     }
 
     component Digits: StyledText {
@@ -104,14 +108,13 @@ Item {
                 "tnum": 1
             })
         font.variableAxes: root.variableFont ? {
-            "ROND": root.rounded ? 100 : 0,
+            "ROND": root.rounded ? 100 : 20,
             "wght": root.digitWeight,
             "opsz": root.displaySize
         } : {}
         minimumPixelSize: Style.fontSizeLarge
         fontSizeMode: Text.HorizontalFit
         horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
         wrapMode: Text.NoWrap
         elide: Text.ElideNone
         LayoutMirroring.enabled: false

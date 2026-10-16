@@ -216,7 +216,7 @@ Item {
                             required property var modelData
 
                             anchors.verticalCenter: parent.verticalCenter
-                            width: Style.spacingXS
+                            width: Style.spacingS
                             height: Style.spacingXS
                             radius: Style.fullRadius(width, height)
                             color: modelData

@@ -13,6 +13,7 @@ StyledButton {
     property string tooltipText: ""
     property string iconName: ""
     property string glyph: ""
+    property string path: ""
     property string actionIcon: ""
     property string actionTooltip: ""
     property real ringValue: -1
@@ -28,6 +29,7 @@ StyledButton {
     signal middleClicked
 
     readonly property bool showAction: actionIcon !== "" && (hovered || actionArea.containsMouse)
+    readonly property var look: row.path !== "" && Host.appearance ? Host.appearance.lookup(row.path) : null
     readonly property color contentColor: {
         if (!enabled)
             return Style.onSurface_38;
@@ -100,10 +102,21 @@ StyledButton {
                 FileIcon {
                     anchors.centerIn: parent
                     visible: !row.busy && !row.showAction
-                    iconName: row.iconName
+                    iconName: row.look?.icon || row.iconName
                     glyph: row.glyph
                     size: FileBrowserMetrics.sidebarGlyphSize
                     color: Style.primary
+                    tint: row.look?.color ?? "transparent"
+                }
+
+                Loader {
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    active: !row.busy && !row.showAction && String(row.look?.emblem ?? "") !== ""
+                    sourceComponent: DSVGIcon {
+                        source: Paths.resolveIconPath(row.look?.emblem ?? "")
+                        size: Math.max(FileBrowserMetrics.emblemMinSize, FileBrowserMetrics.sidebarGlyphSize * FileBrowserMetrics.sidebarEmblemRatio)
+                    }
                 }
 
                 DIcon {

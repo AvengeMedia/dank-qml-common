@@ -205,6 +205,7 @@ Item {
             visible: pane.entry !== null && !stage.showsContent && !stage.standing
             iconSize: stage.iconSize
             iconName: pane.entry?.iconName ?? ""
+            path: pane.entry?.path ?? ""
             thumbnail: pane.entry?.thumbnail ?? ""
             mime: pane.entry?.mime ?? ""
             isDir: pane.entry?.isDir ?? false

@@ -12,6 +12,7 @@ Item {
     property string thumbnail: ""
     property int size: Style.iconSize
     property color color: Style.surfaceText
+    property color tint: "transparent"
     property bool asynchronous: true
 
     readonly property string themeIconPath: glyph !== "" ? "" : Paths.resolveIconPath(iconName)
@@ -89,6 +90,7 @@ Item {
         sourceComponent: DSVGIcon {
             source: root.themeIconPath
             size: root.size
+            colorOverride: root.tint
             asynchronous: root.asynchronous
         }
     }
@@ -99,7 +101,7 @@ Item {
         sourceComponent: DIcon {
             name: root.glyph !== "" ? root.glyph : root.glyphFor(root.iconName)
             size: root.size
-            color: root.color
+            color: root.tint.a > 0 ? root.tint : root.color
         }
     }
 }

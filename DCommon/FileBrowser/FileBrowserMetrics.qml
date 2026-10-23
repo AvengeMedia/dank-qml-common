@@ -81,7 +81,6 @@ Singleton {
     readonly property real selectionFooterHeight: Style.buttonHeightS
     readonly property real emblemMinSize: Style.iconSizeSmall
     readonly property real emblemRatio: 0.3
-    readonly property real sidebarEmblemRatio: 0.6
     readonly property real hiddenOpacity: Style.pendingOpacity
     readonly property real skeletonOpacity: Style.pendingOpacity
     readonly property real rubberBandMinimum: Style.spacingS

@@ -100,22 +100,34 @@ StyledButton {
                 }
 
                 FileIcon {
+                    id: placeIcon
+
                     anchors.centerIn: parent
                     visible: !row.busy && !row.showAction
-                    iconName: row.look?.icon || row.iconName
+                    iconName: row.iconName
+                    iconOverride: row.look?.icon ?? ""
                     glyph: row.glyph
                     size: FileBrowserMetrics.sidebarGlyphSize
                     color: Style.primary
-                    tint: row.look?.color ?? "transparent"
+                    tint: row.look?.color || "transparent"
                 }
 
                 Loader {
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    active: !row.busy && !row.showAction && String(row.look?.emblem ?? "") !== ""
-                    sourceComponent: DSVGIcon {
-                        source: Paths.resolveIconPath(row.look?.emblem ?? "")
-                        size: Math.max(FileBrowserMetrics.emblemMinSize, FileBrowserMetrics.sidebarGlyphSize * FileBrowserMetrics.sidebarEmblemRatio)
+                    anchors.right: placeIcon.right
+                    anchors.bottom: placeIcon.bottom
+                    visible: !row.busy && !row.showAction
+                    active: (row.look?.emblem ?? "") !== ""
+                    sourceComponent: Rectangle {
+                        width: FileBrowserMetrics.emblemMinSize
+                        height: width
+                        radius: Style.fullRadius(width, height)
+                        color: Style.surfaceContainerLowest
+
+                        DSVGIcon {
+                            anchors.centerIn: parent
+                            source: Paths.resolveIconPath(row.look?.emblem ?? "")
+                            size: parent.width - Style.spacingXS
+                        }
                     }
                 }
 

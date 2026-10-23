@@ -31,11 +31,12 @@ Item {
 
     FileIcon {
         anchors.fill: parent
-        iconName: root.look?.icon || root.iconName
+        iconName: root.iconName
+        iconOverride: root.look?.icon ?? ""
         thumbnail: root.thumbnail !== "" ? root.thumbnail : root.mime === "image/svg+xml" ? root.path : ""
         size: root.iconSize
         color: root.isDir && !root.selected ? Style.primary : root.tint
-        tint: root.look?.color ?? "transparent"
+        tint: root.look?.color || "transparent"
     }
 
     component Emblem: Rectangle {
@@ -78,11 +79,10 @@ Item {
     Loader {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        active: String(root.look?.emblem ?? "") !== "" && !root.untrusted && !root.unreadable
+        active: (root.look?.emblem ?? "") !== "" && !root.untrusted && !root.unreadable
         sourceComponent: DSVGIcon {
             source: Paths.resolveIconPath(root.look?.emblem ?? "")
             size: root.emblemSize
-            asynchronous: root.isDir
         }
     }
 }

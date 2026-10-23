@@ -8,6 +8,7 @@ Item {
     id: root
 
     property string iconName: ""
+    property string iconOverride: ""
     property string glyph: ""
     property string thumbnail: ""
     property int size: Style.iconSize
@@ -15,7 +16,7 @@ Item {
     property color tint: "transparent"
     property bool asynchronous: true
 
-    readonly property string themeIconPath: glyph !== "" ? "" : Paths.resolveIconPath(iconName)
+    readonly property string themeIconPath: glyph !== "" ? "" : (Paths.resolveIconPath(iconOverride) || Paths.resolveIconPath(iconName))
     readonly property real devicePixelRatio: Window.window?.devicePixelRatio ?? Screen.devicePixelRatio
     readonly property int rasterSize: Style.iconRasterSize(size * devicePixelRatio)
 
